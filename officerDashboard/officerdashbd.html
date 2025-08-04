@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../img/download.png">
+  <title>Dashboard</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="dashboarStyle.css">
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="../../img/download.png" alt="Logo" />
+      <p>FarmerConnect.lk</p>
+    </div>
+
+    <div class="nav-links">
+      <a href="#"><i class="fa fa-home"></i> Home</a>
+      <a href="#"><i class="fa fa-bullhorn"></i> Announcement</a>
+      <a href="#"><i class="fa fa-question-circle"></i> Help</a>
+      
+      <div class="dropdown" id="dropdown">
+        <button class="account-btn" onclick="toggleMenu()">
+          <div class="avatar">JD</div>
+          <span>John Doe</span>
+          <span class="arrow">▼</span>
+        </button>
+        
+        <div class="menu">
+          <div class="user-info">
+            <div class="user-name">John Doe</div>
+            <div class="user-email">john.doe@example.com</div>
+          </div>
+          
+          <button class="menu-item" onclick="menuAction('settings')">
+            ⚙️ Settings
+          </button>
+          
+          <button class="menu-item" onclick="menuAction('update')">
+            👤 Update Account
+          </button>
+          
+          <button class="menu-item sign-out" onclick="menuAction('signout')">
+            🚪 Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="date">
+    <p>Date: <span id="currentDate"></span></p>
+    <p>Time: <span id="currentTime"></span></p>
+  </div>
+
+  <div class="welcome">
+    <h1>Welcome back, Officer Johnson!</h1>
+    <p>Here's what's happening in your agricultural district today</p>
+  </div>
+  
+  <!-- Content Section -->
+  <div class="full_Box">
+    <div class="content_wrapper">
+
+      <!-- User Roles -->
+      <div class="user_Information">
+        <div class="actor"><h3>Farmers</h3></div>
+        <div class="actor"><h3>Agri Officers</h3></div>
+        <div class="actor"><h3>Seller Agents</h3></div>
+      </div>
+
+      <!-- Features -->
+      <div class="features_block">
+        <div class="features">
+          <i class="fas fa-tractor farmer-icon"></i>
+          <h3>Farmers</h3>
+          <p>Find farmers, their contacts, and farm data—network effortlessly!</p>
+          <div class="stat-value">2,847</div>
+          <p><span>+12%</span> from last month</p>
+        </div>
+
+        <div class="features">
+          <i class="fas fa-exclamation-triangle blink" style="color: orange;"></i>
+          <h3>Complain & Inquiry</h3>
+          <p>Monitor and address user complaints and inquiries in one place.</p>
+          <div class="stat-value">15</div>
+          <p><span>3 new</span> today</p>
+        </div>
+
+        <div class="features">
+          <i class="fas fa-circle blink" style="color: yellow;"></i>
+          <h3>Yellow Cases</h3>
+          <p>Stay informed about pest and crop disease outbreaks in your area.</p>
+          <div class="stat-value">8</div>
+          <p><span>2 new</span> today</p>
+        </div>
+
+        <div class="features">
+          <i class="fa-solid fa-book-open"></i>
+          <h3>Knowledge Center</h3>
+          <p>Access guides, tutorials, and expert advice on agriculture.</p>
+        </div>
+
+        <div class="features">
+          <i class="fas fa-timeline"></i>
+          <h3>Timeline</h3>
+          <p>The farming process follows three stages: preparation</p>
+        </div>
+
+        <div class="features">
+          <i class="fa-solid fa-comments"></i>
+          <h3>Complain</h3>
+          <p>Report issues directly to the relevant agricultural authorities.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
