@@ -1,0 +1,103 @@
+/* Marketplace Styles */
+.marketplace-heading {
+  font-size: 36px;
+  font-weight: bold;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  color: #2f9b63;
+  text-align: center;
+}
+
+.marketplace-description {
+  font-size: 18px;
+  color: #444;
+  max-width: 700px;
+  margin: 0 auto 40px auto;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Marketplace cards */
+.features_block {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 20px;
+  justify-items: center;
+}
+
+.feature-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  transition: all 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.feature-top {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  transition: transform 0.4s ease;
+}
+
+.feature-top::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0));
+}
+
+.feature-card:hover .feature-top {
+  transform: scale(1.08);
+}
+
+.feature-bottom {
+  padding: 20px 10px;
+  text-align: center;
+}
+
+.feature-bottom h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #508d1c;
+  text-align: center;
+}
+
+.feature-bottom p {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.feature-bottom .btn {
+  display: inline-block;
+  padding: 8px 20px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.feature-bottom .btn:hover {
+  background-color: #388e3c;
+  transform: scale(1.05);
+}
