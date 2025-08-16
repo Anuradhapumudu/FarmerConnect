@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home | FarmerConnect.lk</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Files -->
+
+  <link rel="stylesheet" href="styleSheet/marketplace.css">
+  <link rel="stylesheet" href="styleSheet/reponsive.css">
+</head>
+
+<body>
+  <!-- Side Navigation -->
+  <div id="mySidenav" class="sidenav">
+    <span class="closebtn" onclick="closeNav()">&times;</span>
+     <a href="#"><i class="fa-solid fa-clock"></i> Cultivation Timeline</a>
+    <a href="#"><i class="fa-solid fa-calculator"></i> Fertilizer Calculator</a>
+    <a href="#"><i class="fa-solid fa-virus"></i> Disease Detector</a>
+     <a href="#"><i class="fa-solid fa-book-open"></i> Knowledge Center</a>
+    <a href="#"><i class="fa-solid fa-comments"></i> Complain </a>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mainContent">
+    <!-- Navigation Bar -->
+    <div class="navbar">
+      <div class="logo">
+        <img src="img/download.png" alt="Logo" />
+        <p>FarmerConnect.lk</p>
+      </div>
+      <div class="nav-links">
+        <a href="#"><i class="fa fa-home"></i> Home</a>
+        <a href="#"><i class="fa fa-bullhorn"></i> Announcement</a>
+        <a href="#"><i class="fa fa-question-circle"></i> Help</a>
+        <a href="#"><i class="fa-regular fa-circle-user fa-2xl"></i></a>
+      </div>
+    </div>
+
+    <!-- Open Menu Button -->
+    <button class="openbtn" onclick="openNav()">☰ Menu</button>
+  
+    <!-- Page heading -->
+    <h2 class="marketplace-heading">Marketplace</h2>
+    <p class="marketplace-description">
+      Discover premium agricultural products and services - one of many powerful tools in
+      your complete farming platform.
+    </p>
+
+    <!-- Marketplace Cards -->
+    <div class="features_block">
+      <div class="feature-card">
+        <div class="feature-top" style="background-image: url('img/fertilizer.jpg');"></div>
+        <div class="feature-bottom">
+          <h3>Fertilizer</h3>
+          <p>High-quality fertilizers for optimal crop growth</p>
+          <a href="#" class="btn">Shop Now</a>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top" style="background-image: url('img/paddy seed.webp');"></div>
+        <div class="feature-bottom">
+          <h3>Paddy Seeds</h3>
+          <p>Premium paddy seeds for better paddy fields</p>
+          <a href="#" class="btn">Shop Now</a>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top" style="background-image: url('img/Agrochemicals.jpg');"></div>
+        <div class="feature-bottom">
+          <h3>Agrochemicals</h3>
+          <p>Effective crop chemicals for crop disease</p>
+          <a href="#" class="btn">Shop Now</a>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top" style="background-image: url('img/equipments.jpg');"></div>
+        <div class="feature-bottom">
+          <h3>Equipments</h3>
+          <p>Buy essential farming tools and equipment</p>
+          <a href="#" class="btn">Shop Now</a>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top" style="background-image: url('img/Agricultural_machinery.jpg');"></div>
+        <div class="feature-bottom">
+          <h3>Rent Machinery</h3>
+          <p>Rent heavy machinery for your farming needs</p>
+          <a href="#" class="btn">Shop Now</a>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top" style="background-image: url('img/collage.jpg');"></div>
+        <div class="feature-bottom">
+          <h3>Others</h3>
+          <p>Additional agricultural supplies and services</p>
+          <a href="#" class="btn">Shop Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("mainContent").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("mainContent").style.marginLeft = "0";
+    }
+  </script>
+</body>
+</html>
