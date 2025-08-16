@@ -1,3 +1,130 @@
+/* Common Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-image: url('../img/1.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  transition: margin-left 0.3s ease;
+}
+
+#mainContent {
+  background-color: rgba(202, 255, 200, 0.7);
+  min-height: 100vh;
+  padding-bottom: 40px;
+  transition: margin-left 0.3s ease;
+}
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  color: #3a5a40;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 1000;
+  flex-wrap: wrap;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.navbar .logo img {
+  height: 55px;
+  margin-right: 8px;
+}
+
+.navbar .nav-links {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.navbar .nav-links a {
+  color: #3a5a40;
+  text-decoration: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.navbar .nav-links a:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Open Button */
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  transition: all 0.3s;
+}
+
+.openbtn:hover {
+  background-color: #388e3c;
+}
+
+/* Side Navigation Bar */
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1002;
+  top: 0;
+  left: 0;
+  background-color: #2e7d32;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 15px 25px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  display: block;
+  transition: 0.3s;
+  border-radius: 5px;
+  margin: 5px 10px;
+}
+
+.sidenav a:hover {
+  background-color: #4caf50;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+
 /* Marketplace Styles */
 .marketplace-heading {
   font-size: 36px;
@@ -101,3 +228,7 @@
   background-color: #388e3c;
   transform: scale(1.05);
 }
+
+
+
+
