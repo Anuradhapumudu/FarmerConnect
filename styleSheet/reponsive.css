@@ -11,20 +11,21 @@
     grid-template-columns: 1fr;
   }
 
+  /* Keep navbar horizontal */
   .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .navbar .nav-links {
-    flex-direction: column;
+    flex-direction: row; /* horizontal */
+    flex-wrap: wrap;     /* allow links to wrap if too long */
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
+    padding: 10px;
   }
 
   .navbar .nav-links a {
-    width: 100%;
-    padding: 10px 0;
-    text-align: left;
+    padding: 5px 8px;
+    text-align: center;
+    white-space: nowrap; /* prevent breaking */
+    font-size: 14px; /* adjust if needed */
   }
 
   .marketplace-heading span {
