@@ -1,0 +1,29 @@
+CREATE TABLE disease_reports (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    report_id VARCHAR(20) UNIQUE NOT NULL,
+    farmer_nic VARCHAR(20) NOT NULL,
+    plr_number VARCHAR(50) NOT NULL,
+    observation_date DATE NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    severity ENUM('low', 'medium', 'high') NOT NULL,
+    affected_area DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create table for media files (if you want to store them in the database)
+CREATE TABLE report_media (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    report_id VARCHAR(20) NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    file_type ENUM('image', 'video') NOT NULL,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (report_id) REFERENCES disease_reports(report_id) ON DELETE CASCADE
+);
+
+-- Create an index for better query performance
+CREATE INDEX idx_farmer_nic ON disease_reports(farmer_nic);
+CREATE INDEX idx_observation_date ON disease_reports(observation_date);
+CREATE INDEX idx_severity ON disease_reports(severity);
