@@ -2,14 +2,16 @@
 <!-- Marketplace-specific CSS -->
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
 
-<!-- My Orders Button -->
-<div class="myOrders">
-  <button onclick="window.location.href='my_orders.php'">
-    <i class="fa fa-shopping-cart"></i> My Orders
-  </button>
-</div>
+<main class="main-content" id="mainContent">
+  <div class="container">
+    <!-- My Orders Button -->
+    <div class="myOrders">
+      <button onclick="window.location.href='my_orders.php'">
+        <i class="fa fa-shopping-cart"></i> My Orders
+      </button>
+    </div>
 
-<h2 class="marketplace-heading">Marketplace</h2>
+    <h2 class="marketplace-heading">Marketplace</h2>
     <p class="marketplace-description">
       Discover premium agricultural products and services - one of many powerful tools in
       your complete farming platform.
@@ -71,8 +73,9 @@
         </div>
       </div>
     </div>
-
+  </div>
+</main>
     <!-- Marketplace-specific JS -->
 <script src="<?php echo URLROOT; ?>/js/marketplace.js"></script>
-
+<?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

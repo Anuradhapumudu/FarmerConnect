@@ -1,4 +1,8 @@
-// Initialize sidebar functionality when DOM is loaded
+<?php
+    // PHP code here
+?>
+<script>
+    // Initialize sidebar functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM loaded, initializing sidebar...');
   
@@ -906,3 +910,5 @@ function updateMainContent(page = 'home') {
     `;
   }
 }
+
+</script>

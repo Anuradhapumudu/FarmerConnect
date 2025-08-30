@@ -40,6 +40,10 @@
         <i class="fas fa-book"></i>
         <span class="menu-text">Knowledge Center</span>
       </a></li>
+      <li><a href="#" data-tooltip="Marketplace">
+        <i class="fas fa-store"></i>
+        <span class="menu-text">Marketplace</span>
+      </a></li>
       <li><a href="#" data-tooltip="Complain">
         <i class="fas fa-exclamation-circle"></i>
         <span class="menu-text">Complain</span>
