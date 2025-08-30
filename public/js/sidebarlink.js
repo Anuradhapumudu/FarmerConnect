@@ -1,9 +1,15 @@
 // Initialize sidebar functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM loaded, initializing sidebar...');
-  initSidebarNavigation();
   
-  // Handle browser back/forward buttons
+  try {
+    initSidebarNavigation();
+    console.log('Sidebar navigation initialized successfully');
+  } catch (error) {
+    console.error('Error initializing sidebar navigation:', error);
+  }
+
+  // Handle browser back buttons
   window.addEventListener('hashchange', function() {
     const hash = window.location.hash.substring(1);
     const page = hash || 'home';
@@ -85,6 +91,13 @@ function getPageKey(tooltip, menuText) {
 function initSidebarNavigation() {
   const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
   
+  console.log('Found sidebar links:', sidebarLinks.length);
+  
+  if (sidebarLinks.length === 0) {
+    console.warn('No sidebar links found! Check if .sidebar-menu exists in the DOM');
+    return;
+  }
+  
   // Remove all active classes first
   sidebarLinks.forEach(link => {
     link.classList.remove('active');
@@ -155,12 +168,18 @@ function initSidebarNavigation() {
 }
 
 function updateMainContent(page = 'home') {
+  console.log('updateMainContent called with page:', page);
+  
   const mainContent = document.querySelector('.main-content .container');
   
   if (!mainContent) {
-    console.warn('Main content container not found');
+    console.warn('Main content container not found - looking for .main-content .container');
+    console.log('Available main-content elements:', document.querySelectorAll('.main-content'));
+    console.log('Available container elements:', document.querySelectorAll('.container'));
     return;
   }
+  
+  console.log('Main content found:', mainContent);
   
   const pageContent = {
     cultivation: {
@@ -200,38 +219,43 @@ function updateMainContent(page = 'home') {
       subtitle: 'Report plant diseases to help protect our agricultural community',
       content: `
         <div class="content-card">
-            <form action="#" method="POST" id="diseaseReportForm" class="framework-form" enctype="multipart/form-data">
-                <div class="report-id-display">
-                    Report ID: <span id="reportIdDisplay"></span>
-                </div>
-                
+            <form action="farmer/submitDiseaseReport" method="POST" id="diseaseReportForm" class="framework-form" enctype="multipart/form-data">
+                <!-- Hidden inputs to include report_id and current timestamp -->
+                <input type="hidden" id="reportId" name="report_id" value="">
+                <input type="hidden" name="submission_timestamp" value="">
+
                 <div class="form-group">
                     <label for="farmerNIC" class="required">Farmer NIC Number</label>
                     <input type="text" id="farmerNIC" name="farmerNIC" 
-                           placeholder="Enter your National Identity Card number" required>
+                           placeholder="Enter your National Identity Card number" value="">
+                    <span class="error" id="farmerNIC_error"></span>
                 </div>
                 
                 <div class="form-group">
                     <label for="plrNumber" class="required">PLR Number</label>
                     <input type="text" id="plrNumber" name="plrNumber" 
-                           placeholder="Enter your Planters Registration Number" required>
+                           placeholder="Enter your Planters Registration Number" value="">
+                    <span class="error" id="plrNumber_error"></span>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label for="date" class="required">Date of Observation</label>
-                    <input type="date" id="date" name="date" required>
+                    <input type="hidden" id="date" name="date" value="">
+                    <span class="error" id="date_error"></span>
                 </div>
                 
                 <div class="form-group">
                     <label for="title" class="required">Report Title</label>
                     <input type="text" id="title" name="title" 
-                           placeholder="Brief description of the issue" required>
+                           placeholder="Brief description of the issue" value="">
+                    <span class="error" id="title_error"></span>
                 </div>
                 
                 <div class="form-group">
                     <label for="description" class="required">Detailed Description</label>
                     <textarea id="description" name="description" 
-                              placeholder="Describe the symptoms, patterns, and any other relevant details" required></textarea>
+                              placeholder="Describe the symptoms, patterns, and any other relevant details"></textarea>
+                    <span class="error" id="description_error"></span>
                 </div>
                 
                 <div class="form-group">
@@ -250,7 +274,7 @@ function updateMainContent(page = 'home') {
                     <label class="required">Severity Level</label>
                     <div class="radio-group">
                         <label class="radio-option severity-low">
-                            <input type="radio" name="severity" value="low" required>
+                            <input type="radio" name="severity" value="low">
                             Low
                         </label>
                         <label class="radio-option severity-medium">
@@ -267,7 +291,7 @@ function updateMainContent(page = 'home') {
                 <div class="form-group">
                     <label for="affectedArea" class="required">Affected Area (in acres)</label>
                     <input type="number" id="affectedArea" name="affectedArea" 
-                           placeholder="Enter the size of the affected area" min="0" step="0.1" required>
+                           placeholder="Enter the size of the affected area" min="0" step="0.1" value="">
                 </div>
                 <div class="form-group">
                     <div class="checkbox-container">
@@ -410,17 +434,6 @@ function updateMainContent(page = 'home') {
                 font-size: 0.9rem;
                 color: var(--text-secondary);
                 margin-top: 5px;
-            }
-            
-            .report-id-display {
-                background: var(--bg-secondary);
-                padding: 15px;
-                border-radius: 8px;
-                text-align: center;
-                font-weight: 600;
-                color: var(--text-primary);
-                margin-bottom: 25px;
-                border-left: 4px solid var(--primary);
             }
             
             .btn-primary {
@@ -600,14 +613,37 @@ function updateMainContent(page = 'home') {
         
         // Set the report ID
         const reportIdElement = document.getElementById('reportIdDisplay');
+        const reportIdHidden = document.getElementById('reportId');
         if (reportIdElement) {
-            reportIdElement.textContent = generateReportId();
+            const reportId = generateReportId();
+            reportIdElement.textContent = reportId;
+            if (reportIdHidden) {
+                reportIdHidden.value = reportId;
+            }
         }
         
-        // Set today's date as default
+        // Set today's date and current timestamp
+        const now = new Date();
         const dateInput = document.getElementById('date');
-        if (dateInput && !dateInput.value) {
-            dateInput.valueAsDate = new Date();
+        const timestampInput = document.querySelector('input[name="submission_timestamp"]');
+        
+        if (dateInput) {
+            // Format date as YYYY-MM-DD for the date input
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}`;
+        }
+        
+        if (timestampInput) {
+            // Format timestamp as YYYY-MM-DD HH:MM:SS
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            timestampInput.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
         
         // File upload area functionality
@@ -664,7 +700,90 @@ function updateMainContent(page = 'home') {
         if (form) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                alert('Disease report submitted successfully! This is a demo - in a real application, this would be sent to the server.');
+                
+                // Clear any existing error messages
+                const errorSpans = form.querySelectorAll('.error');
+                errorSpans.forEach(span => span.textContent = '');
+                
+                // Update timestamp to current time just before submission
+                const now = new Date();
+                const timestampInput = document.querySelector('input[name="submission_timestamp"]');
+                if (timestampInput) {
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    const seconds = String(now.getSeconds()).padStart(2, '0');
+                    timestampInput.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                }
+                
+                // Get form data
+                const formData = new FormData(form);
+                
+                // Submit form via AJAX
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success === false && data.errors) {
+                        // Display validation errors
+                        Object.keys(data.errors).forEach(key => {
+                            if (key.endsWith('_error') && data.errors[key]) {
+                                const errorSpan = document.getElementById(key);
+                                if (errorSpan) {
+                                    errorSpan.textContent = data.errors[key];
+                                    errorSpan.style.color = '#e74c3c';
+                                    errorSpan.style.fontSize = '0.9rem';
+                                    errorSpan.style.marginTop = '5px';
+                                    errorSpan.style.display = 'block';
+                                }
+                            }
+                        });
+                    } else {
+                        // Success or redirect will be handled by PHP
+                        alert('Disease report submitted successfully!');
+                        form.reset();
+                        // Generate new report ID for next submission
+                        const reportIdElement = document.getElementById('reportIdDisplay');
+                        const reportIdHidden = document.getElementById('reportId');
+                        if (reportIdElement) {
+                            const reportId = generateReportId();
+                            reportIdElement.textContent = reportId;
+                            if (reportIdHidden) {
+                                reportIdHidden.value = reportId;
+                            }
+                        }
+                        
+                        // Reset date and timestamp to current values
+                        const now = new Date();
+                        const dateInput = document.getElementById('date');
+                        const timestampInput = document.querySelector('input[name="submission_timestamp"]');
+                        
+                        if (dateInput) {
+                            const year = now.getFullYear();
+                            const month = String(now.getMonth() + 1).padStart(2, '0');
+                            const day = String(now.getDate()).padStart(2, '0');
+                            dateInput.value = `${year}-${month}-${day}`;
+                        }
+                        
+                        if (timestampInput) {
+                            const year = now.getFullYear();
+                            const month = String(now.getMonth() + 1).padStart(2, '0');
+                            const day = String(now.getDate()).padStart(2, '0');
+                            const hours = String(now.getHours()).padStart(2, '0');
+                            const minutes = String(now.getMinutes()).padStart(2, '0');
+                            const seconds = String(now.getSeconds()).padStart(2, '0');
+                            timestampInput.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while submitting the report. Please try again.');
+                });
             });
         }
     }, 100);
