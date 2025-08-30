@@ -75,7 +75,6 @@
     </div>
   </div>
 </main>
-    <!-- Marketplace-specific JS -->
-<script src="<?php echo URLROOT; ?>/js/marketplace.js"></script>
+
 <?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
