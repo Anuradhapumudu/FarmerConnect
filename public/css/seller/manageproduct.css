@@ -1,0 +1,196 @@
+/* =========================
+   Common Styles
+========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+ 
+}
+
+#mainContent {
+  
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+
+/* =========================
+   Buttons
+========================= */
+.btn {
+  display: inline-block;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-add {
+  background: #2e7d32;
+}
+
+.btn-add:hover {
+  background: #1b5e20;
+}
+
+.btn-edit {
+  background: #1976d2;
+}
+
+.btn-edit:hover {
+  background: #0d47a1;
+}
+
+.btn-delete {
+  background: #d32f2f;
+}
+
+.btn-delete:hover {
+  background: #b71c1c;
+}
+
+/* =========================
+   Product Page
+========================= */
+.add_products {
+  margin: 20px;
+  text-align: center;
+}
+
+.heading {
+  font-size: 40px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  color: #2f9b63;
+  text-align: center;
+}
+
+/* Product list grid */
+.product_box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  justify-items: center;
+}
+
+/* Product card */
+.product-container {
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.product-container:hover {
+  transform: translateY(-8px);
+}
+
+.product-container img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-container:hover img {
+  transform: scale(1.05);
+}
+
+.product-details {
+  padding: 20px;
+  flex: 1;
+  text-align: center;
+}
+
+.product-details h2 {
+  margin: 10px 0;
+  color: #1b5e20;
+  font-size: 25px;
+}
+
+.in-stock {
+  display: inline-block;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2e7d32;
+  margin: 8px 0;
+}
+
+.description {
+  margin: 10px 0 3px 0;
+  font-size: 16px;
+  color: #2e3a32;
+  line-height: 1.5;
+  min-height: auto;
+}
+
+.badges .stock,
+.badges .region {
+  display: inline-block;
+  background: #c8e6c9;
+  color: #1b5e20;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 6px;
+  margin-right: 8px;
+}
+
+.divider {
+  border: none;
+  border-top: 2px solid #2e7d32;
+  margin: 10px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .product_box {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .product_box {
+    grid-template-columns: 1fr;
+  }
+}

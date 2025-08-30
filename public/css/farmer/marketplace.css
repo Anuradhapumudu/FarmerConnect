@@ -13,26 +13,20 @@ body {
 }
 
 #mainContent {
-  background-color: rgba(202, 255, 200, 0.7);
   min-height: 100vh;
   padding-bottom: 40px;
   transition: margin-left 0.3s ease;
 }
 
-
-body {
-
-  background-image: url('styleSheet/1.jpg');
-
-}
 .marketplace-heading {
-  font-size: 36px;
-  font-weight: bold;
-  margin-top: 50px;
-  margin-bottom: 10px;
-  color: #2f9b63;
-  text-align: center;
+    font-size: 50px !important;
+    font-weight: bold;
+    color: #2f9b63;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
+
 
 .marketplace-description {
   font-size: 18px;
@@ -197,5 +191,17 @@ body {
   .myOrders button {
     width: 90%;               /* full-width button look */
     justify-content: center;  /* center icon + text */
+  }
+}
+
+@media (max-width: 768px) {
+  .marketplace-heading {
+    font-size: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .marketplace-heading {
+    font-size: 36px;
   }
 }

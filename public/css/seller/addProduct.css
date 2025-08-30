@@ -1,0 +1,107 @@
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Main container */
+    .form-wrapper {
+      max-width: 600px;
+      margin: 60px auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+      border: 2px solid #2e7d32;
+      backdrop-filter: blur(6px);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 28px;
+      color: #1b5e20;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 15px;
+      color: #2e7d32;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1px solid #a5d6a7;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #2e7d32;
+      box-shadow: 0 0 6px rgba(46,125,50,0.4);
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    button {
+      margin-top: 20px;
+      background: #2e7d32;
+      color: white;
+      padding: 12px;
+      border: none;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #1b5e20;
+      transform: translateY(-2px);
+    }
+
+    .success {
+      background: #d4edda;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-left: 6px solid #28a745;
+      border-radius: 6px;
+      color: #155724;
+      font-weight: 600;
+    }
+
+    .error {
+      background: #f8d7da;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-left: 6px solid #dc3545;
+      border-radius: 6px;
+      color: #721c24;
+      font-weight: 600;
+    }
+
+    /* File input nicer */
+    input[type="file"] {
+      padding: 6px;
+      background: #f9f9f9;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .form-wrapper {
+        margin: 30px 15px;
+        padding: 20px;
+      }
+    }

@@ -1,6 +1,6 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 <!-- Marketplace-specific CSS -->
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplaceSeller.css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/seller/marketplaceSeller.css?v=<?= time(); ?>">
 
 <main class="main-content" id="mainContent">
      <div class="container">
@@ -18,7 +18,7 @@
         <div class="feature-bottom">
           <h3>Manage Products</h3>
           <p>Add, edit, or remove your listed items</p>
-          <a href="manageproduct.php" class="btn">Manage</a>
+          <a href="<?php echo URLROOT; ?>/manageproduct" class="btn">Manage</a>
         </div>
       </div>
 

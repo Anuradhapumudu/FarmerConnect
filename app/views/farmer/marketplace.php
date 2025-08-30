@@ -1,6 +1,9 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 <!-- Marketplace-specific CSS -->
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
+
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/marketplace.css?v=<?= time(); ?>">
+
+
 
 <main class="main-content" id="mainContent">
   <div class="container">

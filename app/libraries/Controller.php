@@ -1,11 +1,14 @@
 <?php
     class Controller {
         //To load model
-        public function model($model) {
-            require_once '../app/models/' . $model . '.php';
-            //Instentiate the model and paste it to the controller member variable
-            return new $model();
-        }
+        public function model($model, $db = null) {
+    require_once '../app/models/' . $model . '.php';
+    if ($db) {
+        return new $model($db); // pass database object
+    } else {
+        return new $model(); // fallback, if no db needed
+    }
+}
 
         //To load the view
         public function view($view, $data = []) {

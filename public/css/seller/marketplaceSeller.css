@@ -13,23 +13,19 @@ body {
 }
 
 #mainContent {
-  background-color: rgba(202, 255, 200, 0.7);
+
   min-height: 100vh;
   padding-bottom: 40px;
   transition: margin-left 0.3s ease;
 }
 
 
-body {
 
-  background-image: url('styleSheet/1.jpg');
-
-}
 .marketplace-heading {
-  font-size: 36px;
+  font-size: 50px !important;
   font-weight: bold;
-  margin-top: 50px;
-  margin-bottom: 10px;
+  margin-top: 00px;
+  margin-bottom: 20px;
   color: #2f9b63;
   text-align: center;
 }
