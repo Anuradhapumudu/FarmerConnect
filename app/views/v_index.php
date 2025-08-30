@@ -61,7 +61,7 @@
                     <span>Login</span>
                 </a>
                 <p aria-hidden="true">or</p>
-                <a href="<?php echo URLROOT; ?>/pages/register.html" class="btn btn-outline" aria-label="Create new account">
+                <a href="<?php echo URLROOT; ?>/users/register" class="btn btn-outline" aria-label="Create new account">
                     <span>Register</span>
                 </a>
             </div>
