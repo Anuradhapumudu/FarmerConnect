@@ -1,8 +1,8 @@
-<?php require_once APPROOT . '/views/inc/components/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/minimalheader.php'; ?>
 
 <!-- Main Content -->
 <main style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 160px); padding: 20px;">
-    <div class="container" style="text-align: center; max-width: 600px;">
+    <div class="container" style="text-align: center;">
         <!-- 404 Error Content -->
         <div style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 20px; padding: 60px 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); margin-bottom: 30px;">
             <!-- Large 404 Number -->
@@ -92,6 +92,8 @@
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        margin: 0;
+        padding: 0;
     }
     
     /* Responsive adjustments */
@@ -179,4 +181,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php require_once APPROOT . '/views/inc/components/footer.php'; ?>
+<?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>

@@ -13,7 +13,8 @@
                 require_once '../app/views/'.$view.'.php';
             }
             else {
-                die('Correstponding view does not exists');
+                require_once '../app/views/404.php';
+                die('Corresponding view does not exists');
             }
         }
     }

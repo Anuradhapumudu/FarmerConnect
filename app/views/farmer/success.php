@@ -1,7 +1,7 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/hdwithtsbr.php'; ?>
 
-<main class="main-content">
-    <div class="container">
+<main class="main-content" style="margin-left: 0; width: 100%; max-width: 100%;">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
         <div class="content-card text-center">
             <div style="font-size: 4rem; color: var(--success);">✅</div>
             <h1>Report Submitted Successfully!</h1>
@@ -20,4 +20,4 @@
     </div>
 </main>
 
-<?php require_once APPROOT . '/views/inc/footer.php'; ?>
+<?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>

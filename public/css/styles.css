@@ -699,3 +699,65 @@ footer.expanded {
     gap: 30px;
   }
 }
+
+/* Success page styles */
+.content-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  border: 1px solid var(--card-border);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.report-details {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  border-left: 4px solid var(--primary);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: white;
+}
+
+.btn-secondary {
+  background: linear-gradient(90deg, #6c757d 0%, #5a6268 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, var(--primary-light) 0%, var(--accent) 100%);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(90deg, #5a6268 0%, #495057 100%);
+}
+
+@media (max-width: 768px) {
+  .content-card {
+    padding: 30px 20px;
+    margin: 20px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons .btn {
+    width: 100%;
+  }
+}
