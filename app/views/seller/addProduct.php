@@ -7,26 +7,40 @@
  <div class="form-wrapper">
     <h2><i class="fa-solid fa-plus-circle"></i> Add a Product</h2>
 
+    <!-- Centered note about required fields -->
+    <p class="required-note"><span class="required">*</span> indicates required fields</p>
 
-<form method="post" action="" enctype="multipart/form-data">
-    <label>Product Name:</label>
+   <form method="post" action="" enctype="multipart/form-data">
+
+    <?php if (!empty($data['success'])): ?>
+    <div class="success"><?= $data['success'] ?></div>
+    <?php endif; ?>
+
+    <?php if (!empty($data['error'])): ?>
+        <div class="error"><?= $data['error'] ?></div>
+    <?php endif; ?>
+
+        <label>Product Name: <span class="required">*</span></label>
     <input type="text" name="name" value="<?= htmlspecialchars($data['name']) ?>" required>
 
-    <label>Seller Id:</label>
+    <label>Seller Id: <span class="required">*</span></label>
     <input type="text" name="seller_id" value="<?= htmlspecialchars($data['seller_id']) ?>" required>
 
-    <label>Category:</label>
+    <label>Category: <span class="required">*</span></label>
     <select name="category" required>
         <option value="">Select Category</option>
         <option value="Fertilizer" <?= $data['category']=='Fertilizer'?'selected':'' ?>>Fertilizer</option>
-        <option value="Seeds" <?= $data['category']=='Seeds'?'selected':'' ?>>Seeds</option>
-        <option value="Tools" <?= $data['category']=='Tools'?'selected':'' ?>>Tools</option>
+        <option value="Seeds" <?= $data['category']=='Seeds'?'selected':'' ?>>Paddy Seeds</option>
+        <option value="Agrochemicals" <?= $data['category']=='Agrochemicals'?'selected':'' ?>>Agrochemicals</option>
+        <option value="Equipments" <?= $data['category']=='Equipments'?'selected':'' ?>>Equipments</option>
+        <option value="Rental" <?= $data['category']=='Rental'?'selected':'' ?>>Rent Machinery</option>
+        <option value="Others" <?= $data['category']=='Others'?'selected':'' ?>>Others</option>
     </select>
 
-    <label>Description:</label>
+    <label>Description: <span class="required">*</span></label>
     <textarea name="description" rows="3" required><?= htmlspecialchars($data['description']) ?></textarea>
 
-    <label>Region:</label>
+    <label>Region: <span class="required">*</span></label>
     <select name="region" required>
         <option value="">Select Region</option>
         <option value="Colombo" <?= $data['region']=='Colombo'?'selected':'' ?>>Colombo</option>
@@ -34,29 +48,24 @@
         <option value="Matara" <?= $data['region']=='Matara'?'selected':'' ?>>Matara</option>
     </select>
 
-    <label>Unit Type:</label>
+    <label>Unit Type: <span class="required">*</span></label>
     <select name="unit_type" required>
         <option value="">Select Unit</option>
         <option value="kg" <?= $data['unit_type']=='kg'?'selected':'' ?>>Kg</option>
         <option value="litre" <?= $data['unit_type']=='litre'?'selected':'' ?>>Litre</option>
         <option value="packet" <?= $data['unit_type']=='packet'?'selected':'' ?>>Packet</option>
+        <option value="hour" <?= $data['unit_type']=='hour'?'selected':'' ?>>1 Hour</option>
+        <option value="day" <?= $data['unit_type']=='day'?'selected':'' ?>>1 Day</option>
     </select>
 
-    <label>Price Per Unit (LKR):</label>
+    <label>Price Per Unit (LKR): <span class="required">*</span></label>
     <input type="number" step="0.1" name="price" value="<?= htmlspecialchars($data['price']) ?>" required>
 
-    <label>Available Quantity:</label>
+    <label>Available Quantity: <span class="required">*</span></label>
     <input type="number" name="available" value="<?= htmlspecialchars($data['available']) ?>" required>
 
-    <label>Image:</label>
+    <label>Image: <span class="required">*</span></label>
     <input type="file" name="image" accept="image/*" required>
-
-    <?php if (!empty($data['success'])): ?>
-        <div class="success"><?= $data['success'] ?></div>
-    <?php endif; ?>
-    <?php if (!empty($data['error'])): ?>
-        <div class="error"><?= $data['error'] ?></div>
-    <?php endif; ?>
 
     <div style="display:flex; gap:10px; margin-top:20px;">
         <button type="submit" style="flex:1; background:#2e7d32;">
@@ -67,6 +76,7 @@
             <i class="fa-solid fa-xmark"></i> Cancel
         </button>
     </div>
+
 </form>
     </div>
 </main>

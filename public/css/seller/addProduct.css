@@ -92,6 +92,20 @@
       font-weight: 600;
     }
 
+    .required {
+    color: red;         /* Makes the star red */
+    font-weight: bold;   /* Makes it bold */
+    margin-left: 2px;    /* Small spacing after label text */
+    }
+
+    .required-note {
+    text-align: center;   /* Center the text */
+    font-weight: bold;    /* Make it bold */
+    margin-bottom: 15px;  /* Space between note and feedback/messages */
+    font-size: 1rem;      /* Optional: adjust size */
+}
+
+
     /* File input nicer */
     input[type="file"] {
       padding: 6px;
