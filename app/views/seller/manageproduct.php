@@ -18,12 +18,21 @@
   <div class="product-container">
     <img src="<?php echo URLROOT . '/uploads/' . $product->image_url; ?>" alt="Product">
     <div class="product-details">
-      <span class="in-stock">In Stock</span>
+      <?php 
+          $statusClass = '';
+          if ($product->status === 'Instock') $statusClass = 'status-instock';
+          elseif ($product->status === 'Outstock') $statusClass = 'status-outstock';
+          
+        ?>
+      <span class="status <?php echo $statusClass; ?>">
+        <?php echo htmlspecialchars($product->status); ?>
+      </span>
+
       <h2><?php echo htmlspecialchars($product->item_name); ?></h2>
       <div><span class="price">Rs <?php echo htmlspecialchars($product->price_per_unit); ?></span></div>
       <p class="description"><?php echo htmlspecialchars($product->description); ?></p>
       <div class="badges">
-        <span class="stock">Stock: <?php echo htmlspecialchars($product->available_quantity); ?></span>
+        <span class="stock">Available Quantity: <?php echo htmlspecialchars($product->available_quantity); ?></span>
         <span class="region">Region: <?php echo htmlspecialchars($product->region); ?></span>
       </div>
       <hr class="divider">
@@ -41,7 +50,8 @@
 
     </div>
   </div>
-</div></main>
+</main>
+
 
 
 

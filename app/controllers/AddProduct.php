@@ -17,6 +17,7 @@ class AddProduct extends Controller {
             'price' => '',
             'available' => '',
             'image' => '',
+            'status'=> '',
             'success' => '',
             'error' => ''
         ];
@@ -27,6 +28,7 @@ class AddProduct extends Controller {
             $data['seller_id'] = trim($_POST['seller_id']);
             $data['category'] = trim($_POST['category']);
             $data['description'] = trim($_POST['description']);
+            $data['status'] = trim($_POST['status']);
             $data['region'] = trim($_POST['region']);
             $data['unit_type'] = trim($_POST['unit_type']);
             $data['price'] = trim($_POST['price']);

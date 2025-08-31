@@ -1,75 +1,83 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 
-<!-- Marketplace-specific CSS -->
+<!-- Edit Product CSS -->
 <link rel="stylesheet" href="<?= URLROOT ?>/css/seller/editproduct.css?v=<?= time(); ?>">
 
 <?php
-// Ensure $product is available and cast to array if it's an object
-if (isset($product) && is_object($product)) {
-    $product = (array) $product;
-}
+$product = $data['product'] ?? [];
 ?>
 
-<main class="main-content" id="mainContent">
-    <h2><i class="fas fa-edit"></i> Edit Product</h2>
+<main>
+    <div class="form-wrapper">
+        <h2><i class="fas fa-edit"></i> Edit Product</h2>
 
-    <form method="post" action="<?= URLROOT ?>/products/update" enctype="multipart/form-data">
-        <input type="hidden" name="item_id" value="<?= htmlspecialchars($product['item_id'] ?? '') ?>">
-        <input type="hidden" name="current_image" value="<?= htmlspecialchars($product['image_url'] ?? '') ?>">
+        <form method="post" action="<?= URLROOT ?>/editproduct/index/<?= $product['item_id'] ?>" enctype="multipart/form-data">
 
-            
-            <div class="card">
-                <h3>Product Information</h3>
-                <div class="form-section">
-                    <div class="image-container">
-                        <img src="<?= URLROOT ?>/uploads/<?= htmlspecialchars($product['image_url'] ?? '') ?>" class="product-image">
-                        <label>Add New Image :</label>
-                        <input type="file" name="image">
-                    </div>
+            <input type="hidden" name="item_id" value="<?= htmlspecialchars($product['item_id'] ?? '') ?>">
+            <input type="hidden" name="current_image" value="<?= htmlspecialchars($product['image_url'] ?? '') ?>">
 
-                    <div class="info-container">
-                        <label>Product Name:</label>
-                        <input type="text" name="item_name" value="<?= htmlspecialchars($product['item_name'] ?? '') ?>" required>
+            <div class="required-note">Fields marked with <span class="required">*</span> are required</div>
 
-                        <label>Product Type:</label>
-                        <select name="category" required>
-                            <option value="">Select Category</option>
-                            <option value="Fertilizer" <?= isset($product['category']) && $product['category']=='Fertilizer' ? 'selected' : '' ?>>Fertilizer</option>
-                            <option value="Seeds" <?= isset($product['category']) && $product['category']=='Seeds' ? 'selected' : '' ?>>Seeds</option>
-                            <option value="Tools" <?= isset($product['category']) && $product['category']=='Tools' ? 'selected' : '' ?>>Tools</option>
-                        </select>
+            <label>Product Name: <span class="required">*</span></label>
+            <input type="text" name="item_name" value="<?= htmlspecialchars($product['item_name'] ?? '') ?>" required>
 
-                        <label>Brand:</label>
-                        <input type="text" name="brand" value="<?= htmlspecialchars($product['brand'] ?? '') ?>">
+            <label>Product Type: <span class="required">*</span></label>
+            <select name="category" required>
+                <option value="">Select Category</option>
+                <option value="Fertilizer" <?= isset($product['category']) && $product['category']=='Fertilizer' ? 'selected' : '' ?>>Fertilizer</option>
+                <option value="Seeds" <?= isset($product['category']) && $product['category']=='Seeds' ? 'selected' : '' ?>>Seeds</option>
+                <option value="Agrochemicals" <?= isset($product['category']) && $product['category']=='Agrochemicals' ? 'selected' : '' ?>>Agrochemicals</option>
+                <option value="Equipments" <?= isset($product['category']) && $product['category']=='Equipments' ? 'selected' : '' ?>>Equipments</option>
+                <option value="Rental" <?= isset($product['category']) && $product['category']=='Rental' ? 'selected' : '' ?>>Rent Machinery</option>
+                <option value="Others" <?= isset($product['category']) && $product['category']=='Others' ? 'selected' : '' ?>>Others</option>
+            </select>
 
-                        <label>Price:</label>
-                        <input type="number" name="price_per_unit" value="<?= htmlspecialchars($product['price_per_unit'] ?? '') ?>" step="0.01" required>
+            <label>Description:</label>
+            <textarea name="description" rows="4"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
 
-                        <label>Discount (%):</label>
-                        <input type="number" name="discount" value="<?= htmlspecialchars($product['discount'] ?? '') ?>" step="1">
+            <label>Status: <span class="required">*</span></label>
+            <select name="status" required>
+                <option value="">Select Status</option>
+                <option value="Instock" <?= isset($product['status']) && $product['status']=='Instock' ? 'selected' : '' ?>>In Stock</option>
+                <option value="Outstock" <?= isset($product['status']) && $product['status']=='Outstock' ? 'selected' : '' ?>>Out Stock</option>
+            </select>
 
-                        <label>Discount Price:</label>
-                        <input type="number" name="discount_price" value="<?= htmlspecialchars($product['discount_price'] ?? '') ?>" step="0.01">
+            <label>Region: <span class="required">*</span></label>
+            <select name="region" required>
+                <option value="">Select Region</option>
+                <option value="Colombo" <?= isset($product['region']) && $product['region']=='Colombo' ? 'selected' : '' ?>>Colombo</option>
+                <option value="Galle" <?= isset($product['region']) && $product['region']=='Galle' ? 'selected' : '' ?>>Galle</option>
+                <option value="Matara" <?= isset($product['region']) && $product['region']=='Matara' ? 'selected' : '' ?>>Matara</option>
+            </select>
 
-                        <label>Description:</label>
-                        <textarea name="description" rows="4"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
+            <label>Unit Type: <span class="required">*</span></label>
+            <select name="unit_type" required>
+                <option value="">Select Unit</option>
+                <option value="kg" <?= isset($product['unit_type']) && $product['unit_type']=='kg' ? 'selected' : '' ?>>Kg</option>
+                <option value="litre" <?= isset($product['unit_type']) && $product['unit_type']=='litre' ? 'selected' : '' ?>>Litre</option>
+                <option value="packet" <?= isset($product['unit_type']) && $product['unit_type']=='packet' ? 'selected' : '' ?>>Packet</option>
+                <option value="hour" <?= isset($product['unit_type']) && $product['unit_type']=='hour' ? 'selected' : '' ?>>1 Hour</option>
+                <option value="day" <?= isset($product['unit_type']) && $product['unit_type']=='day' ? 'selected' : '' ?>>1 Day</option>
+            </select>
 
-                        <label>Expiration Date:</label>
-                        <input type="date" name="expiration_date" value="<?= htmlspecialchars($product['expiration_date'] ?? '') ?>">
+            <label>Price Per Unit (LKR): <span class="required">*</span></label>
+            <input type="number" name="price_per_unit" value="<?= htmlspecialchars($product['price_per_unit'] ?? '') ?>" step="0.01" required>
 
-                        <label>Available Quantity:</label>
-                        <input type="number" name="available_quantity" value="<?= htmlspecialchars($product['available_quantity'] ?? '') ?>" required>
-                    </div>
-                </div>
+            <label>Available Quantity: <span class="required">*</span></label>
+            <input type="number" name="available_quantity" value="<?= htmlspecialchars($product['available_quantity'] ?? '') ?>" required>
 
-                <div class="button-container">
-                    <input type="submit" value="Update">
-                    <a href="<?= URLROOT ?>/products/manage" class="button">Back to List</a>
-                </div>
-            </div>
-            
-    
-    </form>
+            <label>Current Image:</label>
+            <?php if(!empty($product['image_url'])): ?>
+                <img src="<?= URLROOT ?>/uploads/<?= htmlspecialchars($product['image_url']) ?>" class="product-image-preview">
+            <?php endif; ?>
+            <label>Upload New Image:</label>
+            <input type="file" name="image">
+
+            <button type="submit">Update Product</button>
+            <a href="<?= URLROOT ?>/manageproduct" class="back-button">Back to List</a>
+
+        </form>
+    </div>
 </main>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

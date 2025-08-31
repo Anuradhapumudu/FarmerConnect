@@ -39,6 +39,13 @@
 
     <label>Description: <span class="required">*</span></label>
     <textarea name="description" rows="3" required><?= htmlspecialchars($data['description']) ?></textarea>
+    
+        <label>Status: <span class="required">*</span></label>
+    <select name="status" required>
+        <option value="">Select Status</option>
+        <option value="Instock" <?= $data['status']=='Instock'?'selected':'' ?>>In Stock</option>
+        <option value="Outstock" <?= $data['status']=='Outstock'?'selected':'' ?>>Out Stock</option>
+    </select>
 
     <label>Region: <span class="required">*</span></label>
     <select name="region" required>
