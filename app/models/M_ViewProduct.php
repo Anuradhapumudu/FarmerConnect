@@ -6,15 +6,15 @@ class M_ViewProduct {
         $this->db = $database;
     }
 
-    // Fetch products by category
-    public function getProductsByCategory($category) {
+    // This method must exist
+    public function getFertilizerProducts() {
         $this->db->query("
             SELECT products.*, sellers.seller_name AS seller_name 
             FROM products 
             JOIN sellers ON products.seller_id = sellers.seller_id
-            WHERE products.category = :category
+            WHERE products.category = 'fertilizer'
         ");
-        $this->db->bind(':category', $category);
         return $this->db->resultSet();
     }
 }
+?>

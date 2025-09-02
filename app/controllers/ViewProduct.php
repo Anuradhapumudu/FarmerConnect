@@ -3,17 +3,19 @@ class ViewProduct extends Controller {
     private $viewproductModel;
 
     public function __construct() {
-        $this->viewproductModel = $this->model('M_Product', new Database());
+        $this->viewproductModel = $this->model('M_ViewProduct', new Database());
     }
 
-    // Index page (fertilizer listing)
     public function index() {
-        $products = $this->viewproductModel->getProductsByCategory('fertilizer');
+        // call the method that exists in your model
+        $products = $this->viewproductModel->getFertilizerProducts();
 
         $data = [
+            'category' => 'Fertilizer',
             'products' => $products
         ];
 
-        $this->view('farmer/viewProduct', $data);
+        $this->view('farmer/viewproduct', $data);
     }
 }
+?>
