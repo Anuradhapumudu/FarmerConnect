@@ -1,0 +1,159 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background: linear-gradient(135deg, rgb(235, 234, 234), rgb(242, 243, 242));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    width: 400px;
+    max-width: 90%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(7, 7, 7, 0.1);
+}
+.form-box {
+    display: none;
+}
+.form-box.active {
+    display: block;
+}
+.signin {
+    color: rgb(0, 0, 0);
+    text-align: center;
+    margin: 10px 0px 30px 0px;
+}
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.input-field input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgb(125, 221, 108);
+    border-radius: 8px;
+    outline: none;
+}
+.input-field input:focus {
+    border-color: rgb(27, 54, 23);
+}
+.login button{
+    display: block;
+    padding: 10px 20px;
+    margin: 10px auto;
+    border: none;
+    border-radius: 25px;
+    background: #4CAF50;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.login button:hover{
+    transform: scale(1.05);
+}
+.horizontal-line {
+    margin: 20px;
+}
+.lostpassword{
+    margin: 10px 0px;
+    text-align: right;
+}
+.new-account {
+    text-align: center;
+}
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    padding: 5px;               
+    border-radius: 8px;  
+    margin: 5px auto 15px auto;
+}
+.btn-group button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px 15px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                box-shadow 0.3s ease,
+                transform 0.25s ease
+}
+.btn-group button.active {
+    background-color: #4CAF50;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+.btn-group button.active:hover {
+    color: #fff;
+}
+.btn-group button:hover {
+    color: #4CAF50;
+    transform: translateY(-1px);
+}
+.form-invalid {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+        height: auto;
+        align-items: flex-start;
+    }
+
+    .container {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .btn-group {
+        flex-direction: column;
+        gap: 2px;
+        width: 90%;
+        max-width: 350px;
+        margin: 10 auto;
+    }
+
+    .btn-group button {
+        width: 100%;      
+        padding: 14px;
+        font-size: 15px;
+    }
+
+    .signin {
+        font-size: 20px;
+    }
+
+    .input-field input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .login button {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto;   
+        padding: 12px;
+        font-size: 15px;
+    }
+}
