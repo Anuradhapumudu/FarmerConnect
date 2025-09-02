@@ -3,7 +3,7 @@ class ViewProduct extends Controller {
     private $viewproductModel;
 
     public function __construct() {
-        $this->viewproductModel = $this->model('M_ViewProduct', new Database());
+        $this->viewproductModel = $this->model('M_Product', new Database());
     }
 
     // Index page (fertilizer listing)
@@ -14,6 +14,6 @@ class ViewProduct extends Controller {
             'products' => $products
         ];
 
-        $this->view('farmer/marketplace', $data);
+        $this->view('farmer/viewProduct', $data);
     }
 }

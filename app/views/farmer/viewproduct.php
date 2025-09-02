@@ -10,7 +10,8 @@
   <div class="breadcrumb">
     <a href="<?= URLROOT ?>/pages/index">Home</a><span>/</span>
     <a href="<?= URLROOT ?>/marketplace">Marketplace</a><span>/</span>
-    <span>Fertilizer</span>
+    <h2 class="marketplace-heading"><?php echo $data['category']; ?> Products</h2>
+    
   </div>
 
   <!-- Filter -->
@@ -29,38 +30,23 @@
     <button onclick="resetFilter()">Reset</button>
   </div>
 
-  <!-- Product List -->
-  <?php if (!empty($data['products'])): ?>
-      <?php foreach ($data['products'] as $row): ?>
-          <div class="product-container" data-region="<?= htmlspecialchars($row->region) ?>">
-            <img src="<?= URLROOT ?>/uploads/<?= htmlspecialchars($row->image_url) ?>" alt="<?= htmlspecialchars($row->item_name) ?>">
-            <div class="product-details">
-              <span class="in-stock">In Stock</span>
-              <h2><?= htmlspecialchars($row->item_name) ?></h2>
-              <div><span class="price">Rs. <?= number_format($row->price_per_unit, 2) ?></span></div>
-              <p class="description">Available Quantity: <?= $row->available_quantity ?><br>Seller: <?= htmlspecialchars($row->seller_name) ?></p>
-              <div class="quantity-add">
-                <a class="add-to-cart" href="<?= URLROOT ?>/buy_products/index/<?= $row->item_id ?>">Buy Now</a>
-              </div>
-              <hr class="divider">
-              <div class="product_quality">
-                <div class="quality_box">
-                  <div class="quality_icon"><i class="fa-solid fa-truck"></i></div>
-                  <div class="quality">Delivery Info</div>
-                </div>
-                <div class="quality_box">
-                  <div class="quality_icon"><i class="fa-solid fa-shield-heart"></i></div>
-                  <div class="quality">Quality Guarantee</div>
-                </div>
-              </div>
-            </div>
+   <div class="product-list">
+      <?php if (!empty($data['products'])): ?>
+        <?php foreach ($data['products'] as $product): ?>
+          <div class="product-card">
+            <h3><?php echo htmlspecialchars($product->product_name); ?></h3>
+            <p><?php echo htmlspecialchars($product->description); ?></p>
+            <p>Price: Rs. <?php echo htmlspecialchars($product->price); ?></p>
+            <p>Seller: <?php echo htmlspecialchars($product->seller_name); ?></p>
+            <a href="<?php echo URLROOT; ?>/buyProduct/<?php echo $product->item_id; ?>" class="btn">Buy Now</a>
           </div>
-      <?php endforeach; ?>
-  <?php else: ?>
-      <p style="text-align:center;margin-top:30px;">No products found.</p>
-  <?php endif; ?>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>No products found in this category.</p>
+      <?php endif; ?>
+    </div>
+  </div>
 
-</div>
 
 <script>
 function applyFilter() {
@@ -90,10 +76,6 @@ function resetFilter() {
   document.querySelectorAll(".product-container").forEach(p => p.style.display = "flex");
 }
 </script>
-
-
-
-
 
 
 <?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>

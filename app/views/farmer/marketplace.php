@@ -25,9 +25,10 @@
       <div class="feature-card">
         <div class="feature-top" style="background-image: url('img/fertilizer.jpg');"></div>
         <div class="feature-bottom">
-          <h3>Fertilizer</h3>
+          <h3>fertilizer</h3>
           <p>High-quality fertilizers for optimal crop growth</p>
-          <a href="view_products.php" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/viewProduct" class="btn">Shop Now</a>
+
         </div>
       </div>
 
