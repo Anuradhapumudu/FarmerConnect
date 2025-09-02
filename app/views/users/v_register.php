@@ -144,7 +144,7 @@
             </div>
             <hr class="horizontal-line">
                 <div class="have-account" >
-                <p>Already have an account ? <a href="#">Login Here</a></p>
+                <p>Already have an account ? <a href="<?php echo URLROOT; ?>/users/login">Login Here</a></p>
             </div> 
         </div>
     </main>

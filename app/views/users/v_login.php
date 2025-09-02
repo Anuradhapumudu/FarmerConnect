@@ -112,7 +112,7 @@
             </div>
             <hr class="horizontal-line">
                 <div class="new-account">
-                <p>Don't have an account ? <a href="#">Register Here</a></p>
+                <p>Don't have an account ? <a href="<?php echo URLROOT; ?>/users/register">Register Here</a></p>
             </div> 
         </div>
     </main>
