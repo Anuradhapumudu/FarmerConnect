@@ -12,7 +12,7 @@
 
                 // Determine which form was submitted
                 $formType = 'farmer';
-                if (isset($_POST['officerID'])) {
+                if (isset($_POST['officer_id'])) {
                     $formType = 'officer';
                 } elseif (isset($_POST['brn'])) {
                     $formType = 'seller';
@@ -30,7 +30,7 @@
                     'email' => trim($_POST['email']),
                     'password' => trim($_POST['password']),
                     'confirm_password' => trim($_POST['confirm_password']),
-                    'officerID' => '',
+                    'officer_id' => '',
                     'brn' => '',
                     
 
@@ -40,7 +40,7 @@
                     'email_error' => '',
                     'password_error' => '',
                     'confirm_password_error' => '',
-                    'officerID_error' => '',
+                    'officer_id_error' => '',
                     'brn_error' => '',
                     ];
                     // Validate farmer inputs
@@ -80,7 +80,7 @@
                     'last_name' => trim($_POST['last_name']),
                     'nic' => trim($_POST['nic']),
                     'email' => trim($_POST['email']),
-                    'officerID' => trim($_POST['officerID']),
+                    'officer_id' => trim($_POST['officer_id']),
                     'password' => trim($_POST['password']),
                     'confirm_password' => trim($_POST['confirm_password']),
                     'brn' => '',
@@ -89,7 +89,7 @@
                     'last_name_error' => '',
                     'nic_error' => '',
                     'email_error' => '',
-                    'officerID_error' => '',
+                    'officer_id_error' => '',
                     'password_error' => '',
                     'confirm_password_error' => '',
                     'brn_error' => ''
@@ -111,8 +111,8 @@
                             $data['email_error'] = 'Email is already taken';
                         }
                     }
-                    if (empty($data['officerID'])) {
-                        $data['officerID_error'] = 'Please enter your Officer ID';
+                    if (empty($data['officer_id'])) {
+                        $data['officer_id_error'] = 'Please enter your Officer ID';
                     }
                     if (empty($data['password'])) {
                         $data['password_error'] = 'Please enter your password';
@@ -130,7 +130,7 @@
                     'brn' => trim($_POST['brn']),
                     'password' => trim($_POST['password']),
                     'confirm_password' => trim($_POST['confirm_password']),
-                    'officerID' => '',
+                    'officer_id' => '',
 
                     'first_name_error' => '',
                     'last_name_error' => '',
@@ -139,7 +139,7 @@
                     'brn_error' => '',
                     'password_error' => '',
                     'confirm_password_error' => '',
-                    'officerID_error' => '',
+                    'officer_id_error' => '',
                     ];
                     // Validate seller inputs
                     if (empty($data['first_name'])) {
@@ -182,7 +182,23 @@
                     // Register user
                     if ($this->userModel->register($data)) {
                         // Redirect to the login page
-                        die('User registered successfully');
+                        echo "
+                            <div style='
+                                text-align: center; 
+                                margin-top: 50px; 
+                                font-family: Arial, sans-serif; 
+                                font-size: 20px; 
+                                color: green;'>
+                                Registration successful! 🎉 <br>
+                                Redirecting to login page in 5 seconds...
+                            </div>
+                            <script>
+                                setTimeout(function(){
+                                    window.location.href = '" . URLROOT . "/users/login';
+                                }, 5000);
+                            </script>
+                        ";
+                    exit;
                     } else {
                         die('Something went wrong');
                     }
@@ -201,7 +217,7 @@
                     'email' => '',
                     'password' => '',
                     'confirm_password' => '',
-                    'officerID' => '',
+                    'officer_id' => '',
                     'brn' => '',
 
                     'first_name_error' => '',
@@ -210,15 +226,13 @@
                     'email_error' => '',
                     'password_error' => '',
                     'confirm_password_error' => '',
-                    'officerID_error' => '',
+                    'officer_id_error' => '',
                     'brn_error' => ''
                 ];
                 // Load the view with the initial data
                 $this->view('users/v_register', $data);
             }
         }
-
-
 
         // Login logic here
         public function login() {
@@ -282,7 +296,7 @@
                     if (empty($data['officer_id'])) {
                         $data['officer_id_error'] = 'Please enter your Officer ID';
                     } else {
-                        if (!$this->userModel->findUserByOfficerId($data['officer_id'])) {
+                        if (!$this->userModel->findUserByOfficer_id($data['officer_id'])) {
                             $data['officer_id_error'] = 'No user found';
                         }
                     }
@@ -349,7 +363,7 @@
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
                             if ($loggedUser) {
                                 // Create session,
-                                die('Success');
+                                $this->createUserSession($loggedUser, $formType);
                             } else {
                                 $data['password_error'] = 'Password incorrect';
                                 // Load the view with errors
@@ -366,6 +380,7 @@
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
                             if ($loggedUser) {
                                 // Create session,
+                                $this->createUserSession($loggedUser, $formType);
                             } else {
                                 $data['password_error'] = 'Password incorrect';
                                 // Load the view with errors
@@ -381,7 +396,14 @@
                         if (empty($data['seller_id_error']) && empty($data['password_error'])) {
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
                             if ($loggedUser) {
-                                // Create session,
+                                if ($loggedUser->approval_status !== 'Approved') {
+                                    $data['seller_id_error'] = 'Your account is not approved yet.';
+                                    $this->view('users/v_login', $data);
+                                    return;
+                                } else {
+                                    // Create session,
+                                    $this->createUserSession($loggedUser, $formType);
+                                }
                             } else {
                                 $data['password_error'] = 'Password incorrect';
                                 // Load the view with errors
@@ -398,6 +420,7 @@
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
                             if ($loggedUser) {
                                 // Create session,
+                                $this->createUserSession($loggedUser, $formType);
                             } else {
                                 $data['password_error'] = 'Password incorrect';
                                 // Load the view with errors
@@ -427,6 +450,42 @@
                 // Load the view with the initial data
                 $this->view('users/v_login', $data);
             }
+        }
+
+        // user session creation
+        public function createUserSession($user, $formType) {
+            $_SESSION['user_type'] = $formType;
+            switch ($formType) {
+                case 'farmer':
+                    $_SESSION['nic'] = $user->nic;
+                    break;
+                case 'officer':
+                    $_SESSION['officer_id'] = $user->officer_id;
+                    break;
+                case 'seller':
+                    $_SESSION['seller_id'] = $user->seller_id;
+                    break;
+                case 'admin':
+                    $_SESSION['admin_id'] = $user->admin_id;
+                    break;
+                default:
+                    break;
+            }
+            die('Success');
+        }
+
+        public function logout() {
+            $_SESSION = [];
+            session_destroy();
+            header('Location: ' . URLROOT . '/users/login');
+            exit;
+        }
+
+        public function isLoggedIn() {
+            if(isset($_SESSION['user_type'])) {
+                return true;
+            }
+            return false;
         }
     }
 ?>

@@ -19,7 +19,7 @@
             $this->db->bind(':first_name', $data['first_name']);
             $this->db->bind(':last_name', $data['last_name']);
             $this->db->bind(':nic', $data['nic']);
-            $this->db->bind(':officer_id', !empty($data['officerID']) ? $data['officerID'] : null);
+            $this->db->bind(':officer_id', !empty($data['officer_id']) ? $data['officer_id'] : null);
             $this->db->bind(':brn', !empty($data['brn']) ? $data['brn'] : null);
             $this->db->bind(':email', $data['email']);
             $this->db->bind(':password', $data['password']); // already hashed in controller
@@ -38,7 +38,7 @@
                     $idColumn = "nic";
                     break;
                 case 'officer':
-                    $table = "officers";
+                    $table = "registrations";
                     $idColumn = "officer_id";
                     break;
                 case 'seller':
@@ -87,7 +87,7 @@
         }
 
         // Check if officer ID already exists in registrations
-        public function findUserByOfficerId($officer_id) {
+        public function findUserByOfficer_id($officer_id) {
             $this->db->query("SELECT * FROM registrations WHERE officer_id = :officer_id");
             $this->db->bind(':officer_id', $officer_id);
             $row = $this->db->single();

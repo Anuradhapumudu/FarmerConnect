@@ -86,8 +86,8 @@
                             <span class = "form-invalid"><?php echo ($data['form_type'] == 'officer') ? $data['email_error'] : ''; ?></span>
                         </div>
                         <div class="input-field">
-                            <input type="text" name="officerID" id="officerID" placeholder="Officer ID" value="<?php echo $data['officerID']; ?>">
-                            <span class = "form-invalid"><?php echo ($data['form_type'] == 'officer') ? $data['officerID_error'] : ''; ?></span>
+                            <input type="text" name="officer_id" id="officer_id" placeholder="Officer ID" value="<?php echo $data['officer_id']; ?>">
+                            <span class = "form-invalid"><?php echo ($data['form_type'] == 'officer') ? $data['officer_id_error'] : ''; ?></span>
                         </div>
                         <div class="input-field">
                             <input type="password" name="password" id="officer_password" placeholder="Password" value="<?php echo $data['password']; ?>">
