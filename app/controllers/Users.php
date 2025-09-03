@@ -471,6 +471,7 @@
                 default:
                     break;
             }
+            $this->view('officer/v_create_announcements', $data);
             die('Success');
         }
 
