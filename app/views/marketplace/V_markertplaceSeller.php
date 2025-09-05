@@ -18,7 +18,7 @@
         <div class="feature-bottom">
           <h3>Manage Products</h3>
           <p>Add, edit, or remove your listed items</p>
-          <a href="<?php echo URLROOT; ?>/manageproduct" class="btn">Manage</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/ManageProduct" class="btn">Manage</a>
         </div>
       </div>
 

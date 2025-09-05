@@ -46,7 +46,7 @@
               <div><span class="price">Rs. <?= number_format($price, 2) ?></span></div>
               <p class="description">Available Quantity: <?= $available ?><br>Seller: <?= $sellerName ?></p>
               <div class="quantity-add">
-                <a class="add-to-cart" href="<?= URLROOT ?>/buyProduct/<?= $itemId ?>">Buy Now</a>
+                <a class="add-to-cart" href="<?= URLROOT ?>/marketplace/buyProduct/<?= $itemId ?>">Buy Now</a>
               </div>
               <hr class="divider">
               <div class="product_quality">

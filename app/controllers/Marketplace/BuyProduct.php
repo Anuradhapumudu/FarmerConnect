@@ -3,7 +3,7 @@ class BuyProduct extends Controller {
     private $buyProductModel;
 
     public function __construct() {
-        $this->buyProductModel = $this->model('M_BuyProduct', new Database());
+        $this->buyProductModel = $this->model('M_Marketplace/M_BuyProduct', new Database());
     }
 
     public function index($id = 0) {
@@ -33,6 +33,6 @@ class BuyProduct extends Controller {
             'product' => $product
         ];
 
-        $this->view('farmer/buyproduct', $data);
+        $this->view('marketplace/V_buyproduct', $data);
     }
 }

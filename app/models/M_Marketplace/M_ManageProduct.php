@@ -1,5 +1,5 @@
 <?php
-class Product {
+class M_ManageProduct {
  private $db;
 
     public function __construct($database) {

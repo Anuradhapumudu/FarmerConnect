@@ -4,7 +4,7 @@ class ManageProduct extends Controller {
 
     public function __construct() {
         // Pass the Database object to the model
-        $this->manageProductModel = $this->model('Product', new Database());
+        $this->manageProductModel = $this->model('M_Marketplace/M_ManageProduct', new Database());
     }
 
     public function index() {
@@ -19,7 +19,7 @@ class ManageProduct extends Controller {
         $products = $this->manageProductModel->getProductsBySeller($seller_id);
 
         $data = ['products' => $products];
-        $this->view('seller/manageProduct', $data);
+        $this->view('marketplace/V_manageProduct', $data);
     }
 }
 ?>
