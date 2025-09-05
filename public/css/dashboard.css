@@ -3,30 +3,28 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Hero Section */
+/* Hero Section - White Background */
 .hero {
-  background: linear-gradient(135deg, rgba(76,175,80,0.85), rgba(139,195,74,0.85));
-  backdrop-filter: blur(4px); /* optional glassy effect */
-  color: white;
+   background: linear-gradient(
+    rgba(255,255,255,0.92), 
+    rgba(255,255,255,0.85)
+  );
+  backdrop-filter: blur(15px);
+-webkit-backdrop-filter: blur(10px);
+  color: #2e7d32; /* green text by default */
   text-align: center;
   padding: 50px 40px;
-  border-radius: 0 0 50px 50px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  border-radius: 0 0 100px 100px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
   position: relative;
-}
-
-.hero h1, .hero p, .hero .btn {
-  opacity: 0;
-  transform: translateY(30px);
-  animation-fill-mode: forwards;
 }
 
 .hero h1 {
   font-size: 3.5rem;
   margin-bottom: 20px;
   line-height: 1.2;
-  color: #f1f8f2;
-  text-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+  color: #388e3c; /* bold green heading */
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
   animation: slideUpIn 1s ease-out 0.2s forwards;
 }
 
@@ -36,14 +34,15 @@ html {
   max-width: 750px;
   margin-left: auto;
   margin-right: auto;
-   color: #e0f2c6;
-  text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
+  color: var(--text-secondary); /* softer gray */
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
   animation: slideUpIn 1s ease-out 0.3s forwards;
 }
 
 .hero .btn {
   display: inline-block;
-  background: #f0ad4e;
+  background: linear-gradient(90deg, #f0ad4e, #f39c12);
+  box-shadow: 0 4px 12px rgba(240, 173, 78, 0.3);
   color: white;
   padding: 12px 25px;
   border-radius: 30px;
@@ -55,6 +54,7 @@ html {
 .hero .btn:hover {
   background: #e08e00;
 }
+
 
 /* Sections */
 section {

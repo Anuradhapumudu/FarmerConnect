@@ -1,3 +1,4 @@
+/* Smooth Scroll */
 html {
   scroll-behavior: smooth;
 }
@@ -5,121 +6,70 @@ html {
 /* Hero Section */
 .hero {
   background: linear-gradient(135deg, rgba(76,175,80,0.85), rgba(139,195,74,0.85));
+  backdrop-filter: blur(4px); /* optional glassy effect */
   color: white;
   text-align: center;
-  padding: 90px 40px;
+  padding: 50px 40px;
   border-radius: 0 0 50px 50px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   position: relative;
 }
 
-/* Add subtle fade-in animation */
-.hero::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.2);
-  z-index: 1;
+.hero h1, .hero p, .hero .btn {
   opacity: 0;
-  animation: fadeIn 2s forwards;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
+  transform: translateY(30px);
+  animation-fill-mode: forwards;
 }
 
 .hero h1 {
-  font-size: 3.2rem;
+  font-size: 3.5rem;
   margin-bottom: 20px;
   line-height: 1.2;
   color: #f1f8f2;
   text-shadow: 1px 1px 10px rgba(0,0,0,0.5);
-  z-index: 2;
-  position: relative;
-  animation: slideUp 1s ease-out;
+  animation: slideUpIn 1s ease-out 0.2s forwards;
 }
 
 .hero p {
   font-size: 1.4rem;
   margin-bottom: 35px;
-  max-width: 700px;
+  max-width: 750px;
   margin-left: auto;
   margin-right: auto;
-  color: #e0f2d6;
+   color: #e0f2c6;
   text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
-  z-index: 2;
-  position: relative;
-  animation: slideUp 1.2s ease-out;
+  animation: slideUpIn 1s ease-out 0.3s forwards;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero .btn {
+  display: inline-block;
+  background: #f0ad4e;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  animation: slideUpIn 1s ease-out 0.4s forwards;
 }
 
-/* Optional: Button styling inside hero */
-  .btn {
-      display: inline-block;
-      background: var(--secondary);
-      color: var(--primary);
-      padding: 12px 25px;
-      border-radius: 30px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-
-    .btn:hover {
-      background: #e0a800;
-    }
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .hero {
-    padding: 80px 20px;
-  }
-  .hero h1 {
-    font-size: 2.4rem;
-  }
-  .hero p {
-    font-size: 1.2rem;
-  }
+.hero .btn:hover {
+  background: #e08e00;
 }
 
-@media (max-width: 480px) {
-  .hero {
-    padding: 60px 15px;
-  }
-  .hero h1 {
-    font-size: 1.9rem;
-  }
-  .hero p {
-    font-size: 1rem;
-  }
-}
-
-
-/* Section */
+/* Sections */
 section {
   padding: 60px 20px;
   text-align: center;
 }
 
 section h2 {
-  font-size: 40px;
-  color: var(--primary);
+  font-size: 2.5rem;
+  color: #4caf50;
   margin-bottom: 40px;
   position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUpIn 1s ease-out 0.4s forwards;
 }
 
 section h2::after {
@@ -127,16 +77,69 @@ section h2::after {
   display: block;
   width: 60px;
   height: 4px;
-  background: var(--secondary);
+  background: #f0ad4e;
   margin: 12px auto 0;
   border-radius: 2px;
 }
 
-/* Features Grid */
-#features {
-  scroll-margin-top: 80px; /* adjust to your header height */
+/* User Roles / Who We Serve */
+.user_Information {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  max-width: 1100px;
+  margin: auto;
 }
 
+.actor {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUpIn 0.8s ease-out forwards;
+}
+
+.actor:nth-child(1) { animation-delay: 0.2s; }
+.actor:nth-child(2) { animation-delay: 0.4s; }
+.actor:nth-child(3) { animation-delay: 0.6s; }
+
+.actor i, .actor h3, .actor p {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUpIn 0.8s ease-out forwards;
+}
+
+.actor:nth-child(1) i,
+.actor:nth-child(1) h3,
+.actor:nth-child(1) p { animation-delay: 0.25s; }
+
+.actor:nth-child(2) i,
+.actor:nth-child(2) h3,
+.actor:nth-child(2) p { animation-delay: 0.45s; }
+
+.actor:nth-child(3) i,
+.actor:nth-child(3) h3,
+.actor:nth-child(3) p { animation-delay: 0.65s; }
+
+.actor:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.actor i {
+  margin-bottom: 15px;
+  color: #4caf50;
+  font-size: 2rem;
+}
+
+/* Features */
+
+#features {
+  scroll-margin-top: 40px; /* adjust to your header height */
+}
 
 .features_block {
   display: grid;
@@ -148,36 +151,32 @@ section h2::after {
 }
 
 .feature {
-    text-decoration: none; /* remove underline */
-  color: inherit;        /* keep text color */
-  display: block;        /* make the whole card block */
+  display: block;
   background: #f9fff6;
   border-radius: 18px;
   padding: 50px 20px;
-  border-left: 6px solid var(--secondary);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;;
+  border-left: 6px solid #f0ad4e;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  
+  text-decoration: none;
+  color: inherit;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUpIn 0.8s ease-out forwards;
 }
 
-.feature h3, 
-.feature i,
-.feature p {
-  text-align: center;
-}
+.feature:nth-child(1) { animation-delay: 0.2s; }
+.feature:nth-child(2) { animation-delay: 0.35s; }
+.feature:nth-child(3) { animation-delay: 0.5s; }
+.feature:nth-child(4) { animation-delay: 0.65s; }
+.feature:nth-child(5) { animation-delay: 0.8s; }
+.feature:nth-child(6) { animation-delay: 0.95s; }
 
 .feature i {
   display: block;
   margin: 0 auto 12px;
   color: #4caf50;
-}
-
-
-.feature:hover {
-background-color: #f0fff4;
-  transform: translateY(-7px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  cursor: pointer;
+  font-size: 2rem;
 }
 
 .feature h3 {
@@ -193,7 +192,25 @@ background-color: #f0fff4;
   line-height: 1.5;
 }
 
-/* Responsive Tweaks */
+.feature:hover {
+  background-color: #f0fff4;
+  transform: translateY(-7px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  cursor: pointer;
+}
+
+/* Keyframes */
+@keyframes slideUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero h1 { font-size: 2.2rem; }
