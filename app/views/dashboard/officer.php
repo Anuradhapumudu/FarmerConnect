@@ -6,6 +6,8 @@
   <div class="hero-content">
     <h1> Welcome Back to FarmerConnect.lk</h1>
     <p>Connect with agri experts, sellers, and a thriving farming community in Sri Lanka.</p>
+    <!-- Get Started button -->
+    <a href="#features" id="getStartedBtn" class="btn">Get Started</a>
   </div>
 </section>
 
