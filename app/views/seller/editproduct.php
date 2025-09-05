@@ -1,6 +1,6 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 
-<!-- Edit Product CSS -->
+<!-- Edit Product C SS -->
 <link rel="stylesheet" href="<?= URLROOT ?>/css/seller/editproduct.css?v=<?= time(); ?>">
 
 <?php

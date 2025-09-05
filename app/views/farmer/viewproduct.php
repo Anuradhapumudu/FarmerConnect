@@ -1,14 +1,11 @@
-
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/viewproduct.css?v=<?= time(); ?>">
 
 <div id="mainContent">
 
-  
-
   <!-- Breadcrumb -->
   <div class="breadcrumb">
-    <a href="<?= URLROOT ?>/pages/index">Home</a><span>/</span>
+    <a href="<?= URLROOT ?>/index">Home</a><span>/</span>
     <a href="<?= URLROOT ?>/marketplace">Marketplace</a><span>/</span>
     <span>Fertilizer</span>
   </div>
@@ -29,18 +26,27 @@
     <button onclick="resetFilter()">Reset</button>
   </div>
 
-  <!-- Product List -->
+  <!-- Products -->
   <?php if (!empty($data['products'])): ?>
       <?php foreach ($data['products'] as $row): ?>
-          <div class="product-container" data-region="<?= htmlspecialchars($row->region) ?>">
-            <img src="<?= URLROOT ?>/uploads/<?= htmlspecialchars($row->image_url) ?>" alt="<?= htmlspecialchars($row->item_name) ?>">
+          <?php 
+              $price = floatval($row->price_per_unit);
+              $region = htmlspecialchars($row->region);
+              $itemName = htmlspecialchars($row->item_name);
+              $sellerName = htmlspecialchars($row->seller_name);
+              $imageUrl = URLROOT . '/uploads/' . htmlspecialchars($row->image_url);
+              $available = intval($row->available_quantity);
+              $itemId = intval($row->item_id);
+          ?>
+          <div class="product-container" data-region="<?= $region ?>">
+            <img src="<?= $imageUrl ?>" alt="<?= $itemName ?>">
             <div class="product-details">
               <span class="in-stock">In Stock</span>
-              <h2><?= htmlspecialchars($row->item_name) ?></h2>
-              <div><span class="price">Rs. <?= number_format($row->price_per_unit, 2) ?></span></div>
-              <p class="description">Available Quantity: <?= $row->available_quantity ?><br>Seller: <?= htmlspecialchars($row->seller_name) ?></p>
+              <h2><?= $itemName ?></h2>
+              <div><span class="price">Rs. <?= number_format($price, 2) ?></span></div>
+              <p class="description">Available Quantity: <?= $available ?><br>Seller: <?= $sellerName ?></p>
               <div class="quantity-add">
-                <a class="add-to-cart" href="<?= URLROOT ?>/buy_products/index/<?= $row->item_id ?>">Buy Now</a>
+                <a class="add-to-cart" href="<?= URLROOT ?>/buyProduct/<?= $itemId ?>">Buy Now</a>
               </div>
               <hr class="divider">
               <div class="product_quality">
@@ -57,7 +63,7 @@
           </div>
       <?php endforeach; ?>
   <?php else: ?>
-      <p style="text-align:center;margin-top:30px;">No products found.</p>
+      <p style="text-align:center;margin-top:30px;">No Fertilizer products found.</p>
   <?php endif; ?>
 
 </div>
@@ -72,16 +78,19 @@ function applyFilter() {
 
   products.forEach(product => {
     let name = product.querySelector("h2").textContent.toLowerCase();
-    let price = parseInt(product.querySelector(".price").textContent.replace(/\D/g, ""));
+    let price = parseFloat(product.querySelector(".price").textContent.replace(/\D/g, "")) || 0;
     let location = product.getAttribute("data-region");
     let match = true;
+
     if (search && !name.includes(search)) match = false;
     if (minPrice && price < minPrice) match = false;
     if (maxPrice && price > maxPrice) match = false;
     if (region && location !== region) match = false;
+
     product.style.display = match ? "flex" : "none";
   });
 }
+
 function resetFilter() {
   document.getElementById("searchInput").value = "";
   document.getElementById("minPrice").value = "";
@@ -90,11 +99,6 @@ function resetFilter() {
   document.querySelectorAll(".product-container").forEach(p => p.style.display = "flex");
 }
 </script>
-
-
-
-
-
 
 <?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

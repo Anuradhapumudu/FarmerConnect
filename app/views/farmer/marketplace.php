@@ -27,7 +27,8 @@
         <div class="feature-bottom">
           <h3>Fertilizer</h3>
           <p>High-quality fertilizers for optimal crop growth</p>
-          <a href="view_products.php" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/viewproduct" class="btn">Shop Now</a>
+
         </div>
       </div>
 
@@ -79,5 +80,4 @@
   </div>
 </main>
 
-<?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
