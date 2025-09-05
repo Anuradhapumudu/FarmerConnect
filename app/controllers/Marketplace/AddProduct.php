@@ -49,18 +49,17 @@ class AddProduct extends Controller {
                         $data['error'] = '❌ Failed to upload image.';
                     }
                 }
-
                 // Insert product if no errors
                 if (empty($data['error'])) {
                     if ($this->addProductModel->addProduct($data)) {
-                        $data['success'] = '✅ Product added successfully!';
-                        // Reset form
-                        foreach($data as $key => $val) {
-                            if ($key != 'success' && $key != 'error') $data[$key] = '';
-                        }
+                        // ✅ Redirect to success page instead of directly rendering view
+                        header("Location: " . URLROOT . "/marketplace/addsuccess");
+                        exit(); // stop execution to prevent accidental rendering
                     } else {
-                        $data['error'] = '❌ Failed to add product.';
+                        header("Location: " . URLROOT . "/marketplace/adderror");
+                        exit(); 
                     }
+               
                 }
             }
         }
