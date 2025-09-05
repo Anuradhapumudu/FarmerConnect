@@ -32,7 +32,7 @@ $product = $data['product'] ?? [];
                 ?>
             </select>
 
-            <label>Description:</label>
+            <label>Description:<span class="required">*</span></label>
             <textarea name="description" rows="4"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
 
             <label>Status: <span class="required">*</span></label>
