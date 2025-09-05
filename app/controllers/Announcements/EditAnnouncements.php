@@ -3,7 +3,12 @@
 class EditAnnouncements extends Controller{
 
     public function __construct() {
-        $this->announcementModel = $this->model('M_Announcements');
+        $this->announcementModel = $this->model('M_Announcements/M_Announcements');
+    }
+    public function index() {
+        // Redirect to announcements page if no method specified
+        header('Location: ' . URLROOT . '/Announcements/Announcements');
+        exit;
     }
     public function edit($id){
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -51,7 +56,7 @@ class EditAnnouncements extends Controller{
                             </div>
                             <script>
                                 setTimeout(function(){
-                                    window.location.href = '" . URLROOT . "/Announcements';
+                                    window.location.href = '" . URLROOT . "/Announcements/Announcements';
                                 }, 5000);
                             </script>
                         ";
@@ -71,7 +76,7 @@ class EditAnnouncements extends Controller{
                 'attachFiles' => '',
                 'attachment_path' => $announcement->attachment_path
             ];
-            $this->view('officer/v_edit_announcements', $data);
+            $this->view('announcements/v_edit_announcements', $data);
         }
     }
 }

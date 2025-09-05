@@ -2,10 +2,10 @@
 
 class DeleteAnnouncements extends Controller{
     public function __construct() {
-        $this->announcementModel = $this->model('M_Announcements');
+        $this->announcementModel = $this->model('M_Announcements/M_Announcements');
     }
     public function delete($id) {
-    $announcementModel = $this->model('M_Announcements');
+    $announcementModel = $this->model('M_Announcements/M_Announcements');
 
     if($announcementModel->deleteAnnouncement($id)) {
         echo "
@@ -20,7 +20,7 @@ class DeleteAnnouncements extends Controller{
                             </div>
                             <script>
                                 setTimeout(function(){
-                                    window.location.href = '" . URLROOT . "/Announcements';
+                                    window.location.href = '" . URLROOT . "/Announcements/Announcements';
                                 }, 5000);
                             </script>
                         ";

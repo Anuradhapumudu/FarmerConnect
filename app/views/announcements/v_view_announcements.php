@@ -3,7 +3,7 @@
 
 <div id="mainContent" class="announcement-view">
     <div class="announcement-detail-card">
-        <a href="<?php echo URLROOT; ?>/Announcements" class="clear-results">❌</a>
+        <a href="<?php echo URLROOT; ?>/Announcements/Announcements" class="clear-results">❌</a>
         <h1 class="announcement-title">
             
             <?php echo htmlspecialchars($data['announcement']->title); ?>
@@ -22,7 +22,7 @@
         <?php endif; ?>
 
         <div class="back-link">
-            <a href="<?php echo URLROOT; ?>/Announcements">⬅ Back to Announcements</a>
+            <a href="<?php echo URLROOT; ?>/Announcements/Announcements">⬅ Back to Announcements</a>
         </div>
     </div>
 </div>

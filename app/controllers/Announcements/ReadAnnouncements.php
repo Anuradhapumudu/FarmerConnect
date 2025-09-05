@@ -3,7 +3,7 @@
 class ReadAnnouncements extends Controller {
 
     public function __construct() {
-        $this->announcementModel = $this->model('M_Announcements');
+        $this->announcementModel = $this->model('M_Announcements/M_Announcements');
     }
 
 
@@ -18,7 +18,7 @@ class ReadAnnouncements extends Controller {
         ];
 
         // Load the view and pass the data
-        $this->view('officer/v_announcements', $data);
+        $this->view('announcements/v_announcements', $data);
     }
 }
 ?>

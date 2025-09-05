@@ -6,7 +6,7 @@
 <div id="mainContent">
 
   <div class="top-actions">
-    <button class="create-announcement-btn" onclick="window.location.href='<?php echo URLROOT; ?>/CreateAnnouncements/create'">+ Create Announcement</button>
+    <button class="create-announcement-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/CreateAnnouncements/create'">+ Create Announcement</button>
   </div>
 
   <h2 class="announcements-heading">Announcements</h2>
@@ -19,12 +19,12 @@
             <?php foreach ($data['pinnedAnnouncements'] as $announcement): ?>
                 <div class="announcement-card">
                   <div class="pin-icon">
-                        <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
+                        <a href="<?php echo URLROOT; ?>/Announcements/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
                             📌 Unpin
                         </a>
                     </div>
                     <h3 class="announcement-title">
-                        <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
+                        <a href="<?php echo URLROOT; ?>/Announcements/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                           <?php echo htmlspecialchars($announcement->title); ?>
                         </a>
                       </h3>
@@ -32,8 +32,8 @@
                     <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
                     <!-- Edit and Delete buttons -->
                       <div class="announcement-actions">
-                          <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
-                          <form method="POST" action="<?php echo URLROOT; ?>/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
+                          <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
+                          <form method="POST" action="<?php echo URLROOT; ?>/Announcements/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
                               <button type="submit" class="delete-btn">Delete</button>
                           </form>
                       </div>
@@ -45,7 +45,7 @@
 
   <!--Search Section-->
   <div class="search-section">
-    <form method="GET" action="<?php echo URLROOT; ?>/Announcements">
+    <form method="GET" action="<?php echo URLROOT; ?>/Announcements/Announcements">
       <div class="search-row">
         <div class="search-group">
           <label for="search-term" class="search-label">Search Term</label>
@@ -86,18 +86,18 @@
         <div class="search-results">
             <div class="section-title">
               Search Results 
-              <a href="<?php echo URLROOT; ?>/Announcements" class="clear-results">❌</a>
+              <a href="<?php echo URLROOT; ?>/Announcements/Announcements" class="clear-results">❌</a>
           </div>
             <div class="announcement-list" id="searchResults">
                 <?php foreach ($data['searchResults'] as $announcement): ?>
                     <div class="announcement-card">
                       <div class="pin-icon">
-                          <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
+                          <a href="<?php echo URLROOT; ?>/Announcements/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
                               <?php echo $announcement->is_pinned ? '📌 Unpin' : '📌 Pin'; ?>
                           </a>
                       </div>
                         <h3 class="announcement-title">
-                          <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
+                          <a href="<?php echo URLROOT; ?>/Announcements/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
@@ -105,8 +105,8 @@
                         <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
                         <!-- Edit and Delete buttons -->
                         <div class="announcement-actions">
-                            <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
-                            <form method="POST" action="<?php echo URLROOT; ?>/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
+                            <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
+                            <form method="POST" action="<?php echo URLROOT; ?>/Announcements/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
                               <button type="submit" class="delete-btn">Delete</button>
                           </form>
                         </div>
@@ -118,7 +118,7 @@
       <div class="no-results">
         <div class="section-title">
                 Search Results 
-                <a href="<?php echo URLROOT; ?>/Announcements" class="clear-results">❌</a>
+                <a href="<?php echo URLROOT; ?>/Announcements/Announcements" class="clear-results">❌</a>
         </div>
         <div class="results-message">No results found.</div>
       </div>
@@ -133,13 +133,13 @@
               <?php foreach ($data['latestAnnouncements'] as $announcement): ?>
                   <div class="announcement-card">
                     <div class="pin-icon">
-                        <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
+                        <a href="<?php echo URLROOT; ?>/Announcements/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
                             <?php echo $announcement->is_pinned ? '📌 Unpin' : '📌 Pin'; ?>
                         </a>
                     </div>
 
                       <h3 class="announcement-title">
-                        <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
+                        <a href="<?php echo URLROOT; ?>/Announcements/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                           <?php echo htmlspecialchars($announcement->title); ?>
                         </a>
                       </h3>
@@ -148,8 +148,8 @@
 
                       <!-- Edit and Delete buttons -->
                       <div class="announcement-actions">
-                          <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
-                          <form method="POST" action="<?php echo URLROOT; ?>/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement?');">
+                          <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
+                          <form method="POST" action="<?php echo URLROOT; ?>/Announcements/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement?');">
                               <button type="submit" class="delete-btn">Delete</button>
                           </form>
                       </div>
@@ -172,13 +172,13 @@
 
                   <!-- icon for pin the announcement -->
                     <div class="pin-icon">
-                        <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
+                        <a href="<?php echo URLROOT; ?>/Announcements/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
                             <?php echo $announcement->is_pinned ? '📌 Unpin' : '📌 Pin'; ?>
                         </a>
                     </div>
 
                       <h3 class="announcement-title">
-                        <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
+                        <a href="<?php echo URLROOT; ?>/Announcements/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                           <?php echo htmlspecialchars($announcement->title); ?>
                         </a>
                       </h3>
@@ -187,8 +187,8 @@
 
                       <!-- Edit and Delete buttons -->
                       <div class="announcement-actions">
-                          <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
-                          <form method="POST" action="<?php echo URLROOT; ?>/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
+                          <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
+                          <form method="POST" action="<?php echo URLROOT; ?>/Announcements/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
                               <button type="submit" class="delete-btn">Delete</button>
                           </form>
                       </div>

@@ -3,9 +3,18 @@
 class CreateAnnouncements extends Controller{
 
     public function __construct() {
-        $this->announcementModel = $this->model('M_Announcements');
+        $this->announcementModel = $this->model('M_Announcements/M_Announcements');
     }
-
+    public function index() {
+        $data = [
+            'title' => '',
+            'category' => '',
+            'content' => '',
+            'attachFiles' => '',
+            'attachment_path' => ''  
+        ];
+        $this->view('announcements/v_create_announcements', $data);
+    }
     public function create(){
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Process form data
@@ -51,7 +60,7 @@ class CreateAnnouncements extends Controller{
                             </div>
                             <script>
                                 setTimeout(function(){
-                                    window.location.href = '" . URLROOT . "/Announcements';
+                                    window.location.href = '" . URLROOT . "/Announcements/Announcements';
                                 }, 5000);
                             </script>
                         ";
@@ -69,7 +78,7 @@ class CreateAnnouncements extends Controller{
                 'attachFiles' => '',
                 'attachment_path' => ''  
             ];
-            $this->view('officer/v_create_announcements', $data);
+            $this->view('announcements/v_create_announcements', $data);
         }
     }
 }

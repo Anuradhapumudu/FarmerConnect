@@ -2,7 +2,7 @@
 class Announcements extends Controller {
     public function index() {
         // Load the model
-        $announcementModel = $this->model('M_Announcements');
+        $announcementModel = $this->model('M_Announcements/M_Announcements');
 
         // Get announcements
         $announcements = $announcementModel->getAnnouncements();
@@ -28,27 +28,27 @@ class Announcements extends Controller {
         ];
 
         // Load the view with data
-        $this->view('officer/v_announcements', $data);
+        $this->view('announcements/v_announcements', $data);
     }
     public function togglePin($id) {
-        $announcementModel = $this->model('M_Announcements');
+        $announcementModel = $this->model('M_Announcements/M_Announcements');
         
         $announcementModel->togglePin($id);
         
         // Redirect back to announcements page
-        header('Location: ' . URLROOT . '/Announcements');
+        header('Location: ' . URLROOT . '/Announcements/Announcements');
         exit;
     }
     // view announcement
     public function details($id) {
-        $announcementModel = $this->model('M_Announcements');
+        $announcementModel = $this->model('M_Announcements/M_Announcements');
         $announcement = $announcementModel->getAnnouncementById($id);
 
         $data = [
             'announcement' => $announcement
         ];
 
-        $this->view('officer/v_view_announcements', $data);
+        $this->view('announcements/v_view_announcements', $data);
     }
 }
 ?>
