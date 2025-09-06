@@ -4,87 +4,178 @@
 
 <?php
 $product = $data['product'] ?? [];
+$errors = $data['errors'] ?? [];
 ?>
 
-<main>
+<main class="main-content" id="mainContent">
+  <div class="containers">
     <div class="form-wrapper">
-        <h2><i class="fas fa-edit"></i> Edit Product</h2>
+        <div class="form-header">
+            <div class="form-icon">
+            <h2><i class="fas fa-edit"></i> 
+            </div>
+            <h2>Edit Product</h2>
+        </div>
+
+        <p class="required-note"><span class="required">*</span> indicates required fields</p>
+
+        <?php if(!empty($errors['general'])): ?>
+            <div class="error"><?= $errors['general'] ?></div>
+        <?php endif; ?>
 
         <form method="post" action="<?= URLROOT ?>/Marketplace/EditProduct/index/<?= ($product['item_id'] ?? 0) ?>" enctype="multipart/form-data">
 
             <input type="hidden" name="item_id" value="<?= htmlspecialchars($product['item_id'] ?? '') ?>">
             <input type="hidden" name="current_image" value="<?= htmlspecialchars($product['image_url'] ?? '') ?>">
 
-            <div class="required-note">Fields marked with <span class="required">*</span> are required</div>
+            <div class="form-grid">
+                <!-- Product Name -->
+                <div class="form-group">
+                    <label>Product Name: <span class="required">*</span></label>
+                    <input type="text" name="item_name" value="<?= htmlspecialchars($product['item_name'] ?? '') ?>" required>
+                    <?php if(!empty($errors['name'])): ?>
+                        <div class="error"><?= $errors['name'] ?></div>
+                    <?php endif; ?>
+                </div>
 
-            <label>Product Name: <span class="required">*</span></label>
-            <input type="text" name="item_name" value="<?= htmlspecialchars($product['item_name'] ?? '') ?>" required>
+                <!-- Category -->
+                <div class="form-group">
+                    <label>Product Type: <span class="required">*</span></label>
+                    <select name="category" required>
+                        <option value="">Select Category</option>
+                        <?php
+                        $categories = ['Fertilizer','Seeds','Agrochemicals','Equipments','Rental','Others'];
+                        foreach ($categories as $cat) {
+                            $selected = (isset($product['category']) && $product['category']==$cat) ? 'selected' : '';
+                            echo "<option value='$cat' $selected>$cat</option>";
+                        }
+                        ?>
+                    </select>
+                    <?php if(!empty($errors['category'])): ?>
+                        <div class="error"><?= $errors['category'] ?></div>
+                    <?php endif; ?>
+                </div>
 
-            <label>Product Type: <span class="required">*</span></label>
-            <select name="category" required>
-                <option value="">Select Category</option>
-                <?php
-                $categories = ['Fertilizer','Seeds','Agrochemicals','Equipments','Rental','Others'];
-                foreach ($categories as $cat) {
-                    $selected = (isset($product['category']) && $product['category']==$cat) ? 'selected' : '';
-                    echo "<option value='$cat' $selected>$cat</option>";
-                }
-                ?>
-            </select>
+                <!-- Description -->
+                <div class="form-group full-width">
+                    <label>Description:<span class="required">*</span></label>
+                    <textarea name="description" rows="4"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
+                    <?php if(!empty($errors['description'])): ?>
+                        <div class="error"><?= $errors['description'] ?></div>
+                    <?php endif; ?>
+                </div>
 
-            <label>Description:<span class="required">*</span></label>
-            <textarea name="description" rows="4"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
+                <!-- Status -->
+                <div class="form-group">
+                    <label>Status: <span class="required">*</span></label>
+                    <select name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="Instock" <?= (isset($product['status']) && $product['status']=='Instock') ? 'selected' : '' ?>>In Stock</option>
+                        <option value="Outstock" <?= (isset($product['status']) && $product['status']=='Outstock') ? 'selected' : '' ?>>Out Stock</option>
+                    </select>
+                    <?php if(!empty($errors['status'])): ?>
+                        <div class="error"><?= $errors['status'] ?></div>
+                    <?php endif; ?>
+                </div>
 
-            <label>Status: <span class="required">*</span></label>
-            <select name="status" required>
-                <option value="">Select Status</option>
-                <option value="Instock" <?= (isset($product['status']) && $product['status']=='Instock') ? 'selected' : '' ?>>In Stock</option>
-                <option value="Outstock" <?= (isset($product['status']) && $product['status']=='Outstock') ? 'selected' : '' ?>>Out Stock</option>
-            </select>
+                <!-- Region -->
+                <div class="form-group">
+                    <label>Region: <span class="required">*</span></label>
+                    <select name="region" required>
+                        <option value="">Select Region</option>
+                        <?php
+                        $regions = ['Colombo','Galle','Matara'];
+                        foreach ($regions as $reg) {
+                            $selected = (isset($product['region']) && $product['region']==$reg) ? 'selected' : '';
+                            echo "<option value='$reg' $selected>$reg</option>";
+                        }
+                        ?>
+                    </select>
+                    <?php if(!empty($errors['region'])): ?>
+                        <div class="error"><?= $errors['region'] ?></div>
+                    <?php endif; ?>
+                </div>
 
-            <label>Region: <span class="required">*</span></label>
-            <select name="region" required>
-                <option value="">Select Region</option>
-                <?php
-                $regions = ['Colombo','Galle','Matara'];
-                foreach ($regions as $reg) {
-                    $selected = (isset($product['region']) && $product['region']==$reg) ? 'selected' : '';
-                    echo "<option value='$reg' $selected>$reg</option>";
-                }
-                ?>
-            </select>
+                <!-- Unit Type -->
+                <div class="form-group">
+                    <label>Unit Type: <span class="required">*</span></label>
+                    <select name="unit_type" required>
+                        <option value="">Select Unit</option>
+                        <?php
+                        $units = ['kg','litre','packet','hour','day'];
+                        foreach ($units as $unit) {
+                            $selected = (isset($product['unit_type']) && $product['unit_type']==$unit) ? 'selected' : '';
+                            echo "<option value='$unit' $selected>$unit</option>";
+                        }
+                        ?>
+                    </select>
+                    <?php if(!empty($errors['unit_type'])): ?>
+                        <div class="error"><?= $errors['unit_type'] ?></div>
+                    <?php endif; ?>
+                </div>
 
-            <label>Unit Type: <span class="required">*</span></label>
-            <select name="unit_type" required>
-                <option value="">Select Unit</option>
-                <?php
-                $units = ['kg','litre','packet','hour','day'];
-                foreach ($units as $unit) {
-                    $selected = (isset($product['unit_type']) && $product['unit_type']==$unit) ? 'selected' : '';
-                    echo "<option value='$unit' $selected>$unit</option>";
-                }
-                ?>
-            </select>
+                <!-- Price -->
+                <div class="form-group">
+                    <label>Price Per Unit (LKR): <span class="required">*</span></label>
+                    <input type="number" name="price_per_unit" value="<?= htmlspecialchars($product['price_per_unit'] ?? '') ?>" step="0.01" required>
+                    <?php if(!empty($errors['price'])): ?>
+                        <div class="error"><?= $errors['price'] ?></div>
+                    <?php endif; ?>
+                </div>
 
-            <label>Price Per Unit (LKR): <span class="required">*</span></label>
-            <input type="number" name="price_per_unit" value="<?= htmlspecialchars($product['price_per_unit'] ?? '') ?>" step="0.01" required>
+                <!-- Available Quantity -->
+                <div class="form-group">
+                    <label>Available Quantity: <span class="required">*</span></label>
+                    <input type="number" name="available_quantity" value="<?= htmlspecialchars($product['available_quantity'] ?? '') ?>" required>
+                    <?php if(!empty($errors['available'])): ?>
+                        <div class="error"><?= $errors['available'] ?></div>
+                    <?php endif; ?>
+                </div>
 
-            <label>Available Quantity: <span class="required">*</span></label>
-            <input type="number" name="available_quantity" value="<?= htmlspecialchars($product['available_quantity'] ?? '') ?>" required>
+                <!-- Image -->
+                <label>Current Image:</label>
+                <?php if(!empty($product['image_url'])): ?>
+                    <img src="<?= URLROOT ?>/uploads/<?= htmlspecialchars($product['image_url']) ?>" class="product-image-preview" style="max-width:150px;">
+                <?php endif; ?>
 
-            <label>Current Image:</label>
-            <?php if(!empty($product['image_url'])): ?>
-                <img src="<?= URLROOT ?>/uploads/<?= htmlspecialchars($product['image_url']) ?>" class="product-image-preview">
-            <?php endif; ?>
+                <div class="form-group full-width">
+                    <label>Upload New Image:</label>
+                    <div class="file-input-container">
+                        <div class="file-input-button">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose Product Image
+                        </div>
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+                </div>
+            </div>
 
-            <label>Upload New Image:</label>
-            <input type="file" name="image">
-
-            <button type="submit">Update Product</button>
-            <a href="<?= URLROOT ?>/Marketplace/ManageProduct" class="back-button">Back to List</a>
-
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check-circle"></i> Update Product
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='<?= URLROOT ?>/marketplace/manageproduct'">
+                    <i class="fas fa-times-circle"></i> Cancel
+                </button>
+            </div>
         </form>
     </div>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.querySelector('input[type="file"]');
+    const fileInputButton = document.querySelector('.file-input-button');
+
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            fileInputButton.innerHTML = `<i class="fas fa-check-circle"></i> ${this.files[0].name}`;
+            fileInputButton.style.borderColor = '#2e7d32';
+            fileInputButton.style.background = '#e8f5e9';
+        } else {
+            fileInputButton.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Choose Product Image`;
+        }
+    });
+});
+</script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

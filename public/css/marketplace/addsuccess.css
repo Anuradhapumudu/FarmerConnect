@@ -1,72 +1,176 @@
-.sucess_wrapper {
-  display: flex;
-  justify-content: center;   /* center horizontally */
-  margin-top: 80px;  
-  margin-bottom: 80px;        /* add spacing from top */
-}
 
-.sucess_card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 30px;
+    .sucess_wrapper {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .sucess_card {
+ background: white;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(46, 125, 50, 0.15);
+  padding: 60px 40px;   /* increased padding */
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  max-width: 400px;
-  width: 100%;
-}
-
-.sucess_icon {
-  background: #e6f9ec;
-  color: #28a745;
-  font-size: 40px;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 70px;
-  height: 70px;
-  margin-bottom: 20px;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 10px;
-  font-size:30px;
-}
-
-p {
-  color: #666;
-  margin-bottom: 20px;
-  font-size: 18px;
-}
-
-.sucess {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.sucess_btn-primary {
-  background: #28a745;
-  color: white;
-}
-
-.sucess_btn-primary:hover {
-  background: #218838;
-}
-
-.sucess_btn-secondary {
-  background: #fff;
-  border: 1px solid #ddd;
-  color: #333;
-}
-
-.sucess_btn-secondary:hover {
-  background: #f1f1f1;
-}
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(46, 125, 50, 0.1);
+  min-height: 500px;    /* ensures taller card */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centers content vertically */
+  gap: 25px;             /* spreads elements evenly */
+     
+    }
+    
+    .sucess_card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(to right, #2e7d32, #4caf50, #81c784);
+    }
+    
+    .sucess_icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
+      margin: 0 auto 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #2e7d32;
+      border: 4px solid #c8e6c9;
+      animation: pulse 2s infinite;
+      box-shadow: 0 5px 15px rgba(46, 125, 50, 0.2);
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(46, 125, 50, 0.2);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(46, 125, 50, 0.3);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(46, 125, 50, 0.2);
+      }
+    }
+    
+    .sucess_card h2 {
+      color: #2e7d32;
+      font-size: 32px;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+    
+    .sucess_card p {
+      color: #546e7a;
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .sucess_btn-primary, .sucess_btn-secondary {
+      padding: 16px 25px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .sucess_btn-primary {
+      background: linear-gradient(to right, #2e7d32, #4caf50);
+      color: white;
+      box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+    }
+    
+    .sucess_btn-primary:hover {
+      background: linear-gradient(to right, #1b5e20, #2e7d32);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(46, 125, 50, 0.4);
+    }
+    
+    .sucess_btn-secondary {
+      background: white;
+      color: #2e7d32;
+      border: 2px solid #c8e6c9;
+      box-shadow: 0 2px 10px rgba(46, 125, 50, 0.1);
+    }
+    
+    .sucess_btn-secondary:hover {
+      background: #e8f5e9;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(46, 125, 50, 0.2);
+    }
+    
+    /* Decorative elements */
+    .leaf-decoration {
+      position: absolute;
+      opacity: 0.1;
+      z-index: 0;
+    }
+    
+    .leaf-1 {
+      top: 20px;
+      right: 20px;
+      font-size: 40px;
+      color: #2e7d32;
+      transform: rotate(30deg);
+    }
+    
+    .leaf-2 {
+      bottom: 20px;
+      left: 20px;
+      font-size: 35px;
+      color: #2e7d32;
+      transform: rotate(-20deg);
+    }
+    
+    /* Responsive design */
+    @media (min-width: 768px) {
+      .button-group {
+        flex-direction: row;
+      }
+      
+      .sucess_btn-primary, .sucess_btn-secondary {
+        width: auto;
+        flex: 1;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .sucess_card {
+        padding: 30px 20px;
+      }
+      
+      .sucess_icon {
+        width: 80px;
+        height: 80px;
+        font-size: 30px;
+      }
+      
+      .sucess_card h2 {
+        font-size: 24px;
+      }
+    }
