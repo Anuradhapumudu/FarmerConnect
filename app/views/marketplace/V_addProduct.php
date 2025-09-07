@@ -1,5 +1,5 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/seller/addProduct.css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/seller/addProduct.css?v=<?= time(); ?>">
 <main class="main-content" id="mainContent">
   <div class="containers">
 

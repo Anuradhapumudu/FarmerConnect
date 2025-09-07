@@ -27,7 +27,7 @@
         <div class="feature-bottom">
           <h3>Track Orders</h3>
           <p>View and manage customer orders.</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/TrackOrders" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/SellerTrackOrders" class="btn">Shop Now</a>
         </div>
       </div>
 

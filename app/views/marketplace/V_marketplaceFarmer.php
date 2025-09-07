@@ -8,11 +8,14 @@
 <main class="main-content" id="mainContent">
   <div class="container">
     <!-- My Orders Button -->
-    <div class="myOrders">
-      <button onclick="window.location.href='my_orders.php'">
-        <i class="fa fa-shopping-cart"></i> My Orders
-      </button>
-    </div>
+        <div class="myOrders">
+          <a href="<?php echo URLROOT; ?>/Marketplace/FarmerTrackOrders">
+            <button>
+              <i class="fa fa-shopping-cart"></i> My Orders
+            </button>
+          </a>
+        </div>
+
 
     <h2 class="marketplace-heading">Marketplace</h2>
     <p class="marketplace-description">

@@ -1,0 +1,352 @@
+<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/adminviewproducts.css?v=<?= time(); ?>">
+
+<main class="main-content" id="mainContent">
+
+ <!-- Filter -->
+  <div class="filter-container">
+    <input type="text" id="searchInput" placeholder="Search product...">
+    <input type="number" id="minPrice" placeholder="Min Price">
+    <input type="number" id="maxPrice" placeholder="Max Price">
+        <select id="categoryFilter">
+         <option value="">All Items</option>
+      <option value="Fertilizer">Fertilizer</option>
+      <option value="Seeds">Paddy seeds</option>
+      <option value="Tools">Tools</option>
+      <option value="Others">Others</option>
+    </select>
+    <select id="regionFilter">
+      <option value="">All Regions</option>
+      <option value="Colombo">Colombo</option>
+      <option value="Kandy">Kandy</option>
+      <option value="Galle">Galle</option>
+      <option value="Jaffna">Jaffna</option>
+    </select>
+        <select id="statusFilter">
+         <option value="">Any Status</option>
+      <option value="Instock">In Stock</option>
+      <option value="Outstock">Out Stock</option>
+
+    </select>
+    <button onclick="applyFilter()">Filter</button>
+    <button onclick="resetFilter()">Reset</button>
+  </div>
+
+
+  <!-- Products Section -->
+<div class="products">
+
+  <!-- Product 1 -->
+  <div class="product-container" data-region="Colombo">
+    <img src="uploads/fertilizer1.jpg" alt="Organic Fertilizer">
+    <div class="product-details">
+      <span class="in-stock">In Stock</span>
+      <h2>Organic Fertilizer</h2>
+      <div><span class="price">Rs. 1,500.00</span></div>
+      <p class="description">Available Quantity: 50<br>Seller: Green Agro Ltd</p>
+      <div class="quantity-add">
+        <a class="add-to-cart" href="#">Buy Now</a>
+      </div>
+      <hr class="divider">
+      <div class="product_quality">
+        <div class="quality_box">
+          <div class="quality_icon"><i class="fa-solid fa-truck"></i></div>
+          <div class="quality">Delivery Info</div>
+        </div>
+        <div class="quality_box">
+          <div class="quality_icon"><i class="fa-solid fa-shield-heart"></i></div>
+          <div class="quality">Quality Guarantee</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product 2 -->
+  <div class="product-container" data-region="Kandy">
+    <img src="uploads/fertilizer2.jpg" alt="Compost Mix">
+    <div class="product-details">
+      <span class="in-stock">In Stock</span>
+      <h2>Compost Mix</h2>
+      <div><span class="price">Rs. 1,200.00</span></div>
+      <p class="description">Available Quantity: 30<br>Seller: EcoFarmers</p>
+      <div class="quantity-add">
+        <a class="add-to-cart" href="#">Buy Now</a>
+      </div>
+      <hr class="divider">
+      <div class="product_quality">
+        <div class="quality_box">
+          <div class="quality_icon"><i class="fa-solid fa-truck"></i></div>
+          <div class="quality">Delivery Info</div>
+        </div>
+        <div class="quality_box">
+          <div class="quality_icon"><i class="fa-solid fa-shield-heart"></i></div>
+          <div class="quality">Quality Guarantee</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product 3 -->
+  <div class="product-container" data-region="Galle">
+    <img src="uploads/fertilizer3.jpg" alt="Coconut Husk Fertilizer">
+    <div class="product-details">
+      <span class="in-stock">In Stock</span>
+      <h2>Coconut Husk Fertilizer</h2>
+      <div><span class="price">Rs. 1,800.00</span></div>
+      <p class="description">Available Quantity: 20<br>Seller: Nature Grow</p>
+      <div class="quantity-add">
+        <a class="add-to-cart" href="#">Buy Now</a>
+      </div>
+      <hr class="divider">
+      <div class="product_quality">
+        <div class="quality_box">
+          <div class="quality_icon"><i class="fa-solid fa-truck"></i></div>
+          <div class="quality">Delivery Info</div>
+        </div>
+        <div class="quality_box">
+          <div class="quality_icon"><i class="fa-solid fa-shield-heart"></i></div>
+          <div class="quality">Quality Guarantee</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize all components
+      initMobileMenu();
+      initSidebar();
+    });
+
+    // ---------------- SIDEBAR ----------------
+    function initSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggleNav = document.getElementById('sidebarToggleNav');
+      const mainContent = document.getElementById('mainContent');
+      const footer = document.getElementById('footer');
+      const overlay = document.getElementById('overlay');
+      
+      if (!sidebar || !sidebarToggleNav) return;
+      
+      function toggleSidebar() {
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+          // Mobile behavior - slide in/out from left
+          sidebar.classList.toggle('expanded');
+          if (overlay) {
+            overlay.classList.toggle('active');
+          }
+          // Prevent body scrolling when sidebar is open on mobile
+          if (sidebar.classList.contains('expanded')) {
+            document.body.style.overflow = 'hidden';
+          } else {
+            document.body.style.overflow = 'auto';
+          }
+        } else {
+          // Desktop behavior - expand/collapse in place
+          sidebar.classList.toggle('expanded');
+          mainContent.classList.toggle('expanded');
+          if (footer) {
+            footer.classList.toggle('expanded');
+          }
+        }
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove('expanded');
+        mainContent.classList.remove('expanded');
+        if (footer) {
+          footer.classList.remove('expanded');
+        }
+        if (overlay) {
+          overlay.classList.remove('active');
+        }
+        document.body.style.overflow = 'auto';
+      }
+      
+      sidebarToggleNav.addEventListener('click', toggleSidebar);
+
+      // Close sidebar when clicking on overlay (mobile)
+      if (overlay) {
+        overlay.addEventListener('click', closeSidebar);
+      }
+
+      // Close sidebar when clicking on sidebar links (mobile)
+      const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+      sidebarLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 768 && sidebar.classList.contains('expanded')) {
+            closeSidebar();
+          }
+        });
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        const isMobile = window.innerWidth <= 768;
+        
+        if (!isMobile) {
+          // Reset mobile states when switching to desktop
+          if (overlay) {
+            overlay.classList.remove('active');
+          }
+          document.body.style.overflow = 'auto';
+        } else {
+          // Reset desktop states when switching to mobile
+          mainContent.classList.remove('expanded');
+          if (footer) {
+            footer.classList.remove('expanded');
+          }
+        }
+      });
+
+      // Close sidebar on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('expanded') && window.innerWidth <= 768) {
+          closeSidebar();
+        }
+      });
+    }
+
+    // ---------------- MOBILE MENU ----------------
+    function initMobileMenu() {
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      const overlay = document.getElementById('overlay');
+      
+      if (!mobileMenuBtn || !navLinks) return;
+      
+      // Initialize aria-expanded attribute
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      
+      function openMobileMenu() {
+        navLinks.classList.add('active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileMenuBtn.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
+        document.body.style.overflow = 'hidden';
+        if (overlay) {
+          overlay.classList.add('active');
+        }
+      }
+      
+      function closeMobileMenu() {
+        navLinks.classList.remove('active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars" aria-hidden="true"></i>';
+        document.body.style.overflow = 'auto';
+        if (overlay) {
+          overlay.classList.remove('active');
+        }
+      }
+      
+      function toggleMobileMenu() {
+        const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+      }
+      
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMobileMenu();
+      });
+      
+      // Close menu when clicking on links
+      const navLinksItems = document.querySelectorAll('.nav-links a');
+      navLinksItems.forEach(link => {
+        link.addEventListener('click', () => {
+          if (navLinks.classList.contains('active')) {
+            closeMobileMenu();
+          }
+        });
+      });
+      
+      // Close menu on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+          closeMobileMenu();
+        }
+      });
+      
+      // Close mobile menu when clicking on overlay
+      if (overlay) {
+        overlay.addEventListener('click', () => {
+          if (navLinks.classList.contains('active')) {
+            closeMobileMenu();
+          }
+        });
+      }
+      
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.navbar') && !e.target.closest('.nav-links') && navLinks.classList.contains('active')) {
+          closeMobileMenu();
+        }
+      });
+
+      // Handle window resize - close mobile menu when switching to desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+          closeMobileMenu();
+        }
+      });
+    }
+
+
+
+
+  // Apply filters
+  function applyFilter() {
+    let search = document.getElementById("searchInput").value.toLowerCase().trim();
+    let minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
+    let maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
+    let category = document.getElementById("categoryFilter").value;
+    let region = document.getElementById("regionFilter").value;
+    let status = document.getElementById("statusFilter").value;
+
+    let products = document.querySelectorAll(".product-container");
+
+    products.forEach(product => {
+      let name = product.querySelector("h2")?.textContent.toLowerCase() || "";
+      let price = parseFloat(product.querySelector(".price")?.textContent.replace(/\D/g, "")) || 0;
+      let location = product.getAttribute("data-region") || "";
+      let prodCategory = product.getAttribute("data-category") || "";
+      let prodStatus = product.getAttribute("data-status") || "";
+
+      let match = true;
+
+      if (search && !name.includes(search)) match = false;
+      if (price < minPrice || price > maxPrice) match = false;
+      if (category && prodCategory !== category) match = false;
+      if (region && location !== region) match = false;
+      if (status && prodStatus !== status) match = false;
+
+      product.style.display = match ? "flex" : "none";
+    });
+  }
+
+  // Reset filters
+  function resetFilter() {
+    document.getElementById("searchInput").value = "";
+    document.getElementById("minPrice").value = "";
+    document.getElementById("maxPrice").value = "";
+    document.getElementById("categoryFilter").value = "";
+    document.getElementById("regionFilter").value = "";
+    document.getElementById("statusFilter").value = "";
+
+    document.querySelectorAll(".product-container").forEach(product => {
+      product.style.display = "flex";
+    });
+  }
+
+
+
+  </script>
+
+<?php require_once APPROOT . '/views/inc/footer.php'; ?>
