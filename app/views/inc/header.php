@@ -72,7 +72,7 @@
       <nav class="navbar">
         <div class="nav-links" id="navLinks">
           <a href="#"><i class="fa fa-home"></i> Home</a>
-          <a href="#"><i class="fa fa-bullhorn"></i> Announcement</a>
+          <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
           <a href="#"><i class="fa fa-question-circle"></i> Help</a>
           <a href="#"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
