@@ -1,0 +1,221 @@
+      * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+ 
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  transition: margin-left 0.3s ease;
+}
+
+ #mainContent {
+
+  min-height: 100vh;
+  padding-bottom: 40px;
+  transition: margin-left 0.3s ease;
+ }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      margin: 20px auto;
+      max-width: 1000px;
+      font-size: 14px;
+      color: #3a5a40;
+    }
+
+    .breadcrumb a {
+      text-decoration: none;
+      color: #2e7d32;
+      font-weight: 600;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb span {
+      margin: 0 5px;
+      color: #555555;
+    }
+
+    /* Filter Container */
+    .filter-container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 15px;
+      background: #f1f8f4;
+      border: 1px solid #c8e6c9;
+      border-radius: 8px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-container input,
+    .filter-container select,
+    .filter-container button {
+      padding: 8px 10px;
+      border: 1px solid #2e7d32;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .filter-container button {
+      background: #2e7d32;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .filter-container button:hover {
+      background: #1b5e20;
+    }
+
+    .product-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      display: flex;
+      gap: 20px;
+      overflow: hidden;
+    }
+
+    .product-container img {
+      width: 40%;
+      height: auto;
+      object-fit: cover;
+      border: 2px solid #2e7d32;
+      border-radius: 12px;
+    }
+
+    .product-details {
+      padding: 25px;
+      flex: 1;
+    }
+
+    .in-stock {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+
+    .product-details h2 {
+      margin: 10px 0;
+      font-size: 34px;
+      color: #1b5e20;
+    }
+
+    .price {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+
+    .description {
+      margin: 15px 0;
+      font-size: 15px;
+      color: #444;
+    }
+
+    .quantity-add {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .quantity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity input {
+      width: 50px;
+      text-align: center;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .divider-vertical {
+      width: 2px;
+      background-color: #2e7d32;
+      height: 40px;
+    }
+
+    .add-to-cart {
+      background: #2e7d32;
+      color: #fff;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .add-to-cart:hover {
+      background: #1b5e20;
+      transform: scale(1.05);
+    }
+
+    .product_quality {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e8f5e9;
+      border-radius: 6px;
+      font-size: 14px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap; 
+    }
+
+    .quality_box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #2e7d32;
+    }
+
+    .quality_icon {
+      font-size: 18px;
+      color: #2e7d32;
+    }
+
+    .divider {
+      border: none;
+      border-top: 2px solid #2e7d32;
+      margin: 15px 0; 
+    }
+
+    @media (max-width: 800px) {
+      .product-container {
+        flex-direction: column;
+      }
+      .product-container img {
+        width: 100%;
+      }
+      .quantity-add {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .divider-vertical {
+        display: none;
+      }
+    }
+  

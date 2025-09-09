@@ -1,0 +1,129 @@
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+}
+.main-content {
+  max-width: 600px;
+  width: 70%;
+  margin: 30px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.main-content h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #222;
+}
+
+.input-group,
+.search-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label,
+.search-group label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.required {
+  color: red;
+  margin-left: 3px;
+}
+
+.input-group input,
+.search-group select,
+.input-group textarea {
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.input-group input:focus,
+.search-group select:focus,
+.input-group textarea:focus {
+  border-color: #4ca951;
+  box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+}
+
+#attachFiles {
+  border: 1px dashed #aaa;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: border-color 0.2s;
+}
+
+#attachFiles:hover {
+  border-color: #2e7d32;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-group button {
+  width: 100%;
+  color: #fff;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+.create-btn {
+  background: #2e7d32;
+}
+.cancel-btn {
+  background: #bf4949;
+}
+.create-btn:hover {
+  background: #256428;
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+}
+.cancel-btn:hover {
+  background: #9f3023;
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+}
+
+@media (max-width: 600px) {
+  .main-content {
+    padding: 15px;
+  }
+
+  .main-content h1 {
+    font-size: 22px;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .btn-group button {
+    width: 100%;
+  }
+}
