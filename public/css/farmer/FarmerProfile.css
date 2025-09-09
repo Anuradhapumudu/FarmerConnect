@@ -1,0 +1,300 @@
+/* =======================
+   General Styles
+======================= */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  width: 100%;
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* =======================
+   Page Titles
+======================= */
+.page-title {
+  margin: 40px 0 20px;
+}
+
+.page-title h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2e7d32;
+  border-left: 8px solid #4caf50;
+  padding-left: 14px;
+  margin: 0;
+}
+
+/* =======================
+   Profile Card
+======================= */
+.profile-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  align-items: flex-start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+/*.profile-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}*/
+
+.profile-info {
+  flex: 3;
+}
+
+.profile-pic {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-pic img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #4caf50;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile picture styling already exists above, just adding buttons */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 160px;  /* same size buttons */
+  text-align: center;
+}
+
+.upload-btn {
+  background: #4caf50;
+  color: white;
+}
+
+.upload-btn:hover {
+  background: #388e3c;
+}
+
+.remove-btn {
+  background: #f44336;
+  color: white;
+}
+
+.remove-btn:hover {
+  background: #d32f2f;
+}
+
+/* =======================
+   Forms
+======================= */
+
+form {
+  display: grid;
+  gap: 25px 40px;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #444;
+  font-size: 1rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.25);
+}
+
+.form-actions {
+  grid-column: 1 / -1; /* full width in grid */
+  text-align: right;
+  margin-top: 20px;
+}
+
+.edit-btn {
+  background: #02b0bd;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: #158dc0;
+}
+
+.save-btn {
+  background: #4caf50;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #388e3c;
+}
+
+.plr-selector {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.plr-selector label {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.plr-selector select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  border: 2px solid #4caf50;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #2e7d32;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="12" height="8" viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><path fill="%234CAF50" d="M6 8L0 0h12z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 8px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.plr-selector select:hover {
+  border-color: #388e3c;
+}
+
+.plr-selector select:focus {
+  outline: none;
+  border-color: #66bb6a;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.add-btn {
+  background: #1976d2;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background: #1565c0;
+}
+
+.add-btn {
+  background: #0288d1;
+  color: white;
+  margin-right: 10px;
+}
+
+.add-btn:hover {
+  background: #0277bd;
+}
+
+
+
+/* Layout: Farmer Form = 1 column */
+#farmerForm {
+  grid-template-columns: 1fr;
+}
+
+/* Layout: Paddy Form = 2 columns on large screen */
+#paddyForm {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* =======================
+   Responsive
+======================= */
+@media (max-width: 992px) {
+  main {
+    padding: 0 20px;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    padding: 25px;
+  }
+
+  .profile-pic {
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  #paddyForm,
+  #farmerForm {
+    grid-template-columns: 1fr;
+  }
+
+  .plr-selector{
+    display: flex;
+    flex-direction: column;
+  }
+}
