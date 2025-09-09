@@ -1,12 +1,12 @@
-
 <?php
-class FarmerDashboard extends Controller {
+
+class FarmerDashboard extends Controller{
+
+    public function index(){
     
-
-
-    public function index() {
-       
-        
-        $this->view('dashboard/farmer');
+         $this->view('farmer/FarmerDashboard');
     }
-?}
+}
+
+
+?>

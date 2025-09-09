@@ -57,7 +57,7 @@
             </nav>
             
             <div class="nav-signup-buttons">
-                <a href="<?php echo URLROOT; ?>/users/login" class="btn" aria-label="Login to your account">
+                <a href="<?php echo URLROOT; ?>/pages/login.html" class="btn" aria-label="Login to your account">
                     <span>Login</span>
                 </a>
                 <p aria-hidden="true">or</p>
@@ -70,11 +70,11 @@
 
     <!-- Floating signup buttons for mobile -->
     <div class="signup-buttons" aria-label="Account actions">
-    <a href="<?php echo URLROOT; ?>/users/login" class="btn" aria-label="Login to your account">
+    <a href="<?php echo URLROOT; ?>/pages/login.html" class="btn" aria-label="Login to your account">
             <span>Login</span>
         </a>
         <p aria-hidden="true">or</p>
-    <a href="<?php echo URLROOT; ?>/users/register" class="btn btn-outline" aria-label="Create new account">
+    <a href="<?php echo URLROOT; ?>/pages/register.html" class="btn btn-outline" aria-label="Create new account">
             <span>Register</span>
         </a>
     </div>
