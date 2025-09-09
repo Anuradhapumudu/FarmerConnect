@@ -17,7 +17,7 @@
           <div class="section-title">📌 Pinned Announcements</div>
           <div class="announcement-list" id="pinnedAnnouncements">
               <?php foreach ($data['pinnedAnnouncements'] as $announcement): ?>
-                  <div class="announcement-card">
+                  <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
                     <div class="pin-icon">
                           <a href="<?php echo URLROOT; ?>/Announcements/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
                               📌 Unpin
@@ -46,8 +46,8 @@
     <?php endif; ?>
 
     <!--Search Section-->
-    <div class="search-section">
-      <form method="GET" action="<?php echo URLROOT; ?>/Announcements/Announcements">
+    <div class="search-section" id="searchSection">
+      <form method="GET" action="<?php echo URLROOT; ?>/Announcements/Announcements#searchResults">
         <div class="search-row">
           <div class="search-group">
             <label for="search-term" class="search-label">Search Term</label>
@@ -83,16 +83,16 @@
     </div>
 
     <!-- Search Results -->
-    <div class="search-results">
+    <div class="search-results" id="searchResults">
       <?php if (!empty($data['searchResults'])): ?>
           <div class="search-results">
               <div class="section-title">
                 Search Results
-                <a href="<?php echo URLROOT; ?>/Announcements/Announcements" class="clear-results">❌</a>
+                <a href="<?php echo URLROOT; ?>/Announcements/Announcements#searchSection" class="clear-results">❌</a>
               </div>
               <div class="announcement-list" id="searchResults">
                   <?php foreach ($data['searchResults'] as $announcement): ?>
-                      <div class="announcement-card">
+                      <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
                         <div class="pin-icon">
                             <a href="<?php echo URLROOT; ?>/Announcements/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
                                 <?php echo $announcement->is_pinned ? '📌 Unpin' : '📌 Pin'; ?>
@@ -135,7 +135,7 @@
         <div class="announcement-list" id="latestAnnouncements">
             <?php if (!empty($data['latestAnnouncements'])): ?>
                 <?php foreach ($data['latestAnnouncements'] as $announcement): ?>
-                    <div class="announcement-card">
+                    <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
                       <div class="pin-icon">
                           <a href="<?php echo URLROOT; ?>/Announcements/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
                               <?php echo $announcement->is_pinned ? '📌 Unpin' : '📌 Pin'; ?>
@@ -174,7 +174,7 @@
         <div class="announcement-list" id="previousAnnouncements">
             <?php if (!empty($data['previousAnnouncements'])): ?>
                 <?php foreach ($data['previousAnnouncements'] as $announcement): ?>
-                    <div class="announcement-card">
+                    <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
 
                     <!-- icon for pin the announcement -->
                       <div class="pin-icon">

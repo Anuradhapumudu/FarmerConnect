@@ -5,21 +5,38 @@
 }
 body {
     background: linear-gradient(135deg, rgb(235, 234, 234), rgb(242, 243, 242));
+    font-family: Arial, Helvetica, sans-serif;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
     height: auto;
     overflow-y: auto;
-    padding: 20px 0px;
+    padding: 0px 0px;
 }
 .container {
+    display: flex;             
+    flex-direction: row;
+    overflow: hidden;
     margin: 0 auto;
-    width: 400px;
-    max-width: 90%;
+    width: 100%;
     background: #fff;
-    border-radius: 10px;
-    padding: 20px 30px;
+    padding: 0px 0px;
     box-shadow: 0 0 15px rgba(7, 7, 7, 0.1);
+}
+.image-section {
+    flex: 0.5;
+}
+.desktop-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+.mobile-img {
+    display: none;
+}
+.form-section {
+    flex: 0.5;
+    padding: 20px 30px;
 }
 .form-box {
     display: none;
@@ -33,27 +50,37 @@ body {
     margin: 10px 0px 30px 0px;
 }
 .input-group {
+    margin: auto 60px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 .input-field input {
     width: 100%;
     padding: 12px;
-    border: 1px solid rgb(125, 221, 108);
+    border: 1px solid #c1c2c1;
     border-radius: 8px;
     outline: none;
 }
 .input-field input:focus {
     border-color: rgb(27, 54, 23);
 }
+.input-field label span.required {
+    color: red;
+    margin-left: 2px;
+    font-weight: bold;
+}
+.create-account {
+    margin: auto 60px;
+}
 .create-account button{
+    width: 100%;
     display: block;
     padding: 10px 20px;
-    margin: 10px auto;
+    margin: 20px 0px;
     border: none;
-    border-radius: 25px;
-    background: #4CAF50;
+    border-radius: 8px;
+    background: #2e7d32;
     color: #fff;
     font-size: 14px;
     cursor: pointer;
@@ -62,19 +89,26 @@ body {
 .create-account button:hover{
     transform: scale(1.05);
 }
-.horizontal-line {
-    margin: 20px;
+.create-account button i {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.create-account button:hover i {
+    transform: translateX(5px);
 }
 .have-account{
-    text-align: center;
+    margin: 10px 0px 25px 0px;
+    font-size: 14px;
+    text-align: right;
 }
 .btn-group {
+    margin: 15px 60px;
     display: flex;
     justify-content: space-between;
     background-color: #f9f9f9;
     padding: 5px;               
     border-radius: 8px;  
-    margin: 5px auto 15px auto;
 }
 .btn-group button {
     flex: 1;
@@ -88,20 +122,20 @@ body {
     position: relative;
 }
 .btn-group button.active {
-    background-color: #4CAF50;
+    background-color: #2e7d32;
     color: #fff;
     font-weight: bold;
     border-radius: 4px;
     box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
     transform: translateY(-1px);
-    outline: 2px solid #4CAF50;
+    outline: 2px solid #2e7d32;
     outline-offset: 2px;
 }
 .btn-group button.active:hover {
     color: #fff;
 }
 .btn-group button:hover {
-    color: #4CAF50;
+    color: #2e7d32;
     transform: translateY(-1px);
 }
 .form-invalid {
@@ -112,10 +146,29 @@ body {
 
 @media (max-width: 768px) {
     .container {
-        width: 90%;
-        padding: 20px;
+        flex-direction: column;
+    }
+    .image-section {
+        width: 100%;
+        order: -1;
+        margin-bottom: 20px;
     }
 
+    .desktop-img {
+        display: none; 
+    }
+
+    .mobile-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .form-section {
+        width: 100%;
+        padding: 0 15px;
+    }
     .btn-group {
         gap: 8px;
     }
@@ -132,29 +185,48 @@ body {
 }
 @media (max-width: 480px) {
     body {
-        padding: 15px;
+        padding: 0px;
         height: auto;
         align-items: flex-start; 
     }
 
     .container {
+    flex-direction: column;
+    }
+    .image-section {
         width: 100%;
-        max-width: 100%;
-        padding: 15px;
-        border-radius: 8px;
+        order: -1;
+        margin-bottom: 20px;
     }
 
+    .desktop-img {
+        display: none; 
+    }
+
+    .mobile-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+    .input-group {
+        margin: auto 30px;
+    }
+    .form-section {
+        width: 100%;
+        padding: 0 15px;
+    }
     .btn-group {
         flex-direction: column;
         gap: 10px;
         width: 100%;
-        margin: 10px auto 20px auto; 
+        margin: 10px auto 30px auto; 
     }
 
     .btn-group button {
         width: 100%;
-        padding: 14px;
-        font-size: 15px;
+        padding: 10px;
+        font-size: 13px;
         border-radius: 6px;
     }
 

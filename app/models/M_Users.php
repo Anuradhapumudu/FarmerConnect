@@ -36,18 +36,22 @@
                 case 'farmer':
                     $table = "registrations";
                     $idColumn = "nic";
+                    $passwordColumn = "password";
                     break;
                 case 'officer':
                     $table = "registrations";
                     $idColumn = "officer_id";
+                    $passwordColumn = "password";
                     break;
                 case 'seller':
                     $table = "sellers";
                     $idColumn = "seller_id";
+                    $passwordColumn = "password_hash";
                     break;
                 case 'admin':
                     $table = "admins";
                     $idColumn = "admin_id";
+                    $passwordColumn = "password_hash";
                     break;
                 default:
                     return false;
@@ -59,7 +63,7 @@
 
             if ($row) {
                 // Verify password
-                $hashed_password = $row->password;
+                $hashed_password = $row->$passwordColumn;
                 if (password_verify($password, $hashed_password)) {
                     return $row; // successful login
                 }
@@ -113,5 +117,12 @@
             return ($this->db->rowCount() > 0);
         }
 
+        // Check if officer_id exists in officers table
+        public function isOfficerIdValid($officer_id) {
+            $this->db->query("SELECT * FROM officers WHERE officer_id = :officer_id");
+            $this->db->bind(':officer_id', $officer_id);
+            $this->db->single();
+            return ($this->db->rowCount() > 0);
+        }
 
     }

@@ -11,6 +11,7 @@ body {
   background-size: cover;
   line-height: 1.6;
 }
+
 .topcontainer {
   background: #bfc4c9 !important;
   border-radius: 30px;
@@ -160,7 +161,7 @@ body {
 .announcement-card {
   background: #fff;
   border-radius: 12px;
-  padding: 18px;
+  padding: 15px 18px;
   height: 100%;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   display: flex;
@@ -312,6 +313,15 @@ body {
     display: flex;
     margin: 0;
     padding: 0;
+}
+#searchResults {
+  scroll-margin-top: 100px;
+}
+#searchSection {
+  scroll-margin-top: 100px;
+}
+[id^="announcement-"] {
+  scroll-margin-top: 100px;
 }
 @media (max-width: 1024px) {
   .announcement-list {
