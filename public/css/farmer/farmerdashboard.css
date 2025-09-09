@@ -1,0 +1,133 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+    background-image: url("../../img/Dashboardbackground.jpg");
+    background-size: cover;                  /* cover full box */
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+} 
+
+main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.3); /* 👈 adjust opacity 0.5–0.8 */
+  backdrop-filter: blur(3px);
+  z-index: 0;
+}
+
+main > * {
+  position: relative;
+  z-index: 1; /* make cards & text stay above */
+}
+
+main h2 {
+    font-size: 40px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    color: #2e7d32;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.6); /* soft white behind text */
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 39px auto;
+    padding: 60px;
+
+    position: relative;
+    overflow: hidden;
+
+    background: rgba(255, 255, 255, 0.3);      /* subtle glass effect */
+    backdrop-filter: blur(8px);                 /* soft blur for premium look */
+    border-radius: 20px;                        /* rounder edges */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+    /*background-color:rgba(255,255,255,0.2);
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);*/
+
+}
+
+
+
+.card {
+    width: 100%;
+    background: rgb(255,255,255);
+   /* border: 1px solid #c8e6c9;*/
+    border: none;
+    border-radius: 20px;
+    padding: 30px 10px;
+    text-decoration: none;
+    color: #2e7d32;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 8px 15px rgba(0,0,0,0.08);
+}
+
+.card div {
+    /*font-size: 2em;
+    margin-bottom: 10px;*/
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 2.5em;
+    margin-bottom: 15px;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2), 0 6px 12px rgba(0,0,0,0.1);
+    /*transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);*/
+}
+
+.card p {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #2e7d32;
+    transition: color 0.3s ease;
+}
+
+.card:hover p {
+    color: #1b5e20;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    main h2 {
+        font-size: 2em;
+    }
+}

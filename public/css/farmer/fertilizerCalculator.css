@@ -1,0 +1,326 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: rgba(202, 255, 200, 0.7);
+  color: #333;
+}
+
+main{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:10px;
+}
+
+main h1{
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #2e7d32;
+  margin-bottom: 10px;
+  margin-top: 40px;
+  text-align: center;
+  letter-spacing: 1px;
+  text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.08);
+  border-bottom: 3px solid #c8e6c9;
+  padding-bottom: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: #4b6e34;
+  margin-top: -5px;
+  margin-bottom: -30px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* New wrapper for form + results side by side */
+.calc-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+
+/* Make both take equal space */
+#calc, 
+#recommadtion {
+  flex: 1;
+  min-width: 300px; /* responsive stacking */
+}
+
+
+#calc{
+  flex: 1;
+  min-width: 350px;
+  max-width: 500px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 30px 25px;
+  text-align: left;
+}
+
+#calc form .info {
+  margin-bottom: 18px;
+}
+
+#calc label {
+  font-weight: 600;
+  color: #2e7d32;
+  display: block;
+  margin-bottom: 6px;
+}
+
+#calc input,
+#calc select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cfd8dc;
+  border-radius: 10px;
+  margin-bottom: 22px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+#calc input:focus,
+#calc select:focus {
+  border: 1px solid #43a047;
+  box-shadow: 0 0 6px rgba(67,160,71,0.3);
+}
+
+#calc input[type="text"],
+#calc select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #c8e6c9;
+  border-radius: 10px;
+  font-size: 1em;
+  transition: border 0.2s;
+}
+
+#calc input[type="text"]:focus,
+#calc select:focus {
+  outline: none;
+  border: 1px solid #66bb6a;
+}
+
+#calc input[type="submit"] {
+  margin-top: 15px;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #66bb6a, #43a047);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+#calc input[type="submit"]:hover {
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  transform: translateY(-2px);
+}
+
+#recommadtion
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* center cards horizontally */
+  gap: 20px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 25px;
+}
+
+#recommadtion .card-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  padding: 16px 20px;
+  border-radius: 14px;
+  font-weight: 600;
+  color: #2e7d32;
+  font-size: 1em;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+#recommadtion .card-item:hover {
+  transform: translateY(-3px);
+}
+
+#recommadtion .card-item span {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #1b5e20;
+}
+
+.result-section {
+  flex: 1;
+  min-width: 350px;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+#recommadtion div {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: #2e7d32;
+  font-size: 1em;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+  text-align: center;
+  min-width: 100px;
+}
+
+#recommadtion div:hover {
+  transform: translateY(-3px);
+}
+
+#recommadtion p{
+  font-size: 1.3em;
+  margin: 6px 0 0;
+  font-weight: 700;
+  color: #1b5e20;
+}
+
+.link{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.link a{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  text-decoration: none;
+  font-weight: 600;
+  color: white;
+  border-radius: 10px;
+  background: linear-gradient(to right, #2e7d32, #66bb6a);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  min-width: 180px;
+}
+
+.link a:hover {
+  background: linear-gradient(to right, #fbc02d, #f57f17); /* yellow-orange gradient */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.info
+{
+  margin: 20px;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) 
+{
+    .dashboard-grid 
+    {
+        grid-template-columns: 1fr;
+    }
+
+}
+    
+
+    @media (max-width: 600px) 
+    {
+        
+        main h1 
+            {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding: 0 10px;
+            text-shadow: none;
+            border-bottom: 2px solid #c8e6c9;
+        }
+
+        .page-subtitle 
+        {
+            font-size: 0.9rem;
+            padding: 0 10px;
+            line-height: 1.4;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .calc-container 
+        {
+            flex-direction: column;
+            gap: 20px;
+            padding: 10px;
+        }
+
+        #calc,
+        .result-section
+        {
+            width: 100%;
+            max-width: 100%;
+            padding: 20px;
+        }
+
+        .link a
+        {
+            font-size: 0.9rem;
+            padding: 10px;
+            border-radius: 8px;
+            min-width: auto;
+        }
+
+        #recommadtion 
+        {
+            padding: 15px;
+            gap: 15px;
+        }
+
+        #recommadtion .card-item 
+        {
+            font-size: 0.95rem;
+            padding: 12px;
+        }
+
+        #recommadtion .card-item span 
+        {
+            font-size: 1rem;
+        }
+    }
+
