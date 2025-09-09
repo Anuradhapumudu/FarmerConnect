@@ -1,3 +1,4 @@
+
 <?php
 class FarmerDashboard extends Controller {
     
@@ -8,5 +9,4 @@ class FarmerDashboard extends Controller {
         
         $this->view('dashboard/farmer');
     }
-}
-?>
+?}
