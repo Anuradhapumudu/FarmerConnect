@@ -40,7 +40,7 @@
         <a href="<?php echo URLROOT; ?>/Marketplace/EditProduct/<?php echo $product->item_id; ?>" class="btn btn-edit">
           <i class="fas fa-edit"></i> Edit
         </a>
-        <a href="<?php echo URLROOT; ?>/seller/delete_product/<?php echo $product->item_id; ?>" class="btn btn-delete">
+        <a href="<?php echo URLROOT; ?>/Marketplace/DeleteProduct/<?php echo $product->item_id; ?>" class="btn btn-delete">
           <i class="fas fa-trash"></i> Delete
         </a>
       </div>
