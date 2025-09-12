@@ -5,9 +5,9 @@
   <h2>Delete Product</h2>
   <p>Are you sure you want to delete <strong><?php echo htmlspecialchars($data->item_name); ?></strong>?</p>
 
-  <form action="<?php echo URLROOT; ?>/seller/delete_product/<?php echo $data->item_id; ?>" method="POST">
+  <form action="<?php echo URLROOT; ?>/Marketplace/DeleteProduct/delete_product/<?php echo $data->item_id; ?>" method="POST">
     <input type="submit" value="Yes, Delete" class="btn btn-danger">
-    <a href="<?php echo URLROOT; ?>/Marketplace/manageProducts" class="btn btn-secondary">Cancel</a>
+    <a href="<?php echo URLROOT; ?>/Marketplace/ManageProduct" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
 
