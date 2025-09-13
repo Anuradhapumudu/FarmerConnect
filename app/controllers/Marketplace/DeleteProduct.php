@@ -3,7 +3,7 @@ class DeleteProduct extends Controller {
     private $productModel;
 
     public function __construct() {
-        $this->productModel = $this->model('M_Marketplace/M_DeleteProduct', new Database());
+        $this->productModel = $this->model('M_Marketplace/M_Marketplace', new Database());
     }
 
         // Add this

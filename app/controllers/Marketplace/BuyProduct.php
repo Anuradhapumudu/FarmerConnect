@@ -3,7 +3,7 @@ class BuyProduct extends Controller {
     private $buyProductModel;
 
     public function __construct() {
-        $this->buyProductModel = $this->model('M_Marketplace/M_BuyProduct', new Database());
+        $this->buyProductModel = $this->model('M_Marketplace/M_Marketplace', new Database());
     }
 
     public function index($id = 0) {

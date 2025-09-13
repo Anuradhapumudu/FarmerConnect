@@ -3,7 +3,7 @@ class EditProduct extends Controller {
     private $editProductModel;
 
     public function __construct() {
-        $this->editProductModel = $this->model('M_Marketplace/M_EditProduct', new Database());
+        $this->editProductModel = $this->model('M_Marketplace/M_Marketplace', new Database());
     }
 
     public function index($id = null) {

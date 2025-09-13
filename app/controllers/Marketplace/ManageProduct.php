@@ -4,7 +4,7 @@ class ManageProduct extends Controller {
 
     public function __construct() {
         // Pass the Database object to the model
-        $this->manageProductModel = $this->model('M_Marketplace/M_ManageProduct', new Database());
+        $this->manageProductModel = $this->model('M_Marketplace/M_Marketplace', new Database());
     }
 
     public function index() {
