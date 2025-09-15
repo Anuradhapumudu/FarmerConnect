@@ -1,0 +1,318 @@
+
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* Header */
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
+    }
+    
+    .admin-header h1 {
+      color: #2e7d32;
+      margin-bottom: 5px;
+    }
+    
+    .admin-header p {
+      color: #558b2f;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .action-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .back-btn {
+      background: #9e9e9e;
+      color: white;
+    }
+    
+    .back-btn:hover {
+      background: #757575;
+    }
+    
+    .save-btn {
+      background: #2e7d32;
+      color: white;
+    }
+    
+    .save-btn:hover {
+      background: #1b5e20;
+    }
+    
+    .delete-btn {
+      background: #f44336;
+      color: white;
+    }
+    
+    .delete-btn:hover {
+      background: #d32f2f;
+    }
+    
+    /* Main content layout */
+    .content-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+    }
+    
+    /* Farmer profile section */
+    .profile-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
+      padding: 25px;
+      text-align: center;
+      height: fit-content;
+    }
+    
+    .profile-img-container {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+    }
+    
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid #e8f5e9;
+    }
+    
+    .change-img-btn {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .profile-details {
+      text-align: left;
+      margin-top: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #555;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #c8e6c9;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: #2e7d32;
+    }
+    
+    select.form-control {
+      cursor: pointer;
+    }
+    
+    /* Paddy details section */
+    .paddy-details {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
+      padding: 25px;
+    }
+    
+    .section-title {
+      color: #2e7d32;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f5e9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .add-field-btn {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .paddy-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .paddy-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    
+    .remove-field-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #f44336;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .paddy-card h3 {
+      color: #2e7d32;
+      margin-bottom: 15px;
+      padding-right: 30px;
+    }
+    
+    /* Action buttons */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+      justify-content: flex-end;
+    }
+    
+    /* Delete confirmation modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      width: 400px;
+      text-align: center;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    }
+    
+    .modal-content h3 {
+      margin-bottom: 15px;
+      color: #2e7d32;
+    }
+    
+    .modal-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-around;
+    }
+    
+    .confirm-btn {
+      background: #f44336;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .confirm-btn:hover {
+      background: #d32f2f;
+    }
+    
+    .cancel-btn {
+      background: #9e9e9e;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .cancel-btn:hover {
+      background: #757575;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 900px) {
+      .content-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .admin-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      
+      .header-actions {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
