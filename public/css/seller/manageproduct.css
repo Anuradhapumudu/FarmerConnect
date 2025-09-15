@@ -205,6 +205,8 @@ body {
   justify-content: center;
 }
 
+
+
 /* Responsive */
 @media (max-width: 900px) {
   .product_box {
