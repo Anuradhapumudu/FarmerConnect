@@ -55,15 +55,21 @@ class M_Marketplace{
         $this->db->bind(':seller_id', $seller_id);
         return $this->db->resultSet();
     }
-    public function getFertilizerProducts() {
-        $this->db->query("
-            SELECT products.*, sellers.seller_name AS seller_name 
-            FROM products 
-            JOIN sellers ON products.seller_id = sellers.seller_id
-            WHERE products.category = 'fertilizer'
-        ");
-        return $this->db->resultSet();
-    }
+public function getProductsByCategory($category) {
+    $category = trim(strtolower($category)); // remove extra spaces & lowercase
+
+    $this->db->query("
+        SELECT products.*, 
+               sellers.seller_name AS seller_name,
+               sellers.seller_telNo AS seller_telNo
+        FROM products 
+        JOIN sellers ON products.seller_id = sellers.seller_id
+        WHERE LOWER(TRIM(products.category)) = :category
+    ");
+    $this->db->bind(':category', $category);
+    return $this->db->resultSet();
+}
+
 
     //update
      public function updateProduct($data) {

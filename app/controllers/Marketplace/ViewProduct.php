@@ -1,17 +1,29 @@
 <?php
 class ViewProduct extends Controller {
-    private $viewproductModel;
+    private $marketplaceModel;
 
     public function __construct() {
-        $this->viewproductModel = $this->model('M_Marketplace/M_Marketplace', new Database());
+        $this->marketplaceModel = $this->model('M_Marketplace/M_Marketplace', new Database());
     }
 
-    public function index() {
-        // call the method that exists in your model
-        $products = $this->viewproductModel->getFertilizerProducts();
+    public function index($categorySlug = null) {
+        // Slug → DB category mapping
+        $categoryMap = [
+            'fertilizer' => 'Fertilizer',
+            'paddy-seeds' => 'Seeds',
+            'agrochemicals' => 'Agrochemicals',
+            'equipments' => 'Equipments',
+            'machinery' => 'Rent Machinery',
+            'others' => 'Others'
+        ];
+
+        $categorySlug = strtolower($categorySlug ?? '');
+        $category = $categoryMap[$categorySlug] ?? null;
+
+        $products = $category ? $this->marketplaceModel->getProductsByCategory($category) : [];
 
         $data = [
-            'category' => 'Fertilizer',
+            'category' => $category,
             'products' => $products
         ];
 

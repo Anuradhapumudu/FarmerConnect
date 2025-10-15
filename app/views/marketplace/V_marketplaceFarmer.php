@@ -26,57 +26,57 @@
     <!-- Marketplace Cards -->
     <div class="features_block">
       <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/fertilizer.jpg');"></div>
+        <div class="feature-top" style="background-image: url('<?php echo URLROOT; ?>/img/fertilizer.jpg');"></div>
         <div class="feature-bottom">
           <h3>Fertilizer</h3>
           <p>High-quality fertilizers for optimal crop growth</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/fertilizer" class="btn">Shop Now</a>
 
         </div>
       </div>
 
       <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/paddy seed.webp');"></div>
+        <div class="feature-top" style="background-image: url('<?php echo URLROOT; ?>/img/paddy seed.webp');"></div>
         <div class="feature-bottom">
           <h3>Paddy Seeds</h3>
           <p>Premium paddy seeds for better paddy fields</p>
-          <a href="#" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/ViewProduct/paddy-seeds" class="btn">Shop Now</a>
         </div>
       </div>
 
       <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/Agrochemicals.jpg');"></div>
+        <div class="feature-top" style="background-image: url('<?php echo URLROOT; ?>/img/Agrochemicals.jpg');"></div>
         <div class="feature-bottom">
           <h3>Agrochemicals</h3>
           <p>Effective crop chemicals for crop disease</p>
-          <a href="#" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/ViewProduct/agrochemicals" class="btn">Shop Now</a>
         </div>
       </div>
 
       <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/equipments.jpg');"></div>
+        <div class="feature-top" style="background-image: url('<?php echo URLROOT; ?>/img/equipments.jpg');"></div>
         <div class="feature-bottom">
           <h3>Equipments</h3>
           <p>Buy essential farming tools and equipment</p>
-          <a href="#" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/equipments" class="btn">Shop Now</a>
         </div>
       </div>
 
       <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/Agricultural_machinery.jpg');"></div>
+        <div class="feature-top" style="background-image: url('<?php echo URLROOT; ?>/img/Agricultural_machinery.jpg');"></div>
         <div class="feature-bottom">
           <h3>Rent Machinery</h3>
           <p>Rent heavy machinery for your farming needs</p>
-          <a href="#" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/machinery" class="btn">Shop Now</a>
         </div>
       </div>
 
       <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/collage.jpg');"></div>
+        <div class="feature-top" style="background-image: url('<?php echo URLROOT; ?>/img/collage.jpg');"></div>
         <div class="feature-bottom">
           <h3>Others</h3>
           <p>Additional agricultural supplies and services</p>
-          <a href="#" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/others" class="btn">Shop Now</a>
         </div>
       </div>
     </div>
