@@ -64,9 +64,8 @@ body {
 }
 
 .order-card {
-  border-radius: 16px;
   padding: 0;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   background-color: #fff;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
   max-width: 1200px;   /* same as filter */
@@ -76,6 +75,7 @@ body {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
+  overflow: hidden;
 }
 
 .order-card:hover {
@@ -86,16 +86,16 @@ body {
 .order-main-content {
   flex: 1;
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   width: 100%;
-  min-height: 250px;
+  max-height: 370px;
   box-sizing: border-box;
 }
 
 .order-image {
   width: 40%;
-  min-width: 200px;
-  height: auto;
+  max-width: 370px;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;

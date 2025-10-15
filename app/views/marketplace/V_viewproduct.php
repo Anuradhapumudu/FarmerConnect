@@ -34,6 +34,7 @@
           $seller_telNo = htmlspecialchars($row->seller_telNo);
           $status = htmlspecialchars($row->status);
         ?>
+        
 
         <div class="order-card product-card" 
              data-name="<?= strtolower($itemName) ?>" 
@@ -93,6 +94,7 @@
             </div>
           </div>
         </div>
+        
       <?php endforeach; ?>
     </div>
 
@@ -100,7 +102,7 @@
     <div class="no-orders">
       <i class="fas fa-box-open"></i>
       <h3>No Fertilizer Products Found</h3>
-      <p>Try adjusting your filters or check again later.</p>
+      <p>Check again later.</p>
     </div>
   <?php endif; ?>
 
