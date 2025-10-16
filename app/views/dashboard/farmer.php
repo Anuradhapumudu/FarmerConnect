@@ -16,31 +16,31 @@
   <h2>Features</h2>
 
   <div class="features_block">
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/Farmertimeline" class="feature">
       <i class="fa-solid fa-clock fa-2x"></i>
       <h3>Timeline</h3>
       <p>Track planting, harvesting, and seasonal activities efficiently.</p>
-    </div>
+</a>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/FertilizerCalculator" class="feature">
       <i class="fa-solid fa-calculator fa-2x"></i>
       <h3>Fertilizer Calculator</h3>
       <p>Get accurate fertilizer recommendations based on crop and soil.</p>
-    </div>
+</a>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/Disease" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
       <p>Stay informed about pest and crop disease outbreaks in your area.</p>
-    </div>
+</a>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterFarmer" class="feature">
       <i class="fa-solid fa-book-open fa-2x"></i>
       <h3>Knowledge Center</h3>
       <p>Access guides, tutorials, and expert advice on agriculture.</p>
-    </div>
+</a>
 
-    <a href="<?php echo URLROOT; ?>/marketplace" class="feature">
+    <a href="<?php echo URLROOT; ?>/Marketplace/MarketplaceFarmer" class="feature">
       <i class="fa-solid fa-store fa-2x"></i>
       <h3>Marketplace</h3>
       <p>Buy and sell produce, equipment, and services with ease.</p>
