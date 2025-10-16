@@ -62,7 +62,7 @@
                                 <span class = "form-invalid"><?php echo ($data['form_type'] == 'farmer') ? $data['nic_error'] : ''; ?></span>
                             </div>
                             <div class="input-field">
-                                <label for="email">Email<span class="required">*</span></label>
+                                <label for="email">Phone No<span class="required">*</span></label>
                                 <input type="text" name="email" id="farmer_email" placeholder="Email" value="<?php echo $data['email']; ?>">
                                 <span class = "form-invalid"><?php echo ($data['form_type'] == 'farmer') ? $data['email_error'] : ''; ?></span>
                             </div>
