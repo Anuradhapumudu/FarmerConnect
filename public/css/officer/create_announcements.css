@@ -24,7 +24,11 @@ body {
   font-size: 28px;
   color: #222;
 }
-
+.input-group input,
+.input-group textarea,
+.search-group select {
+  font-family: "Segoe UI", Arial, sans-serif;
+}
 .input-group,
 .search-group {
   margin-bottom: 20px;
