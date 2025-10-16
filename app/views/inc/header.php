@@ -12,10 +12,13 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/styles.css">
-
+  <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
+  
   <!-- Scripts -->
-  <script src="<?php echo URLROOT; ?>/js/default.js" defer></script>
+   <!-- mobile responsive hamburger menu button -->
+  <script src="<?php echo URLROOT; ?>/js/default.js" defer></script> 
 </head>
+
 <body>
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
@@ -83,3 +86,5 @@
       </nav>
     </div>
   </header>
+  <!-- Sidebar section bar -->
+  <?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>

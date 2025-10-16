@@ -92,10 +92,14 @@ function initMobileMenu() {
 
 // Note: Active link management is now handled by sidebarlink.js for sidebar links
 // Only handle header navigation links here if needed
-const activePage = window.location.pathname.split("/").pop();
-const navLinks = document.querySelectorAll('.nav-links a');
-navLinks.forEach(link => {
-    if (link.href.includes(`${activePage}`)) {
-        link.classList.add('active');
+(function() {
+    if (typeof activePage === 'undefined') {
+        window.activePage = window.location.pathname.split("/").pop();
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => {
+            if (link.href.includes(`${window.activePage}`)) {
+                link.classList.add('active');
+            }
+        });
     }
-});
+})();

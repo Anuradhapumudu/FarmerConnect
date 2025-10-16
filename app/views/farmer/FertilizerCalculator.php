@@ -1,6 +1,5 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 
-<script src="<?php echo APPROOT; ?>/js/sidebarlink.js; ?>" defer></script>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/fertilizerCalculator.css?v=<?= time(); ?>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 

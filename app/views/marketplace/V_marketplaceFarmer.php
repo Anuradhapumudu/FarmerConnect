@@ -4,7 +4,6 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/marketplace.css?v=<?= time(); ?>">
 
 
-
 <main class="main-content" id="mainContent">
   <div class="container">
     <!-- My Orders Button -->
@@ -40,7 +39,7 @@
         <div class="feature-bottom">
           <h3>Paddy Seeds</h3>
           <p>Premium paddy seeds for better paddy fields</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/ViewProduct/paddy-seeds" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/paddy-seeds" class="btn">Shop Now</a>
         </div>
       </div>
 
@@ -49,7 +48,7 @@
         <div class="feature-bottom">
           <h3>Agrochemicals</h3>
           <p>Effective crop chemicals for crop disease</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/ViewProduct/agrochemicals" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/agrochemicals" class="btn">Shop Now</a>
         </div>
       </div>
 
