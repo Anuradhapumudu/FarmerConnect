@@ -113,6 +113,15 @@
                     }
                     if (empty($data['officer_id'])) {
                         $data['officer_id_error'] = 'Please enter your Officer ID';
+                    }else {
+                        // Check if officer_id exists in officers table
+                        if (!$this->userModel->isOfficerIdValid($data['officer_id'])) {
+                            $data['officer_id_error'] = 'Officer ID not found. Only valid officers can register.';
+                        } 
+                        // Check if officer_id already registered
+                        elseif ($this->userModel->findUserByOfficer_id($data['officer_id'])) {
+                            $data['officer_id_error'] = 'Officer ID is already registered';
+                        }
                     }
                     if (empty($data['password'])) {
                         $data['password_error'] = 'Please enter your password';
@@ -169,7 +178,20 @@
                     }
             }
                 // validation is completed and then register the user
-                if (empty($data['first_name_error']) && empty($data['last_name_error']) && empty($data['email_error']) && empty($data['password_error']) && empty($data['confirm_password_error'])) {
+                /*if (empty($data['first_name_error']) && empty($data['last_name_error']) && empty($data['email_error']) && empty($data['password_error']) && empty($data['confirm_password_error'])) {
+                */
+                $all_errors = [
+                    $data['first_name_error'],
+                    $data['last_name_error'],
+                    $data['nic_error'],
+                    $data['email_error'],
+                    $data['password_error'],
+                    $data['confirm_password_error'],
+                    $data['officer_id_error'],
+                    $data['brn_error']
+                ];
+
+                if (!array_filter($all_errors)) {
                     // Hash password
                     $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
                     // Set ApprovalStatus according to user type
@@ -458,21 +480,24 @@
             switch ($formType) {
                 case 'farmer':
                     $_SESSION['nic'] = $user->nic;
+                    header('Location: ' . URLROOT . '/FarmerDashboard');
                     break;
                 case 'officer':
                     $_SESSION['officer_id'] = $user->officer_id;
+                    header('Location: ' . URLROOT . '/OfficerDashboard');
                     break;
                 case 'seller':
                     $_SESSION['seller_id'] = $user->seller_id;
+                    header('Location: ' . URLROOT . '/SellerDashboard');
                     break;
                 case 'admin':
                     $_SESSION['admin_id'] = $user->admin_id;
+                    header('Location: ' . URLROOT . '/AdminDashboard');
                     break;
                 default:
                     break;
             }
-            $this->view('officer/v_create_announcements', $data);
-            die('Success');
+            exit;
         }
 
         public function logout() {

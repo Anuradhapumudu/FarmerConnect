@@ -9,4 +9,7 @@ class FarmerDashboard extends Controller {
         
         $this->view('dashboard/farmer');
     }
-?}
+}
+
+
+?>
