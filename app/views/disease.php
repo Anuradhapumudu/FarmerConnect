@@ -1,0 +1,647 @@
+<?php require_once APPROOT . '/views/inc/minimalheader.php'; ?>
+<div class="content-card">
+    <div class="content-header">
+        <h1>🐛 Disease Detector</h1>
+        <p class="content-subtitle">Report plant diseases to help protect our agricultural community</p>
+    </div>
+    
+    <div class="report-id-display">
+        <label>Report ID:</label>
+        <span id="reportIdDisplay">Generating...</span>
+    </div>
+
+            <form action="<?php echo URLROOT; ?>/disease/submit" method="POST" id="diseaseReportForm" class="framework-form" enctype="multipart/form-data">
+                <!-- Hidden inputs to include reportId and current timestamp -->
+                <input type="hidden" id="reportId" name="reportId">
+                <input type="hidden" name="submission_timestamp" value="">
+
+                <div class="form-group">
+                    <label for="farmerNIC" class="required">Farmer NIC Number</label>
+                    <input type="text" id="farmerNIC" name="farmerNIC" 
+                           placeholder="Enter your National Identity Card number" value="<?php echo $data['farmerNIC']; ?>">
+                    <span class="error"><?php echo $data['farmerNIC_error']; ?></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="plrNumber" class="required">PLR Number</label>
+                    <input type="text" id="plrNumber" name="plrNumber" 
+                           placeholder="Enter your Planters Registration Number" value="<?php echo $data['plrNumber']; ?>">
+                    <span class="error"><?php echo $data['plrNumber_error']; ?></span>
+                </div>
+                
+                <div class="form-group-split">
+                    <div class="form-group-half">
+                        <label for="observationDate" class="required">Date of Observation</label>
+                        <input type="date" id="observationDate" name="observationDate" value="<?php echo $data['observationDate']; ?>">
+                        <span class="error"><?php echo $data['observationDate_error']; ?></span>
+                    </div>
+                    <div class="form-group-half">
+                        <label for="todayDate">Today's Date</label>
+                        <input type="date" id="todayDate" name="todayDate" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="title" class="required">Report Title</label>
+                    <input type="text" id="title" name="title" 
+                           placeholder="Brief description of the issue" value="<?php echo $data['title']; ?>">
+                    <span class="error"><?php echo $data['title_error']; ?></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description" class="required">Detailed Description</label>
+                    <textarea id="description" name="description" 
+                        placeholder="Describe the symptoms, patterns, and any other relevant details"><?php echo $data['description']; ?></textarea>
+                    <span class="error"><?php echo $data['description_error']; ?></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="media">Upload Images / Video</label>
+                    <div class="file-upload" id="mediaUploadArea">
+                        <div>
+                            <i class="upload-icon"><img style="width: 30px; height: 30px;" src="https://cdn-icons-png.flaticon.com/128/10024/10024248.png"></i>
+                                <p>Click to upload or drag and drop</p>
+                                <p class="upload-subtext">PNG, JPG, GIF, MP4 up to 10MB</p>
+                            </div>
+                        <input type="file" id="media" name="media[]" accept="image/*,video/*" hidden multiple>
+                    </div>
+                    <span class="error"><?php echo $data['media_error']; ?></span>
+                    <div class="uploaded-files" id="uploadedFiles" style="margin-top: 10px;"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Severity Level</label>
+                    <div class="radio-group">
+                        <label class="radio-option severity-low">
+                            <input type="radio" name="severity" value="low" <?php echo ($data['severity'] == 'low') ? 'checked' : ''; ?>>
+                            Low
+                        </label>
+                        <label class="radio-option severity-medium">
+                            <input type="radio" name="severity" value="medium" <?php echo ($data['severity'] == 'medium') ? 'checked' : ''; ?>>
+                            Medium
+                        </label>
+                        <label class="radio-option severity-high">
+                            <input type="radio" name="severity" value="high" <?php echo ($data['severity'] == 'high') ? 'checked' : ''; ?>>
+                            High
+                        </label>
+                    </div>
+                    <span class="error"><?php echo $data['severity_error']; ?></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="affectedArea" class="required">Affected Area (in acres)</label>
+                    <input type="number" id="affectedArea" name="affectedArea" 
+                           placeholder="Enter the size of the affected area" min="0" step="0.1" value="<?php echo $data['affectedArea']; ?>">
+                    <span class="error"><?php echo $data['affectedArea_error']; ?></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox-container">
+                        <label for="terms" class="checkbox-label required">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            I agree to the <a href="#" class="terms-link">terms and conditions</a>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Report</button>
+            </form>
+        </div>
+    <style>
+            .error {
+                color: red;
+                font-size: 0.8em;
+            }
+
+            .uploaded-files {
+                background: rgba(255, 255, 255, 0.8);
+                border-radius: 5px;
+                padding: 10px;
+                display: none;
+            }
+            
+            .uploaded-files.has-files {
+                display: block;
+            }
+            
+            .uploaded-file {
+                padding: 5px 10px;
+                margin: 2px 0;
+                background: rgba(46, 125, 50, 0.1);
+                border-radius: 3px;
+                font-size: 0.9rem;
+                color: var(--primary);
+            }
+            
+            /* Fix for scrolling issue - add top padding to main content */
+            .main-content {
+                padding-top: 30px;
+            }
+            
+            .content-card {
+                background: var(--glass-bg);
+                backdrop-filter: var(--glass-blur);
+                border-radius: 15px;
+                padding: 30px;
+                margin: 20px auto 40px;
+                max-width: 1200px;
+                width: 90%;
+            }
+            
+            .content-header {
+                margin-bottom: 30px;
+                text-align: left;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+                padding-bottom: 20px;
+            }
+            
+            .content-header h1 {
+                color: var(--text-primary);
+                font-size: 2.2rem;
+                margin-bottom: 10px;
+                font-weight: 800;
+            }
+            
+            .content-subtitle {
+                color: var(--text-secondary);
+                font-size: 1.1rem;
+                margin: 10px 0;
+            }
+            
+            .report-id-display {
+                background: rgba(46, 125, 50, 0.1);
+                border: 1px solid rgba(46, 125, 50, 0.3);
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 25px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .report-id-display label {
+                font-weight: 600;
+                color: var(--text-primary);
+                margin: 0;
+            }
+            
+            .report-id-display span {
+                font-family: 'Courier New', monospace;
+                font-weight: bold;
+                color: var(--primary);
+                background: rgba(255, 255, 255, 0.8);
+                padding: 5px 10px;
+                border-radius: 4px;
+                border: 1px solid rgba(46, 125, 50, 0.2);
+            }
+            
+            .framework-form {
+                width: 100%;
+                margin: 0 auto;
+            }
+            
+            .form-group {
+                margin-bottom: 25px;
+            }
+            
+            .form-group-split {
+                display: flex;
+                gap: 20px;
+                margin-bottom: 25px;
+            }
+            
+            .form-group-half {
+                flex: 1;
+            }
+            
+            .form-group label {
+                display: block;
+                margin-bottom: 10px;
+                font-weight: 600;
+                color: var(--text-primary);
+            }
+            
+            .form-group .required::after {
+                content: " *";
+                color: #e74c3c;
+            }
+            
+            input, select, textarea {
+                width: 100%;
+                padding: 12px 15px;
+                border: 1px solid var(--card-border);
+                border-radius: 8px;
+                font-size: 1rem;
+                background: rgba(255, 255, 255, 0.8);
+                transition: var(--transition);
+                color: var(--dark);
+                box-sizing: border-box;
+            }
+            
+            input:focus, select:focus, textarea:focus {
+                border-color: var(--primary);
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+            }
+            
+            textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+            
+            .radio-group {
+                display: flex;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            
+            .radio-option {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 15px;
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.7);
+                transition: var(--transition);
+                cursor: pointer;
+            }
+            
+            .radio-option:hover {
+                background: rgba(255, 255, 255, 0.9);
+            }
+            
+            .radio-option input {
+                width: auto;
+            }
+            
+            .severity-low { color: var(--primary-light); }
+            .severity-medium { color: var(--secondary); }
+            .severity-high { color: #e74c3c; }
+            
+            .file-upload {
+                border: 2px dashed var(--card-border);
+                padding: 25px;
+                text-align: center;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: var(--transition);
+                background: rgba(255, 255, 255, 0.7);
+            }
+            
+            .file-upload:hover {
+                border-color: var(--primary);
+                background: rgba(255, 255, 255, 0.9);
+            }
+            
+            .upload-icon {
+                font-size: 2rem;
+                margin-bottom: 10px;
+                display: block;
+            }
+            
+            .upload-subtext {
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+                margin-top: 5px;
+            }
+            
+            .btn-primary {
+                width: 100%;
+                padding: 15px;
+                font-size: 1.1rem;
+                margin-top: 10px;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: var(--transition);
+            }
+            
+            .btn-primary:hover {
+                background: var(--primary-dark);
+            }
+            
+            /* Custom checkbox styling */
+            .checkbox-container {
+                position: relative;
+                margin-top: 10px;
+            }
+            
+            .checkbox-label {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                font-size: 0.95rem;
+                line-height: 1.4;
+                background: rgba(255, 255, 255, 0.7);
+                transition: var(--transition);
+                margin-bottom: 0;
+            }
+            
+            .checkbox-label:hover {
+                background: rgba(255, 255, 255, 0.9);
+                border-color: var(--primary);
+            }
+            
+            #terms {
+                width: 18px;
+                height: 18px;
+                margin: 0;
+                cursor: pointer;
+                accent-color: var(--primary);
+            }
+            
+            .terms-link {
+                color: #e74c3c;
+                text-decoration: none;
+                font-weight: 600;
+                border-bottom: 1px solid transparent;
+                transition: var(--transition);
+            }
+            
+            .terms-link:hover {
+                color: #c0392b;
+                border-bottom-color: #c0392b;
+            }
+            
+            .checkbox-label.required::after {
+                content: " *";
+                color: #e74c3c;
+                font-weight: bold;
+            }
+            
+            @media (max-width: 768px) {
+                .content-card {
+                    padding: 20px;
+                    margin: 15px auto 30px;
+                    width: 95%;
+                }
+                
+                .form-group-split {
+                    flex-direction: column;
+                    gap: 15px;
+                }
+                
+                .radio-group {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .file-upload {
+                    padding: 15px;
+                }
+                
+                .content-header h1 {
+                    font-size: 1.8rem;
+                }
+            }
+        </style>
+        
+        <script>
+            // Set current date when page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                try {
+                    const today = new Date();
+                    const formattedDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+                    
+                    // Set today's date (readonly)
+                    const todayDateElement = document.getElementById('todayDate');
+                    if (todayDateElement) {
+                        todayDateElement.value = formattedDate;
+                    }
+                    
+                    // Set observation date to today by default
+                    const observationDateElement = document.getElementById('observationDate');
+                    if (observationDateElement) {
+                        observationDateElement.value = formattedDate;
+                        observationDateElement.max = formattedDate;
+                    }
+                    
+                    // Also set the submission timestamp
+                    const submissionTimestamp = today.toISOString();
+                    const submissionTimestampElement = document.querySelector('input[name="submission_timestamp"]');
+                    if (submissionTimestampElement) {
+                        submissionTimestampElement.value = submissionTimestamp;
+                    }
+                    
+                    // Generate and set report ID
+                    generateAndSetReportId();
+                    
+                    // Initialize file upload functionality
+                    initFileUpload();
+                } catch (error) {
+                    console.error('Error initializing form:', error);
+                    // Still try to generate report ID even if other parts fail
+                    generateAndSetReportId();
+                }
+            });
+
+            // Generate a random report ID
+            function generateReportId() {
+                try {
+                    // Using crypto.randomUUID() - available in modern browsers
+                    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+                        const uuid = crypto.randomUUID();
+                        return 'DR-' + uuid;
+                    }
+                    
+                    // Alternative for older environments
+                    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+                        return 'DR-' + ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                        );
+                    }
+                    
+                    // Fallback method using Math.random
+                    return 'DR-' + 'xxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                } catch (error) {
+                    console.error('Error generating report ID:', error);
+                    // Final fallback
+                    return 'DR-' + Date.now() + '-' + Math.random().toString(36).substring(2);
+                }
+            }
+            
+            // Generate and set the report ID in both display and hidden input
+            function generateAndSetReportId() {
+                try {
+                    const reportId = generateReportId();
+                    console.log('Generated Report ID:', reportId); // Debug log
+                    
+                    const reportIdElement = document.getElementById('reportIdDisplay');
+                    const reportIdHidden = document.getElementById('reportId');
+                    
+                    if (reportIdElement) {
+                        reportIdElement.textContent = reportId;
+                        console.log('Report ID displayed successfully'); // Debug log
+                    } else {
+                        console.error('reportIdDisplay element not found');
+                    }
+                    
+                    if (reportIdHidden) {
+                        reportIdHidden.value = reportId;
+                        console.log('Report ID set in hidden input successfully'); // Debug log
+                    } else {
+                        console.error('reportId hidden input not found');
+                    }
+                } catch (error) {
+                    console.error('Error setting report ID:', error);
+                    // Set a fallback value
+                    const fallbackId = 'DR-' + Date.now();
+                    const reportIdElement = document.getElementById('reportIdDisplay');
+                    const reportIdHidden = document.getElementById('reportId');
+                    
+                    if (reportIdElement) {
+                        reportIdElement.textContent = fallbackId;
+                    }
+                    if (reportIdHidden) {
+                        reportIdHidden.value = fallbackId;
+                    }
+                }
+            }   
+
+            // File upload area functionality
+            function initFileUpload() {
+                try {
+                    const fileUploadArea = document.getElementById('mediaUploadArea');
+                    const fileInput = document.getElementById('media');
+                    
+                    if (!fileUploadArea || !fileInput) {
+                        console.warn('File upload elements not found');
+                        return;
+                    }
+                    
+                    // Click handler for upload area
+                    fileUploadArea.addEventListener('click', () => {
+                        fileInput.click();
+                    });
+                    
+                    // Drag and drop handlers
+                    fileUploadArea.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        fileUploadArea.style.borderColor = 'blue';
+                        fileUploadArea.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+                    });
+                    
+                    fileUploadArea.addEventListener('dragleave', () => {
+                        fileUploadArea.style.borderColor = 'blue';
+                        fileUploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+                    });
+                    
+                    fileUploadArea.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        fileUploadArea.style.borderColor = 'blue';
+                        fileUploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+                        
+                        if (e.dataTransfer.files.length) {
+                            fileInput.files = e.dataTransfer.files;
+                            updateFileUploadText(e.dataTransfer.files);
+                            showFilePreview(e.dataTransfer.files);
+                        }
+                    });
+                    
+                    // File input change handler
+                    fileInput.addEventListener('change', () => {
+                        if (fileInput.files.length) {
+                            updateFileUploadText(fileInput.files);
+                            showFilePreview(fileInput.files);
+                        }
+                    });
+                    
+                    function updateFileUploadText(files) {
+                        try {
+                            const fileText = files.length === 1 ? 
+                                `1 file selected: ${files[0].name}` : 
+                                `${files.length} files selected`;
+                                
+                            const textElement = fileUploadArea.querySelector('p');
+                            if (textElement) {
+                                textElement.textContent = fileText;
+                            }
+                        } catch (error) {
+                            console.error('Error updating file upload text:', error);
+                        }
+                    }
+                    
+                    function showFilePreview(files) {
+                        try {
+                            const uploadedFilesDiv = document.getElementById('uploadedFiles');
+                            if (!uploadedFilesDiv) {
+                                console.warn('uploadedFiles container not found');
+                                return;
+                            }
+                            
+                            uploadedFilesDiv.innerHTML = ''; // Clear previous previews
+                            
+                            if (files.length > 0) {
+                                uploadedFilesDiv.classList.add('has-files');
+                                
+                                Array.from(files).forEach((file, index) => {
+                                    const fileType = file.type;
+                                    const previewWrapper = document.createElement('div');
+                                    previewWrapper.className = 'file-preview-wrapper';
+                                    previewWrapper.style.display = 'inline-block';
+                                    previewWrapper.style.margin = '5px';
+
+                                    if (fileType.startsWith('image/')) {
+                                        const img = document.createElement('img');
+                                        img.className = 'file-preview-image';
+                                        img.style.width = '100px';
+                                        img.style.height = '100px';
+                                        img.style.objectFit = 'cover';
+                                        img.style.borderRadius = '6px';
+                                        img.alt = `Preview of ${file.name}`;
+
+                                        const reader = new FileReader();
+                                        reader.onload = function (e) {
+                                            img.src = e.target.result;
+                                        };
+                                        reader.onerror = function() {
+                                            console.error('Error reading file:', file.name);
+                                        };
+                                        reader.readAsDataURL(file);
+
+                                        previewWrapper.appendChild(img);
+                                    } 
+                                    else if (fileType.startsWith('video/')) {
+                                        const video = document.createElement('video');
+                                        video.className = 'file-preview-video';
+                                        video.controls = true;
+                                        video.style.width = '150px';
+                                        video.style.height = '100px';
+                                        video.style.borderRadius = '6px';
+
+                                        const reader = new FileReader();
+                                        reader.onload = function (e) {
+                                            video.src = e.target.result;
+                                        };
+                                        reader.onerror = function() {
+                                            console.error('Error reading video file:', file.name);
+                                        };
+                                        reader.readAsDataURL(file);
+
+                                        previewWrapper.appendChild(video);
+                                    } else {
+                                        // For other file types, show file info
+                                        const fileInfo = document.createElement('div');
+                                        fileInfo.className = 'file-info';
+                                        fileInfo.textContent = `${index + 1}. ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                                        previewWrapper.appendChild(fileInfo);
+                                    }
+
+                                    uploadedFilesDiv.appendChild(previewWrapper);
+                                });
+                            } else {
+                                uploadedFilesDiv.classList.remove('has-files');
+                            }
+                        } catch (error) {
+                            console.error('Error showing file preview:', error);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error initializing file upload:', error);
+                }
+            }
+        </script>
+<?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>
