@@ -12,59 +12,24 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/styles.css">
+  <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/sidebar.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
-  
-  <!-- Scripts -->
-   <!-- mobile responsive hamburger menu button -->
-  <script src="<?php echo URLROOT; ?>/js/default.js" defer></script> 
 </head>
 
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
-    <ul class="sidebar-menu">
-      <li><a href="#" class="active" data-tooltip="Home">
-        <i class="fas fa-home"></i>
-        <span class="menu-text">Home</span>
-      </a></li>
-      <li><a href="#" data-tooltip="Cultivation Timeline">
-        <i class="fas fa-calendar-alt"></i>
-        <span class="menu-text">Cultivation Timeline</span>
-      </a></li>
-      <li><a href="#" data-tooltip="Fertilizer Calculator">
-        <i class="fas fa-calculator"></i>
-        <span class="menu-text">Fertilizer Calculator</span>
-      </a></li>
-      <li><a href="#" data-tooltip="Disease Detector">
-        <i class="fas fa-bug"></i>
-        <span class="menu-text">Disease Detector</span>
-      </a></li>
-      <li><a href="#" data-tooltip="Knowledge Center">
-        <i class="fas fa-book"></i>
-        <span class="menu-text">Knowledge Center</span>
-      </a></li>
-      <li><a href="#" data-tooltip="Marketplace">
-        <i class="fas fa-store"></i>
-        <span class="menu-text">Marketplace</span>
-      </a></li>
-      <li><a href="#" data-tooltip="Complain">
-        <i class="fas fa-exclamation-circle"></i>
-        <span class="menu-text">Complain</span>
-      </a></li>
-    </ul>
-  </div>
-
-  <!-- Overlay for sidebar -->
-  <div class="overlay" id="overlay"></div>
+  <!-- Hidden checkboxes for state management -->
+  <input type="checkbox" id="sidebar-toggle">
+  <input type="checkbox" id="mobile-menu-toggle">
 
   <!-- Header -->
   <header>
     <div class="header-container">
       <div class="logo-container">
-        <button id="sidebarToggleNav" class="sidebar-toggle-nav">
+        <!-- Sidebar toggle - uses label for checkbox -->
+        <label for="sidebar-toggle" class="sidebar-toggle-label" aria-label="Toggle sidebar">
           <i class="fas fa-bars"></i>
-        </button>
-        <a href="#" class="logo">
+        </label>
+        <a href="<?php echo URLROOT; ?>/farmer" class="logo">
           <div class="logo-icon">
             <img src="<?php echo URLROOT; ?>/img/logo.png" alt="FarmerConnect.lk Logo" width="50" height="50">
           </div>
@@ -74,17 +39,56 @@
 
       <nav class="navbar">
         <div class="nav-links" id="navLinks">
-          <a href="#"><i class="fa fa-home"></i> Home</a>
+          <a href="<?php echo URLROOT; ?>/farmer"><i class="fa fa-home"></i> Home</a>
           <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
           <a href="#"><i class="fa fa-question-circle"></i> Help</a>
           <a href="#"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
 
-        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Toggle navigation menu">
+        <!-- Mobile menu toggle -->
+        <label for="mobile-menu-toggle" class="mobile-menu-label" aria-label="Toggle navigation menu">
           <i class="fas fa-bars"></i>
-        </button>
+        </label>
       </nav>
     </div>
   </header>
-  <!-- Sidebar section bar -->
-  <?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>
+
+  <!-- Mobile menu overlay -->
+  <label for="mobile-menu-toggle" class="mobile-overlay"></label>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+      <li><a href="<?php echo URLROOT; ?>/farmer" class="active" data-tooltip="Home">
+        <i class="fas fa-home"></i>
+        <span class="menu-text">Home</span>
+      </a></li>
+      <li><a href="<?php echo URLROOT; ?>/farmer#cultivation" data-tooltip="Cultivation Timeline">
+        <i class="fas fa-calendar-alt"></i>
+        <span class="menu-text">Cultivation Timeline</span>
+      </a></li>
+      <li><a href="<?php echo URLROOT; ?>/farmer#calculator" data-tooltip="Fertilizer Calculator">
+        <i class="fas fa-calculator"></i>
+        <span class="menu-text">Fertilizer Calculator</span>
+      </a></li>
+      <li><a href="<?php echo URLROOT; ?>/disease" data-tooltip="Disease Detector">
+        <i class="fas fa-bug"></i>
+        <span class="menu-text">Disease Detector</span>
+      </a></li>
+      <li><a href="<?php echo URLROOT; ?>/farmer#knowledge" data-tooltip="Knowledge Center">
+        <i class="fas fa-book"></i>
+        <span class="menu-text">Knowledge Center</span>
+      </a></li>
+      <li><a href="<?php echo URLROOT; ?>/marketplace/marketpl" data-tooltip="Marketplace">
+        <i class="fas fa-store"></i>
+        <span class="menu-text">Marketplace</span>
+      </a></li>
+      <li><a href="<?php echo URLROOT; ?>/farmer#complain" data-tooltip="Complain">
+        <i class="fas fa-exclamation-circle"></i>
+        <span class="menu-text">Complain</span>
+      </a></li>
+    </ul>
+  </aside>
+
+  <!-- Overlay for closing sidebar -->
+  <label for="sidebar-toggle" class="sidebar-overlay"></label>
