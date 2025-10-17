@@ -1,0 +1,273 @@
+/* Sidebar Styles - Pure CSS with checkbox */
+.sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: var(--sidebar-width-collapsed);
+  height: calc(100vh - var(--header-height));
+  background: rgba(248, 249, 250, 0.95);
+  color: var(--sidebar-text);
+  transition: width 0.3s ease, left 0.3s ease;
+  z-index: 999;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.15);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 20px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* Sidebar expanded state via checkbox - Desktop only */
+@media (min-width: 769px) {
+  #sidebar-toggle:checked ~ .sidebar {
+    width: var(--sidebar-width-expanded);
+  }
+  
+  #sidebar-toggle:checked ~ .main-content {
+    margin-left: var(--sidebar-width-expanded);
+  }
+  
+  #sidebar-toggle:checked ~ footer {
+    margin-left: var(--sidebar-width-expanded);
+  }
+}
+
+/* Overlay for closing sidebar - Desktop */
+.sidebar-overlay {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: 100%;
+  height: calc(100vh - var(--header-height));
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  display: none;
+}
+
+@media (min-width: 769px) {
+  #sidebar-toggle:checked ~ .sidebar-overlay {
+    opacity: 1;
+    pointer-events: all;
+    display: block;
+  }
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  transition: var(--transition);
+  border-left: 4px solid transparent;
+  white-space: nowrap;
+  position: relative;
+  min-height: 52px;
+  gap: 15px;
+}
+
+.sidebar-menu a i {
+  flex-shrink: 0;
+  font-size: 1.4rem;
+  width: 28px;
+  min-width: 28px;
+  text-align: center;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.sidebar-menu a .menu-text {
+  opacity: 0;
+  visibility: hidden;
+  max-width: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, max-width 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Show text when expanded on desktop */
+@media (min-width: 769px) {
+  #sidebar-toggle:checked ~ .sidebar .sidebar-menu a .menu-text {
+    opacity: 1;
+    visibility: visible;
+    max-width: 200px;
+  }
+}
+
+/* Fixed hover states - only apply when sidebar is expanded */
+@media (min-width: 769px) {
+  #sidebar-toggle:checked ~ .sidebar .sidebar-menu a:hover,
+  #sidebar-toggle:checked ~ .sidebar .sidebar-menu a.active {
+    background: var(--sidebar-hover);
+    color: var(--primary);
+    border-left-color: var(--primary);
+  }
+
+  #sidebar-toggle:checked ~ .sidebar .sidebar-menu a:hover i,
+  #sidebar-toggle:checked ~ .sidebar .sidebar-menu a.active i {
+    color: var(--primary);
+  }
+
+  /* Reset hover states when sidebar is collapsed */
+  #sidebar-toggle:not(:checked) ~ .sidebar .sidebar-menu a:hover {
+    background: transparent;
+    border-left-color: transparent;
+  }
+  
+  #sidebar-toggle:not(:checked) ~ .sidebar .sidebar-menu a:hover i {
+    color: #666;
+  }
+}
+
+/* Enhanced tooltip styling - Desktop only, collapsed sidebar */
+@media (min-width: 769px) {
+  .sidebar-menu a::after {
+    content: attr(data-tooltip);
+    position: fixed;
+    left: calc(var(--sidebar-width-collapsed) + 15px);
+    background: rgba(0, 0, 0, 0.95);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 10001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-50%);
+  }
+
+  .sidebar-menu a::before {
+    content: '';
+    position: fixed;
+    left: calc(var(--sidebar-width-collapsed) + 8px);
+    border: 7px solid transparent;
+    border-right-color: rgba(0, 0, 0, 0.95);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 10002;
+    transform: translateY(-50%);
+  }
+
+  /* Show tooltip on hover - only when sidebar is collapsed */
+  #sidebar-toggle:not(:checked) ~ .sidebar .sidebar-menu a:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #sidebar-toggle:not(:checked) ~ .sidebar .sidebar-menu a:hover::before {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Hide tooltips when sidebar is expanded */
+  #sidebar-toggle:checked ~ .sidebar .sidebar-menu a::after,
+  #sidebar-toggle:checked ~ .sidebar .sidebar-menu a::before {
+    display: none;
+  }
+}
+
+/* Mobile sidebar behavior */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 70px;
+  }
+
+  .sidebar {
+    left: calc(-1 * var(--sidebar-width-expanded));
+    width: var(--sidebar-width-expanded);
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    transition: left 0.3s ease;
+    background: rgba(248, 249, 250, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1001;
+  }
+  
+  #sidebar-toggle:checked ~ .sidebar {
+    left: 0;
+  }
+  
+  /* Show menu text on mobile always */
+  .sidebar .sidebar-menu a .menu-text {
+    opacity: 1;
+    visibility: visible;
+    max-width: 200px;
+  }
+  
+  /* Hide tooltips on mobile */
+  .sidebar .sidebar-menu a::after,
+  .sidebar .sidebar-menu a::before {
+    display: none !important;
+  }
+  
+  /* Mobile sidebar overlay */
+  .sidebar-overlay {
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    z-index: 1000;
+  }
+  
+  #sidebar-toggle:checked ~ .sidebar-overlay {
+    opacity: 1;
+    pointer-events: all;
+    display: block;
+  }
+
+  /* Enable hover effects on mobile */
+  .sidebar .sidebar-menu a:hover,
+  .sidebar .sidebar-menu a.active {
+    background: var(--sidebar-hover);
+    color: var(--primary);
+    border-left-color: var(--primary);
+  }
+
+  .sidebar .sidebar-menu a:hover i,
+  .sidebar .sidebar-menu a.active i {
+    color: var(--primary);
+  }
+}
+
+/* Scrollbar styling for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(46, 125, 50, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(46, 125, 50, 0.5);
+}
