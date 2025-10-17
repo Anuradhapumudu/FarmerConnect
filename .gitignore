@@ -78,3 +78,6 @@ config/local.php
 # App uploads (keep folder, ignore contents)
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Local dev/test scripts (do not push)
+test_db.php
