@@ -135,6 +135,18 @@ section h2::after {
   font-size: 2rem;
 }
 
+.actor-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.actor-link:hover .actor {
+  transform: scale(1.03);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
 /* Features */
 
 #features {

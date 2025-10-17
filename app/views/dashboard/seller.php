@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/minimalheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/sellerdashboardheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=<?= time(); ?>">
 
 <!-- Hero Section -->
@@ -18,7 +18,7 @@
   <div class="features_block">
 
 
-    <a href="<?php echo URLROOT; ?>/marketplaceseller" class="feature">
+    <a href="<?php echo URLROOT; ?>/Marketplace/Marketplaceseller" class="feature">
 
       <i class="fa-solid fa-store fa-2x"></i>
       <h3>Marketplace</h3>

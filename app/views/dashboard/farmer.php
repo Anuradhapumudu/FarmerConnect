@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/minimalheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/farmerdashboardheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=<?= time(); ?>">
 
 <!-- Hero Section -->

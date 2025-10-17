@@ -33,7 +33,7 @@
         <div class="nav-links" id="navLinks">
           <a href="#"><i class="fa fa-home"></i> Home</a>
           <a href="#"><i class="fa fa-bullhorn"></i> Announcement</a>
-          <a href="#"><i class="fa fa-question-circle"></i> Help</a>
+          <a href="<?php echo URLROOT; ?>/Help/Help"><i class="fa fa-question-circle"></i> Help</a>
           <a href="#"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
 
