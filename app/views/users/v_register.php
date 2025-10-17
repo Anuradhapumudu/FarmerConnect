@@ -1,4 +1,6 @@
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="<?php echo URLROOT; ?>/js/register.js" defer></script>
@@ -63,10 +65,10 @@
                             </div>
                             <div class="input-field">
 
-                                <label for="email">Phone No<span class="required">*</span></label>
+                                <label for="phone_no">Phone No<span class="required">*</span></label>
 
-                                <input type="text" name="email" id="farmer_email" placeholder="Email" value="<?php echo $data['email']; ?>">
-                                <span class = "form-invalid"><?php echo ($data['form_type'] == 'farmer') ? $data['email_error'] : ''; ?></span>
+                                <input type="text" name="phone_no" id="farmer_phone_no" placeholder="Phone Number" value="<?php echo $data['phone_no']; ?>">
+                                <span class = "form-invalid"><?php echo ($data['form_type'] == 'farmer') ? $data['phone_no_error'] : ''; ?></span>
                             </div>
                             <div class="input-field">
                                 <label for="password">Password<span class="required">*</span></label>
@@ -147,6 +149,11 @@
                                 <span class = "form-invalid"><?php echo ($data['form_type'] == 'seller') ? $data['last_name_error'] : ''; ?></span>
                             </div>
                             <div class="input-field">
+                                <label for="company_name">Company Name (Optional)</label>
+                                <input type="text" name="company_name" id="seller_company_name" placeholder="Company Name" value="<?php echo $data['company_name']; ?>">
+                                <span class = "form-invalid"><?php echo ($data['form_type'] == 'seller') ? $data['company_name_error'] : ''; ?></span>
+                            </div>
+                            <div class="input-field">
                                 <label for="nic">NIC<span class="required">*</span></label>
                                 <input type="text" name="nic" id="seller_nic" placeholder="NIC" value="<?php echo $data['nic']; ?>">
                                 <span class = "form-invalid"><?php echo ($data['form_type'] == 'seller') ? $data['nic_error'] : ''; ?></span>
@@ -160,6 +167,16 @@
                                 <label for="brn">Business Registration Number ( BRN )<span class="required">*</span></label>
                                 <input type="text" name="brn" id="seller_brn" placeholder="Business Registration Number ( BRN )" value="<?php echo $data['brn']; ?>">
                                 <span class = "form-invalid"><?php echo ($data['form_type'] == 'seller') ? $data['brn_error'] : ''; ?></span>
+                            </div>
+                            <div class="input-field">
+                                <label for="phone_no">Phone Number<span class="required">*</span></label>
+                                <input type="text" name="phone_no" id="seller_phone_no" placeholder="Phone Number" value="<?php echo $data['phone_no']; ?>">
+                                <span class = "form-invalid"><?php echo ($data['form_type'] == 'seller') ? $data['phone_no_error'] : ''; ?></span>
+                            </div>
+                            <div class="input-field">
+                                <label for="address">Address<span class="required">*</span></label>
+                                <input type="text" name="address" id="seller_address" placeholder="Address" value="<?php echo $data['address']; ?>">
+                                <span class = "form-invalid"><?php echo ($data['form_type'] == 'seller') ? $data['address_error'] : ''; ?></span>
                             </div>
                             <div class="input-field">
                                 <label for="password">Password<span class="required">*</span></label>

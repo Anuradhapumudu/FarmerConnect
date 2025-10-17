@@ -9,9 +9,9 @@
         // Register user (into registrations table)
         public function register($data) {
             $this->db->query("INSERT INTO registrations 
-                (user_type, first_name, last_name, nic, officer_id, brn, email, password, approval_status)
+                (user_type, first_name, last_name, nic, officer_id, brn, email, password, approval_status, phone_no)
                 VALUES
-                (:user_type, :first_name, :last_name, :nic, :officer_id, :brn, :email, :password, :approval_status)
+                (:user_type, :first_name, :last_name, :nic, :officer_id, :brn, :email, :password, :approval_status, :phone_no)
             ");
 
             // Bind values
@@ -21,12 +21,31 @@
             $this->db->bind(':nic', $data['nic']);
             $this->db->bind(':officer_id', !empty($data['officer_id']) ? $data['officer_id'] : null);
             $this->db->bind(':brn', !empty($data['brn']) ? $data['brn'] : null);
-            $this->db->bind(':email', $data['email']);
+            $this->db->bind(':email', !empty($data['email']) ? $data['email'] : null);
             $this->db->bind(':password', $data['password']); // already hashed in controller
             $this->db->bind(':approval_status', $data['approval_status']);
+            $this->db->bind(':phone_no', !empty($data['phone_no']) ? $data['phone_no'] : null);
 
             // Execute
             return $this->db->execute();
+
+                /*// Get the registration ID for linking
+                $registration_id = $this->db->lastInsertId();
+
+                // 2️⃣ Insert into farmer/seller table based on type
+                if ($data['form_type'] == 'farmer') {
+                    $this->db->query("INSERT INTO farmers 
+                        (registration_id, first_name, last_name, nic, phone_no)
+                        VALUES
+                        (:registration_id, :first_name, :last_name, :nic, :phone_no)
+                    ");
+                    $this->db->bind(':registration_id', $registration_id);
+                    $this->db->bind(':first_name', $data['first_name']);
+                    $this->db->bind(':last_name', $data['last_name']);
+                    $this->db->bind(':nic', $data['nic']);
+                    $this->db->bind(':phone_no', $data['phone_no']);
+                    return $this->db->execute();
+                }*/
         }
 
         // Login the user
@@ -76,6 +95,13 @@
         public function findUserByEmail($email) {
             $this->db->query("SELECT * FROM registrations WHERE email = :email");
             $this->db->bind(':email', $email);
+            $row = $this->db->single();
+
+            return ($this->db->rowCount() > 0);
+        }
+        public function findUserByPhoneNo($phone_no) {
+            $this->db->query("SELECT * FROM registrations WHERE phone_no = :phone_no");
+            $this->db->bind(':phone_no', $phone_no);
             $row = $this->db->single();
 
             return ($this->db->rowCount() > 0);

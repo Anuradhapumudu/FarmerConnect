@@ -31,7 +31,7 @@ body {
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
+  width: 700px;
   height: 3px;
   background: linear-gradient(90deg, #317b43, #136d4f);
   border-radius: 2px;

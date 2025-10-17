@@ -27,21 +27,27 @@
                     'first_name' => trim($_POST['first_name']),
                     'last_name' => trim($_POST['last_name']),
                     'nic' => trim($_POST['nic']),
-                    'email' => trim($_POST['email']),
+                    'phone_no' => trim($_POST['phone_no']),
                     'password' => trim($_POST['password']),
                     'confirm_password' => trim($_POST['confirm_password']),
                     'officer_id' => '',
                     'brn' => '',
+                    'email' => '',
+                    'address' => '',
+                    'company_name' => '',
                     
 
                     'first_name_error' => '',
                     'last_name_error' => '',
                     'nic_error' => '',
-                    'email_error' => '',
+                    'phone_no_error' => '',
                     'password_error' => '',
                     'confirm_password_error' => '',
                     'officer_id_error' => '',
                     'brn_error' => '',
+                    'email_error' => '',
+                    'address_error' => '',
+                    'company_name_error' => ''
                     ];
                     // Validate farmer inputs
                     if (empty($data['first_name'])) {
@@ -52,19 +58,18 @@
                     }
                     if (empty($data['nic'])) {
                         $data['nic_error'] = 'Please enter your NIC';
-                    } else {
-                        // Old format: 9 digits + V/X (total 10 chars)
-                        // New format: 12 digits (total 12 chars)
-                        $nic = $data['nic'];
-                        if (!preg_match('/^(\d{9}[VXvx]|\d{12})$/', $nic)) {
-                            $data['nic_error'] = 'NIC format is invalid';
-                        }
+                    } elseif (!preg_match('/^(\d{9}[VXvx]|\d{12})$/', $data['nic'])) {
+                        $data['nic_error'] = 'NIC format is invalid';
+                    } elseif ($this->userModel->findUserByNic($data['nic'])) {
+                        $data['nic_error'] = 'NIC is already registered';
                     }
-                    if (empty($data['email'])) {
-                        $data['email_error'] = 'Please enter your email';
+                    if (empty($data['phone_no'])) {
+                        $data['phone_no_error'] = 'Please enter your phone number';
+                    } else if (strlen($data['phone_no']) != 10) { 
+                        $data['phone_no_error'] = 'Phone number must be exactly 10 digits';
                     } else {
-                        if ($this->userModel->findUserByEmail($data['email'])) {
-                            $data['email_error'] = 'Email is already taken';
+                        if ($this->userModel->findUserByPhoneNo($data['phone_no'])) {
+                            $data['phone_no_error'] = 'Phone number is already taken';
                         }
                     }
                     if (empty($data['password'])) {
@@ -84,6 +89,9 @@
                     'password' => trim($_POST['password']),
                     'confirm_password' => trim($_POST['confirm_password']),
                     'brn' => '',
+                    'phone_no' => '',
+                    'address' => '',
+                    'company_name' => '',
 
                     'first_name_error' => '',
                     'last_name_error' => '',
@@ -92,7 +100,10 @@
                     'officer_id_error' => '',
                     'password_error' => '',
                     'confirm_password_error' => '',
-                    'brn_error' => ''
+                    'brn_error' => '',
+                    'phone_no_error' => '',
+                    'address_error' => '',
+                    'company_name_error' => ''
                     ];
                     // Validate officer inputs
                     if (empty($data['first_name'])) {
@@ -103,6 +114,10 @@
                     }
                     if (empty($data['nic'])) {
                         $data['nic_error'] = 'Please enter your NIC';
+                    } elseif (!preg_match('/^(\d{9}[VXvx]|\d{12})$/', $data['nic'])) {
+                        $data['nic_error'] = 'NIC format is invalid';
+                    } elseif ($this->userModel->findUserByNic($data['nic'])) {
+                        $data['nic_error'] = 'NIC is already registered';
                     }
                     if (empty($data['email'])) {
                         $data['email_error'] = 'Please enter your email';
@@ -139,6 +154,9 @@
                     'brn' => trim($_POST['brn']),
                     'password' => trim($_POST['password']),
                     'confirm_password' => trim($_POST['confirm_password']),
+                    'address' => trim($_POST['address']),
+                    'company_name' => trim($_POST['company_name']),
+                    'phone_no' => trim($_POST['phone_no']),
                     'officer_id' => '',
 
                     'first_name_error' => '',
@@ -148,7 +166,11 @@
                     'brn_error' => '',
                     'password_error' => '',
                     'confirm_password_error' => '',
+                    'address_error' => '',
+                    'company_name_error' => '',
+                    'phone_no_error' => '',
                     'officer_id_error' => '',
+                
                     ];
                     // Validate seller inputs
                     if (empty($data['first_name'])) {
@@ -159,6 +181,10 @@
                     }
                     if (empty($data['nic'])) {
                         $data['nic_error'] = 'Please enter your NIC';
+                    } elseif (!preg_match('/^(\d{9}[VXvx]|\d{12})$/', $data['nic'])) {
+                        $data['nic_error'] = 'NIC format is invalid';
+                    } elseif ($this->userModel->findUserByNic($data['nic'])) {
+                        $data['nic_error'] = 'NIC is already registered';
                     }
                     if (empty($data['email'])) {
                         $data['email_error'] = 'Please enter your email';
@@ -169,6 +195,18 @@
                     }
                     if (empty($data['brn'])) {
                         $data['brn_error'] = 'Please enter your Business Registration Number (BRN)';
+                    }
+                    if (empty($data['phone_no'])) {
+                        $data['phone_no_error'] = 'Please enter your phone number';
+                    } else if (strlen($data['phone_no']) != 10) { 
+                        $data['phone_no_error'] = 'Phone number must be exactly 10 digits';
+                    } else {
+                        if ($this->userModel->findUserByPhoneNo($data['phone_no'])) {
+                            $data['phone_no_error'] = 'Phone number is already taken';
+                        }
+                    }
+                    if (empty($data['address'])) {
+                        $data['address_error'] = 'Please enter your address';
                     }
                     if (empty($data['password'])) {
                         $data['password_error'] = 'Please enter your password';
@@ -188,7 +226,9 @@
                     $data['password_error'],
                     $data['confirm_password_error'],
                     $data['officer_id_error'],
-                    $data['brn_error']
+                    $data['brn_error'],
+                    $data['phone_no_error'],
+                    $data['address_error'],
                 ];
 
                 if (!array_filter($all_errors)) {
@@ -202,7 +242,7 @@
                     }
 
                     // Register user
-                    if ($this->userModel->register($data)) {
+                    if ($data['form_type'] !== 'seller' && $this->userModel->register($data)) {
                         // Redirect to the login page
                         echo "
                             <div style='
@@ -221,8 +261,42 @@
                             </script>
                         ";
                     exit;
-                    } else {
-                        die('Something went wrong');
+                    } elseif ($data['form_type'] === 'seller' && $this->userModel->register($data)) {
+                        // Redirect to the login page
+                        echo "
+                            <div style='
+                                text-align: center; 
+                                margin-top: 50px; 
+                                font-family: Arial, sans-serif; 
+                                font-size: 20px; 
+                                color: green;'>
+                                Request sent! <br>
+                                You will be notified when accepted...
+                            </div>
+                            <script>
+                                setTimeout(function(){
+                                    window.location.href = '" . URLROOT . "/users/login';
+                                }, 5000);
+                            </script>
+                        ";
+                    } 
+                    else {
+                        echo "
+                            <div style='
+                                text-align: center; 
+                                margin-top: 50px; 
+                                font-family: Arial, sans-serif; 
+                                font-size: 20px; 
+                                color: green;'>
+                                Something went wrong! <br>
+                                Please try again...
+                            </div>
+                            <script>
+                                setTimeout(function(){
+                                    window.location.href = '" . URLROOT . "/users/register';
+                                }, 5000);
+                            </script>
+                        ";
                     }
                 } else {
                     // Load the view with errors
@@ -236,20 +310,26 @@
                     'first_name' => '',
                     'last_name' => '',
                     'nic' => '',
+                    'phone_no' => '',
                     'email' => '',
                     'password' => '',
                     'confirm_password' => '',
                     'officer_id' => '',
                     'brn' => '',
+                    'address' => '',
+                    'company_name' => '',
 
                     'first_name_error' => '',
                     'last_name_error' => '',
                     'nic_error' => '',
+                    'phone_no_error' => '',
                     'email_error' => '',
                     'password_error' => '',
                     'confirm_password_error' => '',
                     'officer_id_error' => '',
-                    'brn_error' => ''
+                    'brn_error' => '',
+                    'address_error' => '',
+                    'company_name_error' => '',
                 ];
                 // Load the view with the initial data
                 $this->view('users/v_register', $data);
