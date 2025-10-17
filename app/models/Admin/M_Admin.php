@@ -1,0 +1,71 @@
+<?php
+class M_Admin {
+    private $db;
+
+    public function __construct($database) {
+        $this->db = $database;
+    }
+
+    // Get all sellers
+    public function getAllSellers() {
+        $this->db->query("SELECT * FROM sellers ORDER BY created_at DESC");
+        return $this->db->resultSet();
+    }
+
+    // Get counts
+    public function getCounts() {
+        $this->db->query("
+            SELECT 
+                COUNT(*) AS total,
+                SUM(CASE WHEN approval_status='Approved' THEN 1 ELSE 0 END) AS approved,
+                SUM(CASE WHEN approval_status='Pending' THEN 1 ELSE 0 END) AS pending,
+                SUM(CASE WHEN approval_status='Rejected' THEN 1 ELSE 0 END) AS rejected
+            FROM sellers
+        ");
+        return $this->db->single();
+    }
+
+    // Delete seller
+    public function deleteSeller($id) {
+        $this->db->query("DELETE FROM sellers WHERE seller_id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
+
+    // Get single seller
+    public function getSellerById($id) {
+        $this->db->query("SELECT * FROM sellers WHERE seller_id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+    public function updateSeller($id, $data) {
+    $this->db->query("UPDATE sellers SET
+        first_name = :first_name,
+        last_name = :last_name,
+        nic = :nic,
+        email = :email,
+        phone_no = :phone_no,
+        address = :address,
+        company_name = :company_name,
+        brn = :brn,
+        approval_status = :approval_status
+        WHERE seller_id = :id
+    ");
+
+    $this->db->bind(':first_name', $data['first_name']);
+    $this->db->bind(':last_name', $data['last_name']);
+    $this->db->bind(':nic', $data['nic']);
+    $this->db->bind(':email', $data['email']);
+    $this->db->bind(':phone_no', $data['phone_no']);
+    $this->db->bind(':address', $data['address']);
+    $this->db->bind(':company_name', $data['company_name']);
+    $this->db->bind(':brn', $data['brn']);
+    $this->db->bind(':approval_status', $data['approval_status']);
+    $this->db->bind(':id', $id);
+
+    return $this->db->execute();
+}
+
+}
+?>
