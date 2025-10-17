@@ -29,7 +29,7 @@
         <label for="sidebar-toggle" class="sidebar-toggle-label" aria-label="Toggle sidebar">
           <i class="fas fa-bars"></i>
         </label>
-        <a href="<?php echo URLROOT; ?>/farmer" class="logo">
+        <a href="<?php echo URLROOT; ?>" class="logo">
           <div class="logo-icon">
             <img src="<?php echo URLROOT; ?>/img/logo.png" alt="FarmerConnect.lk Logo" width="50" height="50">
           </div>
@@ -39,10 +39,10 @@
 
       <nav class="navbar">
         <div class="nav-links" id="navLinks">
-          <a href="<?php echo URLROOT; ?>/farmer"><i class="fa fa-home"></i> Home</a>
+          <a href="<?php echo URLROOT; ?>/farmerdashboard"><i class="fa fa-home"></i> Home</a>
           <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
-          <a href="#"><i class="fa fa-question-circle"></i> Help</a>
-          <a href="#"><i class="fa-regular fa-circle-user"></i> Profile</a>
+          <a href="<?php echo URLROOT; ?>/Help/V_help"><i class="fa fa-question-circle"></i> Help</a>
+          <a href="<?php echo URLROOT; ?>/FarmerProfile"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
 
         <!-- Mobile menu toggle -->
