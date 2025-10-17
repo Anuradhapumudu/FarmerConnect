@@ -6,16 +6,19 @@ class M_disease {
         $this->db = new Database;
     }
 
-    // CREATE - Submit the report
+    // CREATE - Submit the report (returns generated report_code)
     public function submitDReport($data) {
         try {
-            $this->db->query("INSERT INTO disease_reports (reportId, farmerNIC, plrNumber, observationDate, title, description, media, severity, affectedArea, status, created_at)
-                              VALUES (:reportId, :farmerNIC, :plrNumber, :observationDate, :title, :description, :media, :severity, :affectedArea, :status, NOW())");
+            // Generate report code first
+            $reportCode = $this->generateReportCode();
+
+            $this->db->query("INSERT INTO disease_reports (report_code, farmerNIC, pirNumber, observationDate, title, description, media, severity, affectedArea, status, created_at)
+                              VALUES (:report_code, :farmerNIC, :pirNumber, :observationDate, :title, :description, :media, :severity, :affectedArea, :status, NOW())");
 
             // Bind values
-            $this->db->bind(':reportId', $data['reportId']);
+            $this->db->bind(':report_code', $reportCode);
             $this->db->bind(':farmerNIC', $data['farmerNIC']);
-            $this->db->bind(':plrNumber', $data['plrNumber']);
+            $this->db->bind(':pirNumber', $data['plrNumber']); // Note: plrNumber in data, pirNumber in DB
             $this->db->bind(':observationDate', $data['observationDate']);
             $this->db->bind(':title', $data['title']);
             $this->db->bind(':description', $data['description']);
@@ -26,7 +29,7 @@ class M_disease {
 
             // Execute
             if ($this->db->execute()) {
-                return true;
+                return $reportCode;
             } else {
                 error_log("Database execution failed in submitDReport");
                 return false;
@@ -34,6 +37,23 @@ class M_disease {
         } catch (Exception $e) {
             error_log("Exception in submitDReport: " . $e->getMessage());
             return false;
+        }
+    }
+
+    // Generate unique report code
+    private function generateReportCode() {
+        try {
+            // Get the next available ID
+            $this->db->query("SELECT COALESCE(MAX(CAST(SUBSTRING(report_code, 3) AS UNSIGNED)), 0) + 1 as next_id FROM disease_reports");
+            $result = $this->db->single();
+            $nextId = $result ? $result->next_id : 1;
+
+            // Generate report code with leading zeros
+            return 'DR' . str_pad($nextId, 3, '0', STR_PAD_LEFT);
+        } catch (Exception $e) {
+            error_log("Exception in generateReportCode: " . $e->getMessage());
+            // Fallback to timestamp-based code
+            return 'DR' . date('His');
         }
     }
 
@@ -52,8 +72,8 @@ class M_disease {
     // READ - Get all reports by PLR number
     public function getReportsByPLR($plrNumber) {
         try {
-            $this->db->query("SELECT * FROM disease_reports WHERE plrNumber = :plrNumber ORDER BY created_at DESC");
-            $this->db->bind(':plrNumber', $plrNumber);
+            $this->db->query("SELECT * FROM disease_reports WHERE pirNumber = :pirNumber ORDER BY created_at DESC");
+            $this->db->bind(':pirNumber', $plrNumber);
             return $this->db->resultSet();
         } catch (Exception $e) {
             error_log("Exception in getReportsByPLR: " . $e->getMessage());
@@ -61,14 +81,14 @@ class M_disease {
         }
     }
 
-    // READ - Get a single report by reportId
-    public function getReportById($reportId) {
+    // READ - Get a single report by report_code
+    public function getReportByCode($reportCode) {
         try {
-            $this->db->query("SELECT * FROM disease_reports WHERE reportId = :reportId");
-            $this->db->bind(':reportId', $reportId);
+            $this->db->query("SELECT * FROM disease_reports WHERE report_code = :report_code");
+            $this->db->bind(':report_code', $reportCode);
             return $this->db->single();
         } catch (Exception $e) {
-            error_log("Exception in getReportById: " . $e->getMessage());
+            error_log("Exception in getReportByCode: " . $e->getMessage());
             return false;
         }
     }
@@ -102,7 +122,7 @@ class M_disease {
     }
 
     // READ - Search reports by multiple criteria
-    public function searchReports($farmerNIC = '', $plrNumber = '', $reportId = '') {
+    public function searchReports($farmerNIC = '', $plrNumber = '', $reportCode = '') {
         try {
             $conditions = [];
             $params = [];
@@ -113,13 +133,13 @@ class M_disease {
             }
 
             if (!empty($plrNumber)) {
-                $conditions[] = "plrNumber = :plrNumber";
-                $params[':plrNumber'] = $plrNumber;
+                $conditions[] = "pirNumber = :pirNumber";
+                $params[':pirNumber'] = $plrNumber;
             }
 
-            if (!empty($reportId)) {
-                $conditions[] = "reportId = :reportId";
-                $params[':reportId'] = $reportId;
+            if (!empty($reportCode)) {
+                $conditions[] = "report_code = :report_code";
+                $params[':report_code'] = $reportCode;
             }
 
             if (empty($conditions)) {
@@ -145,7 +165,7 @@ class M_disease {
         try {
             $this->db->query("UPDATE disease_reports SET 
                               farmerNIC = :farmerNIC,
-                              plrNumber = :plrNumber,
+                              pirNumber = :pirNumber,
                               observationDate = :observationDate,
                               title = :title,
                               description = :description,
@@ -153,12 +173,12 @@ class M_disease {
                               severity = :severity,
                               affectedArea = :affectedArea,
                               updated_at = NOW()
-                              WHERE reportId = :reportId");
+                              WHERE report_code = :report_code");
             
             // Bind values
-            $this->db->bind(':reportId', $data['reportId']);
+            $this->db->bind(':report_code', $data['report_code']);
             $this->db->bind(':farmerNIC', $data['farmerNIC']);
-            $this->db->bind(':plrNumber', $data['plrNumber']);
+            $this->db->bind(':pirNumber', $data['plrNumber']);
             $this->db->bind(':observationDate', $data['observationDate']);
             $this->db->bind(':title', $data['title']);
             $this->db->bind(':description', $data['description']);
@@ -173,11 +193,24 @@ class M_disease {
         }
     }
 
-    // DELETE - Delete report
-    public function deleteReport($reportId) {
+    // UPDATE - Update report media only
+    public function updateReportMedia($reportCode, $media) {
         try {
-            $this->db->query("DELETE FROM disease_reports WHERE reportId = :reportId");
-            $this->db->bind(':reportId', $reportId);
+            $this->db->query("UPDATE disease_reports SET media = :media, updated_at = NOW() WHERE report_code = :report_code");
+            $this->db->bind(':media', $media);
+            $this->db->bind(':report_code', $reportCode);
+            return $this->db->execute();
+        } catch (Exception $e) {
+            error_log("Exception in updateReportMedia: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // DELETE - Delete report
+    public function deleteReport($reportCode) {
+        try {
+            $this->db->query("DELETE FROM disease_reports WHERE report_code = :report_code");
+            $this->db->bind(':report_code', $reportCode);
             return $this->db->execute();
         } catch (Exception $e) {
             error_log("Exception in deleteReport: " . $e->getMessage());
@@ -224,13 +257,12 @@ class M_disease {
         }
     }
 
-    // Update report status (for future use - you might want to add a status column)
-    public function updateReportStatus($reportId, $status) {
+    // Update report status
+    public function updateReportStatus($reportCode, $status) {
         try {
-            // Note: This requires adding a 'status' column to your database table
-            $this->db->query("UPDATE disease_reports SET status = :status, updated_at = NOW() WHERE reportId = :reportId");
+            $this->db->query("UPDATE disease_reports SET status = :status, updated_at = NOW() WHERE report_code = :report_code");
             $this->db->bind(':status', $status);
-            $this->db->bind(':reportId', $reportId);
+            $this->db->bind(':report_code', $reportCode);
             return $this->db->execute();
         } catch (Exception $e) {
             error_log("Exception in updateReportStatus: " . $e->getMessage());
@@ -264,7 +296,7 @@ class M_disease {
     }
 
     // Search reports with pagination
-    public function searchReportsWithPagination($farmerNIC = '', $plrNumber = '', $reportId = '', $limit = 10, $offset = 0) {
+    public function searchReportsWithPagination($farmerNIC = '', $plrNumber = '', $reportCode = '', $limit = 10, $offset = 0) {
         try {
             $conditions = [];
             $params = [];
@@ -275,13 +307,13 @@ class M_disease {
             }
 
             if (!empty($plrNumber)) {
-                $conditions[] = "plrNumber LIKE :plrNumber";
-                $params[':plrNumber'] = "%{$plrNumber}%";
+                $conditions[] = "pirNumber LIKE :pirNumber";
+                $params[':pirNumber'] = "%{$plrNumber}%";
             }
 
-            if (!empty($reportId)) {
-                $conditions[] = "reportId LIKE :reportId";
-                $params[':reportId'] = "%{$reportId}%";
+            if (!empty($reportCode)) {
+                $conditions[] = "report_code LIKE :report_code";
+                $params[':report_code'] = "%{$reportCode}%";
             }
 
             $whereClause = !empty($conditions) ? "WHERE " . implode(' AND ', $conditions) : "";
@@ -304,7 +336,7 @@ class M_disease {
     }
 
     // Get search results count (for pagination)
-    public function getSearchResultsCount($farmerNIC = '', $plrNumber = '', $reportId = '') {
+    public function getSearchResultsCount($farmerNIC = '', $plrNumber = '', $reportCode = '') {
         try {
             $conditions = [];
             $params = [];
@@ -315,13 +347,13 @@ class M_disease {
             }
 
             if (!empty($plrNumber)) {
-                $conditions[] = "plrNumber LIKE :plrNumber";
-                $params[':plrNumber'] = "%{$plrNumber}%";
+                $conditions[] = "pirNumber LIKE :pirNumber";
+                $params[':pirNumber'] = "%{$plrNumber}%";
             }
 
-            if (!empty($reportId)) {
-                $conditions[] = "reportId LIKE :reportId";
-                $params[':reportId'] = "%{$reportId}%";
+            if (!empty($reportCode)) {
+                $conditions[] = "report_code LIKE :report_code";
+                $params[':report_code'] = "%{$reportCode}%";
             }
 
             $whereClause = !empty($conditions) ? "WHERE " . implode(' AND ', $conditions) : "";
@@ -368,8 +400,13 @@ class M_disease {
             }
 
             if (!empty($filters['plrNumber'])) {
-                $conditions[] = "plrNumber LIKE :plrNumber";
-                $params[':plrNumber'] = "%{$filters['plrNumber']}%";
+                $conditions[] = "pirNumber LIKE :pirNumber";
+                $params[':pirNumber'] = "%{$filters['plrNumber']}%";
+            }
+
+            if (!empty($filters['reportCode'])) {
+                $conditions[] = "report_code LIKE :report_code";
+                $params[':report_code'] = "%{$filters['reportCode']}%";
             }
 
             if (!empty($filters['severity'])) {
@@ -477,17 +514,17 @@ class M_disease {
     // Batch operations
     
     // Delete multiple reports
-    public function deleteMultipleReports($reportIds) {
+    public function deleteMultipleReports($reportCodes) {
         try {
-            if (empty($reportIds) || !is_array($reportIds)) {
+            if (empty($reportCodes) || !is_array($reportCodes)) {
                 return false;
             }
             
-            $placeholders = str_repeat('?,', count($reportIds) - 1) . '?';
-            $this->db->query("DELETE FROM disease_reports WHERE reportId IN ($placeholders)");
+            $placeholders = str_repeat('?,', count($reportCodes) - 1) . '?';
+            $this->db->query("DELETE FROM disease_reports WHERE report_code IN ($placeholders)");
             
-            foreach ($reportIds as $index => $reportId) {
-                $this->db->bind($index + 1, $reportId);
+            foreach ($reportCodes as $index => $reportCode) {
+                $this->db->bind($index + 1, $reportCode);
             }
             
             return $this->db->execute();
@@ -498,19 +535,19 @@ class M_disease {
     }
 
     // Update multiple reports status
-    public function updateMultipleReportsStatus($reportIds, $status) {
+    public function updateMultipleReportsStatus($reportCodes, $status) {
         try {
-            if (empty($reportIds) || !is_array($reportIds)) {
+            if (empty($reportCodes) || !is_array($reportCodes)) {
                 return false;
             }
             
-            $placeholders = str_repeat('?,', count($reportIds) - 1) . '?';
-            $this->db->query("UPDATE disease_reports SET status = :status, updated_at = NOW() WHERE reportId IN ($placeholders)");
+            $placeholders = str_repeat('?,', count($reportCodes) - 1) . '?';
+            $this->db->query("UPDATE disease_reports SET status = :status, updated_at = NOW() WHERE report_code IN ($placeholders)");
             
             $this->db->bind(':status', $status);
             
-            foreach ($reportIds as $index => $reportId) {
-                $this->db->bind($index + 1, $reportId);
+            foreach ($reportCodes as $index => $reportCode) {
+                $this->db->bind($index + 1, $reportCode);
             }
             
             return $this->db->execute();
@@ -521,10 +558,10 @@ class M_disease {
     }
 
     // Check if report exists
-    public function reportExists($reportId) {
+    public function reportExists($reportCode) {
         try {
-            $this->db->query("SELECT COUNT(*) as count FROM disease_reports WHERE reportId = :reportId");
-            $this->db->bind(':reportId', $reportId);
+            $this->db->query("SELECT COUNT(*) as count FROM disease_reports WHERE report_code = :report_code");
+            $this->db->bind(':report_code', $reportCode);
             $result = $this->db->single();
             return $result && $result->count > 0;
         } catch (Exception $e) {
