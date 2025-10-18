@@ -1,9 +1,8 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/seller/addProduct.css?v=<?= time(); ?>">
+<link rel="stylesheet" href="<?= URLROOT ?>/css/seller/addProduct.css?v=<?= time(); ?>">
+
 <main class="main-content" id="mainContent">
   <div class="containers">
-
-    
     <div class="form-wrapper">
       <div class="form-header">
         <div class="form-icon">
@@ -21,6 +20,7 @@
       
       <form method="post" action="" enctype="multipart/form-data">
         <div class="form-grid">
+          <!-- Product Name -->
           <div class="form-group">
             <label>Product Name <span class="required">*</span></label>
             <input type="text" name="name" value="<?= htmlspecialchars($data['name']) ?>" placeholder="Enter product name">
@@ -29,14 +29,13 @@
             <?php endif; ?>
           </div>
           
+          <!-- Seller ID (readonly) -->
           <div class="form-group">
             <label>Seller ID <span class="required">*</span></label>
-            <input type="text" name="seller_id" value="<?= htmlspecialchars($data['seller_id']) ?>" placeholder="Your seller ID">
-            <?php if(!empty($data['errors']['seller_id'])): ?>
-              <div class="error"><?= $data['errors']['seller_id'] ?></div>
-            <?php endif; ?>
+            <input type="text" name="seller_id" value="<?= htmlspecialchars($data['seller_id']) ?>" readonly>
           </div>
           
+          <!-- Category -->
           <div class="form-group">
             <label>Category <span class="required">*</span></label>
             <select name="category">
@@ -53,6 +52,7 @@
             <?php endif; ?>
           </div>
           
+          <!-- Status -->
           <div class="form-group">
             <label>Status <span class="required">*</span></label>
             <select name="status">
@@ -65,19 +65,32 @@
             <?php endif; ?>
           </div>
           
+          <!-- Region -->
           <div class="form-group">
             <label>Region <span class="required">*</span></label>
-            <select name="region">
-              <option value="">Select Region</option>
-              <option value="Colombo" <?= $data['region']=='Colombo'?'selected':'' ?>>Colombo</option>
-              <option value="Galle" <?= $data['region']=='Galle'?'selected':'' ?>>Galle</option>
-              <option value="Matara" <?= $data['region']=='Matara'?'selected':'' ?>>Matara</option>
-            </select>
+          <select name="region">
+              <option value="">Select District</option>
+              <?php 
+              $districts = [
+                  "Ampara","Anuradhapura","Badulla","Batticaloa","Colombo",
+                  "Galle","Gampaha","Hambantota","Jaffna","Kalutara",
+                  "Kandy","Kegalle","Kilinochchi","Kurunegala","Mannar",
+                  "Matale","Matara","Monaragala","Mullaitivu","Nuwara Eliya",
+                  "Polonnaruwa","Puttalam","Ratnapura","Trincomalee","Vavuniya"
+              ];
+
+              foreach($districts as $district){
+                  $selected = ($data['region'] ?? '') == $district ? 'selected' : '';
+                  echo "<option value=\"$district\" $selected>$district</option>";
+              }
+              ?>
+          </select>
             <?php if(!empty($data['errors']['region'])): ?>
               <div class="error"><?= $data['errors']['region'] ?></div>
             <?php endif; ?>
           </div>
           
+          <!-- Unit Type -->
           <div class="form-group">
             <label>Unit Type <span class="required">*</span></label>
             <select name="unit_type">
@@ -93,6 +106,7 @@
             <?php endif; ?>
           </div>
           
+          <!-- Price -->
           <div class="form-group">
             <label>Price Per Unit (LKR) <span class="required">*</span></label>
             <input type="number" step="0.1" name="price" value="<?= htmlspecialchars($data['price']) ?>" placeholder="0.00">
@@ -101,6 +115,7 @@
             <?php endif; ?>
           </div>
           
+          <!-- Available Quantity -->
           <div class="form-group">
             <label>Available Quantity <span class="required">*</span></label>
             <input type="number" name="available" value="<?= htmlspecialchars($data['available']) ?>" placeholder="Enter quantity">
@@ -109,14 +124,13 @@
             <?php endif; ?>
           </div>
           
+          <!-- Description -->
           <div class="form-group full-width">
-            <label>Description <span class="required">*</span></label>
+            <label>Description (Optional) </label>
             <textarea name="description" rows="3" placeholder="Describe your product in detail"><?= htmlspecialchars($data['description']) ?></textarea>
-            <?php if(!empty($data['errors']['description'])): ?>
-              <div class="error"><?= $data['errors']['description'] ?></div>
-            <?php endif; ?>
           </div>
           
+          <!-- Product Image -->
           <div class="form-group full-width">
             <label>Product Image <span class="required">*</span></label>
             <div class="file-input-container">
@@ -142,26 +156,24 @@
         </div>
       </form>
     </div>
+  </div>
+</main>
 
-            </main>
-    <script>
-
- // File input feedback
-    document.addEventListener('DOMContentLoaded', function() {
-      const fileInput = document.querySelector('input[type="file"]');
-      const fileInputButton = document.querySelector('.file-input-button');
-      
-      fileInput.addEventListener('change', function() {
-        if (this.files.length > 0) {
-          fileInputButton.innerHTML = `<i class="fas fa-check-circle"></i> ${this.files[0].name}`;
-          fileInputButton.style.borderColor = '#2e7d32';
-          fileInputButton.style.background = '#e8f5e9';
-        } else {
-          fileInputButton.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Choose Product Image`;
-        }
-      });
-    });  
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInput = document.querySelector('input[type="file"]');
+  const fileInputButton = document.querySelector('.file-input-button');
+  
+  fileInput.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      fileInputButton.innerHTML = `<i class="fas fa-check-circle"></i> ${this.files[0].name}`;
+      fileInputButton.style.borderColor = '#2e7d32';
+      fileInputButton.style.background = '#e8f5e9';
+    } else {
+      fileInputButton.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Choose Product Image`;
+    }
+  });
+});
 </script>
-
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

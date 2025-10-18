@@ -11,7 +11,6 @@
       <a href="<?php echo URLROOT; ?>/Marketplace/AddProduct" class="btn btn-add"><i class="fa fa-plus"></i> Add New Product</a>
     </div>
 
-    <h2 style="text-align:center; margin-bottom:20px;">Your Products</h2>
 
     <div class="product_box">
     <?php foreach($data['products'] as $product): ?>
@@ -33,13 +32,14 @@
       <p class="description"><?php echo htmlspecialchars($product->description); ?></p>
       <div class="badges">
         <span class="stock">Available Quantity: <?php echo htmlspecialchars($product->available_quantity); ?></span>
-        <span class="region">Region: <?php echo htmlspecialchars($product->region); ?></span>
+        <span class="region">District: <?php echo htmlspecialchars($product->region); ?></span>
       </div>
       <hr class="divider">
       <div class="actions">
-        <a href="<?php echo URLROOT; ?>/Marketplace/EditProduct/<?php echo $product->item_id; ?>" class="btn btn-edit">
-          <i class="fas fa-edit"></i> Edit
-        </a>
+      <a href="<?php echo URLROOT; ?>/Marketplace/EditProduct/<?=$product->item_id; ?>" class="btn btn-edit">
+        <i class="fas fa-edit"></i> Edit
+      </a>
+
         <a href="<?php echo URLROOT; ?>/Marketplace/DeleteProduct/<?php echo $product->item_id; ?>" class="btn btn-delete">
           <i class="fas fa-trash"></i> Delete
         </a>

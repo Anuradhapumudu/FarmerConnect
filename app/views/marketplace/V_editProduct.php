@@ -58,11 +58,8 @@ $errors = $data['errors'] ?? [];
 
                 <!-- Description -->
                 <div class="form-group full-width">
-                    <label>Description:<span class="required">*</span></label>
+                    <label>Description(Optional):
                     <textarea name="description" rows="4"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
-                    <?php if(!empty($errors['description'])): ?>
-                        <div class="error"><?= $errors['description'] ?></div>
-                    <?php endif; ?>
                 </div>
 
                 <!-- Status -->
@@ -80,17 +77,24 @@ $errors = $data['errors'] ?? [];
 
                 <!-- Region -->
                 <div class="form-group">
-                    <label>Region: <span class="required">*</span></label>
+                    <label>Select District: <span class="required">*</span></label>
                     <select name="region" required>
-                        <option value="">Select Region</option>
                         <?php
-                        $regions = ['Colombo','Galle','Matara'];
+                        $regions = [
+                            'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo',
+                            'Galle', 'Gampaha', 'Hambantota', 'Jaffna', 'Kalutara',
+                            'Kandy', 'Kegalle', 'Kilinochchi', 'Kurunegala', 'Mannar',
+                            'Matale', 'Matara', 'Monaragala', 'Mullaitivu', 'Nuwara Eliya',
+                            'Polonnaruwa', 'Puttalam', 'Ratnapura', 'Trincomalee', 'Vavuniya'
+                        ];
+
                         foreach ($regions as $reg) {
-                            $selected = (isset($product['region']) && $product['region']==$reg) ? 'selected' : '';
+                            $selected = (isset($product['region']) && $product['region'] == $reg) ? 'selected' : '';
                             echo "<option value='$reg' $selected>$reg</option>";
                         }
                         ?>
                     </select>
+
                     <?php if(!empty($errors['region'])): ?>
                         <div class="error"><?= $errors['region'] ?></div>
                     <?php endif; ?>

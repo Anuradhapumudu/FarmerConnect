@@ -1,4 +1,6 @@
-<?php
+<?php 
+require_once APPROOT . '/helpers/email_helper.php';
+
 class SellersList extends Controller {
     private $sellerModel;
 
@@ -19,107 +21,148 @@ class SellersList extends Controller {
     public function delete($id) {
         if ($this->sellerModel->deleteSeller($id)) {
             header('Location: ' . URLROOT . '/Admin/SellersList');
-            exit();
-        } else {
-            die('Something went wrong while deleting seller.');
+            exit;
         }
+        die('Something went wrong while deleting seller.');
     }
 
     // Show seller details
-    public function show() {
-        if (!isset($_POST['seller_id'])) {
+    public function show($id = null) {
+        if (!$id) {
             header('Location: ' . URLROOT . '/Admin/SellersList');
-            exit();
+            exit;
         }
 
-        $id = $_POST['seller_id'];
         $seller = $this->sellerModel->getSellerById($id);
 
         if (!$seller) {
             header('Location: ' . URLROOT . '/Admin/SellersList');
-            exit();
+            exit;
         }
 
         $this->view('admin/V_sellerview', ['seller' => $seller]);
     }
 
-    // Edit seller
+    // Edit seller - GET request (display form with current values)
     public function edit($id = null) {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $seller_id = $_POST['seller_id'];
+        // Handle POST request (form submission)
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $seller_id = $_POST['seller_id'] ?? null;
+
+            if (!$seller_id) {
+                header('Location: ' . URLROOT . '/Admin/SellersList');
+                exit;
+            }
+
             $data = [
-                'first_name' => trim($_POST['first_name']),
-                'last_name'  => trim($_POST['last_name']),
-                'nic'        => trim($_POST['nic']),
-                'email'      => trim($_POST['email']),
-                'phone_no'   => trim($_POST['phone_no']),
-                'address'    => trim($_POST['address']),
-                'company_name' => trim($_POST['company_name']),
-                'brn'        => trim($_POST['brn']),
-                'approval_status' => $_POST['approval_status']
+                'first_name'      => trim($_POST['first_name']),
+                'last_name'       => trim($_POST['last_name']),
+                'nic'             => trim($_POST['nic']),
+                'email'           => trim($_POST['email']),
+                'phone_no'        => trim($_POST['phone_no'] ?? ''),
+                'address'         => trim($_POST['address'] ?? ''),
+                'company_name'    => trim($_POST['company_name'] ?? ''),
+                'brn'             => trim($_POST['brn']),
+                'approval_status' => $_POST['approval_status'] ?? 'Pending'
             ];
 
-            // Update in DB
             if ($this->sellerModel->updateSeller($seller_id, $data)) {
-                // If status is "Approved" — send email
-                if ($data['approval_status'] == 'Approved') {
+                // Send email if status changed to approved
+                if (strtolower($data['approval_status']) === 'approved') {
                     $seller = $this->sellerModel->getSellerById($seller_id);
-                    $this->sendApprovalEmail($seller);
+                    if (!empty($seller->email)) {
+                        sendApprovalEmail($seller->email, $seller->seller_id);
+                    }
                 }
-
                 header('Location: ' . URLROOT . '/Admin/SellersList');
-                exit();
-            } else {
-                die('Something went wrong while updating seller.');
+                exit;
             }
-        } else {
-            if (!$id) {
-                header('Location: ' . URLROOT . '/Admin/SellersList');
-                exit();
-            }
-
-            $seller = $this->sellerModel->getSellerById($id);
-            if (!$seller) {
-                header('Location: ' . URLROOT . '/Admin/SellersList');
-                exit();
-            }
-
-            $this->view('admin/V_selleredit', ['seller' => $seller]);
+            die('Something went wrong while updating seller.');
         }
+
+        // GET request - display form with current values
+        if (!$id) {
+            header('Location: ' . URLROOT . '/Admin/SellersList');
+            exit;
+        }
+
+        $seller = $this->sellerModel->getSellerById($id);
+        if (!$seller) {
+            header('Location: ' . URLROOT . '/Admin/SellersList');
+            exit;
+        }
+
+        $this->view('admin/V_selleredit', ['seller' => $seller]);
     }
 
-    private function sendApprovalEmail($seller) {
-        $to = $seller->email;
-        $subject = "Seller Account Approved - Your Seller ID";
-        $sellerId = $seller->seller_id;
+    // Approve seller
+    public function approve($id) {
+        $seller = $this->sellerModel->getSellerById($id);
+        if (!$seller) {
+            header('Location: ' . URLROOT . '/Admin/SellersList');
+            exit;
+        }
 
-        $message = "
-        <html>
-        <head>
-            <title>Seller Account Approved</title>
-        </head>
-        <body>
-            <p>Hi {$seller->first_name},</p>
-            <p>Congratulations! Your seller account has been approved 🎉</p>
-            <p>Your <strong>Seller ID</strong> is: <strong>{$sellerId}</strong></p>
-            <p>You can now login and start listing your products.</p>
-            <br>
-            <p>Best regards,<br>FarmerConnect Team</p>
-        </body>
-        </html>
-        ";
+        // Validation before approval
+        $requiredFields = ['brn', 'nic', 'email', 'address', 'phone_no'];
+        foreach ($requiredFields as $field) {
+            if (empty($seller->$field)) {
+                $_SESSION['error'] = "Cannot approve seller: Missing required information ($field).";
+                header('Location: ' . URLROOT . '/Admin/SellersList');
+                exit;
+            }
+        }
 
-        // Headers for HTML mail
-        $headers  = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= "From: FarmerConnect <no-reply@farmerconnect.lk>" . "\r\n";
+        if (!filter_var($seller->email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error'] = "Cannot approve seller: Invalid email.";
+            header('Location: ' . URLROOT . '/Admin/SellersList');
+            exit;
+        }
 
-        // Send
-        if (mail($to, $subject, $message, $headers)) {
-            error_log("Approval email sent to $to");
+        $this->sellerModel->updateStatus($id, 'Approved');
+
+        // Send approval email
+        sendApprovalEmail($seller->email, $seller->seller_id);
+
+        header('Location: ' . URLROOT . '/Admin/SellersList');
+        exit;
+    }
+
+    // Reject seller
+    public function reject($id) {
+        $seller = $this->sellerModel->getSellerById($id);
+        if (!$seller) {
+            header('Location: ' . URLROOT . '/Admin/SellersList');
+            exit;
+        }
+
+        $this->sellerModel->updateStatus($id, 'Rejected');
+        header('Location: ' . URLROOT . '/Admin/SellersList');
+        exit;
+    }
+
+    // In SellersList controller
+        public function update($seller_id) {
+    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $data = [
+            'first_name' => trim($_POST['first_name']),
+            'last_name' => trim($_POST['last_name']),
+            'email' => trim($_POST['email']),
+            'phone_no' => trim($_POST['phone_no'] ?? ''),
+            'address' => trim($_POST['address'] ?? ''),
+            'company_name' => trim($_POST['company_name'] ?? ''),
+            'brn' => trim($_POST['brn'] ?? ''),
+            'approval_status' => $_POST['approval_status'] ?? 'Pending'
+        ];
+
+        if($this->sellerModel->updateSeller($seller_id, $data)) {
+            header('Location: ' . URLROOT . '/Admin/SellersList');
+            exit;
         } else {
-            error_log("Failed to send approval email to $to");
+            die('Error updating seller.');
         }
     }
 }
-?>
+
+
+}

@@ -14,7 +14,7 @@
     <!-- Marketplace Cards -->
     <div class="features_block">
       <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/fertilizer.jpg');"></div>
+        <div class="feature-top" style="background-image: url('<?php echo URLROOT; ?>/img/Manage_Products.jpg');"></div>
         <div class="feature-bottom">
           <h3>Manage Products</h3>
           <p>Add, edit, or remove your listed items</p>
@@ -23,7 +23,7 @@
       </div>
 
       <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/paddy seed.webp');"></div>
+        <div class="feature-top" style="background-image: url('<?php echo URLROOT; ?>/img/track.webp');"></div>
         <div class="feature-bottom">
           <h3>Track Orders</h3>
           <p>View and manage customer orders.</p>
@@ -31,14 +31,6 @@
         </div>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-top" style="background-image: url('img/Agrochemicals.jpg');"></div>
-        <div class="feature-bottom">
-          <h3>Browse Marketplace</h3>
-          <p>Explore all products available in the marketplace</p>
-          <a href="<?php echo URLROOT; ?>/marketplace" class="btn">Shop Now</a>
-        </div>
-      </div>
 
       </div>
  </main>   

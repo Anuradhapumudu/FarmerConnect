@@ -80,8 +80,37 @@
   justify-content: flex-start;
 }
 
+/* Save Changes button */
 .action-btn.edit-btn {
-  background-color: #4caf50;
+  background-color: #4CAF50;   /* Green */
+  color: #fff;                 /* White text */
+  border: none;                /* Remove default border */
+  padding: 10px 20px;          /* Button padding */
+  border-radius: 6px;          /* Rounded corners */
+  font-size: 14px;             /* Font size */
+  font-weight: 500;            /* Slightly bold */
+  cursor: pointer;             /* Pointer on hover */
+  display: flex;               /* Align icon and text */
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.action-btn.edit-btn i {
+  margin-right: 6px;           /* Space between icon and text */
+}
+
+.action-btn.edit-btn:hover {
+  background-color: #45a049;   /* Darker green on hover */
+  transform: translateY(-1px); /* Slight lift effect */
+}
+
+.action-btn.edit-btn:active {
+  transform: translateY(0);    /* Reset on click */
+}
+
+
+.action-btn.cancel-btn {
+  background-color: #f44336;   /* Red background */
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -90,15 +119,18 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  text-decoration: none; /* Important for <a> */
+  margin-left: 10px;    /* Space between buttons */
 }
 
-.action-btn.edit-btn i {
+.action-btn.cancel-btn i {
   margin-right: 6px;
 }
 
-.action-btn.edit-btn:hover {
-  background-color: #45a049;
+.action-btn.cancel-btn:hover {
+  background-color: #da190b;
 }
+
 
 /* Responsive */
 @media (max-width: 600px) {

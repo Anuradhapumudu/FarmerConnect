@@ -19,6 +19,7 @@
     <!-- Sellers Table -->
     <div class="data-table">
       <div class="table-header">All Sellers</div>
+      <div class="table-responsive">
       <table>
         <thead>
           <tr>
@@ -32,35 +33,29 @@
         <tbody>
         <?php foreach($data['sellers'] as $seller): ?>
           <tr>
-            <td><?= $seller->nic ?></td>
-            <td><?= $seller->first_name . ' ' . $seller->last_name ?></td>
-            <td><?= $seller->company_name ?></td>
-            <td>
+            <td data-label="NIC"><?= $seller->nic ?></td>
+            <td data-label="Name"><?= $seller->first_name . ' ' . $seller->last_name ?></td>
+            <td data-label="Company"><?= $seller->company_name ?></td>
+            <td data-label="Status">
               <span class="status-badge status-<?= strtolower($seller->approval_status) ?>">
                   <?= $seller->approval_status ?>
               </span>
             </td>
-            <td>
-              <!-- View via POST -->
-              <form action="<?= URLROOT ?>/Admin/SellersList/show" method="POST" style="display:inline;">
-                  <input type="hidden" name="seller_id" value="<?= $seller->seller_id ?>">
-                  <button type="submit" class="action-btn view-btn">
-                      <i class="fas fa-eye"></i> View
-                  </button>
-              </form>
+          <td data-label="Action">
+              <a href="<?= URLROOT ?>/Admin/SellersList/show/<?= $seller->seller_id ?>" class="action-btn view-btn">
+                  <i class="fas fa-eye"></i> View
+              </a>
 
-              <a href="<?= URLROOT ?>/Admin/SellersList/edit<?= $seller->seller_id ?>" class="action-btn edit-btn">
+              <a href="<?= URLROOT ?>/Admin/SellersList/edit/<?= $seller->seller_id ?>" class="action-btn edit-btn">
                   <i class="fas fa-edit"></i> Edit
               </a>
+          </td>
 
-              <a href="<?= URLROOT ?>/sellerslist/delete/<?= $seller->seller_id ?>" class="action-btn delete-btn" onclick="return confirm('Are you sure?');">
-                  <i class="fas fa-trash"></i> Delete
-              </a>
-            </td>
           </tr>
         <?php endforeach; ?>
         </tbody>
       </table>
+      </div>
     </div>
  </div>
 </main>

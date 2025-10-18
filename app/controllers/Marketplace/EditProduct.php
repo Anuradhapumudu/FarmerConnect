@@ -3,10 +3,22 @@ class EditProduct extends Controller {
     private $editProductModel;
 
     public function __construct() {
+        // Start session
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Check if seller is logged in
+        if (!isset($_SESSION['seller_id'])) {
+            header("Location: " . URLROOT . "/Users/login");
+            exit();
+        }
+
+        // Load model
         $this->editProductModel = $this->model('M_Marketplace/M_Marketplace', new Database());
     }
 
-    public function index($id = null) {
+ public function index($id = null) {
         // Validate ID
         if (!$id || !is_numeric($id) || $id <= 0) {
             die("Invalid product ID.");
@@ -61,7 +73,6 @@ class EditProduct extends Controller {
         $errors = [];
         if (empty($productData['item_name'])) $errors['name'] = "⚠ Product name is required.";
         if (empty($productData['category'])) $errors['category'] = "⚠ Please select a category.";
-        if (empty($productData['description'])) $errors['description'] = "⚠ Description cannot be empty.";
         if (empty($productData['status'])) $errors['status'] = "⚠ Please select a status.";
         if (empty($productData['region'])) $errors['region'] = "⚠ Please select a region.";
         if (empty($productData['unit_type'])) $errors['unit_type'] = "⚠ Please select a unit type.";

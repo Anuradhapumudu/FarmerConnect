@@ -4,13 +4,8 @@
 <main class="main-content" id="mainContent">
   <div class="sucess_wrapper">
     <div class="sucess_card">
-      <i class="leaf-decoration leaf-1 fas fa-leaf"></i>
-      <i class="leaf-decoration leaf-2 fas fa-leaf"></i>
       
-      <div class="sucess_icon">
-        <i class="fas fa-check"></i>
-      </div>
-      
+
       <h2>Product Added Successfully!</h2>
       
       <p>Your product has been successfully added to the system. It will be reviewed and made available shortly.</p>
