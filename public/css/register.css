@@ -22,6 +22,7 @@ body {
     background: #fff;
     padding: 0px 0px;
     box-shadow: 0 0 15px rgba(7, 7, 7, 0.1);
+    min-height: 100vh;
 }
 .image-section {
     flex: 0.5;
@@ -99,7 +100,7 @@ body {
 }
 .have-account{
     margin: 10px 0px 25px 0px;
-    font-size: 14px;
+    font-size: 16px;
     text-align: right;
 }
 .btn-group {
@@ -144,7 +145,7 @@ body {
     margin-top: 5px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .container {
         flex-direction: column;
     }
@@ -172,14 +173,21 @@ body {
     .btn-group {
         gap: 8px;
     }
-
+    .have-account {
+        font-size: 18px;
+    }
     .btn-group button {
-        font-size: 15px;
+        font-size: 18px;
         padding: 12px;
     }
-
+    .input-group {
+        gap: 20px;
+    }
+    .input-field label, .input-field input {
+        font-size: 18px;
+    }
     .create-account button {
-        font-size: 15px;
+        font-size: 18px;
         padding: 12px;
     }
 }
@@ -217,16 +225,17 @@ body {
         padding: 0 15px;
     }
     .btn-group {
-        flex-direction: column;
+        flex-direction: row;
         gap: 10px;
-        width: 100%;
-        margin: 10px auto 30px auto; 
+        width: auto;
+        margin: 20px 30px;
+        justify-content: center;
     }
 
     .btn-group button {
         width: 100%;
         padding: 10px;
-        font-size: 13px;
+        font-size: 15px;
         border-radius: 6px;
     }
 
@@ -238,12 +247,16 @@ body {
         padding: 10px;
         font-size: 14px;
     }
-
+    .create-account {
+        margin: auto 30px;
+    }
     .create-account button {
         width: 100%;
-        margin: 15px auto 5px auto;
+        margin: 15px 0 5px 0;
         padding: 12px;
         font-size: 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
     }
 
     .have-account {

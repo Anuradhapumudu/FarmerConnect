@@ -112,7 +112,7 @@
                 case 'admin':
                     $table = "admins";
                     $idColumn = "admin_id";
-                    $passwordColumn = "password_hash";
+                    $passwordColumn = "password";
                     break;
                 default:
                     return false;

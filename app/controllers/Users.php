@@ -327,8 +327,6 @@
                     $formType = 'officer';
                 } elseif (isset($_POST['seller_id'])) {
                     $formType = 'seller';
-                } elseif (isset($_POST['admin_id'])) {
-                    $formType = 'admin';
                 } else {
                     $formType = 'farmer';
                 }
@@ -345,8 +343,7 @@
                         'farmer_nic_error' => '',
                         'password_error' => '',
                         'officer_id_error' => '',
-                        'seller_id_error' => '',
-                        'admin_id_error' => ''
+                        'seller_id_error' => ''
                     ];
                     // Validate farmer inputs
                     if (empty($data['nic'])) {
@@ -370,14 +367,13 @@
                         'farmer_nic_error' => '',
                         'password_error' => '',
                         'officer_id_error' => '',
-                        'seller_id_error' => '',
-                        'admin_id_error' => ''
+                        'seller_id_error' => ''
                     ];
                     // Validate officer inputs
                     if (empty($data['officer_id'])) {
                         $data['officer_id_error'] = 'Please enter your Officer ID';
                     } else {
-                        if (!$this->userModel->findUserByOfficer_id($data['officer_id'])) {
+                        if (!$this->userModel->isOfficerAlreadyRegistered($data['officer_id'])) {
                             $data['officer_id_error'] = 'No user found';
                         }
                     }
@@ -395,8 +391,7 @@
                         'farmer_nic_error' => '',
                         'password_error' => '',
                         'officer_id_error' => '',
-                        'seller_id_error' => '',
-                        'admin_id_error' => ''
+                        'seller_id_error' => ''
                     ];
                     // Validate seller inputs
                     if (empty($data['seller_id'])) {
@@ -484,8 +479,7 @@
                     'farmer_nic_error' => '',
                     'officer_id_error' => '',
                     'seller_id_error' => '',
-                    'admin_id_error' => '',
-                    'password_error' => ''
+                    'password_error' => '',
                 ];
                 // Load the view with the initial data
                 $this->view('users/v_login', $data);
@@ -507,10 +501,6 @@
                 case 'seller':
                     $_SESSION['seller_id'] = $user->seller_id;
                     header('Location: ' . URLROOT . '/SellerDashboard');
-                    break;
-                case 'admin':
-                    $_SESSION['admin_id'] = $user->admin_id;
-                    header('Location: ' . URLROOT . '/AdminDashboard');
                     break;
                 default:
                     break;
