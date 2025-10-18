@@ -1,8 +1,9 @@
 <?php
-    class Users  extends Controller {
+    class Users extends Controller {
         public function __construct() {
             $this->userModel = $this->model('M_Users');
         }
+
         // Registration logic here
         public function register() {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -23,32 +24,32 @@
                 // Input data
                 if ($formType === 'farmer') { // Farmer
                     $data = [
-                    'form_type' => $formType,
-                    'first_name' => trim($_POST['first_name']),
-                    'last_name' => trim($_POST['last_name']),
-                    'nic' => trim($_POST['nic']),
-                    'phone_no' => trim($_POST['phone_no']),
-                    'password' => trim($_POST['password']),
-                    'confirm_password' => trim($_POST['confirm_password']),
-                    'officer_id' => '',
-                    'brn' => '',
-                    'email' => '',
-                    'address' => '',
-                    'company_name' => '',
-                    
+                        'form_type' => $formType,
+                        'first_name' => trim($_POST['first_name']),
+                        'last_name' => trim($_POST['last_name']),
+                        'nic' => trim($_POST['nic']),
+                        'phone_no' => trim($_POST['phone_no']),
+                        'password' => trim($_POST['password']),
+                        'confirm_password' => trim($_POST['confirm_password']),
+                        'officer_id' => '',
+                        'brn' => '',
+                        'email' => '',
+                        'address' => '',
+                        'company_name' => '',
 
-                    'first_name_error' => '',
-                    'last_name_error' => '',
-                    'nic_error' => '',
-                    'phone_no_error' => '',
-                    'password_error' => '',
-                    'confirm_password_error' => '',
-                    'officer_id_error' => '',
-                    'brn_error' => '',
-                    'email_error' => '',
-                    'address_error' => '',
-                    'company_name_error' => ''
+                        'first_name_error' => '',
+                        'last_name_error' => '',
+                        'nic_error' => '',
+                        'phone_no_error' => '',
+                        'password_error' => '',
+                        'confirm_password_error' => '',
+                        'officer_id_error' => '',
+                        'brn_error' => '',
+                        'email_error' => '',
+                        'address_error' => '',
+                        'company_name_error' => ''
                     ];
+
                     // Validate farmer inputs
                     if (empty($data['first_name'])) {
                         $data['first_name_error'] = 'Please enter your first name';
@@ -60,7 +61,7 @@
                         $data['nic_error'] = 'Please enter your NIC';
                     } elseif (!preg_match('/^(\d{9}[VXvx]|\d{12})$/', $data['nic'])) {
                         $data['nic_error'] = 'NIC format is invalid';
-                    } elseif ($this->userModel->findUserByNic($data['nic'])) {
+                    } elseif ($this->userModel->findUserByNic($data['nic'], 'farmers')) {
                         $data['nic_error'] = 'NIC is already registered';
                     }
                     if (empty($data['phone_no'])) {
@@ -68,7 +69,7 @@
                     } else if (strlen($data['phone_no']) != 10) { 
                         $data['phone_no_error'] = 'Phone number must be exactly 10 digits';
                     } else {
-                        if ($this->userModel->findUserByPhoneNo($data['phone_no'])) {
+                        if ($this->userModel->findUserByPhoneNo($data['phone_no'], 'farmers')) {
                             $data['phone_no_error'] = 'Phone number is already taken';
                         }
                     }
@@ -78,33 +79,35 @@
                     if ($data['password'] !== $data['confirm_password']) {
                         $data['confirm_password_error'] = 'Passwords do not match';
                     }
+
                 } elseif ($formType === 'officer') { // Officer
                     $data = [
-                    'form_type' => $formType,
-                    'first_name' => trim($_POST['first_name']),
-                    'last_name' => trim($_POST['last_name']),
-                    'nic' => trim($_POST['nic']),
-                    'email' => trim($_POST['email']),
-                    'officer_id' => trim($_POST['officer_id']),
-                    'password' => trim($_POST['password']),
-                    'confirm_password' => trim($_POST['confirm_password']),
-                    'brn' => '',
-                    'phone_no' => '',
-                    'address' => '',
-                    'company_name' => '',
+                        'form_type' => $formType,
+                        'first_name' => trim($_POST['first_name']),
+                        'last_name' => trim($_POST['last_name']),
+                        'nic' => trim($_POST['nic']),
+                        'email' => trim($_POST['email']),
+                        'officer_id' => trim($_POST['officer_id']),
+                        'password' => trim($_POST['password']),
+                        'confirm_password' => trim($_POST['confirm_password']),
+                        'brn' => '',
+                        'phone_no' => '',
+                        'address' => '',
+                        'company_name' => '',
 
-                    'first_name_error' => '',
-                    'last_name_error' => '',
-                    'nic_error' => '',
-                    'email_error' => '',
-                    'officer_id_error' => '',
-                    'password_error' => '',
-                    'confirm_password_error' => '',
-                    'brn_error' => '',
-                    'phone_no_error' => '',
-                    'address_error' => '',
-                    'company_name_error' => ''
+                        'first_name_error' => '',
+                        'last_name_error' => '',
+                        'nic_error' => '',
+                        'email_error' => '',
+                        'officer_id_error' => '',
+                        'password_error' => '',
+                        'confirm_password_error' => '',
+                        'brn_error' => '',
+                        'phone_no_error' => '',
+                        'address_error' => '',
+                        'company_name_error' => ''
                     ];
+
                     // Validate officer inputs
                     if (empty($data['first_name'])) {
                         $data['first_name_error'] = 'Please enter your first name';
@@ -116,25 +119,24 @@
                         $data['nic_error'] = 'Please enter your NIC';
                     } elseif (!preg_match('/^(\d{9}[VXvx]|\d{12})$/', $data['nic'])) {
                         $data['nic_error'] = 'NIC format is invalid';
-                    } elseif ($this->userModel->findUserByNic($data['nic'])) {
+                    } elseif ($this->userModel->findUserByNic($data['nic'], 'officers')) {
                         $data['nic_error'] = 'NIC is already registered';
                     }
                     if (empty($data['email'])) {
                         $data['email_error'] = 'Please enter your email';
+                    } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                        $data['email_error'] = 'Please enter a valid email address';
                     } else {
-                        if ($this->userModel->findUserByEmail($data['email'])) {
+                        if ($this->userModel->findUserByEmail($data['email'], 'officers')) {
                             $data['email_error'] = 'Email is already taken';
                         }
                     }
                     if (empty($data['officer_id'])) {
                         $data['officer_id_error'] = 'Please enter your Officer ID';
-                    }else {
-                        // Check if officer_id exists in officers table
+                    } else {
                         if (!$this->userModel->isOfficerIdValid($data['officer_id'])) {
                             $data['officer_id_error'] = 'Officer ID not found. Only valid officers can register.';
-                        } 
-                        // Check if officer_id already registered
-                        elseif ($this->userModel->findUserByOfficer_id($data['officer_id'])) {
+                        } elseif ($this->userModel->isOfficerAlreadyRegistered($data['officer_id'])) {
                             $data['officer_id_error'] = 'Officer ID is already registered';
                         }
                     }
@@ -144,34 +146,34 @@
                     if ($data['password'] !== $data['confirm_password']) {
                         $data['confirm_password_error'] = 'Passwords do not match';
                     }
+
                 } else { // Seller
                     $data = [
-                    'form_type' => $formType,
-                    'first_name' => trim($_POST['first_name']),
-                    'last_name' => trim($_POST['last_name']),
-                    'nic' => trim($_POST['nic']),
-                    'email' => trim($_POST['email']),
-                    'brn' => trim($_POST['brn']),
-                    'password' => trim($_POST['password']),
-                    'confirm_password' => trim($_POST['confirm_password']),
-                    'address' => trim($_POST['address']),
-                    'company_name' => trim($_POST['company_name']),
-                    'phone_no' => trim($_POST['phone_no']),
-                    'officer_id' => '',
-
-                    'first_name_error' => '',
-                    'last_name_error' => '',
-                    'nic_error' => '',
-                    'email_error' => '',
-                    'brn_error' => '',
-                    'password_error' => '',
-                    'confirm_password_error' => '',
-                    'address_error' => '',
-                    'company_name_error' => '',
-                    'phone_no_error' => '',
-                    'officer_id_error' => '',
-                
+                        'form_type' => $formType,
+                        'first_name' => trim($_POST['first_name']),
+                        'last_name' => trim($_POST['last_name']),
+                        'nic' => trim($_POST['nic']),
+                        'email' => trim($_POST['email']),
+                        'brn' => trim($_POST['brn']),
+                        'password' => trim($_POST['password']),
+                        'confirm_password' => trim($_POST['confirm_password']),
+                        'address' => trim($_POST['address']),
+                        'company_name' => trim($_POST['company_name']),
+                        'phone_no' => trim($_POST['phone_no']),
+                        'officer_id' => '',
+                        'first_name_error' => '',
+                        'last_name_error' => '',
+                        'nic_error' => '',
+                        'email_error' => '',
+                        'brn_error' => '',
+                        'password_error' => '',
+                        'confirm_password_error' => '',
+                        'address_error' => '',
+                        'company_name_error' => '',
+                        'phone_no_error' => '',
+                        'officer_id_error' => ''
                     ];
+
                     // Validate seller inputs
                     if (empty($data['first_name'])) {
                         $data['first_name_error'] = 'Please enter your first name';
@@ -183,13 +185,13 @@
                         $data['nic_error'] = 'Please enter your NIC';
                     } elseif (!preg_match('/^(\d{9}[VXvx]|\d{12})$/', $data['nic'])) {
                         $data['nic_error'] = 'NIC format is invalid';
-                    } elseif ($this->userModel->findUserByNic($data['nic'])) {
+                    } elseif ($this->userModel->findUserByNic($data['nic'], 'sellers')) {
                         $data['nic_error'] = 'NIC is already registered';
                     }
                     if (empty($data['email'])) {
                         $data['email_error'] = 'Please enter your email';
                     } else {
-                        if ($this->userModel->findUserByEmail($data['email'])) {
+                        if ($this->userModel->findUserByEmail($data['email'], 'sellers')) {
                             $data['email_error'] = 'Email is already taken';
                         }
                     }
@@ -201,7 +203,7 @@
                     } else if (strlen($data['phone_no']) != 10) { 
                         $data['phone_no_error'] = 'Phone number must be exactly 10 digits';
                     } else {
-                        if ($this->userModel->findUserByPhoneNo($data['phone_no'])) {
+                        if ($this->userModel->findUserByPhoneNo($data['phone_no'], 'sellers')) {
                             $data['phone_no_error'] = 'Phone number is already taken';
                         }
                     }
@@ -214,10 +216,9 @@
                     if ($data['password'] !== $data['confirm_password']) {
                         $data['confirm_password_error'] = 'Passwords do not match';
                     }
-            }
-                // validation is completed and then register the user
-                /*if (empty($data['first_name_error']) && empty($data['last_name_error']) && empty($data['email_error']) && empty($data['password_error']) && empty($data['confirm_password_error'])) {
-                */
+                }
+
+                // Validation complete, check errors
                 $all_errors = [
                     $data['first_name_error'],
                     $data['last_name_error'],
@@ -232,9 +233,7 @@
                 ];
 
                 if (!array_filter($all_errors)) {
-                    // Hash password
                     $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-                    // Set ApprovalStatus according to user type
                     if ($data['form_type'] === 'seller') {
                         $data['approval_status'] = 'Pending';
                     } else {
@@ -242,52 +241,36 @@
                     }
 
                     // Register user
-                    if ($data['form_type'] !== 'seller' && $this->userModel->register($data)) {
-                        // Redirect to the login page
+                    if ($this->userModel->register($data)) {
+                        if ($data['form_type'] !== 'seller') {
+                            echo "
+                                <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif; font-size: 20px; color: green;'>
+                                    Registration successful! 🎉 <br>
+                                    Redirecting to login page in 5 seconds...
+                                </div>
+                                <script>
+                                    setTimeout(function(){
+                                        window.location.href = '" . URLROOT . "/users/login';
+                                    }, 5000);
+                                </script>
+                            ";
+                            exit;
+                        } else {
+                            echo "
+                                <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif; font-size: 20px; color: green;'>
+                                    Request sent! <br>
+                                    You will be notified when accepted...
+                                </div>
+                                <script>
+                                    setTimeout(function(){
+                                        window.location.href = '" . URLROOT . "/users/login';
+                                    }, 5000);
+                                </script>
+                            ";
+                        }
+                    } else {
                         echo "
-                            <div style='
-                                text-align: center; 
-                                margin-top: 50px; 
-                                font-family: Arial, sans-serif; 
-                                font-size: 20px; 
-                                color: green;'>
-                                Registration successful! 🎉 <br>
-                                Redirecting to login page in 5 seconds...
-                            </div>
-                            <script>
-                                setTimeout(function(){
-                                    window.location.href = '" . URLROOT . "/users/login';
-                                }, 5000);
-                            </script>
-                        ";
-                    exit;
-                    } elseif ($data['form_type'] === 'seller' && $this->userModel->register($data)) {
-                        // Redirect to the login page
-                        echo "
-                            <div style='
-                                text-align: center; 
-                                margin-top: 50px; 
-                                font-family: Arial, sans-serif; 
-                                font-size: 20px; 
-                                color: green;'>
-                                Request sent! <br>
-                                You will be notified when accepted...
-                            </div>
-                            <script>
-                                setTimeout(function(){
-                                    window.location.href = '" . URLROOT . "/users/login';
-                                }, 5000);
-                            </script>
-                        ";
-                    } 
-                    else {
-                        echo "
-                            <div style='
-                                text-align: center; 
-                                margin-top: 50px; 
-                                font-family: Arial, sans-serif; 
-                                font-size: 20px; 
-                                color: green;'>
+                            <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif; font-size: 20px; color: green;'>
                                 Something went wrong! <br>
                                 Please try again...
                             </div>
@@ -299,14 +282,12 @@
                         ";
                     }
                 } else {
-                    // Load the view with errors
                     $this->view('users/v_register', $data);
                 }
 
             } else {
-                // Initial form
                 $data = [
-                    'form_type' => 'farmer', // Default form type
+                    'form_type' => 'farmer',
                     'first_name' => '',
                     'last_name' => '',
                     'nic' => '',
@@ -318,7 +299,6 @@
                     'brn' => '',
                     'address' => '',
                     'company_name' => '',
-
                     'first_name_error' => '',
                     'last_name_error' => '',
                     'nic_error' => '',
@@ -331,7 +311,6 @@
                     'address_error' => '',
                     'company_name_error' => '',
                 ];
-                // Load the view with the initial data
                 $this->view('users/v_register', $data);
             }
         }
@@ -373,7 +352,7 @@
                     if (empty($data['nic'])) {
                         $data['farmer_nic_error'] = 'Please enter your NIC';
                     } else {
-                        if (!$this->userModel->findUserByNic($data['nic'])) {
+                        if (!$this->userModel->findUserByNic($data['nic'], 'farmers')) {
                             $data['farmer_nic_error'] = 'No user found';
                         }
                     }
@@ -405,7 +384,7 @@
                     if (empty($data['password'])) {
                         $data['password_error'] = 'Please enter your password';
                     }
-                } elseif ($formType === 'seller') { // Seller
+                } else{ // Seller
                     $data = [
                         'form_type' => $formType,
                         'seller_id' => trim($_POST['seller_id']),
@@ -423,33 +402,8 @@
                     if (empty($data['seller_id'])) {
                         $data['seller_id_error'] = 'Please enter your Seller ID';
                     } else {
-                        if (!$this->userModel->findUserBySellerId($data['seller_id'])) {
+                        if (!$this->userModel->findUserBySellerId($data['seller_id'], 'sellers')) {
                             $data['seller_id_error'] = 'No user found';
-                        }
-                    }
-                    if (empty($data['password'])) {
-                        $data['password_error'] = 'Please enter your password';
-                    }
-                } else { // Admin
-                    $data = [
-                        'form_type' => $formType,
-                        'admin_id' => trim($_POST['admin_id']),
-                        'password' => trim($_POST['password']),
-                        'nic' => '',
-                        'officer_id' => '',
-                        'seller_id' => '',
-                        'farmer_nic_error' => '',
-                        'password_error' => '',
-                        'officer_id_error' => '',
-                        'seller_id_error' => '',
-                        'admin_id_error' => ''
-                    ];
-                    // Validate admin ID
-                    if (empty($data['admin_id'])) {
-                        $data['admin_id_error'] = 'Please enter your Admin ID';
-                    } else {
-                        if (!$this->userModel->findUserByAdminId($data['admin_id'])) {
-                            $data['admin_id_error'] = 'No user found';
                         }
                     }
                     if (empty($data['password'])) {
@@ -498,30 +452,14 @@
                         if (empty($data['seller_id_error']) && empty($data['password_error'])) {
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
                             if ($loggedUser) {
-                                if ($loggedUser->approval_status !== 'Approved') {
+                                /*if ($loggedUser->approval_status !== 'Approved') {
                                     $data['seller_id_error'] = 'Your account is not approved yet.';
                                     $this->view('users/v_login', $data);
                                     return;
                                 } else {
                                     // Create session,
                                     $this->createUserSession($loggedUser, $formType);
-                                }
-                            } else {
-                                $data['password_error'] = 'Password incorrect';
-                                // Load the view with errors
-                                $this->view('users/v_login', $data);
-                            }
-                        } else {
-                            // Load the view with errors
-                            $this->view('users/v_login', $data);
-                        }
-                        break;
-                    case 'admin':
-                        $data['username'] = $data['admin_id'];
-                        if (empty($data['admin_id_error']) && empty($data['password_error'])) {
-                            $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
-                            if ($loggedUser) {
-                                // Create session,
+                                }*/
                                 $this->createUserSession($loggedUser, $formType);
                             } else {
                                 $data['password_error'] = 'Password incorrect';
