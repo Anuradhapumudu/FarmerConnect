@@ -23,7 +23,7 @@ $errors = $data['errors'] ?? [];
             <div class="error"><?= $errors['general'] ?></div>
         <?php endif; ?>
 
-        <form method="post" action="<?= URLROOT ?>/Marketplace/EditProduct/index/<?= ($product['item_id'] ?? 0) ?>" enctype="multipart/form-data">
+        <form method="post" action="<?= URLROOT ?>/Marketplace/editProduct/<?= ($product['item_id'] ?? 0) ?>" enctype="multipart/form-data">
 
             <input type="hidden" name="item_id" value="<?= htmlspecialchars($product['item_id'] ?? '') ?>">
             <input type="hidden" name="current_image" value="<?= htmlspecialchars($product['image_url'] ?? '') ?>">
@@ -157,7 +157,7 @@ $errors = $data['errors'] ?? [];
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-check-circle"></i> Update Product
                 </button>
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='<?= URLROOT ?>/marketplace/manageproduct'">
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='<?= URLROOT ?>/Marketplace/manageProduct'">
                     <i class="fas fa-times-circle"></i> Cancel
                 </button>
             </div>

@@ -18,7 +18,7 @@
   <div class="features_block">
 
 
-    <a href="<?php echo URLROOT; ?>/Marketplace/Marketplaceseller" class="feature">
+    <a href="<?php echo URLROOT; ?>/Marketplace/seller" class="feature">
 
       <i class="fa-solid fa-store fa-2x"></i>
       <h3>Marketplace</h3>

@@ -8,7 +8,7 @@
   <div class="container">
     <!-- My Orders Button -->
         <div class="myOrders">
-          <a href="<?php echo URLROOT; ?>/Marketplace/FarmerTrackOrders">
+          <a href="<?php echo URLROOT; ?>/Marketplace/trackOrdersFarmer">
             <button>
               <i class="fa fa-shopping-cart"></i> My Orders
             </button>
@@ -29,7 +29,7 @@
         <div class="feature-bottom">
           <h3>Fertilizer</h3>
           <p>High-quality fertilizers for optimal crop growth</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/fertilizer" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewProduct/fertilizer" class="btn">Shop Now</a>
 
         </div>
       </div>
@@ -39,7 +39,7 @@
         <div class="feature-bottom">
           <h3>Paddy Seeds</h3>
           <p>Premium paddy seeds for better paddy fields</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/paddy-seeds" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewProduct/paddy-seeds" class="btn">Shop Now</a>
         </div>
       </div>
 
@@ -48,7 +48,7 @@
         <div class="feature-bottom">
           <h3>Agrochemicals</h3>
           <p>Effective crop chemicals for crop disease</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/agrochemicals" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewProduct/agrochemicals" class="btn">Shop Now</a>
         </div>
       </div>
 
@@ -57,7 +57,7 @@
         <div class="feature-bottom">
           <h3>Equipments</h3>
           <p>Buy essential farming tools and equipment</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/equipments" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewProduct/equipments" class="btn">Shop Now</a>
         </div>
       </div>
 
@@ -66,7 +66,7 @@
         <div class="feature-bottom">
           <h3>Rent Machinery</h3>
           <p>Rent heavy machinery for your farming needs</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/machinery" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewProduct/machinery" class="btn">Shop Now</a>
         </div>
       </div>
 
@@ -75,7 +75,7 @@
         <div class="feature-bottom">
           <h3>Others</h3>
           <p>Additional agricultural supplies and services</p>
-          <a href="<?php echo URLROOT; ?>/Marketplace/viewproduct/others" class="btn">Shop Now</a>
+          <a href="<?php echo URLROOT; ?>/Marketplace/viewProduct/others" class="btn">Shop Now</a>
         </div>
       </div>
     </div>

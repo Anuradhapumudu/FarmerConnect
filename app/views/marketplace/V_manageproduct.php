@@ -8,7 +8,7 @@
     <div class="heading">Manage Products</div>
 
     <div class="add_products">
-      <a href="<?php echo URLROOT; ?>/Marketplace/AddProduct" class="btn btn-add"><i class="fa fa-plus"></i> Add New Product</a>
+      <a href="<?php echo URLROOT; ?>/Marketplace/addProduct" class="btn btn-add"><i class="fa fa-plus"></i> Add New Product</a>
     </div>
 
 
@@ -36,11 +36,11 @@
       </div>
       <hr class="divider">
       <div class="actions">
-      <a href="<?php echo URLROOT; ?>/Marketplace/EditProduct/<?=$product->item_id; ?>" class="btn btn-edit">
+      <a href="<?php echo URLROOT; ?>/Marketplace/editProduct/<?=$product->item_id; ?>" class="btn btn-edit">
         <i class="fas fa-edit"></i> Edit
       </a>
 
-        <a href="<?php echo URLROOT; ?>/Marketplace/DeleteProduct/<?php echo $product->item_id; ?>" class="btn btn-delete">
+        <a href="<?php echo URLROOT; ?>/Marketplace/deleteProduct/<?=$product->item_id; ?>" class="btn btn-delete">
           <i class="fas fa-trash"></i> Delete
         </a>
       </div>

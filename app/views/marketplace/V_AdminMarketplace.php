@@ -44,7 +44,7 @@
       <div class="feature-bottom">
         <h3>View All Products</h3>
         <p>Add, edit, or remove your listed items</p>
-        <a href="<?php echo URLROOT; ?>/Marketplace/AdminViewProducts" class="btn">View</a>
+        <a href="<?php echo URLROOT; ?>/Marketplace/adminViewProducts" class="btn">View</a>
       </div>
     </div>
 
@@ -53,7 +53,7 @@
       <div class="feature-bottom">
         <h3>View All Orders</h3>
         <p>View and manage customer orders.</p>
-        <a href="<?php echo URLROOT; ?>/Marketplace/AdminViewOrders" class="btn">View</a>
+        <a href="<?php echo URLROOT; ?>/Marketplace/adminViewOrders" class="btn">View</a>
       </div>
     </div>
   </div>

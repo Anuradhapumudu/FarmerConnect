@@ -40,7 +40,7 @@
       <p>Access guides, tutorials, and expert advice on agriculture.</p>
 </a>
 
-    <a href="<?php echo URLROOT; ?>/Marketplace/MarketplaceFarmer" class="feature">
+    <a href="<?php echo URLROOT; ?>/Marketplace/farmer" class="feature">
       <i class="fa-solid fa-store fa-2x"></i>
       <h3>Marketplace</h3>
       <p>Buy and sell produce, equipment, and services with ease.</p>

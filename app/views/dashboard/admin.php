@@ -74,7 +74,7 @@
       <p>Access guides, tutorials, and expert advice on agriculture.</p>
     </div>
 
-    <a href="<?php echo URLROOT; ?>/Marketplace/AdminMarketplace" class="feature">
+    <a href="<?php echo URLROOT; ?>/Marketplace/admin" class="feature">
 
       <i class="fa-solid fa-store fa-2x"></i>
       <h3>Marketplace</h3>

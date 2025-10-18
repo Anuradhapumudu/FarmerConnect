@@ -150,7 +150,7 @@
           <button type="submit" class="btn btn-primary">
             <i class="fas fa-check-circle"></i> Add Product
           </button>
-          <button type="button" class="btn btn-secondary" onclick="window.location.href='<?= URLROOT ?>/marketplace/manageproduct'">
+          <button type="button" class="btn btn-secondary" onclick="window.location.href='<?= URLROOT ?>/Marketplace/manageProduct'">
             <i class="fas fa-times-circle"></i> Cancel
           </button>
         </div>

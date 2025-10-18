@@ -10,13 +10,13 @@
 
     <button 
   class="sucess error_btn-primary" 
-  onclick="window.location.href='<?= URLROOT ?>/Marketplace/AddProduct';">
+  onclick="window.location.href='<?= URLROOT ?>/Marketplace/addProduct';">
   Add Another Product
   </button>
 
 <button 
   class="sucess error_btn-secondary" 
-  onclick="window.location.href='<?= URLROOT ?>/Marketplace/ManageProduct';">
+  onclick="window.location.href='<?= URLROOT ?>/Marketplace/manageProducts';">
   View All Products
 </button>
 

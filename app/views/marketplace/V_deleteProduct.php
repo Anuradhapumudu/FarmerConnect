@@ -14,10 +14,10 @@
     <p><b>Product Type:</b> <?= htmlspecialchars($data->category ?? '') ?></p>
 
 
-    <form action="<?= URLROOT; ?>/Marketplace/DeleteProduct/delete_product/<?= $data->item_id ?>" 
+    <form action="<?= URLROOT; ?>/Marketplace/deleteProduct/<?= $data->item_id ?>" 
           method="POST" class="button-container">
       <input type="submit" value="Yes, Delete" class="btn btn-danger">
-      <a href="<?= URLROOT; ?>/Marketplace/ManageProduct" class="btn btn-secondary">Cancel</a>
+      <a href="<?= URLROOT; ?>/Marketplace/manageProduct" class="btn btn-secondary">Cancel</a>
     </form>
 
     <p class="note" style="color:#b71c1c;">⚠️ Deleting this product is permanent and cannot be undone.</p>

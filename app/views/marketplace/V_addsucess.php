@@ -11,11 +11,11 @@
       <p>Your product has been successfully added to the system. It will be reviewed and made available shortly.</p>
       
       <div class="button-group">
-        <button class="sucess_btn-primary" onclick="window.location.href='<?= URLROOT ?>/Marketplace/AddProduct';">
+        <button class="sucess_btn-primary" onclick="window.location.href='<?= URLROOT ?>/Marketplace/addProduct';">
           <i class="fas fa-plus-circle"></i> Add Another Product
         </button>
         
-        <button class="sucess_btn-secondary" onclick="window.location.href='<?= URLROOT ?>/Marketplace/ManageProduct';">
+        <button class="sucess_btn-secondary" onclick="window.location.href='<?= URLROOT ?>/Marketplace/manageProduct';">
           <i class="fas fa-list"></i> View All Products
         </button>
       </div>
