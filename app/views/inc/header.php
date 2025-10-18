@@ -71,7 +71,7 @@
         <i class="fas fa-calculator"></i>
         <span class="menu-text">Fertilizer Calculator</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/Disease" data-tooltip="Disease Detector">
+      <li><a href="<?php echo URLROOT; ?>/Disease/viewReports" data-tooltip="Disease Detector">
         <i class="fas fa-bug"></i>
         <span class="menu-text">Disease Detector</span>
       </a></li>

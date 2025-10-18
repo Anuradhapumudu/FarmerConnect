@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/minimalheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/header.php'; ?>
 <div class="content-card">
     <div class="content-header">
         <h1>🐛 Disease Detector</h1>
@@ -568,4 +568,4 @@
         }
     }
 </script>
-<?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>
+<?php require_once APPROOT . '/views/inc/footer.php'; ?>
