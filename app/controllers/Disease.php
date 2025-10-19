@@ -1,26 +1,26 @@
 <?php
 class Disease extends Controller{
-    
+
     public function index(){
         // Remove reportId from initial data since it's auto-generated
         $data = [
-            'farmerNIC' => '', 
+            'farmerNIC' => '',
             'plrNumber' => '',
-            'observationDate' => '', 
-            'todayDate' => '', 
+            'observationDate' => '',
+            'todayDate' => '',
             'title' => '',
-            'description' => '', 
-            'severity' => '', 
+            'description' => '',
+            'severity' => '',
             'affectedArea' => '',
             'terms' => '',
-            'farmerNIC_error' => '', 
+            'farmerNIC_error' => '',
             'plrNumber_error' => '',
-            'observationDate_error' => '', 
+            'observationDate_error' => '',
             'title_error' => '',
-            'description_error' => '', 
+            'description_error' => '',
             'media_error' => '',
-            'severity_error' => '', 
-            'affectedArea_error' => '', 
+            'severity_error' => '',
+            'affectedArea_error' => '',
             'terms_error' => ''
         ];
         $this->view('disease', $data);
@@ -98,7 +98,7 @@ class Disease extends Controller{
         }
 
         $report = $this->model('M_disease')->getReportByCode($reportCode); // Changed method call
-        
+
         if (!$report) {
             $_SESSION['error_message'] = 'Report not found';
             header('Location: ' . URLROOT . '/disease/viewReports');
@@ -109,7 +109,7 @@ class Disease extends Controller{
         $data = [
             'reportCode' => $report->report_code, // Changed from reportId
             'farmerNIC' => $report->farmerNIC,
-            'plrNumber' => $report->plrNumber,
+            'plrNumber' => $report->pirNumber,
             'observationDate' => $report->observationDate,
             'title' => $report->title,
             'description' => $report->description,
@@ -117,7 +117,7 @@ class Disease extends Controller{
             'affectedArea' => $report->affectedArea,
             'existingMedia' => $report->media,
             'terms' => 'on', // Pre-check terms for edit
-            
+
             // Error fields
             'farmerNIC_error' => '',
             'plrNumber_error' => '',
@@ -130,7 +130,7 @@ class Disease extends Controller{
             'terms_error' => '',
             'isEdit' => true
         ];
-        
+
         $this->view('disease', $data);
     }
 
@@ -151,7 +151,7 @@ class Disease extends Controller{
                     'terms' => isset($_POST['terms']) ? $_POST['terms'] : '',
                     'existingMedia' => isset($_POST['existingMedia']) ? trim($_POST['existingMedia']) : '',
                     'removeMedia' => isset($_POST['removeMedia']) ? $_POST['removeMedia'] : [],
-                    
+
                     // Error fields
                     'farmerNIC_error' => '',
                     'plrNumber_error' => '',
@@ -173,36 +173,34 @@ class Disease extends Controller{
                     exit();
                 }
 
-                // VALIDATION LOGIC (same as before, but remove reportId validation)
-                
                 // Validate Farmer NIC
                 if (empty($data['farmerNIC'])) {
                     $data['farmerNIC_error'] = 'Please enter your NIC number';
-                } elseif (!preg_match('/^([0-9]{9}[vVxX]|[0-9]{12})$/', $data['farmerNIC'])) {
+                } elseif (!preg_match('/^([0-9]{9}[vV]|[0-9]{12})$/', $data['farmerNIC'])) {
                     $data['farmerNIC_error'] = 'Invalid NIC format. Use 9 digits with V/X or 12 digits';
                 }
-                
+
                 // Validate PLR Number
                 if (empty($data['plrNumber'])) {
                     $data['plrNumber_error'] = 'Please enter your PLR number';
                 } elseif (!preg_match('/^PLR[0-9]+$/', $data['plrNumber'])) {
                     $data['plrNumber_error'] = 'Invalid PLR format. Must start with PLR followed by numbers';
                 }
-                
+
                 // Validate Observation Date
                 if (empty($data['observationDate'])) {
                     $data['observationDate_error'] = 'Please select the observation date';
                 } else {
                     $observationDate = DateTime::createFromFormat('Y-m-d', $data['observationDate']);
                     $today = new DateTime();
-                    
+
                     if (!$observationDate) {
                         $data['observationDate_error'] = 'Invalid date format';
                     } elseif ($observationDate > $today) {
                         $data['observationDate_error'] = 'Observation date cannot be in the future';
                     }
                 }
-                
+
                 // Validate Title
                 if (empty($data['title'])) {
                     $data['title_error'] = 'Please enter a report title';
@@ -211,7 +209,7 @@ class Disease extends Controller{
                 } elseif (strlen($data['title']) > 200) {
                     $data['title_error'] = 'Title must be less than 200 characters';
                 }
-                
+
                 // Validate Description
                 if (empty($data['description'])) {
                     $data['description_error'] = 'Please enter a detailed description';
@@ -220,14 +218,14 @@ class Disease extends Controller{
                 } elseif (strlen($data['description']) > 2000) {
                     $data['description_error'] = 'Description must be less than 2000 characters';
                 }
-                
+
                 // Validate Severity
                 if (empty($data['severity'])) {
                     $data['severity_error'] = 'Please select a severity level';
                 } elseif (!in_array($data['severity'], ['low', 'medium', 'high'])) {
                     $data['severity_error'] = 'Invalid severity level selected';
                 }
-                
+
                 // Validate Affected Area
                 if (empty($data['affectedArea'])) {
                     $data['affectedArea_error'] = 'Please enter the affected area';
@@ -240,7 +238,7 @@ class Disease extends Controller{
                 } else {
                     $data['affectedArea'] = floatval($data['affectedArea']);
                 }
-                
+
                 // Validate Terms and Conditions
                 if (empty($data['terms']) || $data['terms'] !== 'on') {
                     $data['terms_error'] = 'You must agree to the terms and conditions';
@@ -249,12 +247,12 @@ class Disease extends Controller{
                 // Handle Media Updates
                 $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
                 $finalMediaList = [];
-                
+
                 // Start with existing media
                 if (!empty($data['existingMedia'])) {
                     $existingFiles = explode(',', $data['existingMedia']);
                     $existingFiles = array_map('trim', $existingFiles);
-                    
+
                     // Remove files marked for deletion
                     foreach ($existingFiles as $file) {
                         if (!in_array($file, $data['removeMedia'])) {
@@ -274,12 +272,12 @@ class Disease extends Controller{
                     try {
                         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi', 'video/quicktime', 'video/x-ms-wmv'];
                         $maxFileSize = 10 * 1024 * 1024; // 10MB
-                        
+
                         foreach ($_FILES['media']['name'] as $key => $filename) {
                             if ($_FILES['media']['error'][$key] === UPLOAD_ERR_OK) {
                                 $tmpName = $_FILES['media']['tmp_name'][$key];
                                 $fileSize = $_FILES['media']['size'][$key];
-                                
+
                                 // Use finfo to get accurate MIME type
                                 $finfo = new finfo(FILEINFO_MIME_TYPE);
                                 $fileType = $finfo->file($tmpName);
@@ -319,11 +317,11 @@ class Disease extends Controller{
                 $data['media'] = !empty($finalMediaList) ? implode(',', $finalMediaList) : null;
 
                 // Check for validation errors
-                $hasErrors = !empty($data['farmerNIC_error']) || !empty($data['plrNumber_error']) || 
-                           !empty($data['observationDate_error']) || !empty($data['title_error']) || 
-                           !empty($data['description_error']) || !empty($data['media_error']) || 
-                           !empty($data['severity_error']) || !empty($data['affectedArea_error']) || 
-                           !empty($data['terms_error']);
+                $hasErrors = !empty($data['farmerNIC_error']) || !empty($data['plrNumber_error']) ||
+                            !empty($data['observationDate_error']) || !empty($data['title_error']) ||
+                            !empty($data['description_error']) || !empty($data['media_error']) ||
+                            !empty($data['severity_error']) || !empty($data['affectedArea_error']) ||
+                            !empty($data['terms_error']);
 
                 if (!$hasErrors) {
                     // Update in database
@@ -362,7 +360,7 @@ class Disease extends Controller{
 
         // Get report details to clean up media files
         $report = $this->model('M_disease')->getReportByCode($reportCode); // Changed
-        
+
         if (!$report) {
             $_SESSION['error_message'] = 'Report not found';
             header('Location: ' . URLROOT . '/disease/viewReports');
@@ -372,13 +370,13 @@ class Disease extends Controller{
         try {
             // Delete from database first
             $dbResult = $this->model('M_disease')->deleteReport($reportCode); // Changed
-            
+
             if ($dbResult) {
                 // Clean up media files
                 if (!empty($report->media)) {
                     $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
                     $mediaFiles = explode(',', $report->media);
-                    
+
                     foreach ($mediaFiles as $filename) {
                         $filename = trim($filename);
                         $filePath = $uploadDir . $filename;
@@ -387,7 +385,7 @@ class Disease extends Controller{
                         }
                     }
                 }
-                
+
                 $_SESSION['success_message'] = 'Report deleted successfully';
             } else {
                 $_SESSION['error_message'] = 'Failed to delete report';
@@ -409,7 +407,7 @@ class Disease extends Controller{
         }
 
         $report = $this->model('M_disease')->getReportByCode($reportCode); // Changed
-        
+
         if (!$report) {
             $_SESSION['error_message'] = 'Report not found';
             header('Location: ' . URLROOT . '/disease/viewReports');
@@ -419,7 +417,7 @@ class Disease extends Controller{
         $data = [
             'report' => $report
         ];
-        
+
         $this->view('confirmDelete', $data);
     }
 
@@ -434,30 +432,30 @@ class Disease extends Controller{
         try {
             // Verify that this file belongs to this report
             $report = $this->model('M_disease')->getReportByCode($reportCode); // Changed
-            
+
             if ($report && !empty($report->media)) {
                 $reportFiles = explode(',', $report->media);
                 $reportFiles = array_map('trim', $reportFiles);
-                
+
                 // Check if the requested filename exists for this report
                 if (!in_array($filename, $reportFiles)) {
                     http_response_code(403);
                     echo "File not associated with this report";
                     return;
                 }
-                
+
                 // Build file path
                 $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
                 $filePath = $uploadDir . $filename;
-                
+
                 if (file_exists($filePath)) {
                     $fileInfo = pathinfo($filePath);
                     $mimeType = $this->getMimeType($fileInfo['extension']);
-                    
+
                     header('Content-Type: ' . $mimeType);
                     header('Content-Length: ' . filesize($filePath));
                     header('Content-Disposition: inline; filename="' . basename($filePath) . '"');
-                    
+
                     readfile($filePath);
                     exit();
                 } else {
@@ -490,7 +488,7 @@ class Disease extends Controller{
                     'affectedArea' => isset($_POST['affectedArea']) ? trim($_POST['affectedArea']) : '',
                     'status' => 'pending',
                     'terms' => isset($_POST['terms']) ? $_POST['terms'] : '',
-                    
+
                     // Error fields
                     'farmerNIC_error' => '',
                     'plrNumber_error' => '',
@@ -512,28 +510,28 @@ class Disease extends Controller{
                 } elseif (!preg_match('/^([0-9]{9}[vVxX]|[0-9]{12})$/', $data['farmerNIC'])) {
                     $data['farmerNIC_error'] = 'Invalid NIC format. Use 9 digits with V/X or 12 digits';
                 }
-                
+
                 // Validate PLR Number
                 if (empty($data['plrNumber'])) {
                     $data['plrNumber_error'] = 'Please enter your PLR number';
                 } elseif (!preg_match('/^PLR[0-9]+$/', $data['plrNumber'])) {
                     $data['plrNumber_error'] = 'Invalid PLR format. Must start with PLR followed by numbers';
                 }
-                
+
                 // Validate Observation Date
                 if (empty($data['observationDate'])) {
                     $data['observationDate_error'] = 'Please select the observation date';
                 } else {
                     $observationDate = DateTime::createFromFormat('Y-m-d', $data['observationDate']);
                     $today = new DateTime();
-                    
+
                     if (!$observationDate) {
                         $data['observationDate_error'] = 'Invalid date format';
                     } elseif ($observationDate > $today) {
                         $data['observationDate_error'] = 'Observation date cannot be in the future';
                     }
                 }
-                
+
                 // Validate Title
                 if (empty($data['title'])) {
                     $data['title_error'] = 'Please enter a report title';
@@ -542,7 +540,7 @@ class Disease extends Controller{
                 } elseif (strlen($data['title']) > 200) {
                     $data['title_error'] = 'Title must be less than 200 characters';
                 }
-                
+
                 // Validate Description
                 if (empty($data['description'])) {
                     $data['description_error'] = 'Please enter a detailed description';
@@ -551,14 +549,14 @@ class Disease extends Controller{
                 } elseif (strlen($data['description']) > 2000) {
                     $data['description_error'] = 'Description must be less than 2000 characters';
                 }
-                
+
                 // Validate Severity
                 if (empty($data['severity'])) {
                     $data['severity_error'] = 'Please select a severity level';
                 } elseif (!in_array($data['severity'], ['low', 'medium', 'high'])) {
                     $data['severity_error'] = 'Invalid severity level selected';
                 }
-                
+
                 // Validate Affected Area
                 if (empty($data['affectedArea'])) {
                     $data['affectedArea_error'] = 'Please enter the affected area';
@@ -571,7 +569,7 @@ class Disease extends Controller{
                 } else {
                     $data['affectedArea'] = floatval($data['affectedArea']);
                 }
-                
+
                 // Validate Terms and Conditions
                 if (empty($data['terms']) || $data['terms'] !== 'on') {
                     $data['terms_error'] = 'You must agree to the terms and conditions';
@@ -583,10 +581,10 @@ class Disease extends Controller{
                         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi', 'video/quicktime', 'video/x-ms-wmv'];
                         $maxFileSize = 10 * 1024 * 1024; // 10MB
                         $uploadedFiles = [];
-                        
+
                         // Define upload directory
                         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
-                        
+
                         // Create upload directory if it doesn't exist
                         if (!is_dir($uploadDir)) {
                             if (!mkdir($uploadDir, 0755, true)) {
@@ -599,7 +597,7 @@ class Disease extends Controller{
                                 if ($_FILES['media']['error'][$key] === UPLOAD_ERR_OK) {
                                     $tmpName = $_FILES['media']['tmp_name'][$key];
                                     $fileSize = $_FILES['media']['size'][$key];
-                                    
+
                                     // Use finfo to get accurate MIME type
                                     $finfo = new finfo(FILEINFO_MIME_TYPE);
                                     $fileType = $finfo->file($tmpName);
@@ -642,16 +640,16 @@ class Disease extends Controller{
                 }
 
                 // Check if there are any validation errors
-                $hasErrors = !empty($data['farmerNIC_error']) || !empty($data['plrNumber_error']) || 
-                           !empty($data['observationDate_error']) || !empty($data['title_error']) || 
-                           !empty($data['description_error']) || !empty($data['media_error']) || 
-                           !empty($data['severity_error']) || !empty($data['affectedArea_error']) || 
-                           !empty($data['terms_error']);
+                $hasErrors = !empty($data['farmerNIC_error']) || !empty($data['plrNumber_error']) ||
+                            !empty($data['observationDate_error']) || !empty($data['title_error']) ||
+                            !empty($data['description_error']) || !empty($data['media_error']) ||
+                            !empty($data['severity_error']) || !empty($data['affectedArea_error']) ||
+                            !empty($data['terms_error']);
 
                 if (!$hasErrors) {
                     // All validations passed, submit to database
                     $reportCode = $this->model('M_disease')->submitDReport($data); // This now returns the generated report code
-                    
+
                     if ($reportCode) {
                         // SUCCESS - Rename any temporary files with the actual report code
                         if (!empty($uploadedFiles)) {
@@ -662,18 +660,18 @@ class Disease extends Controller{
                                 $baseName = substr($baseName, 0, 30);
                                 $finalFilename = $reportCode . '_' . $baseName . '_' . time() . '.' . $fileExtension;
                                 $finalPath = $uploadDir . $finalFilename;
-                                
+
                                 if (rename($fileInfo['temp_path'], $finalPath)) {
                                     $finalFilenames[] = $finalFilename;
                                 }
                             }
-                            
+
                             // Update the database with final filenames
                             if (!empty($finalFilenames)) {
                                 $this->model('M_disease')->updateReportMedia($reportCode, implode(',', $finalFilenames));
                             }
                         }
-                        
+
                         // Redirect to success page with report code
                         header('Location: ' . URLROOT . '/disease/success/' . $reportCode);
                         exit();
@@ -698,7 +696,7 @@ class Disease extends Controller{
                             }
                         }
                     }
-                    
+
                     // Redisplay form with errors
                     $this->view('disease', $data);
                 }
@@ -711,49 +709,49 @@ class Disease extends Controller{
         } else {
             // Handle GET request - show empty form
             $data = [
-                'farmerNIC' => '', 
+                'farmerNIC' => '',
                 'plrNumber' => '',
-                'observationDate' => '', 
-                'todayDate' => '', 
+                'observationDate' => '',
+                'todayDate' => '',
                 'title' => '',
-                'description' => '', 
-                'severity' => '', 
+                'description' => '',
+                'severity' => '',
                 'affectedArea' => '',
                 'terms' => '',
-                'farmerNIC_error' => '', 
+                'farmerNIC_error' => '',
                 'plrNumber_error' => '',
-                'observationDate_error' => '', 
+                'observationDate_error' => '',
                 'title_error' => '',
-                'description_error' => '', 
+                'description_error' => '',
                 'media_error' => '',
-                'severity_error' => '', 
-                'affectedArea_error' => '', 
+                'severity_error' => '',
+                'affectedArea_error' => '',
                 'terms_error' => ''
             ];
             $this->view('disease', $data);
         }
     }
-    
+
     // Success page method - UPDATED
     public function success($reportCode = '') { // Changed parameter name
         if (empty($reportCode)) {
             header('Location: ' . URLROOT . '/disease');
             exit();
         }
-        
+
         // Verify the report exists
         $report = $this->model('M_disease')->getReportByCode($reportCode); // Changed
-        
+
         if (!$report) {
             header('Location: ' . URLROOT . '/disease');
             exit();
         }
-        
+
         $data = [
             'report_id' => $reportCode, // Changed to match view expectation
             'report' => $report
         ];
-        
+
         $this->view('success', $data);
     }
 
@@ -775,5 +773,4 @@ class Disease extends Controller{
 
     // ... [rest of your methods remain the same, just update any that use reportId] ...
 }
-
 ?>

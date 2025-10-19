@@ -4,8 +4,14 @@
     <div class="content-header">
         <h1>📋 Submitted Reports</h1>
         <p class="content-subtitle">View all submitted disease reports</p>
-    </div>
 
+        <div class = "create-report-btn">
+        <a href="<?php echo URLROOT; ?>/disease" class="btn btn-success">
+            <i class="fas fa-plus"></i> Create New Report
+        </a>
+    </div>
+    </div>
+    
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success">
             <i class="fas fa-check-circle"></i>
@@ -26,6 +32,37 @@
             <div><?php echo htmlspecialchars($data['message']); ?></div>
         </div>
     <?php endif; ?>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="filter-group">
+            <label for="date-filter" class="filter-label">Date</label>
+            <input type="date" id="date-filter" class="filter-input" title="Filter by report date">
+        </div>
+        <div class="filter-group">
+            <label for="severity-filter" class="filter-label">Severity</label>
+            <select id="severity-filter" class="filter-select">
+                <option value="">All</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="status-filter" class="filter-label">Status</label>
+            <select id="status-filter" class="filter-select">
+                <option value="">All</option>
+                <option value="pending">Pending</option>
+                <option value="under_review">Under Review</option>
+                <option value="resolved">Resolved</option>
+                <option value="rejected">Rejected</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>&nbsp;</label>
+            <button id="clear-filters" class="btn btn-secondary">Clear</button>
+        </div>
+    </div>
 
     <?php if (!empty($data['reports'])): ?>
         <div class="reports-table-container">
@@ -104,10 +141,10 @@
                                        class="btn btn-primary btn-xs" title="Edit Report">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="<?php echo URLROOT; ?>/disease/confirmDelete/<?php echo htmlspecialchars($report->report_code); ?>"
-                                       class="btn btn-danger btn-xs" title="Delete Report">
+                                    <button type="button" class="btn btn-danger btn-xs" title="Delete Report"
+                                            onclick="event.stopPropagation(); openDeleteModal('<?php echo htmlspecialchars($report->report_code); ?>', '<?php echo htmlspecialchars(addslashes($report->title)); ?>', '<?php echo htmlspecialchars($report->farmerNIC); ?>')">
                                         <i class="fas fa-trash"></i>
-                                    </a>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -129,7 +166,61 @@
     <?php endif; ?>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <i class="fas fa-exclamation-triangle text-danger"></i>
+                Confirm Report Deletion
+            </h4>
+            <button type="button" class="close-btn" onclick="closeDeleteModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="warning-message">
+                <p class="warning-text">
+                    <strong>Are you sure you want to delete this report?</strong>
+                </p>
+                <div class="report-info">
+                    <p><strong>Report ID:</strong> <span id="modal-report-code"></span></p>
+                    <p><strong>Title:</strong> <span id="modal-report-title"></span></p>
+                    <p><strong>Farmer NIC:</strong> <span id="modal-farmer-nic"></span></p>
+                </div>
+                <p class="danger-text">
+                    <i class="fas fa-exclamation-circle"></i>
+                    This action cannot be undone. The report and all associated media files will be permanently deleted.
+                </p>
+            </div>
+            <div class="confirmation-section">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="confirm-delete-checkbox" required>
+                    <label class="form-check-label" for="confirm-delete-checkbox">
+                        I understand that this action is permanent and cannot be undone
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirm-delete-btn" onclick="confirmDelete()" disabled>
+                <i class="fas fa-trash"></i> Delete Report
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden form for deletion -->
+<form id="deleteForm" method="POST" action="" style="display: none;">
+    <input type="hidden" name="confirmDelete" value="1">
+</form>
+
 <style>
+    :root {
+        --primary-dark: #1b5e20;
+    }
+
     .content-card {
         background: var(--glass-bg);
         backdrop-filter: var(--glass-blur);
@@ -227,6 +318,7 @@
 
     .reports-table tbody tr:hover {
         background: rgba(46, 125, 50, 0.05);
+        cursor: pointer;
     }
 
     .report-code {
@@ -386,6 +478,66 @@
         transform: translateY(-1px);
     }
 
+    .btn-secondary {
+        background: rgba(158, 158, 158, 0.9);
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(158, 158, 158, 1);
+        transform: translateY(-1px);
+    }
+
+    .filters-section {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        background: rgba(46, 125, 50, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid rgba(46, 125, 50, 0.2);
+        justify-content: center;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        min-width: 150px;
+    }
+
+    .filter-label {
+        font-weight: 1000;
+        color: var(--text-primary);
+        font-size: 13px;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .filter-input, .filter-select {
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        color: var(--text-primary);
+        font-size: 14px;
+        transition: var(--transition);
+    }
+
+    .filter-input:focus, .filter-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+    }
+
+    .filter-input::placeholder {
+        color: var(--text-secondary);
+    }
+
     .empty-state {
         text-align: center;
         padding: 80px 40px;
@@ -420,6 +572,141 @@
         font-size: 1rem;
     }
 
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideIn 0.3s ease;
+    }
+
+    .modal-header {
+        padding: 20px 25px;
+        border-bottom: 1px solid #dee2e6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #6c757d;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+        background: #f8f9fa;
+        color: #495057;
+    }
+
+    .modal-body {
+        padding: 20px 25px;
+    }
+
+    .warning-message {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .warning-text {
+        font-size: 1.1rem;
+        color: #495057;
+        margin-bottom: 15px;
+    }
+
+    .report-info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        text-align: left;
+    }
+
+    .report-info p {
+        margin: 5px 0;
+        font-size: 0.9rem;
+    }
+
+    .danger-text {
+        color: #dc3545;
+        font-weight: 500;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .confirmation-section {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .form-check-input {
+        margin-top: 2px;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: #856404;
+        cursor: pointer;
+    }
+
+    .modal-footer {
+        padding: 15px 25px;
+        border-top: 1px solid #dee2e6;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
     @media (max-width: 768px) {
         .content-card {
             padding: 20px;
@@ -445,19 +732,98 @@
             padding: 6px 10px;
             font-size: 11px;
         }
+
+        .modal-content {
+            width: 95%;
+            margin: 20px;
+        }
+
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+            padding: 15px 20px;
+        }
     }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(alert => {
-        setTimeout(() => {
-            alert.style.transition = 'all 0.3s ease';
+    // auto hide alerts
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
             alert.style.opacity = '0';
             setTimeout(() => alert.remove(), 300);
-        }, 5000);
+        });
+    }, 5000);
+
+    // view details on row click
+    document.querySelectorAll('.reports-table tbody tr').forEach(row => {
+        row.addEventListener('click', function() {
+            this.querySelector('.btn-info').click();
+        });
     });
+
+    //filtering
+    const filters = ['date-filter', 'severity-filter', 'status-filter'];
+    filters.forEach(id => {
+        document.getElementById(id).addEventListener('change', filterReports);
+    });
+
+    document.getElementById('clear-filters').addEventListener('click', function() {
+        filters.forEach(id => document.getElementById(id).value = '');
+        document.querySelectorAll('.reports-table tbody tr').forEach(row => row.style.display = '');
+    });
+
+    function filterReports() {
+        const date = document.getElementById('date-filter').value;
+        const severity = document.getElementById('severity-filter').value.toLowerCase();
+        const status = document.getElementById('status-filter').value.toLowerCase();
+
+        document.querySelectorAll('.reports-table tbody tr').forEach(row => {
+            const rowSeverity = row.querySelector('.severity-badge').textContent.toLowerCase().trim();
+            const rowStatus = row.querySelector('.status-badge').textContent.toLowerCase().trim();
+            const rowDate = row.querySelector('.date-info div').textContent;
+
+            const matchesDate = !date || rowDate.includes(date);
+            const matchesSeverity = !severity || rowSeverity.includes(severity);
+            const matchesStatus = !status || rowStatus.replace(/\s+/g, '_').includes(status);
+
+            row.style.display = (matchesDate && matchesSeverity && matchesStatus) ? '' : 'none';
+        });
+    }
+
+    // delete function
+    window.openDeleteModal = function(reportCode, title, farmerNic) {
+        document.getElementById('modal-report-code').textContent = reportCode;
+        document.getElementById('modal-report-title').textContent = title;
+        document.getElementById('modal-farmer-nic').textContent = farmerNic;
+        document.getElementById('deleteModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        document.getElementById('confirm-delete-checkbox').checked = false;
+        document.getElementById('confirm-delete-btn').disabled = true;
+        document.getElementById('deleteForm').action = '<?php echo URLROOT; ?>/disease/deleteReport/' + reportCode;
+    };
+
+    window.closeDeleteModal = function() {
+        document.getElementById('deleteModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    };
+
+    window.confirmDelete = function() {
+        if (!document.getElementById('confirm-delete-checkbox').checked) {
+            alert('Please check the confirmation box before proceeding.');
+            return;
+        }
+        document.getElementById('deleteForm').submit();
+    };
+
+    //event listeners
+    document.getElementById('confirm-delete-checkbox').addEventListener('change', function() {
+        document.getElementById('confirm-delete-btn').disabled = !this.checked;
+    });
+
+    document.addEventListener('keydown', e => e.key === 'Escape' && closeDeleteModal());
+    document.getElementById('deleteModal').addEventListener('click', e => e.target === document.getElementById('deleteModal') && closeDeleteModal());
 });
 </script>
 

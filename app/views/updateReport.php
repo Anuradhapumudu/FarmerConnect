@@ -30,10 +30,10 @@
             <label for="plrNumber" class="required">PLR Number
                 <span class="tooltip" title="Your Planters Registration Number">🛈</span>
             </label>
-            <input type="text" id="plrNumber" name="plrNumber" 
-                   placeholder="Enter your Planters Registration Number" 
-                   value="<?php echo htmlspecialchars($data['plrNumber']); ?>"
-                   maxlength="12" required aria-describedby="plrHelp">
+            <input type="text" id="plrNumber" name="plrNumber"
+                    placeholder="Enter your Planters Registration Number"
+                    value="<?php echo htmlspecialchars($data['plrNumber'] ?? ''); ?>"
+                    maxlength="12" required aria-describedby="plrHelp">
             <small id="plrHelp" class="form-text">Max 12 characters</small>
             <span class="error" role="alert" aria-live="polite"><?php echo $data['plrNumber_error']; ?></span>
         </div>

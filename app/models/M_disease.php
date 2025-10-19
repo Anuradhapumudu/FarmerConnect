@@ -97,23 +97,23 @@ class M_disease {
     public function getAllReports($limit = null, $offset = null) {
         try {
             $sql = "SELECT * FROM disease_reports ORDER BY created_at DESC";
-            
+
             if ($limit !== null) {
                 $sql .= " LIMIT :limit";
                 if ($offset !== null) {
                     $sql .= " OFFSET :offset";
                 }
             }
-            
+
             $this->db->query($sql);
-            
+
             if ($limit !== null) {
                 $this->db->bind(':limit', $limit, PDO::PARAM_INT);
                 if ($offset !== null) {
                     $this->db->bind(':offset', $offset, PDO::PARAM_INT);
                 }
             }
-            
+
             return $this->db->resultSet();
         } catch (Exception $e) {
             error_log("Exception in getAllReports: " . $e->getMessage());
@@ -163,7 +163,7 @@ class M_disease {
     // UPDATE - Update report
     public function updateReport($data) {
         try {
-            $this->db->query("UPDATE disease_reports SET 
+            $this->db->query("UPDATE disease_reports SET
                               farmerNIC = :farmerNIC,
                               pirNumber = :pirNumber,
                               observationDate = :observationDate,
@@ -174,7 +174,7 @@ class M_disease {
                               affectedArea = :affectedArea,
                               updated_at = NOW()
                               WHERE report_code = :report_code");
-            
+
             // Bind values
             $this->db->bind(':report_code', $data['report_code']);
             $this->db->bind(':farmerNIC', $data['farmerNIC']);
@@ -317,14 +317,14 @@ class M_disease {
             }
 
             $whereClause = !empty($conditions) ? "WHERE " . implode(' AND ', $conditions) : "";
-            
+
             $sql = "SELECT * FROM disease_reports {$whereClause} ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
             $this->db->query($sql);
 
             foreach ($params as $param => $value) {
                 $this->db->bind($param, $value);
             }
-            
+
             $this->db->bind(':limit', $limit, PDO::PARAM_INT);
             $this->db->bind(':offset', $offset, PDO::PARAM_INT);
 
@@ -357,7 +357,7 @@ class M_disease {
             }
 
             $whereClause = !empty($conditions) ? "WHERE " . implode(' AND ', $conditions) : "";
-            
+
             $sql = "SELECT COUNT(*) as count FROM disease_reports {$whereClause}";
             $this->db->query($sql);
 
@@ -436,9 +436,9 @@ class M_disease {
             }
 
             $whereClause = !empty($conditions) ? "WHERE " . implode(' AND ', $conditions) : "";
-            
+
             $sql = "SELECT * FROM disease_reports {$whereClause} ORDER BY created_at DESC";
-            
+
             if ($limit !== null) {
                 $sql .= " LIMIT :limit";
                 if ($offset !== null) {
@@ -451,7 +451,7 @@ class M_disease {
             foreach ($params as $param => $value) {
                 $this->db->bind($param, $value);
             }
-            
+
             if ($limit !== null) {
                 $this->db->bind(':limit', $limit, PDO::PARAM_INT);
                 if ($offset !== null) {
@@ -470,35 +470,35 @@ class M_disease {
     public function getDashboardStats() {
         try {
             $stats = [];
-            
+
             // Total reports
             $this->db->query("SELECT COUNT(*) as total FROM disease_reports");
             $result = $this->db->single();
             $stats['total_reports'] = $result ? $result->total : 0;
-            
+
             // Reports by severity
             $this->db->query("SELECT severity, COUNT(*) as count FROM disease_reports GROUP BY severity");
             $severityResults = $this->db->resultSet();
-            
+
             $stats['severity_counts'] = [
                 'low' => 0,
                 'medium' => 0,
                 'high' => 0
             ];
-            
+
             foreach ($severityResults as $row) {
                 $stats['severity_counts'][$row->severity] = $row->count;
             }
-            
+
             // Recent reports (last 7 days)
             $this->db->query("SELECT COUNT(*) as count FROM disease_reports WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)");
             $result = $this->db->single();
             $stats['recent_reports'] = $result ? $result->count : 0;
-            
+
             // Most active farmers
             $this->db->query("SELECT farmerNIC, COUNT(*) as report_count FROM disease_reports GROUP BY farmerNIC ORDER BY report_count DESC LIMIT 5");
             $stats['top_farmers'] = $this->db->resultSet();
-            
+
             return $stats;
         } catch (Exception $e) {
             error_log("Exception in getDashboardStats: " . $e->getMessage());
@@ -512,21 +512,21 @@ class M_disease {
     }
 
     // Batch operations
-    
+
     // Delete multiple reports
     public function deleteMultipleReports($reportCodes) {
         try {
             if (empty($reportCodes) || !is_array($reportCodes)) {
                 return false;
             }
-            
+
             $placeholders = str_repeat('?,', count($reportCodes) - 1) . '?';
             $this->db->query("DELETE FROM disease_reports WHERE report_code IN ($placeholders)");
-            
+
             foreach ($reportCodes as $index => $reportCode) {
                 $this->db->bind($index + 1, $reportCode);
             }
-            
+
             return $this->db->execute();
         } catch (Exception $e) {
             error_log("Exception in deleteMultipleReports: " . $e->getMessage());
@@ -540,16 +540,16 @@ class M_disease {
             if (empty($reportCodes) || !is_array($reportCodes)) {
                 return false;
             }
-            
+
             $placeholders = str_repeat('?,', count($reportCodes) - 1) . '?';
             $this->db->query("UPDATE disease_reports SET status = :status, updated_at = NOW() WHERE report_code IN ($placeholders)");
-            
+
             $this->db->bind(':status', $status);
-            
+
             foreach ($reportCodes as $index => $reportCode) {
                 $this->db->bind($index + 1, $reportCode);
             }
-            
+
             return $this->db->execute();
         } catch (Exception $e) {
             error_log("Exception in updateMultipleReportsStatus: " . $e->getMessage());
@@ -575,15 +575,15 @@ class M_disease {
         try {
             $allowedSortFields = ['created_at', 'observationDate', 'title', 'severity', 'affectedArea'];
             $allowedSortOrders = ['ASC', 'DESC'];
-            
+
             if (!in_array($sortBy, $allowedSortFields)) {
                 $sortBy = 'created_at';
             }
-            
+
             if (!in_array(strtoupper($sortOrder), $allowedSortOrders)) {
                 $sortOrder = 'DESC';
             }
-            
+
             $this->db->query("SELECT * FROM disease_reports WHERE farmerNIC = :farmerNIC ORDER BY {$sortBy} {$sortOrder}");
             $this->db->bind(':farmerNIC', $farmerNIC);
             return $this->db->resultSet();
