@@ -177,7 +177,7 @@ class Disease extends Controller{
                 if (empty($data['farmerNIC'])) {
                     $data['farmerNIC_error'] = 'Please enter your NIC number';
                 } elseif (!preg_match('/^([0-9]{9}[vV]|[0-9]{12})$/', $data['farmerNIC'])) {
-                    $data['farmerNIC_error'] = 'Invalid NIC format. Use 9 digits with V/X or 12 digits';
+                    $data['farmerNIC_error'] = 'Invalid NIC format. Use 9 digits with V or 12 digits';
                 }
 
                 // Validate PLR Number
@@ -507,8 +507,8 @@ class Disease extends Controller{
                 // Validate Farmer NIC
                 if (empty($data['farmerNIC'])) {
                     $data['farmerNIC_error'] = 'Please enter your NIC number';
-                } elseif (!preg_match('/^([0-9]{9}[vVxX]|[0-9]{12})$/', $data['farmerNIC'])) {
-                    $data['farmerNIC_error'] = 'Invalid NIC format. Use 9 digits with V/X or 12 digits';
+                } elseif (!preg_match('/^([0-9]{9}[vV]|[0-9]{12})$/', $data['farmerNIC'])) {
+                    $data['farmerNIC_error'] = 'Invalid NIC format. Use 9 digits with V or 12 digits';
                 }
 
                 // Validate PLR Number
@@ -770,7 +770,5 @@ class Disease extends Controller{
 
         return isset($mimeTypes[strtolower($extension)]) ? $mimeTypes[strtolower($extension)] : 'application/octet-stream';
     }
-
-    // ... [rest of your methods remain the same, just update any that use reportId] ...
 }
 ?>

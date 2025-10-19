@@ -550,7 +550,7 @@
     }
 
     .btn-primary:hover {
-        background: var(--primary-dark);
+        background: blue !important;
         transform: translateY(-1px);
     }
 
@@ -1195,6 +1195,16 @@
         border-radius: 8px;
         padding: 15px;
         margin-top: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .confirmation-section.checked {
+        background-color: red;
+        color: white;
+    }
+
+    .confirmation-section.checked .form-check-label {
+        color: white;
     }
 
     .form-check {
@@ -1269,6 +1279,24 @@
         .description-section,
         .media-section {
             padding: 20px;
+        }
+
+        .report-header-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .report-actions {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .report-actions .btn {
+            flex: 1;
+            text-align: center;
         }
 
         .modal-content {
@@ -1361,8 +1389,16 @@ window.openFullscreenModal = function(fileUrl, mediaType, fileExt, filename) {
 
 // Modal event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('confirm-delete-checkbox').addEventListener('change', function() {
+    const checkbox = document.getElementById('confirm-delete-checkbox');
+    const confirmationSection = document.querySelector('.confirmation-section');
+
+    checkbox.addEventListener('change', function() {
         document.getElementById('confirm-delete-btn').disabled = !this.checked;
+        if (this.checked) {
+            confirmationSection.classList.add('checked');
+        } else {
+            confirmationSection.classList.remove('checked');
+        }
     });
 
     document.addEventListener('keydown', e => e.key === 'Escape' && closeDeleteModal());
