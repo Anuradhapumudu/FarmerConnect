@@ -54,7 +54,7 @@
             </h3>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 25px;">
-                <a href="<?php echo URLROOT; ?>" 
+                <a href="<?php echo URLROOT; ?>/FertilizerCalculator" class="card" style="text-decoration: none; padding: 20px; background: rgba(255, 255, 255, 0.6); border-radius: 10px; transition: all 0.3s ease; border: 1px solid rgba(0, 0, 0, 0.05);"
                    style="text-decoration: none; padding: 20px; background: rgba(255, 255, 255, 0.6); border-radius: 10px; transition: all 0.3s ease; border: 1px solid rgba(0, 0, 0, 0.05);"
                    onmouseover="this.style.background='rgba(255, 255, 255, 0.9)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.1)';"
                    onmouseout="this.style.background='rgba(255, 255, 255, 0.6)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
@@ -63,7 +63,7 @@
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Calculate optimal fertilizer amounts</p>
                 </a>
                 
-                <a href="<?php echo URLROOT; ?>" 
+                <a href="<?php echo URLROOT; ?>/disease/viewReports" class="card" style="text-decoration: none; padding: 20px; background: rgba(255, 255, 255, 0.6); border-radius: 10px; transition: all 0.3s ease; border: 1px solid rgba(0, 0, 0, 0.05);"
                    style="text-decoration: none; padding: 20px; background: rgba(255, 255, 255, 0.6); border-radius: 10px; transition: all 0.3s ease; border: 1px solid rgba(0, 0, 0, 0.05);"
                    onmouseover="this.style.background='rgba(255, 255, 255, 0.9)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.1)';"
                    onmouseout="this.style.background='rgba(255, 255, 255, 0.6)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
@@ -72,7 +72,7 @@
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Identify and treat crop diseases</p>
                 </a>
                 
-                <a href="<?php echo URLROOT; ?>" 
+                <a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterFarmer" class="card" style="text-decoration: none; padding: 20px; background: rgba(255, 255, 255, 0.6); border-radius: 10px; transition: all 0.3s ease; border: 1px solid rgba(0, 0, 0, 0.05);"
                    style="text-decoration: none; padding: 20px; background: rgba(255, 255, 255, 0.6); border-radius: 10px; transition: all 0.3s ease; border: 1px solid rgba(0, 0, 0, 0.05);"
                    onmouseover="this.style.background='rgba(255, 255, 255, 0.9)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.1)';"
                    onmouseout="this.style.background='rgba(255, 255, 255, 0.6)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">

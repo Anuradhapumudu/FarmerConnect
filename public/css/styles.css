@@ -175,6 +175,48 @@ header {
   color: var(--text-primary);
 }
 
+/* Language Selector Styles */
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.language-selector .language-label {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.language-selector .custom-select {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--transition);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%232e7d32' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 34px; /* space for caret */
+}
+
+.language-selector .custom-select:hover {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--text-primary);
+}
+
+.language-selector .custom-select:focus {
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
 .mobile-menu-label {
   display: none;
   background: none;
@@ -572,6 +614,16 @@ body.minimal-layout .page-wrapper {
     align-items: stretch;
     justify-content: flex-start;
     display: flex;
+  }
+  
+  /* Make language selector feel like other menu items on mobile */
+  .nav-links .language-selector {
+    padding: 18px 15px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .nav-links .language-selector .custom-select {
+    width: 100%;
+    background-position: right 15px center;
   }
   
   .nav-links a {

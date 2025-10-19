@@ -14,6 +14,30 @@
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/styles.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/sidebar.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
+  
+  <style>
+    /* Hide Google Translate frame and banner */
+    .goog-te-banner-frame.skiptranslate,
+    #goog-gt-tt,
+    .goog-te-balloon-frame,
+    .goog-te-spinner-pos,
+    [class^="VIpgJd-ZVi9od-"][class*="OEVmcd"] {
+      display: none !important;
+    }
+
+    body {
+      top: 0 !important;
+    }
+
+    #google_translate_element {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+    }
+  </style>
 </head>
 
 <body>
@@ -39,11 +63,24 @@
 
       <nav class="navbar">
         <div class="nav-links" id="navLinks">
+          <div class="language-selector">
+          <label for="custom-translate" class="language-label">Language</label>
+          <select id="custom-translate" class="custom-select" title="Change language">
+            <option value="en">English</option>
+            <option value="si">සිංහල</option>
+            <option value="ta">தமிழ்</option>
+          </select>
+        </div>
+        <div id="google_translate_element"></div>
           <a href="<?php echo URLROOT; ?>/farmerdashboard"><i class="fa fa-home"></i> Home</a>
           <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
           <a href="<?php echo URLROOT; ?>/Help/help"><i class="fa fa-question-circle"></i> Help</a>
           <a href="<?php echo URLROOT; ?>/FarmerProfile"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
+
+        
+
+        
 
         <!-- Mobile menu toggle -->
         <label for="mobile-menu-toggle" class="mobile-menu-label" aria-label="Toggle navigation menu">
