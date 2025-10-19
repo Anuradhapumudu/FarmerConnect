@@ -191,6 +191,23 @@ form {
   background: #388e3c;
 }
 
+.delete-btn {
+  background: #f44336; /* Red */
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-left: 10px; /* optional: space from Save button */
+}
+
+.delete-btn:hover {
+  background: #d32f2f; /* Darker red on hover */
+}
+
 .plr-selector {
   display: flex;
   align-items: center;

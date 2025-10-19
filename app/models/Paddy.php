@@ -41,4 +41,12 @@ class Paddy {
         $this->db->bind(':plr', $plr);
         return $this->db->single();
     }
+
+    // Delete single paddy row by PLR
+    public function deletePaddyByPLR($plr) {
+        $this->db->query("DELETE FROM paddy WHERE PLR = :plr");
+        $this->db->bind(':plr', $plr);
+        return $this->db->execute();
+    }
+
 }
