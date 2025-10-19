@@ -5,6 +5,14 @@
         <p class="content-subtitle"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update your disease report' : 'Report plant diseases to help protect our agricultural community'; ?></p>
     </div>
 
+    <!-- Report ID display for edit mode -->
+    <?php if (isset($data['isEdit']) && $data['isEdit']): ?>
+        <div class="report-id-display">
+            <label>Editing Report:</label>
+            <span><?php echo htmlspecialchars($data['reportCode']); ?></span>
+        </div>
+    <?php endif; ?>
+
     <form action="<?php echo URLROOT; ?>/disease/<?php echo isset($data['isEdit']) && $data['isEdit'] ? 'updateReport' : 'submit'; ?>" method="POST" id="diseaseReportForm" class="framework-form" enctype="multipart/form-data">
         <!-- Hidden inputs for edit mode -->
         <?php if (isset($data['isEdit']) && $data['isEdit']): ?>
@@ -151,11 +159,16 @@
             <div class="checkbox-container">
                 <label for="terms" class="checkbox-label required">
                     <input type="checkbox" id="terms" name="terms" required>
-                    I agree to the <a href="#" class="terms-link">terms and conditions</a>
+                    I agree to the <a href="<?php echo URLROOT; ?>/pages/terms/disease" class="terms-link" target="_blank">terms and conditions</a>
                 </label>
             </div>
         </div>
         
+        <!-- Required fields notice -->
+        <div class="required-fields-notice" role="alert" aria-live="polite">
+            <span class="required-indicator" aria-hidden="true">*</span> All fields marked with <span class="required-indicator" aria-hidden="true">*</span> are required
+        </div>
+
         <button type="submit" class="btn btn-primary"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update Report' : 'Submit Report'; ?></button>
     </form>
 </div>
@@ -186,7 +199,6 @@
         color: var(--primary);
     }
     
-    /* Fix for scrolling issue - add top padding to main content */
     .main-content {
         padding-top: 30px;
     }
@@ -372,7 +384,7 @@
     }
     
     .btn-primary:hover {
-        background: var(--primary-dark);
+        background: red;
     }
     
     /* Custom checkbox styling */
@@ -423,6 +435,19 @@
         color: #e74c3c;
         font-weight: bold;
     }
+
+    .required-fields-notice {
+        border-radius: 8px;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        color: black;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .required-indicator {
+        color: #e74c3c;
+    }
     
     @media (max-width: 768px) {
         .content-card {
@@ -452,344 +477,166 @@
 </style>
 
 <script>
-    // Set current date when page loads
+    // Form functionality
     document.addEventListener('DOMContentLoaded', function() {
-        try {
-            const today = new Date();
-            const formattedDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-
-            // Set today's date (readonly)
-            const todayDateElement = document.getElementById('todayDate');
-            if (todayDateElement) {
-                todayDateElement.value = formattedDate;
-            }
-
-            // Set observation date to today by default (only for new reports)
-            const observationDateElement = document.getElementById('observationDate');
-            if (observationDateElement && !observationDateElement.value) {
-                observationDateElement.value = formattedDate;
-                observationDateElement.max = formattedDate;
-            }
-
-            // Initialize file upload functionality
-            initFileUpload();
-
-            // Initialize existing media display for edit mode
-            initExistingMedia();
-        } catch (error) {
-            console.error('Error initializing form:', error);
+        // Set dates
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('todayDate').value = today;
+        if (!document.getElementById('observationDate').value) {
+            document.getElementById('observationDate').value = today;
+            document.getElementById('observationDate').max = today;
         }
-    });
 
-    // File upload area functionality
-    function initFileUpload() {
-        try {
-            const fileUploadArea = document.getElementById('mediaUploadArea');
-            const fileInput = document.getElementById('media');
-            
-            if (!fileUploadArea || !fileInput) {
-                console.warn('File upload elements not found');
-                return;
-            }
-            
-            // Click handler for upload area
-            fileUploadArea.addEventListener('click', () => {
-                fileInput.click();
-            });
-            
-            // Drag and drop handlers
-            fileUploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                fileUploadArea.style.borderColor = 'blue';
-                fileUploadArea.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
-            });
-            
-            fileUploadArea.addEventListener('dragleave', () => {
-                fileUploadArea.style.borderColor = 'blue';
-                fileUploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-            });
-            
-            fileUploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                fileUploadArea.style.borderColor = 'blue';
-                fileUploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-                
-                if (e.dataTransfer.files.length) {
-                    fileInput.files = e.dataTransfer.files;
-                    updateFileUploadText(e.dataTransfer.files);
-                    showFilePreview(e.dataTransfer.files);
-                }
-            });
-            
-            // File input change handler
-            fileInput.addEventListener('change', () => {
-                if (fileInput.files.length) {
-                    updateFileUploadText(fileInput.files);
-                    showFilePreview(fileInput.files);
-                }
-            });
-            
-            function updateFileUploadText(files) {
-                try {
-                    const fileText = files.length === 1 ? 
-                        `1 file selected: ${files[0].name}` : 
-                        `${files.length} files selected`;
-                        
-                    const textElement = fileUploadArea.querySelector('p');
-                    if (textElement) {
-                        textElement.textContent = fileText;
-                    }
-                } catch (error) {
-                    console.error('Error updating file upload text:', error);
-                }
-            }
-            
-            function showFilePreview(files) {
-                try {
-                    const uploadedFilesDiv = document.getElementById('uploadedFiles');
-                    if (!uploadedFilesDiv) {
-                        console.warn('uploadedFiles container not found');
-                        return;
-                    }
+        // File upload with preview
+        const uploadArea = document.getElementById('mediaUploadArea');
+        const fileInput = document.getElementById('media');
+        const uploadedFilesDiv = document.getElementById('uploadedFiles');
 
-                    uploadedFilesDiv.innerHTML = ''; // Clear previous previews
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--primary)';
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = 'var(--card-border)';
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--card-border)';
+            fileInput.files = e.dataTransfer.files;
+            showFilePreview(fileInput.files);
+        });
 
-                    if (files.length > 0) {
-                        uploadedFilesDiv.classList.add('has-files');
-                        uploadedFilesDiv.style.display = 'grid';
-                        uploadedFilesDiv.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
-                        uploadedFilesDiv.style.gap = '15px';
-                        uploadedFilesDiv.style.marginTop = '10px';
+        fileInput.addEventListener('change', () => showFilePreview(fileInput.files));
 
-                        Array.from(files).forEach((file, index) => {
-                            const fileType = file.type;
-                            const previewWrapper = document.createElement('div');
-                            previewWrapper.className = 'new-file-preview-item';
-                            previewWrapper.style.background = 'rgba(255, 255, 255, 0.9)';
-                            previewWrapper.style.borderRadius = '8px';
-                            previewWrapper.style.padding = '10px';
-                            previewWrapper.style.border = '1px solid rgba(46, 125, 50, 0.2)';
-                            previewWrapper.style.position = 'relative';
+        function showFilePreview(files) {
+            uploadedFilesDiv.innerHTML = '';
+            if (files.length > 0) {
+                uploadedFilesDiv.classList.add('has-files');
+                uploadedFilesDiv.style.display = 'grid';
+                uploadedFilesDiv.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+                uploadedFilesDiv.style.gap = '15px';
+                uploadedFilesDiv.style.marginTop = '10px';
 
-                            // Remove button for new files
-                            const removeBtn = document.createElement('button');
-                            removeBtn.type = 'button';
-                            removeBtn.className = 'remove-new-file-btn';
-                            removeBtn.style.position = 'absolute';
-                            removeBtn.style.top = '5px';
-                            removeBtn.style.right = '5px';
-                            removeBtn.style.background = '#e74c3c';
-                            removeBtn.style.color = 'white';
-                            removeBtn.style.border = 'none';
-                            removeBtn.style.borderRadius = '50%';
-                            removeBtn.style.width = '25px';
-                            removeBtn.style.height = '25px';
-                            removeBtn.style.cursor = 'pointer';
-                            removeBtn.style.fontSize = '14px';
-                            removeBtn.style.lineHeight = '1';
-                            removeBtn.style.zIndex = '10';
-                            removeBtn.textContent = '×';
-                            removeBtn.title = 'Remove this file';
-                            removeBtn.onclick = function() {
-                                removeNewFile(index);
-                            };
-                            previewWrapper.appendChild(removeBtn);
+                Array.from(files).forEach((file, index) => {
+                    const previewWrapper = document.createElement('div');
+                    previewWrapper.className = 'new-file-preview-item';
+                    previewWrapper.style.background = 'rgba(255, 255, 255, 0.9)';
+                    previewWrapper.style.borderRadius = '8px';
+                    previewWrapper.style.padding = '10px';
+                    previewWrapper.style.border = '1px solid rgba(46, 125, 50, 0.2)';
+                    previewWrapper.style.position = 'relative';
 
-                            // Media preview
-                            const mediaDiv = document.createElement('div');
-                            mediaDiv.className = 'media-preview';
-                            mediaDiv.style.textAlign = 'center';
-                            mediaDiv.style.marginBottom = '8px';
+                    // Remove button
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'remove-new-file-btn';
+                    removeBtn.style.position = 'absolute';
+                    removeBtn.style.top = '5px';
+                    removeBtn.style.right = '5px';
+                    removeBtn.style.background = '#e74c3c';
+                    removeBtn.style.color = 'white';
+                    removeBtn.style.border = 'none';
+                    removeBtn.style.borderRadius = '50%';
+                    removeBtn.style.width = '25px';
+                    removeBtn.style.height = '25px';
+                    removeBtn.style.cursor = 'pointer';
+                    removeBtn.style.fontSize = '14px';
+                    removeBtn.style.lineHeight = '1';
+                    removeBtn.style.zIndex = '10';
+                    removeBtn.textContent = '×';
+                    removeBtn.onclick = () => removeFile(index);
+                    previewWrapper.appendChild(removeBtn);
 
-                            if (fileType.startsWith('image/')) {
-                                const img = document.createElement('img');
-                                img.className = 'file-preview-image';
-                                img.style.width = '100%';
-                                img.style.maxHeight = '120px';
-                                img.style.objectFit = 'cover';
-                                img.style.borderRadius = '4px';
-                                img.alt = `Preview of ${file.name}`;
+                    // Media preview
+                    const mediaDiv = document.createElement('div');
+                    mediaDiv.className = 'media-preview';
+                    mediaDiv.style.textAlign = 'center';
+                    mediaDiv.style.marginBottom = '8px';
 
-                                const reader = new FileReader();
-                                reader.onload = function (e) {
-                                    img.src = e.target.result;
-                                };
-                                reader.onerror = function() {
-                                    console.error('Error reading file:', file.name);
-                                };
-                                reader.readAsDataURL(file);
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.style.width = '100%';
+                        img.style.maxHeight = '120px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '4px';
+                        img.alt = `Preview of ${file.name}`;
 
-                                mediaDiv.appendChild(img);
-                            }
-                            else if (fileType.startsWith('video/')) {
-                                const video = document.createElement('video');
-                                video.className = 'file-preview-video';
-                                video.controls = true;
-                                video.style.width = '100%';
-                                video.style.maxHeight = '120px';
-                                video.style.borderRadius = '4px';
+                        const reader = new FileReader();
+                        reader.onload = (e) => img.src = e.target.result;
+                        reader.readAsDataURL(file);
+                        mediaDiv.appendChild(img);
+                    } else if (file.type.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.controls = true;
+                        video.style.width = '100%';
+                        video.style.maxHeight = '120px';
+                        video.style.borderRadius = '4px';
 
-                                const reader = new FileReader();
-                                reader.onload = function (e) {
-                                    video.src = e.target.result;
-                                };
-                                reader.onerror = function() {
-                                    console.error('Error reading video file:', file.name);
-                                };
-                                reader.readAsDataURL(file);
-
-                                mediaDiv.appendChild(video);
-                            } else {
-                                // For other file types, show file info
-                                const fileInfo = document.createElement('div');
-                                fileInfo.className = 'file-info';
-                                fileInfo.style.width = '100%';
-                                fileInfo.style.height = '80px';
-                                fileInfo.style.background = 'rgba(46, 125, 50, 0.1)';
-                                fileInfo.style.borderRadius = '4px';
-                                fileInfo.style.display = 'flex';
-                                fileInfo.style.alignItems = 'center';
-                                fileInfo.style.justifyContent = 'center';
-                                fileInfo.style.color = 'var(--text-secondary)';
-                                fileInfo.innerHTML = `📄 ${file.name.split('.').pop().toUpperCase()}<br><small>${(file.size / 1024 / 1024).toFixed(2)} MB</small>`;
-                                mediaDiv.appendChild(fileInfo);
-                            }
-
-                            previewWrapper.appendChild(mediaDiv);
-
-                            // Filename
-                            const filenameDiv = document.createElement('div');
-                            filenameDiv.className = 'filename';
-                            filenameDiv.style.fontSize = '0.85rem';
-                            filenameDiv.style.color = 'var(--text-primary)';
-                            filenameDiv.style.textAlign = 'center';
-                            filenameDiv.style.wordBreak = 'break-all';
-                            filenameDiv.textContent = file.name;
-                            previewWrapper.appendChild(filenameDiv);
-
-                            uploadedFilesDiv.appendChild(previewWrapper);
-                        });
+                        const reader = new FileReader();
+                        reader.onload = (e) => video.src = e.target.result;
+                        reader.readAsDataURL(file);
+                        mediaDiv.appendChild(video);
                     } else {
-                        uploadedFilesDiv.classList.remove('has-files');
-                        uploadedFilesDiv.style.display = 'none';
+                        const fileInfo = document.createElement('div');
+                        fileInfo.style.width = '100%';
+                        fileInfo.style.height = '80px';
+                        fileInfo.style.background = 'rgba(46, 125, 50, 0.1)';
+                        fileInfo.style.borderRadius = '4px';
+                        fileInfo.style.display = 'flex';
+                        fileInfo.style.alignItems = 'center';
+                        fileInfo.style.justifyContent = 'center';
+                        fileInfo.style.color = 'var(--text-secondary)';
+                        fileInfo.innerHTML = `📄 ${file.name.split('.').pop().toUpperCase()}<br><small>${(file.size / 1024 / 1024).toFixed(2)} MB</small>`;
+                        mediaDiv.appendChild(fileInfo);
                     }
-                } catch (error) {
-                    console.error('Error showing file preview:', error);
-                }
-            }
 
-            // Function to remove a newly added file
-            function removeNewFile(index) {
-                const fileInput = document.getElementById('media');
-                const uploadedFilesDiv = document.getElementById('uploadedFiles');
+                    previewWrapper.appendChild(mediaDiv);
 
-                if (fileInput && fileInput.files) {
-                    // Create a new FileList without the removed file
-                    const dt = new DataTransfer();
-                    const files = Array.from(fileInput.files);
+                    // Filename
+                    const filenameDiv = document.createElement('div');
+                    filenameDiv.style.fontSize = '0.85rem';
+                    filenameDiv.style.color = 'var(--text-primary)';
+                    filenameDiv.style.textAlign = 'center';
+                    filenameDiv.style.wordBreak = 'break-all';
+                    filenameDiv.textContent = file.name;
+                    previewWrapper.appendChild(filenameDiv);
 
-                    files.forEach((file, i) => {
-                        if (i !== index) {
-                            dt.items.add(file);
-                        }
-                    });
-
-                    fileInput.files = dt.files;
-
-                    // Update the preview
-                    if (dt.files.length > 0) {
-                        showFilePreview(dt.files);
-                        updateFileUploadText(dt.files);
-                    } else {
-                        uploadedFilesDiv.innerHTML = '';
-                        uploadedFilesDiv.classList.remove('has-files');
-                        uploadedFilesDiv.style.display = 'none';
-                        updateFileUploadText([]);
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error initializing file upload:', error);
-        }
-    }
-
-    // Initialize existing media display for edit mode
-    function initExistingMedia() {
-        try {
-            const existingMediaDiv = document.getElementById('existingMedia');
-            if (!existingMediaDiv) {
-                return; // Not in edit mode or no existing media
-            }
-
-            // Add functionality for remove buttons
-            const removeButtons = existingMediaDiv.querySelectorAll('.remove-file-btn');
-
-            removeButtons.forEach((button) => {
-                button.addEventListener('click', function() {
-                    const filename = this.getAttribute('data-filename');
-                    const fileItem = this.closest('.existing-file-item');
-                    const checkbox = fileItem.querySelector('input[type="checkbox"]');
-
-                    if (confirm(`Are you sure you want to remove "${filename}"?`)) {
-                        // Mark for removal by checking the hidden checkbox
-                        checkbox.checked = true;
-
-                        // Add visual indication that file will be removed
-                        fileItem.style.opacity = '0.5';
-                        fileItem.style.position = 'relative';
-
-                        // Add "Will be removed" overlay
-                        const overlay = document.createElement('div');
-                        overlay.style.position = 'absolute';
-                        overlay.style.top = '0';
-                        overlay.style.left = '0';
-                        overlay.style.right = '0';
-                        overlay.style.bottom = '0';
-                        overlay.style.background = 'rgba(231, 76, 60, 0.8)';
-                        overlay.style.color = 'white';
-                        overlay.style.display = 'flex';
-                        overlay.style.alignItems = 'center';
-                        overlay.style.justifyContent = 'center';
-                        overlay.style.borderRadius = '8px';
-                        overlay.style.fontWeight = 'bold';
-                        overlay.innerHTML = 'Will be removed<br><button type="button" onclick="undoRemove(this)" style="margin-top: 5px; padding: 2px 8px; background: white; color: #e74c3c; border: none; border-radius: 3px; cursor: pointer;">Undo</button>';
-                        fileItem.appendChild(overlay);
-
-                        // Change remove button to undo
-                        this.textContent = '↶';
-                        this.style.background = '#f39c12';
-                        this.onclick = () => undoRemove(this);
-                    }
+                    uploadedFilesDiv.appendChild(previewWrapper);
                 });
+
+                // Update upload area text
+                const text = files.length === 1 ? `1 file selected: ${files[0].name}` : `${files.length} files selected`;
+                uploadArea.querySelector('p').textContent = text;
+            } else {
+                uploadedFilesDiv.classList.remove('has-files');
+                uploadedFilesDiv.style.display = 'none';
+                uploadArea.querySelector('p').textContent = 'Click to upload or drag and drop';
+            }
+        }
+
+        function removeFile(index) {
+            const dt = new DataTransfer();
+            const files = Array.from(fileInput.files);
+            files.forEach((file, i) => {
+                if (i !== index) dt.items.add(file);
             });
-
-        } catch (error) {
-            console.error('Error initializing existing media:', error);
-        }
-    }
-
-    // Function to undo file removal
-    function undoRemove(button) {
-        const fileItem = button.closest('.existing-file-item');
-        const checkbox = fileItem.querySelector('input[type="checkbox"]');
-        const overlay = fileItem.querySelector('div[style*="rgba(231, 76, 60, 0.8)"]');
-
-        // Uncheck the hidden checkbox
-        checkbox.checked = false;
-
-        // Remove visual indication
-        fileItem.style.opacity = '1';
-
-        // Remove overlay
-        if (overlay) {
-            overlay.remove();
+            fileInput.files = dt.files;
+            showFilePreview(dt.files);
         }
 
-        // Reset remove button
-        const removeBtn = fileItem.querySelector('.remove-file-btn');
-        removeBtn.textContent = '×';
-        removeBtn.style.background = '#e74c3c';
-        removeBtn.onclick = null; // Reset click handler
-    }
+        // Existing media removal
+        document.querySelectorAll('.remove-file-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filename = this.dataset.filename;
+                if (confirm(`Remove "${filename}"?`)) {
+                    this.closest('.existing-file-item').querySelector('input[type="checkbox"]').checked = true;
+                    this.closest('.existing-file-item').style.opacity = '0.5';
+                    this.textContent = '↶';
+                    this.style.background = '#f39c12';
+                }
+            });
+        });
+    });
 </script>
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

@@ -159,11 +159,16 @@
             <div class="checkbox-container">
                 <label for="terms" class="checkbox-label required">
                     <input type="checkbox" id="terms" name="terms" required>
-                    I agree to the <a href="#" class="terms-link">terms and conditions</a>
+                    I agree to the <a href="<?php echo URLROOT; ?>/pages/terms/disease" class="terms-link" target="_blank">terms and conditions</a>
                 </label>
             </div>
         </div>
         
+        <!-- Required fields notice -->
+        <div class="required-fields-notice" role="alert" aria-live="polite">
+            <span class="required-indicator" aria-hidden="true">*</span> All fields marked with <span class="required-indicator" aria-hidden="true">*</span> are required
+        </div>
+
         <button type="submit" class="btn btn-primary"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update Report' : 'Submit Report'; ?></button>
     </form>
 </div>
@@ -194,7 +199,6 @@
         color: var(--primary);
     }
     
-    /* Fix for scrolling issue - add top padding to main content */
     .main-content {
         padding-top: 30px;
     }
@@ -380,7 +384,7 @@
     }
     
     .btn-primary:hover {
-        background: var(--primary-dark);
+        background: red;
     }
     
     /* Custom checkbox styling */
@@ -430,6 +434,19 @@
         content: " *";
         color: #e74c3c;
         font-weight: bold;
+    }
+
+    .required-fields-notice {
+        border-radius: 8px;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        color: black;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .required-indicator {
+        color: #e74c3c;
     }
     
     @media (max-width: 768px) {

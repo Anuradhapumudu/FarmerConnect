@@ -1,0 +1,21 @@
+/* Hide Google Translate frame and banner */
+    .goog-te-banner-frame.skiptranslate,
+    #goog-gt-tt,
+    .goog-te-balloon-frame,
+    .goog-te-spinner-pos,
+    [class^="VIpgJd-ZVi9od-"][class*="OEVmcd"] {
+      display: none !important;
+    }
+
+    body {
+      top: 0 !important;
+    }
+
+    #google_translate_element {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+    }

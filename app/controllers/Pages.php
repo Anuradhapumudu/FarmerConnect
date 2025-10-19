@@ -20,5 +20,13 @@
             ];
             $this->view('v_about', $data);
         }
+
+        public function terms(){
+            $this->view('terms/disease_terms');
+        }
+
+        public function complain(){
+            $this->view('terms/complain_terms');
+        }
     }
 ?>

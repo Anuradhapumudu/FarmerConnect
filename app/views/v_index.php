@@ -24,7 +24,11 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/homepage.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/translate.css">
+
     <script src="<?php echo URLROOT; ?>/js/homepage.js" defer></script>
+    <script src="<?php echo URLROOT; ?>/js/translate.js" defer></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
 </head>
 
 <body>
@@ -65,6 +69,9 @@
                     <span>Register</span>
                 </a>
             </div>
+
+            <!-- Language Selector -->
+            <?php require APPROOT . '/views/inc/components/translate.php'; ?>
         </div>
     </header>
 
