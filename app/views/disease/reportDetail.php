@@ -166,6 +166,140 @@
             </div>
         <?php endif; ?>
 
+        <!-- Officer Responses Section -->
+        <?php if (!empty($data['officer_responses'])): ?>
+            <div class="responses-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-user-md"></i> Officer Responses (<?php echo count($data['officer_responses']); ?>)</h3>
+                </div>
+                <div class="responses-content">
+                    <?php foreach ($data['officer_responses'] as $response): ?>
+                        <div class="response-card">
+                            <div class="response-header">
+                                <div class="officer-info">
+                                    <i class="fas fa-user-md"></i>
+                                    <span class="officer-label">Agricultural Officer</span>
+                                </div>
+                                <div class="response-date">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <?php echo date('M d, Y \a\t g:i A', strtotime($response->created_at)); ?>
+                                </div>
+                            </div>
+                            <div class="response-message">
+                                <div class="message-content">
+                                    <?php echo nl2br(htmlspecialchars($response->response_message)); ?>
+                                </div>
+                                <?php if (!empty($response->response_media)): ?>
+                                    <div class="response-media">
+                                        <div class="media-label">
+                                            <i class="fas fa-paperclip"></i> Attached Files:
+                                        </div>
+                                        <div class="media-files">
+                                            <?php
+                                            $mediaFiles = explode(',', $response->response_media);
+                                            foreach ($mediaFiles as $filename):
+                                                $filename = trim($filename);
+                                                if (empty($filename)) continue;
+                                                $fileUrl = URLROOT . '/officer/viewResponseMedia/' . $response->id . '/' . urlencode($filename);
+                                                $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                                                $isImage = in_array($fileExt, ['jpg', 'jpeg', 'png', 'gif']);
+                                                $isVideo = in_array($fileExt, ['mp4', 'avi', 'mov', 'wmv']);
+                                            ?>
+                                                <div class="response-media-item" onclick="openFullscreenModal('<?php echo $fileUrl; ?>', '<?php echo $isImage ? 'image' : ($isVideo ? 'video' : 'other'); ?>', '<?php echo $fileExt; ?>', '<?php echo htmlspecialchars($filename); ?>')">
+                                                    <?php if ($isImage): ?>
+                                                        <img src="<?php echo $fileUrl; ?>" alt="Response media" loading="lazy">
+                                                    <?php elseif ($isVideo): ?>
+                                                        <video muted>
+                                                            <source src="<?php echo $fileUrl; ?>" type="video/<?php echo $fileExt; ?>">
+                                                            <i class="fas fa-play-circle media-play-icon"></i>
+                                                        </video>
+                                                    <?php else: ?>
+                                                        <div class="file-preview">
+                                                            <div class="file-icon"><i class="fas fa-file"></i></div>
+                                                            <span><?php echo htmlspecialchars($filename); ?></span>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                    <div class="media-badge"><?php echo strtoupper($fileExt); ?></div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="no-responses-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-user-md"></i> Officer Responses</h3>
+                </div>
+                <div class="no-responses-content">
+                    <div class="no-responses-icon">
+                        <?php
+                        switch ($report->status) {
+                            case 'pending':
+                                echo '<i class="fas fa-clock text-warning"></i>';
+                                break;
+                            case 'under_review':
+                                echo '<i class="fas fa-search text-info"></i>';
+                                break;
+                            case 'resolved':
+                                echo '<i class="fas fa-check-circle text-success"></i>';
+                                break;
+                            case 'rejected':
+                                echo '<i class="fas fa-times-circle text-danger"></i>';
+                                break;
+                            default:
+                                echo '<i class="fas fa-clock text-secondary"></i>';
+                        }
+                        ?>
+                    </div>
+                    <h4>
+                        <?php
+                        switch ($report->status) {
+                            case 'pending':
+                                echo 'Report Submitted';
+                                break;
+                            case 'under_review':
+                                echo 'Under Review';
+                                break;
+                            case 'resolved':
+                                echo 'Report Resolved';
+                                break;
+                            case 'rejected':
+                                echo 'Report Rejected';
+                                break;
+                            default:
+                                echo 'Status Unknown';
+                        }
+                        ?>
+                    </h4>
+                    <p>
+                        <?php
+                        switch ($report->status) {
+                            case 'pending':
+                                echo 'Your report has been submitted and is waiting to be reviewed by agricultural officers. You will receive a response soon.';
+                                break;
+                            case 'under_review':
+                                echo 'Your report is currently being reviewed by agricultural officers. They will provide recommendations or solutions shortly.';
+                                break;
+                            case 'resolved':
+                                echo 'This report has been resolved. However, no specific response was recorded. Please contact the agricultural office for more details.';
+                                break;
+                            case 'rejected':
+                                echo 'This report was not accepted for processing. Please contact the agricultural office for more information about the rejection.';
+                                break;
+                            default:
+                                echo 'The status of your report is currently unknown. Please contact the agricultural office for assistance.';
+                        }
+                        ?>
+                    </p>
+                </div>
+            </div>
+        <?php endif; ?>
+
 
     <?php elseif (!empty($data['reports'])): ?>
         <div class="reports-table-container">
@@ -958,6 +1092,171 @@
         word-break: break-word;
     }
 
+    /* Officer Responses Section */
+    .responses-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 24px;
+        margin-bottom: 30px;
+    }
+
+    .responses-content {
+        background: rgba(46, 125, 50, 0.02);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .response-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(46, 125, 50, 0.1);
+        overflow: hidden;
+    }
+
+    .response-header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .officer-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+    }
+
+    .officer-info i {
+        font-size: 1.1rem;
+    }
+
+    .officer-label {
+        font-size: 0.9rem;
+    }
+
+    .response-date {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+    .response-date i {
+        font-size: 0.8rem;
+    }
+
+    .response-message {
+        padding: 20px;
+    }
+
+    .message-content {
+        color: var(--text-primary);
+        line-height: 1.6;
+        font-size: 1rem;
+        margin-bottom: 16px;
+    }
+
+    .response-media {
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding-top: 16px;
+    }
+
+    .media-label {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .media-files {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+    }
+
+    .response-media-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 1;
+        background: rgba(46, 125, 50, 0.05);
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid rgba(46, 125, 50, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .response-media-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border-color: var(--primary);
+    }
+
+    .response-media-item img, .response-media-item video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+
+    .response-media-item:hover img, .response-media-item:hover video {
+        transform: scale(1.05);
+    }
+
+    .no-responses-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 24px;
+        margin-bottom: 30px;
+    }
+
+    .no-responses-content {
+        background: rgba(46, 125, 50, 0.02);
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        border: 2px dashed rgba(46, 125, 50, 0.2);
+    }
+
+    .no-responses-icon {
+        font-size: 3rem;
+        color: #f57c00;
+        margin-bottom: 16px;
+        opacity: 0.8;
+    }
+
+    .no-responses-content h4 {
+        color: var(--text-primary);
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .no-responses-content p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin: 0;
+    }
+
     .btn {
         padding: 10px 16px;
         border-radius: 8px;
@@ -1297,6 +1596,30 @@
         .report-actions .btn {
             flex: 1;
             text-align: center;
+        }
+
+        .responses-content {
+            padding: 15px;
+        }
+
+        .response-header {
+            padding: 12px 16px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .response-message {
+            padding: 16px;
+        }
+
+        .media-files {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .no-responses-content {
+            padding: 30px 15px;
         }
 
         .modal-content {

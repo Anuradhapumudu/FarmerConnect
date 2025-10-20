@@ -23,7 +23,7 @@ class Disease extends Controller{
             'affectedArea_error' => '',
             'terms_error' => ''
         ];
-        $this->view('disease', $data);
+        $this->view('disease/disease', $data);
     }
 
     // Show form to search/view reports
@@ -57,7 +57,12 @@ class Disease extends Controller{
             ];
         }
 
-        $this->view('viewReports', $data);
+        // Add officer responses to each report
+        foreach ($data['reports'] as &$report) {
+            $report->officer_responses = $this->model('M_disease')->getOfficerResponses($report->report_code);
+        }
+
+        $this->view('disease/viewReports', $data);
     }
 
     // View all submitted reports in table format or single report details
@@ -72,8 +77,12 @@ class Disease extends Controller{
                 exit();
             }
 
+            // Get officer responses for this report
+            $officer_responses = $this->model('M_disease')->getOfficerResponses($reportCode);
+
             $data = [
                 'report' => $report,
+                'officer_responses' => $officer_responses,
                 'singleReport' => true,
                 'message' => 'Report details for ' . $reportCode
             ];
@@ -87,7 +96,7 @@ class Disease extends Controller{
             ];
         }
 
-        $this->view('reportDetail', $data);
+        $this->view('disease/reportDetail', $data);
     }
 
     // Show edit form for updating report - UPDATED
@@ -131,7 +140,7 @@ class Disease extends Controller{
             'isEdit' => true
         ];
 
-        $this->view('disease', $data);
+        $this->view('disease/disease', $data);
     }
 
     // Update report - UPDATED
@@ -336,7 +345,7 @@ class Disease extends Controller{
                 }
 
                 // Show form with errors
-                $this->view('disease', $data);
+                $this->view('disease/disease', $data);
 
             } catch (Exception $e) {
                 error_log("Exception in updateReport: " . $e->getMessage());
@@ -418,7 +427,7 @@ class Disease extends Controller{
             'report' => $report
         ];
 
-        $this->view('confirmDelete', $data);
+        $this->view('disease/confirmDelete', $data);
     }
 
     // Display media files from file system - UPDATED
@@ -685,7 +694,7 @@ class Disease extends Controller{
                             }
                         }
                         $data['media_error'] = 'Database insertion failed. Please try again.';
-                        $this->view('disease', $data);
+                        $this->view('disease/disease', $data);
                     }
                 } else {
                     // Validation errors found, clean up any uploaded files
@@ -698,7 +707,7 @@ class Disease extends Controller{
                     }
 
                     // Redisplay form with errors
-                    $this->view('disease', $data);
+                    $this->view('disease/disease', $data);
                 }
 
             } catch (Exception $e) {
@@ -728,7 +737,7 @@ class Disease extends Controller{
                 'affectedArea_error' => '',
                 'terms_error' => ''
             ];
-            $this->view('disease', $data);
+            $this->view('disease/disease', $data);
         }
     }
 
@@ -752,7 +761,7 @@ class Disease extends Controller{
             'report' => $report
         ];
 
-        $this->view('success', $data);
+        $this->view('disease/success', $data);
     }
 
     // Helper method to get MIME type from file extension

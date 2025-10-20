@@ -1,45 +1,52 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 <div class="content-card">
     <div class="content-header">
-        <h1>🐛 Disease Detector</h1>
-        <p class="content-subtitle"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update your disease report' : 'Report plant diseases to help protect our agricultural community'; ?></p>
+        <h1>� Complain Report</h1>
+        <p class="content-subtitle"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update your complaint' : 'Submit your complaint to help us improve our services and address your concerns'; ?></p>
     </div>
 
-    <!-- Report ID display for edit mode -->
+    <!-- Complaint ID display for edit mode -->
     <?php if (isset($data['isEdit']) && $data['isEdit']): ?>
         <div class="report-id-display">
-            <label>Editing Report:</label>
-            <span><?php echo htmlspecialchars($data['reportCode']); ?></span>
+            <label>Editing Complaint:</label>
+            <span><?php echo htmlspecialchars($data['complainCode']); ?></span>
         </div>
     <?php endif; ?>
 
-    <form action="<?php echo URLROOT; ?>/disease/<?php echo isset($data['isEdit']) && $data['isEdit'] ? 'updateReport' : 'submit'; ?>" method="POST" id="diseaseReportForm" class="framework-form" enctype="multipart/form-data">
+    <form action="<?php echo URLROOT; ?>/complain/<?php echo isset($data['isEdit']) && $data['isEdit'] ? 'updateComplain' : 'submit'; ?>" method="POST" id="complainReportForm" class="framework-form" enctype="multipart/form-data">
         <!-- Hidden inputs for edit mode -->
         <?php if (isset($data['isEdit']) && $data['isEdit']): ?>
-            <input type="hidden" name="reportCode" value="<?php echo $data['reportCode']; ?>">
+            <input type="hidden" name="complainCode" value="<?php echo $data['complainCode']; ?>">
             <input type="hidden" name="existingMedia" value="<?php echo $data['existingMedia']; ?>">
         <?php endif; ?>
         <input type="hidden" name="submission_timestamp" value="">
 
         <div class="form-group">
-            <label for="farmerNIC" class="required">Farmer NIC Number</label>
-            <input type="text" id="farmerNIC" name="farmerNIC" 
-                   placeholder="Enter your National Identity Card number" value="<?php echo $data['farmerNIC']; ?>">
-            <span class="error"><?php echo $data['farmerNIC_error']; ?></span>
+            <label for="fullName" class="required">Full Name</label>
+            <input type="text" id="fullName" name="fullName" 
+                   placeholder="Enter your full name" value="<?php echo $data['fullName']; ?>">
+            <span class="error"><?php echo $data['fullName_error']; ?></span>
         </div>
         
         <div class="form-group">
-            <label for="plrNumber" class="required">PLR Number</label>
-            <input type="text" id="plrNumber" name="plrNumber" 
-                   placeholder="Enter your Planters Registration Number" value="<?php echo $data['plrNumber']; ?>">
-            <span class="error"><?php echo $data['plrNumber_error']; ?></span>
+            <label for="email" class="required">Email Address</label>
+            <input type="email" id="email" name="email" 
+                   placeholder="Enter your email address" value="<?php echo $data['email']; ?>">
+            <span class="error"><?php echo $data['email_error']; ?></span>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone" class="required">Phone Number</label>
+            <input type="tel" id="phone" name="phone" 
+                   placeholder="Enter your phone number" value="<?php echo $data['phone']; ?>">
+            <span class="error"><?php echo $data['phone_error']; ?></span>
         </div>
         
         <div class="form-group-split">
             <div class="form-group-half">
-                <label for="observationDate" class="required">Date of Observation</label>
-                <input type="date" id="observationDate" name="observationDate" value="<?php echo $data['observationDate']; ?>">
-                <span class="error"><?php echo $data['observationDate_error']; ?></span>
+                <label for="incidentDate" class="required">Date of Incident</label>
+                <input type="date" id="incidentDate" name="incidentDate" value="<?php echo $data['incidentDate']; ?>">
+                <span class="error"><?php echo $data['incidentDate_error']; ?></span>
             </div>
             <div class="form-group-half">
                 <label for="todayDate">Today's Date</label>
@@ -48,28 +55,43 @@
         </div>
         
         <div class="form-group">
-            <label for="title" class="required">Report Title</label>
-            <input type="text" id="title" name="title" 
-                   placeholder="Brief description of the issue" value="<?php echo $data['title']; ?>">
-            <span class="error"><?php echo $data['title_error']; ?></span>
+            <label for="category" class="required">Complaint Category</label>
+            <select id="category" name="category">
+                <option value="">Select a category</option>
+                <option value="service" <?php echo ($data['category'] == 'service') ? 'selected' : ''; ?>>Service Quality</option>
+                <option value="product" <?php echo ($data['category'] == 'product') ? 'selected' : ''; ?>>Product Issue</option>
+                <option value="delivery" <?php echo ($data['category'] == 'delivery') ? 'selected' : ''; ?>>Delivery Problem</option>
+                <option value="payment" <?php echo ($data['category'] == 'payment') ? 'selected' : ''; ?>>Payment Issue</option>
+                <option value="staff" <?php echo ($data['category'] == 'staff') ? 'selected' : ''; ?>>Staff Behavior</option>
+                <option value="technical" <?php echo ($data['category'] == 'technical') ? 'selected' : ''; ?>>Technical Support</option>
+                <option value="other" <?php echo ($data['category'] == 'other') ? 'selected' : ''; ?>>Other</option>
+            </select>
+            <span class="error"><?php echo $data['category_error']; ?></span>
+        </div>
+        
+        <div class="form-group">
+            <label for="subject" class="required">Complaint Subject</label>
+            <input type="text" id="subject" name="subject" 
+                   placeholder="Brief summary of your complaint" value="<?php echo $data['subject']; ?>">
+            <span class="error"><?php echo $data['subject_error']; ?></span>
         </div>
         
         <div class="form-group">
             <label for="description" class="required">Detailed Description</label>
             <textarea id="description" name="description" 
-                placeholder="Describe the symptoms, patterns, and any other relevant details"><?php echo $data['description']; ?></textarea>
+                placeholder="Describe your complaint in detail, including what happened, when, and how it affected you"><?php echo $data['description']; ?></textarea>
             <span class="error"><?php echo $data['description_error']; ?></span>
         </div>
         
         <div class="form-group">
-            <label for="media">Upload Images / Video</label>
+            <label for="media">Upload Supporting Documents / Images</label>
             <div class="file-upload" id="mediaUploadArea">
                 <div>
                     <i class="upload-icon"><img style="width: 30px; height: 30px;" src="https://cdn-icons-png.flaticon.com/128/10024/10024248.png"></i>
                     <p>Click to upload or drag and drop</p>
-                    <p class="upload-subtext">PNG, JPG, GIF, MP4 up to 10MB</p>
+                    <p class="upload-subtext">PNG, JPG, PDF, DOC up to 10MB (optional)</p>
                 </div>
-                <input type="file" id="media" name="media[]" accept="image/*,video/*" hidden multiple>
+                <input type="file" id="media" name="media[]" accept="image/*,video/*,.pdf,.doc,.docx" hidden multiple>
             </div>
             <span class="error"><?php echo $data['media_error']; ?></span>
             <div class="uploaded-files" id="uploadedFiles" style="margin-top: 10px;"></div>
@@ -77,14 +99,14 @@
             <!-- Existing media files for edit mode -->
             <?php if (isset($data['isEdit']) && $data['isEdit'] && !empty($data['existingMedia'])): ?>
                 <div class="existing-media" id="existingMedia" style="margin-top: 15px;">
-                    <h4>Current Media Files:</h4>
+                    <h4>Current Files:</h4>
                     <div class="existing-files-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 10px;">
                         <?php
                         $existingFiles = explode(',', $data['existingMedia']);
                         foreach ($existingFiles as $index => $filename):
                             $filename = trim($filename);
                             if (empty($filename)) continue;
-                            $fileUrl = URLROOT . '/disease/viewMedia/' . $data['reportCode'] . '/' . urlencode($filename);
+                            $fileUrl = URLROOT . '/complain/viewMedia/' . $data['complainCode'] . '/' . urlencode($filename);
                             $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                             $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']);
                             $isVideo = in_array($fileExtension, ['mp4', 'avi', 'mov', 'wmv']);
@@ -130,37 +152,40 @@
         </div>
         
         <div class="form-group">
-            <label class="required">Severity Level</label>
+            <label class="required">Priority Level</label>
             <div class="radio-group">
                 <label class="radio-option severity-low">
-                    <input type="radio" name="severity" value="low" <?php echo ($data['severity'] == 'low') ? 'checked' : ''; ?>>
+                    <input type="radio" name="priority" value="low" <?php echo ($data['priority'] == 'low') ? 'checked' : ''; ?>>
                     Low
                 </label>
                 <label class="radio-option severity-medium">
-                    <input type="radio" name="severity" value="medium" <?php echo ($data['severity'] == 'medium') ? 'checked' : ''; ?>>
+                    <input type="radio" name="priority" value="medium" <?php echo ($data['priority'] == 'medium') ? 'checked' : ''; ?>>
                     Medium
                 </label>
                 <label class="radio-option severity-high">
-                    <input type="radio" name="severity" value="high" <?php echo ($data['severity'] == 'high') ? 'checked' : ''; ?>>
+                    <input type="radio" name="priority" value="high" <?php echo ($data['priority'] == 'high') ? 'checked' : ''; ?>>
                     High
                 </label>
+                <label class="radio-option severity-high">
+                    <input type="radio" name="priority" value="urgent" <?php echo ($data['priority'] == 'urgent') ? 'checked' : ''; ?>>
+                    Urgent
+                </label>
             </div>
-            <span class="error"><?php echo $data['severity_error']; ?></span>
+            <span class="error"><?php echo $data['priority_error']; ?></span>
         </div>
         
         <div class="form-group">
-            <label for="affectedArea" class="required">Affected Area (in acres)</label>
-            <input type="number" id="affectedArea" name="affectedArea" 
-                   placeholder="Enter the size of the affected area" min="0" step="0.1" value="<?php echo $data['affectedArea']; ?>">
-            <span class="error"><?php echo $data['affectedArea_error']; ?></span>
+            <label for="expectedResolution">Expected Resolution</label>
+            <textarea id="expectedResolution" name="expectedResolution" 
+                placeholder="What outcome are you hoping for? (optional)"><?php echo $data['expectedResolution']; ?></textarea>
+            <span class="error"><?php echo $data['expectedResolution_error']; ?></span>
         </div>
         
         <div class="form-group">
             <div class="checkbox-container">
                 <label for="terms" class="checkbox-label required">
                     <input type="checkbox" id="terms" name="terms" required>
-                    I agree to the <a href="<?php echo URLROOT; ?>/pages/terms/disease" class="terms-link" target="_blank">terms and conditions</a>
-                </label>
+                    I agree to the <a href="<?php echo URLROOT; ?>/pages/complain" class="terms-link" target="_blank">terms and conditions</a>
             </div>
         </div>
         
@@ -169,7 +194,7 @@
             <span class="required-indicator" aria-hidden="true">*</span> All fields marked with <span class="required-indicator" aria-hidden="true">*</span> are required
         </div>
 
-        <button type="submit" class="btn btn-primary"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update Report' : 'Submit Report'; ?></button>
+        <button type="submit" class="btn btn-primary"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update Complaint' : 'Submit Complaint'; ?></button>
     </form>
 </div>
 
@@ -482,9 +507,9 @@
         // Set dates
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('todayDate').value = today;
-        if (!document.getElementById('observationDate').value) {
-            document.getElementById('observationDate').value = today;
-            document.getElementById('observationDate').max = today;
+        if (!document.getElementById('incidentDate').value) {
+            document.getElementById('incidentDate').value = today;
+            document.getElementById('incidentDate').max = today;
         }
 
         // File upload with preview

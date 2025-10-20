@@ -46,12 +46,11 @@
       <p>Buy and sell produce, equipment, and services with ease.</p>
     </a>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/complain/farmerComplaints" class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>
       <h3>Complain</h3>
       <p>Report issues directly to the relevant agricultural authorities.</p>
-    </div>
-  </div>
+    </a>
 </section>
 
 <?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>

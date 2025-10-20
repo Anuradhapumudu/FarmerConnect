@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/styles.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
+  <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/translate.css">
 </head>
 
 <body class="minimal-layout">
@@ -22,7 +23,7 @@
   <!-- Header -->
   <header>
     <div class="header-container">
-      <div class="logo-container">
+      <div class="logo-container notranslate">
         <a href="<?php echo URLROOT; ?>" class="logo">
           <div class="logo-icon">
             <img src="<?php echo URLROOT; ?>/img/logo.png" alt="FarmerConnect.lk Logo" width="50" height="50">
@@ -33,6 +34,9 @@
 
       <nav class="navbar">
         <div class="nav-links" id="navLinks">
+          <!-- translator -->
+          <?php require APPROOT . '/views/inc/components/translate.php'; ?>
+          <!-- main links -->
           <a href="<?php echo URLROOT; ?>/farmerDashboard"><i class="fa fa-home"></i> Home</a>
           <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
           <a href="<?php echo URLROOT; ?>/Help/help"><i class="fa fa-question-circle"></i> Help</a>

@@ -75,6 +75,7 @@
                         <th>Severity</th>
                         <th>Status</th>
                         <th>Date & Area</th>
+                        <th>Officer Response</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -129,6 +130,29 @@
                                 <div class="date-info">
                                     <div><?php echo date('M d, Y', strtotime($report->observationDate)); ?></div>
                                     <small><?php echo number_format($report->affectedArea, 1); ?> acres</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="officer-response">
+                                    <?php if (!empty($report->officer_responses)): ?>
+                                        <?php $latest_response = end($report->officer_responses); ?>
+                                        <div class="response-preview">
+                                            <i class="fas fa-user-md text-success"></i>
+                                            <small class="text-muted">
+                                                <?php echo htmlspecialchars(substr($latest_response->response_message, 0, 50)); ?>
+                                                <?php if (strlen($latest_response->response_message) > 50): ?>...<?php endif; ?>
+                                            </small>
+                                            <br>
+                                            <small class="text-secondary">
+                                                <?php echo date('M d, Y H:i', strtotime($latest_response->created_at)); ?>
+                                            </small>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="no-response">
+                                            <i class="fas fa-clock text-warning"></i>
+                                            <small class="text-muted">Pending</small>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                             <td>
@@ -415,6 +439,31 @@
     .date-info small {
         color: var(--text-secondary);
         font-size: 13px;
+    }
+
+    .officer-response {
+        max-width: 200px;
+    }
+
+    .response-preview {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .response-preview i {
+        font-size: 12px;
+    }
+
+    .no-response {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #f57c00;
+    }
+
+    .no-response i {
+        font-size: 12px;
     }
 
     .action-buttons {
@@ -726,6 +775,14 @@
         .action-buttons {
             flex-direction: column;
             gap: 4px;
+        }
+
+        .officer-response {
+            max-width: 150px;
+        }
+
+        .response-preview small {
+            font-size: 11px;
         }
 
         .btn {

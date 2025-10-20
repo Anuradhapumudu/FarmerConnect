@@ -29,11 +29,11 @@
       <p>View Yellow case Reports and Reply to them.</p>
     </div>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/officerDashboard/viewDiseaseReports" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
-      <p>View Disease Reports and Reply to them.</p>
-    </div>
+      <p>Review and manage submitted disease reports from farmers.</p>
+    </a>
 
     <div class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>

@@ -592,5 +592,49 @@ class M_disease {
             return [];
         }
     }
+
+    // Submit officer response/recommendation
+    public function submitOfficerResponse($reportCode, $officerId, $message, $media = null) {
+        try {
+            error_log("submitOfficerResponse called with: reportCode=$reportCode, officerId=$officerId, message=$message, media=$media");
+
+            $this->db->query("INSERT INTO disease_officer_responses (report_code, officer_id, response_message, response_media, created_at, updated_at)
+                              VALUES (:report_code, :officer_id, :response_message, :response_media, NOW(), NOW())");
+
+            $this->db->bind(':report_code', $reportCode);
+            $this->db->bind(':officer_id', $officerId);
+            $this->db->bind(':response_message', $message);
+            $this->db->bind(':response_media', $media);
+
+            $result = $this->db->execute();
+            error_log("Database execution result: " . ($result ? 'true' : 'false'));
+
+            if ($result) {
+                // Verify the insert worked
+                $this->db->query("SELECT response_media FROM disease_officer_responses WHERE report_code = :report_code AND officer_id = :officer_id ORDER BY created_at DESC LIMIT 1");
+                $this->db->bind(':report_code', $reportCode);
+                $this->db->bind(':officer_id', $officerId);
+                $inserted = $this->db->single();
+                error_log("Inserted record media field: " . ($inserted ? $inserted->response_media : 'null'));
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            error_log("Exception in submitOfficerResponse: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Get officer responses for a report
+    public function getOfficerResponses($reportCode) {
+        try {
+            $this->db->query("SELECT * FROM disease_officer_responses WHERE report_code = :report_code ORDER BY created_at DESC");
+            $this->db->bind(':report_code', $reportCode);
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            error_log("Exception in getOfficerResponses: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 ?>

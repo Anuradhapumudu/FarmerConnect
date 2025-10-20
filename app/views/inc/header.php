@@ -42,7 +42,6 @@
         <div class="nav-links" id="navLinks">
           <!-- translator -->
           <?php require APPROOT . '/views/inc/components/translate.php'; ?>
-          </script>
           <!-- main links -->
           <a href="<?php echo URLROOT; ?>/farmerdashboard"><i class="fa fa-home"></i> Home</a>
           <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
