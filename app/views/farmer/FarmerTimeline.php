@@ -172,7 +172,6 @@
 
 </main>
 
-<?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
 
 <!-- JavaScript -->
@@ -181,25 +180,30 @@
     const task = circleEl.closest('.task');
     const menu = task.querySelector('.status-selector');
 
-    // Close others
+    // Close all other open menus
     document.querySelectorAll('.status-selector').forEach(m => {
       if (m !== menu) m.style.display = 'none';
     });
 
-    // Toggle current
+    // Toggle the current one
     menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
   }
 
   function setStatus(buttonEl, statusClass) {
     const task = buttonEl.closest('.task');
 
-    // Remove old status
+    // Remove any existing status
     task.classList.remove('done', 'problem', 'pending');
 
-    // Add new
+    // Add new one
     task.classList.add(statusClass);
 
     // Hide the selector
     task.querySelector('.status-selector').style.display = 'none';
+
+    // ✅ Redirect farmer if “Have Problem” clicked
+    if (statusClass === 'problem') {
+      window.location.href = "<?php echo URLROOT; ?>/YellowCaseList";
+    }
   }
 </script>

@@ -17,42 +17,42 @@
  
   <div class="features_block">
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/officer/officertimeline" class="feature">
       <i class="fa-solid fa-clock fa-2x"></i>
       <h3>Timeline</h3>
-      <p>Track planting, harvesting, and seasonal activities efficiently.</p>
-    </div>
+      <p>View assinged farmers timelines.</p>
+    </a>
 
     <div class="feature">
       <i class="fa-solid fa-calculator fa-2x"></i>
-      <h3>Fertilizer Calculator</h3>
-      <p>Get accurate fertilizer recommendations based on crop and soil.</p>
+      <h3>Yellow Case Reports</h3>
+      <p>View Yellow case Reports and Reply to them.</p>
     </div>
 
     <div class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
-      <p>Stay informed about pest and crop disease outbreaks in your area.</p>
+      <p>View Disease Reports and Reply to them.</p>
     </div>
 
     <div class="feature">
-      <i class="fa-solid fa-book-open fa-2x"></i>
-      <h3>Knowledge Center</h3>
-      <p>Access guides, tutorials, and expert advice on agriculture.</p>
+      <i class="fa-solid fa-comments fa-2x"></i>
+      <h3>Complain Reports</h3>
+      <p>View Complaint Reports and Reply to them.</p>
     </div>
 
     <a href="<?php echo URLROOT; ?>/marketplace" class="feature">
 
-      <i class="fa-solid fa-store fa-2x"></i>
-      <h3>Marketplace</h3>
-      <p>Buy and sell produce, equipment, and services with ease.</p>
+      <i class="fa-solid fa-book-open fa-2x"></i>
+      <h3>Knowledge Center</h3>
+      <p>Make articles to Knowledge center.</p>
    
     </a>
 
     <div class="feature">
-      <i class="fa-solid fa-comments fa-2x"></i>
-      <h3>Complain</h3>
-      <p>Report issues directly to the relevant agricultural authorities.</p>
+      <i class="fa fa-bullhorn"></i>
+      <h3>Announcements</h3>
+      <p>Make Announcements for farmers.</p>
     </div>
 
  

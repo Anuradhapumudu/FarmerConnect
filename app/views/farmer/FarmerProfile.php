@@ -416,5 +416,5 @@ function deletePaddy() {
 
 </script>
 
-<?php require_once APPROOT . '/views/inc/components/sidebarlink.php'; ?>
+
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
