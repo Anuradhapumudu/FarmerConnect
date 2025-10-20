@@ -21,7 +21,7 @@ body {
   font-weight: bold;
   margin-top: 0px;
   margin-bottom: 10px;
-  color: #2f9b63;
+  color: #2f9b63 !important;
   text-align: center;
   position: relative;
 }
@@ -31,9 +31,9 @@ body {
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
-  height: 3px;
-  background: linear-gradient(90deg, #317b43, #136d4f);
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, #7ff57f, #7d7e7d);
   border-radius: 2px;
 }
 .search-section {
@@ -159,7 +159,7 @@ body {
 }
 
 .announcement-card {
-  background: #fff;
+  background: #dbdada;
   border-radius: 12px;
   padding: 15px 18px;
   height: 100%;
@@ -181,6 +181,12 @@ body {
   font-size: 20px;
   font-weight: bold;
   margin: 8px 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 .announcement-title a {
   text-decoration: none;
@@ -190,8 +196,16 @@ body {
 .announcement-title a:hover {
   text-decoration: underline;     
 }
-
-.announcement-date {
+.announcement-date-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    font-size: 11px;
+    gap: 4px;
+    color: #777;
+    line-height: 1;
+}
+.announcement-date .announcement-posted-by{
   font-size: 12px;
   color: #777;
   margin-bottom: 10px;
@@ -218,7 +232,7 @@ body {
 }
 
 .create-announcement-btn {
-  background: #2e7d32;
+  background: #10b981;
   color: #fff;
   border: none;
   padding: 10px 18px;
@@ -230,7 +244,7 @@ body {
 }
 
 .create-announcement-btn:hover {
-  background: #256528;
+  background: #0b7b55;
   transform: scale(1.05);
   box-shadow: 0 12px 35px rgba(186, 186, 186, 0.4);
 }
@@ -252,10 +266,6 @@ body {
   align-items: center;
   font-size: 14px;
   margin-top: auto;
-}
-
-.announcement-date {
-  color: #777;
 }
 .announcement-actions {
   display: flex;
@@ -348,8 +358,15 @@ body {
     padding: 0 15px;
   }
 }
-
+.input-btn-wrap {
+    display: flex;
+    align-items: center; 
+    gap: 8px; 
+}
 @media (max-width: 768px) {
+  .main-content {
+    margin-top: 0px !important;
+  }
   .announcement-list {
     grid-template-columns: 1fr;
   }
@@ -391,11 +408,14 @@ body {
 }
 
 @media (max-width: 480px) {
+  .main-content {
+    margin-top: 0px !important;
+  }
   .announcements-heading {
     font-size: 30px !important;
   }
   .section-title {
-    font-size: 14px;
+    font-size: 16px;
   }
   .search-input, .search-select, .search-btn {
     font-size: 12px;
@@ -412,4 +432,26 @@ body {
     font-size: 12px;
     padding: 9px 12px;
   }
+  .announcement-date-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 11px;
+  }
+  .announcement-actions .edit-btn, .announcement-actions .delete-btn {
+        padding: 4px 8px; 
+        font-size: 0.8rem; 
+    }
+    .input-btn-wrap .search-input,
+    .search-select {
+        padding: 4px 8px;  
+        font-size: 0.75rem;  
+    }
+    .search-label {
+        font-size: 0.80rem;
+    }
+    .input-btn-wrap .search-btn {
+        padding: 4px 8px;
+        font-size: 0.85rem;
+    }
 }

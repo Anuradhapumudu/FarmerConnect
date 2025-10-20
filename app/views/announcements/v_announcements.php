@@ -1,12 +1,13 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/announcements.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <div class="main-content" id="mainContent">
   <div class="topcontainer">
   <div class="container">
     <div class="top-actions">
-      <button class="create-announcement-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/CreateAnnouncements/create'">+ Create Announcement</button>
+      <button class="create-announcement-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/CreateAnnouncements/create'"><i class="fas fa-bullhorn"></i> Create Announcement</button>
     </div>
 
     <h2 class="announcements-heading">Announcements</h2>
@@ -31,7 +32,10 @@
                       <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
                       <!-- Date, Edit and Delete buttons -->
                       <div class="announcement-bottom">
-                        <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                        <div class="announcement-date-container">
+                          <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                          <span class="announcement-posted-by">Posted by: <?php echo htmlspecialchars($announcement->posted_by); ?></span>
+                        </div>
                           <div class="announcement-actions">
                               <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
                               <form method="POST" action="<?php echo URLROOT; ?>/Announcements/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
@@ -51,9 +55,12 @@
         <div class="search-row">
           <div class="search-group">
             <label for="search-term" class="search-label">Search Term</label>
-            <input id="search-term" name="term" type="text" class="search-input" placeholder="Enter search term..." value="<?php echo isset($_GET['term']) ? htmlspecialchars($_GET['term']) : ''; ?>">
+            <div class="input-btn-wrap">
+              <input id="search-term" name="term" type="text" class="search-input" placeholder="Enter search term..." value="<?php echo isset($_GET['term']) ? htmlspecialchars($_GET['term']) : ''; ?>">
+              <button type="submit" class="search-btn">Search</button>
+            </div>
           </div>
-          <button type="submit" class="search-btn">Search</button>
+          
         </div>
 
         <div class="search-row">
@@ -106,7 +113,10 @@
                           <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
                           <!-- Date, Edit and Delete buttons -->
                           <div class="announcement-bottom">
-                            <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                            <div class="announcement-date-container">
+                              <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                              <span class="announcement-posted-by">Posted by: <?php echo htmlspecialchars($announcement->posted_by); ?></span>
+                            </div>
                               <div class="announcement-actions">
                                   <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
                                   <form method="POST" action="<?php echo URLROOT; ?>/Announcements/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
@@ -151,7 +161,10 @@
 
                         <!-- Date, Edit and Delete buttons -->
                         <div class="announcement-bottom">
-                          <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                          <div class="announcement-date-container">
+                            <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                            <span class="announcement-posted-by">Posted by: <?php echo htmlspecialchars($announcement->posted_by); ?></span>
+                          </div>
                             <div class="announcement-actions">
                                 <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
                                 <form method="POST" action="<?php echo URLROOT; ?>/Announcements/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
@@ -192,7 +205,10 @@
 
                         <!-- Date, Edit and Delete buttons -->
                         <div class="announcement-bottom">
-                          <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                          <div class="announcement-date-container">
+                            <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                            <span class="announcement-posted-by">Posted by: <?php echo htmlspecialchars($announcement->posted_by); ?></span>
+                          </div>
                             <div class="announcement-actions">
                                 <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $announcement->announcement_id; ?>'">Edit</button>
                                 <form method="POST" action="<?php echo URLROOT; ?>/Announcements/DeleteAnnouncements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">

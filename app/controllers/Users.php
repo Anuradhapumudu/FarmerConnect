@@ -195,7 +195,7 @@
                             $data['email_error'] = 'Email is already taken';
                         }
                     }
-                    if (empty($data['brn'])) {
+                    if ($this->userModel->findSellerByBRN($data['brn'])) {
                         $data['brn_error'] = 'Please enter your Business Registration Number (BRN)';
                     }
                     if (empty($data['phone_no'])) {
@@ -327,6 +327,8 @@
                     $formType = 'officer';
                 } elseif (isset($_POST['seller_id'])) {
                     $formType = 'seller';
+                } elseif (isset($_POST['admin_id'])) {
+                    $formType = 'admin';
                 } else {
                     $formType = 'farmer';
                 }
@@ -343,7 +345,8 @@
                         'farmer_nic_error' => '',
                         'password_error' => '',
                         'officer_id_error' => '',
-                        'seller_id_error' => ''
+                        'seller_id_error' => '',
+                        'admin_id_error' => ''
                     ];
                     // Validate farmer inputs
                     if (empty($data['nic'])) {
@@ -367,7 +370,8 @@
                         'farmer_nic_error' => '',
                         'password_error' => '',
                         'officer_id_error' => '',
-                        'seller_id_error' => ''
+                        'seller_id_error' => '',
+                        'admin_id_error' => ''
                     ];
                     // Validate officer inputs
                     if (empty($data['officer_id'])) {
@@ -391,7 +395,8 @@
                         'farmer_nic_error' => '',
                         'password_error' => '',
                         'officer_id_error' => '',
-                        'seller_id_error' => ''
+                        'seller_id_error' => '',
+                        'admin_id_error' => ''
                     ];
                     // Validate seller inputs
                     if (empty($data['seller_id'])) {
@@ -442,30 +447,29 @@
                             $this->view('users/v_login', $data);
                         }
                         break;
-                    case 'seller':
-                        $data['username'] = $data['seller_id'];
-                        if (empty($data['seller_id_error']) && empty($data['password_error'])) {
-                            $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
-                            if ($loggedUser) {
-                                /*if ($loggedUser->approval_status !== 'Approved') {
-                                    $data['seller_id_error'] = 'Your account is not approved yet.';
-                                    $this->view('users/v_login', $data);
-                                    return;
+                            case 'seller':
+                                $data['username'] = $data['seller_id'];
+                                if (empty($data['seller_id_error']) && empty($data['password_error'])) {
+                                    $loggedUser = $this->userModel->login($formType, $data['username'], $data['password']);
+                                    if ($loggedUser) {
+                                        // Check if seller is approved (from registrations table)
+                                        if (strtolower($loggedUser->approval_status) !== 'approved') {
+                                            $data['seller_id_error'] = 'Your account is not approved yet.';
+                                            $this->view('users/v_login', $data);
+                                            return;
+                                        } else {
+                                            $this->createUserSession($loggedUser, $formType);
+                                        }
+                                    } else {
+                                        $data['password_error'] = 'Password incorrect';
+                                        $this->view('users/v_login', $data);
+                                    }
                                 } else {
-                                    // Create session,
-                                    $this->createUserSession($loggedUser, $formType);
-                                }*/
-                                $this->createUserSession($loggedUser, $formType);
-                            } else {
-                                $data['password_error'] = 'Password incorrect';
-                                // Load the view with errors
-                                $this->view('users/v_login', $data);
-                            }
-                        } else {
-                            // Load the view with errors
-                            $this->view('users/v_login', $data);
-                        }
-                        break;
+                                    $this->view('users/v_login', $data);
+                                }
+                                break;
+
+
                 }
             } else {
                 // Initial form
@@ -479,7 +483,8 @@
                     'farmer_nic_error' => '',
                     'officer_id_error' => '',
                     'seller_id_error' => '',
-                    'password_error' => '',
+                    'admin_id_error' => '',
+                    'password_error' => ''
                 ];
                 // Load the view with the initial data
                 $this->view('users/v_login', $data);
@@ -488,18 +493,22 @@
 
         // user session creation
         public function createUserSession($user, $formType) {
+            session_start();
             $_SESSION['user_type'] = $formType;
             switch ($formType) {
                 case 'farmer':
                     $_SESSION['nic'] = $user->nic;
+                    $_SESSION['user_id'] = $user->nic;
                     header('Location: ' . URLROOT . '/FarmerDashboard');
                     break;
                 case 'officer':
                     $_SESSION['officer_id'] = $user->officer_id;
+                    $_SESSION['user_id'] = $user->officer_id;
                     header('Location: ' . URLROOT . '/OfficerDashboard');
                     break;
                 case 'seller':
                     $_SESSION['seller_id'] = $user->seller_id;
+                    $_SESSION['user_id'] = $user->seller_id;
                     header('Location: ' . URLROOT . '/SellerDashboard');
                     break;
                 default:

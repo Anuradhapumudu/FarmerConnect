@@ -9,7 +9,7 @@ body {
 .main-content {
   max-width: 600px;
   width: 70%;
-  margin: 30px auto;
+  margin: 100px auto 20px auto;
   padding: 30px;
   background: #fff;
   border-radius: 10px;
@@ -22,7 +22,17 @@ body {
   text-align: center;
   margin-bottom: 25px;
   font-size: 28px;
-  color: #222;
+  font-weight: 600;
+  color: #1f2937;
+}
+.main-content h1::after {
+  content: "";
+  display: block;
+  width: 70%;
+  height: 1px;
+  background: #c4c6c4;
+  margin: 10px auto 0 auto;
+  border-radius: 2px;
 }
 .input-group input,
 .input-group textarea,
@@ -38,7 +48,7 @@ body {
 
 .input-group label,
 .search-group label {
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 6px;
   font-size: 15px;
 }
@@ -74,8 +84,20 @@ body {
   transition: border-color 0.2s;
 }
 
-#attachFiles:hover {
-  border-color: #2e7d32;
+#attachFiles::file-selector-button {
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #3b82f6;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+#attachFiles::file-selector-button:hover {
+    background-color: #2563eb;
 }
 
 .btn-group {
@@ -96,25 +118,32 @@ body {
   transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
 }
 .create-btn {
-  background: #2e7d32;
+  background: #10b981;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
 }
 .cancel-btn {
-  background: #bf4949;
+  background-color: #f3f4f6; 
+  color: #374151 !important; 
+  border: 1.5px solid #aaaaab !important;
 }
 .create-btn:hover {
-  background: #256428;
+  background: #067d57;
   transform: scale(1.03);
-  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }
 .cancel-btn:hover {
-  background: #9f3023;
+  background-color: #9a9a9b;
+  border-color: #9ca3af;
   transform: scale(1.03);
-  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+  color: #374151;
 }
-
+.create-btn:active {
+    transform: translateY(0);
+}
 @media (max-width: 600px) {
   .main-content {
     padding: 15px;
+    width: 90%;
   }
 
   .main-content h1 {
@@ -122,7 +151,7 @@ body {
   }
 
   .btn-group {
-    flex-direction: column;
+    flex-direction: row;
     gap: 8px;
     align-items: stretch;
   }

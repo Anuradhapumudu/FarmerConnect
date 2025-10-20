@@ -4,6 +4,11 @@ class CreateAnnouncements extends Controller{
 
     public function __construct() {
         $this->announcementModel = $this->model('M_Announcements/M_Announcements');
+        if (!isset($_SESSION['user_type']) || 
+            !in_array($_SESSION['user_type'], ['officer', 'admin'])) {
+            die('Access Denied');
+            exit();
+        }
     }
     public function index() {
         $data = [
@@ -16,6 +21,7 @@ class CreateAnnouncements extends Controller{
         $this->view('announcements/v_create_announcements', $data);
     }
     public function create(){
+        
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Process form data
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);

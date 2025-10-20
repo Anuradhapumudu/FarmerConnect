@@ -57,32 +57,36 @@
                     $this->db->execute();
                     return true;
                     break;
-                case 'seller':
-                    // Insert to registrations table
-                    $this->db->query("INSERT INTO registrations
-                        (user_type, password, approval_status)
-                        VALUES (:user_type, :password, 'pending')");
-                    $this->db->bind(':user_type', $data['form_type']);
-                    $this->db->bind(':password', $data['password']);
-                    $this->db->execute();
-                    $registration_id = $this->db->lastInsertId();
+                    case 'seller':
+                        // Insert into registrations table with pending status
+                        $this->db->query("INSERT INTO registrations
+                            (user_type, password, approval_status)
+                            VALUES (:user_type, :password, 'Pending')");
+                        $this->db->bind(':user_type', $data['form_type']);
+                        $this->db->bind(':password', $data['password']);
+                        $this->db->execute();
+                        $registration_id = $this->db->lastInsertId();
 
-                    // Insert seller request info
-                    $this->db->query("INSERT INTO seller_requests
-                        (registration_id, first_name, last_name, company_name, nic, brn, phone_no, email, address)
-                        VALUES (:registration_id, :first_name, :last_name, :company_name, :nic, :brn, :phone_no, :email, :address)
-                    ");
-                    $this->db->bind(':registration_id', $registration_id);
-                    $this->db->bind(':first_name', $data['first_name']);
-                    $this->db->bind(':last_name', $data['last_name']);
-                    $this->db->bind(':company_name', $data['company_name']);
-                    $this->db->bind(':nic', $data['nic']);
-                    $this->db->bind(':brn', $data['brn']);
-                    $this->db->bind(':phone_no', $data['phone_no']);
-                    $this->db->bind(':email', $data['email']);
-                    $this->db->bind(':address', $data['address']);
-                    $this->db->execute();
-                    return true;
+                        // Insert directly into sellers table
+                        $this->db->query("INSERT INTO sellers
+                            (registration_id, first_name, last_name, company_name, nic, brn, phone_no, email, address, password)
+                            VALUES (:registration_id, :first_name, :last_name, :company_name, :nic, :brn, :phone_no, :email, :address, :password)
+                        ");
+                        $this->db->bind(':registration_id', $registration_id);
+                        $this->db->bind(':first_name', $data['first_name']);
+                        $this->db->bind(':last_name', $data['last_name']);
+                        $this->db->bind(':company_name', $data['company_name']);
+                        $this->db->bind(':nic', $data['nic']);
+                        $this->db->bind(':brn', $data['brn']);
+                        $this->db->bind(':phone_no', $data['phone_no']);
+                        $this->db->bind(':email', $data['email']);
+                        $this->db->bind(':address', $data['address']);
+                        $this->db->bind(':password', $data['password']);
+                        $this->db->execute();
+                        return true;
+
+
+
                     break;
 
                 default:
@@ -192,6 +196,14 @@
             $this->db->single();
             return ($this->db->rowCount() > 0);
         }
+
+        public function findSellerByBRN($brn) {
+            $this->db->query("SELECT * FROM sellers WHERE brn = :brn");
+            $this->db->bind(':brn', $brn);
+            $this->db->single();
+            return ($this->db->rowCount() > 0);
+        }
+
 
     }
 ?>

@@ -58,6 +58,7 @@
             public function createUserSession($user, $formType) {
                 $_SESSION['user_type'] = $formType;
                 $_SESSION['admin_id'] = $user->admin_id;
+                $_SESSION['user_id'] = $user->admin_id;
                 header('Location: ' . URLROOT . '/AdminDashboard');
             }
             public function logout() {

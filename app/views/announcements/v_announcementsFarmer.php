@@ -14,7 +14,7 @@
           <div class="section-title">📌 Pinned Announcements</div>
           <div class="announcement-list" id="pinnedAnnouncements">
               <?php foreach ($data['pinnedAnnouncements'] as $announcement): ?>
-                  <div class="announcement-card">
+                  <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
                       <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/AnnouncementsFarmer/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
@@ -23,7 +23,10 @@
                       <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
                       <!-- Date-->
                       <div class="announcement-bottom">
-                        <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                        <div class="announcement-date-container">
+                          <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                          <span class="announcement-posted-by">Posted by: <?php echo htmlspecialchars($announcement->posted_by); ?></span>
+                        </div>
                       </div>
                   </div>
               <?php endforeach; ?>
@@ -32,8 +35,8 @@
     <?php endif; ?>
 
     <!--Search Section-->
-    <div class="search-section">
-      <form method="GET" action="<?php echo URLROOT; ?>/Announcements/AnnouncementsFarmer">
+    <div class="search-section" id="searchSection">
+      <form method="GET" action="<?php echo URLROOT; ?>/Announcements/AnnouncementsFarmer#searchResults">
         <div class="search-row">
           <div class="search-group">
             <label for="search-term" class="search-label">Search Term</label>
@@ -69,12 +72,12 @@
     </div>
 
     <!-- Search Results -->
-    <div class="search-results">
+    <div class="search-results" id="searchResults">
       <?php if (!empty($data['searchResults'])): ?>
           <div class="search-results">
               <div class="section-title">
                 Search Results
-                <a href="<?php echo URLROOT; ?>/Announcements/AnnouncementsFarmer" class="clear-results">❌</a>
+                <a href="<?php echo URLROOT; ?>/Announcements/AnnouncementsFarmer#searchSection" class="clear-results">❌</a>
               </div>
               <div class="announcement-list" id="searchResults">
                   <?php foreach ($data['searchResults'] as $announcement): ?>
@@ -87,7 +90,10 @@
                           <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
                           <!-- Date -->
                           <div class="announcement-bottom">
-                            <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                            <div class="announcement-date-container">
+                              <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                              <span class="announcement-posted-by">Posted by: <?php echo htmlspecialchars($announcement->posted_by); ?></span>
+                            </div>
                           </div>
                         </div>
                   <?php endforeach; ?>                
@@ -110,7 +116,7 @@
         <div class="announcement-list" id="latestAnnouncements">
             <?php if (!empty($data['latestAnnouncements'])): ?>
                 <?php foreach ($data['latestAnnouncements'] as $announcement): ?>
-                    <div class="announcement-card">
+                    <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
                         <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/AnnouncementsFarmer/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
@@ -120,7 +126,10 @@
 
                         <!-- Date -->
                         <div class="announcement-bottom">
-                          <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                          <div class="announcement-date-container">
+                            <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                            <span class="announcement-posted-by">Posted by: <?php echo htmlspecialchars($announcement->posted_by); ?></span>
+                          </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -136,7 +145,7 @@
         <div class="announcement-list" id="previousAnnouncements">
             <?php if (!empty($data['previousAnnouncements'])): ?>
                 <?php foreach ($data['previousAnnouncements'] as $announcement): ?>
-                    <div class="announcement-card">
+                    <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
                         <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/AnnouncementsFarmer/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
@@ -146,7 +155,10 @@
 
                         <!-- Date -->
                         <div class="announcement-bottom">
-                          <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                          <div class="announcement-date-container">
+                            <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
+                            <span class="announcement-posted-by">Posted by: <?php echo htmlspecialchars($announcement->posted_by); ?></span>
+                          </div>
                         </div>
                     </div>
                 <?php endforeach; ?>

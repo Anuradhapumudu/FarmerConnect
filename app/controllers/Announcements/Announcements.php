@@ -31,6 +31,12 @@ class Announcements extends Controller {
         $this->view('announcements/v_announcements', $data);
     }
     public function togglePin($id) {
+        if (!isset($_SESSION['user_type']) || 
+            !in_array($_SESSION['user_type'], ['officer', 'admin'])) {
+            header('Location: ' . URLROOT . '/Users/login');
+            exit();
+        }
+
         $announcementModel = $this->model('M_Announcements/M_Announcements');
         
         $announcementModel->togglePin($id);

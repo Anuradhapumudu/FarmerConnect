@@ -14,9 +14,9 @@
             // Check the user type from session
             if(isset($_SESSION['user_type'])) {
                 if($_SESSION['user_type'] == 'officer') {
-                    $officer_id = $_SESSION['user_id'] ?? null;;
+                    $officer_id = $_SESSION['user_id'];
                 } elseif($_SESSION['user_type'] == 'admin') {
-                    $admin_id = $_SESSION['user_id'] ?? null;;
+                    $admin_id = $_SESSION['user_id'];
                 }
             }
             $this->db->query('INSERT INTO announcements (officer_id, admin_id, title, category, content, attachment_path) VALUES (:officer_id, :admin_id, :title, :category, :content, :attachment_path)');
@@ -72,19 +72,39 @@
 
         public function getAnnouncements() {
             // Latest announcements (past 7 days)
-            $this->db->query("SELECT * FROM announcements 
-                            WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-                            AND is_pinned = 0
-                            AND is_deleted = 0
-                            ORDER BY created_at DESC");
+            $this->db->query("
+                SELECT a.*, 
+                    CASE 
+                        WHEN a.officer_id IS NOT NULL THEN CONCAT('Officer - ', o.first_name, ' ', o.last_name)
+                        WHEN a.admin_id IS NOT NULL THEN 'Admin'
+                        ELSE 'Unknown'
+                    END AS posted_by
+                FROM announcements a
+                LEFT JOIN officers o ON a.officer_id = o.officer_id
+                LEFT JOIN admins ad ON a.admin_id = ad.admin_id
+                WHERE a.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                AND a.is_pinned = 0
+                AND a.is_deleted = 0
+                ORDER BY a.created_at DESC
+            ");
             $latest = $this->db->resultSet();
 
             // Previous announcements (older than 7 days)
-            $this->db->query("SELECT * FROM announcements 
-                            WHERE created_at < DATE_SUB(NOW(), INTERVAL 7 DAY)
-                            AND is_pinned = 0
-                            AND is_deleted = 0
-                            ORDER BY created_at DESC");
+            $this->db->query("
+                SELECT a.*, 
+                    CASE 
+                        WHEN a.officer_id IS NOT NULL THEN CONCAT('Officer - ', o.first_name, ' ', o.last_name)
+                        WHEN a.admin_id IS NOT NULL THEN 'Admin'
+                        ELSE 'Unknown'
+                    END AS posted_by
+                FROM announcements a
+                LEFT JOIN officers o ON a.officer_id = o.officer_id
+                LEFT JOIN admins ad ON a.admin_id = ad.admin_id
+                WHERE a.created_at < DATE_SUB(NOW(), INTERVAL 7 DAY)
+                AND a.is_pinned = 0
+                AND a.is_deleted = 0
+                ORDER BY a.created_at DESC
+            ");
             $previous = $this->db->resultSet();
 
             return ['latest' => $latest, 'previous' => $previous];
@@ -92,7 +112,19 @@
 
         // Get pinned announcements
         public function getPinnedAnnouncements() {
-            $this->db->query("SELECT * FROM announcements WHERE is_pinned = 1 AND is_deleted = 0 ORDER BY created_at DESC");
+            $this->db->query("
+                SELECT a.*, 
+                    CASE 
+                        WHEN a.officer_id IS NOT NULL THEN CONCAT('Officer - ', o.first_name, ' ', o.last_name)
+                        WHEN a.admin_id IS NOT NULL THEN 'Admin'
+                        ELSE 'Unknown'
+                    END AS posted_by
+                FROM announcements a
+                LEFT JOIN officers o ON a.officer_id = o.officer_id
+                LEFT JOIN admins ad ON a.admin_id = ad.admin_id
+                WHERE a.is_pinned = 1 AND a.is_deleted = 0
+                ORDER BY a.created_at DESC
+            ");
             return $this->db->resultSet();
         }
 
@@ -114,7 +146,18 @@
         }
         // Search announcements in the search section
         public function searchAnnouncements($term = '', $category = '', $date = '') {
-            $query = "SELECT * FROM announcements WHERE 1=1 AND is_deleted = 0";
+            $query = "
+                SELECT a.*, 
+                    CASE 
+                        WHEN a.officer_id IS NOT NULL THEN CONCAT('Officer - ', o.first_name, ' ', o.last_name)
+                        WHEN a.admin_id IS NOT NULL THEN 'Admin'
+                        ELSE 'Unknown'
+                    END AS posted_by
+                FROM announcements a
+                LEFT JOIN officers o ON a.officer_id = o.officer_id
+                LEFT JOIN admins ad ON a.admin_id = ad.admin_id
+                WHERE 1=1 AND a.is_deleted = 0
+            ";
 
             if(!empty($term)) {
                 $query .= " AND (title LIKE :term OR content LIKE :term)";

@@ -4,6 +4,11 @@ class EditAnnouncements extends Controller{
 
     public function __construct() {
         $this->announcementModel = $this->model('M_Announcements/M_Announcements');
+        if (!isset($_SESSION['user_type']) || 
+            !in_array($_SESSION['user_type'], ['officer', 'admin'])) {
+            die('Access Denied');
+            exit();
+        }
     }
     public function index() {
         // Redirect to announcements page if no method specified
