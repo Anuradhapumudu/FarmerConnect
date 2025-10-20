@@ -41,7 +41,7 @@
       <p>View Complaint Reports and Reply to them.</p>
     </div>
 
-    <a href="<?php echo URLROOT; ?>/marketplace" class="feature">
+    <a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterOfficer" class="feature">
 
       <i class="fa-solid fa-book-open fa-2x"></i>
       <h3>Knowledge Center</h3>
@@ -49,11 +49,11 @@
    
     </a>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/Announcements/Announcements" class="feature">
       <i class="fa fa-bullhorn"></i>
       <h3>Announcements</h3>
       <p>Make Announcements for farmers.</p>
-    </div>
+    </a>
 
  
 
