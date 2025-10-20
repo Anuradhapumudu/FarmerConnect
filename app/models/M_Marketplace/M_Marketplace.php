@@ -43,12 +43,22 @@ class M_Marketplace{
 
 //read
 
-   // Get product by ID for buy product
-    public function getProductById($item_id) {
-        $this->db->query("SELECT * FROM products WHERE item_id = :item_id");
-        $this->db->bind(":item_id", $item_id);
-        return $this->db->single();
-    }
+  public function getProductById($item_id) {
+    $this->db->query("
+        SELECT 
+            p.*, 
+            CONCAT(s.first_name, ' ', s.last_name) AS seller_name,
+            s.phone_no AS seller_telNo,
+            s.address AS seller_address,
+            s.company_name
+        FROM products p
+        JOIN sellers s ON p.seller_id = s.seller_id
+        WHERE p.item_id = :item_id
+    ");
+    $this->db->bind(":item_id", $item_id);
+    return $this->db->single();
+}
+
 
     // Get products by seller for 
     public function getProductsBySeller($seller_id) {
@@ -56,20 +66,28 @@ class M_Marketplace{
         $this->db->bind(':seller_id', $seller_id);
         return $this->db->resultSet();
     }
-public function getProductsByCategory($category) {
-    $category = trim(strtolower($category)); // remove extra spaces & lowercase
-
+       public function getProductsByCategory($category) {
     $this->db->query("
-        SELECT products.*, 
-               sellers.seller_name AS seller_name,
-               sellers.seller_telNo AS seller_telNo
-        FROM products 
-        JOIN sellers ON products.seller_id = sellers.seller_id
-        WHERE LOWER(TRIM(products.category)) = :category
+        SELECT 
+            p.*, 
+            p.unit_type,
+            p.province,
+            p.region,
+            CONCAT(s.first_name, ' ', s.last_name) AS seller_name, 
+            s.company_name,
+            s.phone_no AS seller_telNo,
+            s.email,
+            s.address AS seller_address
+        FROM products p
+        JOIN sellers s ON p.seller_id = s.seller_id
+        WHERE p.category = :category
     ");
+
     $this->db->bind(':category', $category);
     return $this->db->resultSet();
 }
+
+
 
 
     //update

@@ -7,15 +7,19 @@
 <?php 
 $product = $data['product'];
 
-$price = floatval($product->price_per_unit);
-$region = htmlspecialchars($product->region);
-$itemName = htmlspecialchars($product->item_name);
-$sellerName = htmlspecialchars($product->seller_name);
-$imageUrl = URLROOT . '/uploads/' . htmlspecialchars($product->image_url);
-$available = intval($product->available_quantity);
+$price       = floatval($product->price_per_unit);
+$region      = htmlspecialchars($product->region);
+$itemName    = htmlspecialchars($product->item_name);
+$sellerName  = htmlspecialchars($product->seller_name);
+$imageUrl    = URLROOT . '/uploads/' . htmlspecialchars($product->image_url);
+$available   = intval($product->available_quantity);
 $description = htmlspecialchars($product->description);
 $seller_telNo = htmlspecialchars($product->seller_telNo);
-$status = htmlspecialchars($product->status);
+$status       = htmlspecialchars($product->status);
+$unit_type    = htmlspecialchars($product->unit_type ?? '');
+$province     = htmlspecialchars($product->province ?? '');
+$district     = htmlspecialchars($product->district ?? '');
+$address      = htmlspecialchars($product->seller_address ?? '');
 ?>
 
 <div class="buy-container">
@@ -28,8 +32,12 @@ $status = htmlspecialchars($product->status);
             <p><b>Product Name:</b> <?= $itemName ?></p>
             <p><b>Price per Unit:</b> Rs. <?= number_format($price, 2) ?></p>
             <p><b>Available Quantity:</b> <?= $available ?></p>
-            <p><b>Seller:</b> <?= $sellerName ?> (<?= $region ?>)</p>
-            <p><b>Contact:</b> <?= $seller_telNo ?></p>
+            <p><b>Unit Type:</b> <?= $unit_type ?></p>
+            <p><b>Seller Name:</b> <?= $sellerName ?></p>
+            <p><b>Seller Address:</b> <?= $address ?>, <?= $district ?>, <?= $province ?></p>
+            <p><b>Seller Contact:</b> <?= $seller_telNo ?></p>
+            <p><b>Seller Region:</b> <?= $region ?></p>
+            <p><b>Description:</b> <?= $description ?></p>
         </div>
 
         <form method="post" class="buy-form">
@@ -45,7 +53,6 @@ $status = htmlspecialchars($product->status);
             <input type="submit" value="Buy Now" class="btn btn-primary">
         </form>
 
-        <p class="note">This is a dummy buy system for testing orders only.</p>
     </div>
 </div>
 
