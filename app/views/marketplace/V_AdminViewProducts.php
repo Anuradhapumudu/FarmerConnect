@@ -3,6 +3,11 @@
 
 <main class="main-content" id="mainContent">
 
+  <div class="containers">
+    <div class="header">
+      <h1>Product Management</h1>
+    </div>
+
  <!-- Filter -->
   <div class="filter-container">
     <input type="text" id="searchInput" placeholder="Search product...">
@@ -34,84 +39,135 @@
 
 
   <!-- Products Section -->
-<div class="products">
+    <div class="orders-container">
 
-  <!-- Product 1 -->
-  <div class="product-container" data-region="Colombo">
-    <img src="uploads/fertilizer1.jpg" alt="Organic Fertilizer">
-    <div class="product-details">
-      <span class="in-stock">In Stock</span>
-      <h2>Organic Fertilizer</h2>
-      <div><span class="price">Rs. 1,500.00</span></div>
-      <p class="description">Available Quantity: 50<br>Seller: Green Agro Ltd</p>
-      <div class="quantity-add">
-        <a class="add-to-cart" href="#">Buy Now</a>
-      </div>
-      <hr class="divider">
-      <div class="product_quality">
-        <div class="quality_box">
-          <div class="quality_icon"><i class="fa-solid fa-truck"></i></div>
-          <div class="quality">Delivery Info</div>
+<div class="order-card">
+  <div class="order-main-content">
+    <div class="order-image">
+      <img src="<?php echo URLROOT; ?>/img/collage.jpg" alt="Premium Paddy Seeds">
+    </div>
+    
+    <div class="order-content-wrapper">
+      <div class="order-header">
+        <div>
+          <div class="order-id">Premium Paddy Seeds</div>
         </div>
-        <div class="quality_box">
-          <div class="quality_icon"><i class="fa-solid fa-shield-heart"></i></div>
-          <div class="quality">Quality Guarantee</div>
+        <div class="order-status status-outstock">Outstock</div>
+      </div>
+  
+      <div class="order-content"> 
+        <div class="product-info">
+          <div class="product-details">
+            <p>Description:</p>
+            <p>Category: Paddy Seeds</p>
+            <p>Province: Western</p>
+            <p>District: Colombo</p>
+            <p>Available quantity: 10 Kg</p>
+            <p>Unit Type: Kg</p>
+            <div class="price">LKR 5,000.00</div>
+          </div>
+        
+          <div class="divider-vertical"></div>
+
+          <div class="customer-details">
+            <h3>Seller Info</h3>
+            <p><strong>Name:</strong> <span class="customer-name">A.J.K Athukorala</span></p>
+            <p><strong>Address:</strong> Kandy, Sri Lanka</p>
+            <p><strong>Contact:</strong> +94 71 123 4567</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Product 2 -->
-  <div class="product-container" data-region="Kandy">
-    <img src="uploads/fertilizer2.jpg" alt="Compost Mix">
-    <div class="product-details">
-      <span class="in-stock">In Stock</span>
-      <h2>Compost Mix</h2>
-      <div><span class="price">Rs. 1,200.00</span></div>
-      <p class="description">Available Quantity: 30<br>Seller: EcoFarmers</p>
-      <div class="quantity-add">
-        <a class="add-to-cart" href="#">Buy Now</a>
-      </div>
-      <hr class="divider">
-      <div class="product_quality">
-        <div class="quality_box">
-          <div class="quality_icon"><i class="fa-solid fa-truck"></i></div>
-          <div class="quality">Delivery Info</div>
+<div class="order-card">
+  <div class="order-main-content">
+    <div class="order-image">
+      <img src="<?php echo URLROOT; ?>/img/vegetables.jpg" alt="Organic Vegetables">
+    </div>
+    
+    <div class="order-content-wrapper">
+      <div class="order-header">
+        <div>
+          <div class="order-id">Organic Vegetables</div>
         </div>
-        <div class="quality_box">
-          <div class="quality_icon"><i class="fa-solid fa-shield-heart"></i></div>
-          <div class="quality">Quality Guarantee</div>
+        <div class="order-status status-confirmed">In Stock</div>
+      </div>
+  
+      <div class="order-content"> 
+        <div class="product-info">
+          <div class="product-details">
+            <p>Description:</p>
+            <p>Category: Vegetables</p>
+            <p>Province: Central</p>
+            <p>District: Matale</p>
+            <p>Available quantity: 20 Kg</p>
+            <p>Unit Type: Kg</p>
+            <div class="price">LKR 3,200.00</div>
+          </div>
+        
+          <div class="divider-vertical"></div>
+
+          <div class="customer-details">
+            <h3>Seller Info</h3>
+            <p><strong>Name:</strong> <span class="customer-name">S.M. Perera</span></p>
+            <p><strong>Address:</strong> Dambulla, Sri Lanka</p>
+            <p><strong>Contact:</strong> +94 71 987 6543</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Product 3 -->
-  <div class="product-container" data-region="Galle">
-    <img src="uploads/fertilizer3.jpg" alt="Coconut Husk Fertilizer">
-    <div class="product-details">
-      <span class="in-stock">In Stock</span>
-      <h2>Coconut Husk Fertilizer</h2>
-      <div><span class="price">Rs. 1,800.00</span></div>
-      <p class="description">Available Quantity: 20<br>Seller: Nature Grow</p>
-      <div class="quantity-add">
-        <a class="add-to-cart" href="#">Buy Now</a>
-      </div>
-      <hr class="divider">
-      <div class="product_quality">
-        <div class="quality_box">
-          <div class="quality_icon"><i class="fa-solid fa-truck"></i></div>
-          <div class="quality">Delivery Info</div>
+<div class="order-card">
+  <div class="order-main-content">
+    <div class="order-image">
+      <img src="<?php echo URLROOT; ?>/img/fruits.jpg" alt="Fresh Fruits">
+    </div>
+    
+    <div class="order-content-wrapper">
+      <div class="order-header">
+        <div>
+          <div class="order-id">Fresh Fruits</div>
         </div>
-        <div class="quality_box">
-          <div class="quality_icon"><i class="fa-solid fa-shield-heart"></i></div>
-          <div class="quality">Quality Guarantee</div>
+        <div class="order-status status-delivered">In Stock</div>
+      </div>
+  
+      <div class="order-content"> 
+        <div class="product-info">
+          <div class="product-details">
+            <p>Description:</p>
+            <p>Category: Fruits</p>
+            <p>Province: Southern</p>
+            <p>District: Galle</p>
+            <p>Available quantity: 15 Kg</p>
+            <p>Unit Type: Kg</p>
+            <div class="price">LKR 4,500.00</div>
+          </div>
+        
+          <div class="divider-vertical"></div>
+
+          <div class="customer-details">
+            <h3>Seller Info</h3>
+            <p><strong>Name:</strong> <span class="customer-name">N.D. Fernando</span></p>
+            <p><strong>Address:</strong> Hikkaduwa, Sri Lanka</p>
+            <p><strong>Contact:</strong> +94 77 555 1122</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+
+    </div>
+
 
 </div>
+
+
 </main>
 
 <script>

@@ -359,5 +359,13 @@ public function editProduct($id) {
 
         $this->view('marketplace/V_buyProduct', ['product' => $product]);
     }
+
+    public function adminViewProducts() {
+        $this->view('marketplace/V_AdminViewProducts');
+    } 
+
+       public function adminViewOrders() {
+        $this->view('marketplace/V_AdminViewOrders');
+    } 
 }
 ?>
