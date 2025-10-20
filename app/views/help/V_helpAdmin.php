@@ -20,11 +20,11 @@
                 
                 <div class="team-grid">
                     <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Rajesh Kumar" class="member-img">
-                        <div class="member-name">Rajesh Kumar</div>
+                        <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Sarath Soysa" class="member-img">
+                        <div class="member-name">Sarath Soysa</div>
                         <div class="member-role">Agricultural Officer</div>
                         <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+                            <p><i class="fas fa-phone"></i> 075 612 8962</p>
                            
                         </div>
                                 <div class="officer-actions">
@@ -34,11 +34,11 @@
                     </div>
                     
                     <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Vikram Singh" class="member-img">
-                        <div class="member-name">Vikram Singh</div>
+                        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Nilan Madushan" class="member-img">
+                        <div class="member-name">Nilan Madushan</div>
                         <div class="member-role">Agricultural Officer</div>
                         <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> +91 96543 21098</p>
+                            <p><i class="fas fa-phone"></i> 077 251 1562</p>
                             
                         </div>
                                                     <div class="officer-actions">
@@ -48,11 +48,11 @@
                     </div>
                     
                     <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sunita Patel" class="member-img">
-                        <div class="member-name">Sunita Patel</div>
-                        <div class="member-role">Admin officer</div>
+                        <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Kamal Perera" class="member-img">
+                        <div class="member-name">Kamal Perera</div>
+                        <div class="member-role">Admin Support</div>
                         <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> +91 95432 10987</p>
+                            <p><i class="fas fa-phone"></i> 077 251 6394</p>
                             
                         </div>
                                                     <div class="officer-actions">
@@ -102,7 +102,7 @@
             
             <div class="emergency-contact">
                 <h3>Emergency Contact</h3>
-                <div class="emergency-number">+91 90000 12345</div>
+                <div class="emergency-number">077 123 45678</div>
                 <p class="emergency-text">Available 24/7 for urgent agricultural issues requiring immediate assistance</p>
                                                 <div class="officer-actions">
                                 <button class="btn btn-sm btn-outline">Edit</button>
