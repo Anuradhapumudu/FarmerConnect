@@ -32,120 +32,128 @@ class Marketplace extends Controller {
     }
 
     //  Add Product
-    public function addProduct() {
-        $data = [
-            'name' => '',
-            'seller_id' => $_SESSION['seller_id'] ?? '',
-            'category' => '',
-            'description' => '',
-            'region' => '',
-            'unit_type' => '',
-            'price' => '',
-            'available' => '',
-            'status' => '',
-            'errors' => [],
-            'success' => ''
-        ];
+public function addProduct() {
+    // Initialize data
+    $data = [
+        'name' => '',
+        'seller_id' => $_SESSION['seller_id'] ?? '',
+        'category' => '',
+        'description' => '',
+        'province' => '',
+        'region' => '',
+        'unit_type' => '',
+        'price' => '',
+        'available' => '',
+        'status' => '',
+        'image' => '',
+        'errors' => [],
+        'success' => ''
+    ];
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Trim POST data
-            $data['name'] = trim($_POST['name']);
-            $data['category'] = trim($_POST['category']);
-            $data['description'] = trim($_POST['description']);
-            $data['status'] = trim($_POST['status']);
-            $data['region'] = trim($_POST['region']);
-            $data['unit_type'] = trim($_POST['unit_type']);
-            $data['price'] = trim($_POST['price']);
-            $data['available'] = trim($_POST['available']);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Trim and preserve form values
+        $data['name'] = trim($_POST['name'] ?? '');
+        $data['category'] = trim($_POST['category'] ?? '');
+        $data['description'] = trim($_POST['description'] ?? '');
+        $data['status'] = trim($_POST['status'] ?? '');
+        $data['province'] = trim($_POST['province'] ?? '');
+        $data['region'] = trim($_POST['region'] ?? '');
+        $data['unit_type'] = trim($_POST['unit_type'] ?? '');
+        $data['price'] = trim($_POST['price'] ?? '');
+        $data['available'] = trim($_POST['available'] ?? '');
 
-            // --- Validation ---
-            if(empty($data['name'])) {
-                $data['errors']['name'] = "Product name is required.";
-            } elseif(strlen($data['name']) < 3) {
-                $data['errors']['name'] = "Product name must be at least 3 characters.";
-            } elseif(!preg_match("/^[a-zA-Z0-9\s\-_]+$/", $data['name'])) {
-                $data['errors']['name'] = " Product name can only contain letters, numbers, spaces, hyphens (-), and underscores (_).";
-            }
+        // --- Validation ---
+        if(strlen($data['name']) === 0) {
+            $data['errors']['name'] = "Product name is required.";
+        } elseif(strlen($data['name']) < 3) {
+            $data['errors']['name'] = "Product name must be at least 3 characters.";
+        } elseif(!preg_match("/^[a-zA-Z0-9\s\-_]+$/", $data['name'])) {
+            $data['errors']['name'] = "Product name can only contain letters, numbers, spaces, hyphens, and underscores.";
+        }
 
-            if(empty($data['category'])) {
-                $data['errors']['category'] = " Please select a category.";
-            }
+        if(strlen($data['category']) === 0) {
+            $data['errors']['category'] = "Please select a category.";
+        }
 
-            if(empty($data['status'])) {
-                $data['errors']['status'] = "Please select a status.";
-            }
+        if(strlen($data['status']) === 0) {
+            $data['errors']['status'] = "Please select a status.";
+        }
 
-            if(empty($data['region'])) {
-                $data['errors']['region'] = " Please select a region.";
-            }
+        if(strlen($data['province']) === 0) {
+            $data['errors']['province'] = "Please select a province.";
+        }
 
-            if(empty($data['unit_type'])) {
-                $data['errors']['unit_type'] = " Please select a unit type.";
-            }
+        if(strlen($data['region']) === 0) {
+            $data['errors']['region'] = "Please select a district.";
+        }
 
-            if(empty($data['price'])) {
-                $data['errors']['price'] = " Price is required.";
-            } elseif(!is_numeric($data['price']) || $data['price'] <= 0) {
-                $data['errors']['price'] = " Price must be a number greater than 0.";
-            }
+        if(strlen($data['unit_type']) === 0) {
+            $data['errors']['unit_type'] = "Please select a unit type.";
+        }
 
-            if(empty($data['available'])) {
-                $data['errors']['available'] = " Quantity is required.";
-            } elseif(!is_numeric($data['available']) || $data['available'] < 0) {
-                $data['errors']['available'] = " Quantity must be a positive number.";
-            }elseif(!filter_var($data['available'], FILTER_VALIDATE_INT)) {
-                 $data['errors']['available'] = " Quantity must be a whole number.";
-             }
+        if(strlen($data['price']) === 0) {
+            $data['errors']['price'] = "Price is required.";
+        } elseif(!is_numeric($data['price']) || floatval($data['price']) <= 0) {
+            $data['errors']['price'] = "Price must be a number greater than 0.";
+        }
 
+        if(strlen($data['available']) === 0) {
+            $data['errors']['available'] = "Quantity is required.";
+        } elseif(strlen(!is_numeric($data['available']) || intval($data['available'])) < 0) {
+            $data['errors']['available'] = "Quantity must be a positive number.";
+        } elseif(strlen(!ctype_digit($data['available']))) {
+            $data['errors']['available'] = "Quantity must be a whole number.";
+        }
 
-            // Image upload validation
-            if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                $filename = basename($_FILES['image']['name']);
-                $target = 'uploads/' . $filename;
+        // --- Image Validation ---
+        if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $allowedExt = ['jpg','jpeg','png','gif'];
+            $fileExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+
+            if(!in_array($fileExt, $allowedExt)) {
+                $data['errors']['image'] = "Only JPG, JPEG, PNG, GIF files are allowed.";
+            } elseif($_FILES['image']['size'] > 2*1024*1024) {
+                $data['errors']['image'] = "Image size must be less than 5MB.";
+            } else {
+                $uploadsDir = 'uploads/';
+                if(!is_dir($uploadsDir)) {
+                    mkdir($uploadsDir, 0777, true);
+                }
+                $filename = time() . '_' . basename($_FILES['image']['name']);
+                $target = $uploadsDir . $filename;
+
                 if(move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
                     $data['image'] = $filename;
                 } else {
-                    $data['errors']['image'] = " Failed to upload image.";
-                }
-            } else {
-                $data['errors']['image'] = " Please upload an image.";
-            }
-
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-            if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                $fileType = $_FILES['image']['type'];
-                if(!in_array($fileType, $allowedTypes)) {
-                    $data['errors']['image'] = " Only JPG, JPEG, PNG, GIF files are allowed.";
+                    $data['errors']['image'] = "Failed to upload image.";
                 }
             }
-
-            $maxSize = 2 * 1024 * 1024; // 2MB
-            if($_FILES['image']['size'] > $maxSize) {
-                $data['errors']['image'] = "Image size must be less than 5MB.";
-            }
-
-
-
-            // --- Add product if no errors ---
-            if(empty($data['errors'])) {
-                if($this->marketplaceModel->createProduct($data)) {
-                    header("Location: " . URLROOT . "/marketplace/addsuccess");
-                    exit();
-                } else {
-                    $data['errors']['general'] = "Something went wrong. Please try again.";
-                }
-            }
+        } else {
+            $data['errors']['image'] = "Please upload an image.";
         }
 
-        $this->view('marketplace/V_addProduct', $data);
+        // --- Add product if no errors ---
+        if(empty($data['errors'])) {
+            if($this->marketplaceModel->createProduct($data)) {
+                header("Location: " . URLROOT . "/marketplace/addsuccess");
+                exit();
+            } else {
+                $data['errors']['general'] = "Something went wrong. Please try again.";
+            }
+        }
     }
+
+    // Load view
+    $this->view('marketplace/V_addProduct', $data);
+}
+
 
     // ✅ Add Success
     public function addSuccess() {
         $this->view('marketplace/V_addsucess');
     }
 
-    // 🛠 Manage Products (Seller)
+    //  Manage Products (Seller)
     public function manageProduct() {
         $seller_id = $_SESSION['seller_id'] ?? null;
         if (!$seller_id) {
@@ -161,64 +169,118 @@ class Marketplace extends Controller {
 public function editProduct($id) {
     // 1️⃣ Fetch product
     $product = $this->marketplaceModel->getProductById($id);
-    if (!$product) die("Product not found");
 
-    // Convert object to array for easier use in view
-    $product = (array) $product;
-    $errors = [];
+    if (!$product) {
+        $_SESSION['product_message'] = "Product not found ❌";
+        header("Location: " . URLROOT . "/Marketplace/manageProduct");
+        exit();
+    }
+
+    $data = [
+        'product' => (array)$product,
+        'errors' => []
+    ];
 
     // 2️⃣ Handle POST
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = $_POST;
-        $data['item_id'] = $id;
+        // Get POST values
+        $data['product']['item_name'] = trim($_POST['item_name'] ?? '');
+        $data['product']['category'] = trim($_POST['category'] ?? '');
+        $data['product']['description'] = trim($_POST['description'] ?? '');
+        $data['product']['status'] = trim($_POST['status'] ?? '');
+        $data['product']['province'] = trim($_POST['province'] ?? '');
+        $data['product']['region'] = trim($_POST['region'] ?? '');
+        $data['product']['unit_type'] = trim($_POST['unit_type'] ?? '');
+        $data['product']['price_per_unit'] = trim($_POST['price_per_unit'] ?? '');
+        $data['product']['available_quantity'] = trim($_POST['available_quantity'] ?? '');
+        $currentImage = $_POST['current_image'] ?? '';
 
-        // 3️⃣ Handle image upload
-        if (!empty($_FILES['image']['name'])) {
-            $targetDir = APPROOT . "/../public/uploads/";
-            $image_name = basename($_FILES['image']['name']);
-            $targetFile = $targetDir . $image_name;
+        // --- VALIDATION ---
+        // Product Name
+        if(strlen($data['product']['item_name']) === 0) {
+            $data['errors']['name'] = "Product name is required.";
+        } elseif(strlen($data['product']['item_name']) < 3) {
+            $data['errors']['name'] = "Product name must be at least 3 characters.";
+        } elseif(!preg_match("/^[a-zA-Z0-9\s\-_]+$/", $data['product']['item_name'])) {
+            $data['errors']['name'] = "Product name can only contain letters, numbers, spaces, hyphens, and underscores.";
+        }
 
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-                $data['image_url'] = $image_name;
+        // Category
+        if(strlen($data['product']['category']) === 0) {
+            $data['errors']['category'] = "Please select a category.";
+        }
+
+        // Status
+        if(strlen($data['product']['status']) === 0) {
+            $data['errors']['status'] = "Please select a status.";
+        }
+
+        // Province
+        if(strlen($data['product']['province']) === 0) {
+            $data['errors']['province'] = "Please select a province.";
+        }
+
+        // Region/District
+        if(strlen($data['product']['region']) === 0) {
+            $data['errors']['region'] = "Please select a district.";
+        }
+
+        // Unit Type
+        if(strlen($data['product']['unit_type']) === 0) {
+            $data['errors']['unit_type'] = "Please select a unit type.";
+        }
+
+        // Price
+        if(strlen($data['product']['price_per_unit']) === 0) {
+            $data['errors']['price'] = "Price is required.";
+        } elseif(!is_numeric($data['product']['price_per_unit']) || floatval($data['product']['price_per_unit']) <= 0) {
+            $data['errors']['price'] = "Price must be a number greater than 0.";
+        }
+
+        // Available Quantity
+        if(strlen($data['product']['available_quantity']) === 0) {
+            $data['errors']['available'] = "Quantity is required.";
+        } elseif(!ctype_digit($data['product']['available_quantity']) || intval($data['product']['available_quantity']) < 0) {
+            $data['errors']['available'] = "Quantity must be a whole positive number.";
+        }
+
+        // --- IMAGE UPLOAD ---
+        if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $allowedExt = ['jpg','jpeg','png','gif'];
+            $fileExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            if(!in_array($fileExt, $allowedExt)) {
+                $data['errors']['image'] = "Only JPG, JPEG, PNG, GIF allowed.";
             } else {
-                $errors['image'] = "Failed to upload image.";
+                $uploadsDir = 'uploads/';
+                if(!is_dir($uploadsDir)) mkdir($uploadsDir, 0777, true);
+                $filename = time().'_'.basename($_FILES['image']['name']);
+                $target = $uploadsDir.$filename;
+                if(move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
+                    $data['product']['image_url'] = $filename;
+                } else {
+                    $data['errors']['image'] = "Failed to upload image.";
+                }
             }
         } else {
-            // Keep current image if no new upload
-            $data['image_url'] = $_POST['current_image'] ?? $product['image_url'];
+            // Keep existing image
+            $data['product']['image_url'] = $currentImage;
         }
 
-        // 4️⃣ Validation
-        if (empty($data['item_name'])) $errors['name'] = "⚠ Product name required.";
-        if (empty($data['category'])) $errors['category'] = "⚠ Please select a category.";
-        if (empty($data['status'])) $errors['status'] = "⚠ Please select status.";
-        if (empty($data['region'])) $errors['region'] = "⚠ Please select region.";
-        if (empty($data['unit_type'])) $errors['unit_type'] = "⚠ Please select unit type.";
-        if (!isset($data['price_per_unit']) || !is_numeric($data['price_per_unit']) || $data['price_per_unit'] <= 0)
-            $errors['price'] = "⚠ Enter valid price.";
-        if (!isset($data['available_quantity']) || !is_numeric($data['available_quantity']) || $data['available_quantity'] < 0)
-            $errors['available'] = "⚠ Enter valid quantity.";
-
-        // 5️⃣ If no errors, update product
-        if (empty($errors)) {
-            if ($this->marketplaceModel->updateProduct($data)) {
+        // --- UPDATE PRODUCT ---
+        if(empty($data['errors'])) {
+            if($this->marketplaceModel->updateProduct($id, $data['product'])) {
+                $_SESSION['product_message'] = "Product updated successfully ✅";
                 header("Location: " . URLROOT . "/Marketplace/manageProduct");
-                exit;
+                exit();
             } else {
-                $errors['general'] = "Failed to update product.";
+                $data['errors']['general'] = "Something went wrong. Please try again.";
             }
         }
-
-        // Reload form with errors and entered values
-        $product = $data;
     }
 
-    // 6️⃣ Load view
-    $this->view('marketplace/V_editProduct', [
-        'product' => $product,
-        'errors' => $errors
-    ]);
+    $this->view('marketplace/V_editProduct', $data);
 }
+
 
 
 

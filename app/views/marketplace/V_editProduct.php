@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/sellerheader.php'; ?>
 
 <link rel="stylesheet" href="<?= URLROOT ?>/css/seller/editproduct.css?v=<?= time(); ?>">
 
@@ -75,30 +75,35 @@ $errors = $data['errors'] ?? [];
                     <?php endif; ?>
                 </div>
 
-                <!-- Region -->
-                <div class="form-group">
-                    <label>Select District: <span class="required">*</span></label>
-                    <select name="region" required>
-                        <?php
-                        $regions = [
-                            'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo',
-                            'Galle', 'Gampaha', 'Hambantota', 'Jaffna', 'Kalutara',
-                            'Kandy', 'Kegalle', 'Kilinochchi', 'Kurunegala', 'Mannar',
-                            'Matale', 'Matara', 'Monaragala', 'Mullaitivu', 'Nuwara Eliya',
-                            'Polonnaruwa', 'Puttalam', 'Ratnapura', 'Trincomalee', 'Vavuniya'
-                        ];
-
-                        foreach ($regions as $reg) {
-                            $selected = (isset($product['region']) && $product['region'] == $reg) ? 'selected' : '';
-                            echo "<option value='$reg' $selected>$reg</option>";
-                        }
-                        ?>
-                    </select>
-
-                    <?php if(!empty($errors['region'])): ?>
-                        <div class="error"><?= $errors['region'] ?></div>
-                    <?php endif; ?>
-                </div>
+                
+                <!-- Province -->
+          <div class="form-group">
+            <label>Province <span class="required">*</span></label>
+            <select id="province" name="province" class="<?= !empty($data['errors']['province']) ? 'error-field' : '' ?>">
+              <option value="">Select Province</option>
+              <?php 
+                $provinces = ["Central","Eastern","North Central","Northern","North Western","Sabaragamuwa","Southern","Uva","Western"];
+                foreach($provinces as $province) {
+                  $selected = (isset($product['province']) && $product['province'] == $province) ? 'selected' : '';
+                  echo "<option value='$province' $selected>$province</option>";
+                }
+              ?>
+            </select>
+            <?php if(!empty($data['errors']['province'])): ?>
+              <div class="error"><?= $data['errors']['province'] ?></div>
+            <?php endif; ?>
+          </div>
+          
+          <!-- District -->
+          <div class="form-group">
+            <label>District <span class="required">*</span></label>
+            <select id="district" name="region" class="<?= !empty($data['errors']['region']) ? 'error-field' : '' ?>">
+              <option value="">Select District</option>
+            </select>
+            <?php if(!empty($data['errors']['region'])): ?>
+              <div class="error"><?= $data['errors']['region'] ?></div>
+            <?php endif; ?>
+          </div>
 
                 <!-- Unit Type -->
                 <div class="form-group">
@@ -178,6 +183,42 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             fileInputButton.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Choose Product Image`;
         }
+    });
+
+     const districtsByProvince = {
+        "Central": ["Kandy","Matale","Nuwara Eliya"],
+        "Eastern": ["Ampara","Batticaloa","Trincomalee"],
+        "Northern": ["Jaffna","Kilinochchi","Mannar","Mullaitivu","Vavuniya"],
+        "North Central": ["Anuradhapura","Polonnaruwa"],
+        "North Western": ["Kurunegala","Puttalam"],
+        "Sabaragamuwa": ["Kegalle","Ratnapura"],
+        "Southern": ["Galle","Matara","Hambantota"],
+        "Uva": ["Badulla","Monaragala"],
+        "Western": ["Colombo","Gampaha","Kalutara"]
+    };
+
+    const provinceSelect = document.getElementById('province');
+    const districtSelect = document.getElementById('district');
+
+    function populateDistricts(selectedProvince, selectedDistrict = null) {
+        districtSelect.innerHTML = '<option value="">Select District</option>';
+        if(districtsByProvince[selectedProvince]) {
+            districtsByProvince[selectedProvince].forEach(dist => {
+                const option = document.createElement('option');
+                option.value = dist;
+                option.textContent = dist;
+                if(dist === selectedDistrict) option.selected = true;
+                districtSelect.appendChild(option);
+            });
+        }
+    }
+
+    // Populate on page load if province exists
+    populateDistricts(provinceSelect.value, "<?= $product['region'] ?? '' ?>");
+
+    // Populate when province changes
+    provinceSelect.addEventListener('change', function() {
+        populateDistricts(this.value);
     });
 });
 </script>

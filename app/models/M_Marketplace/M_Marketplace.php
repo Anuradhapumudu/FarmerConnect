@@ -20,13 +20,14 @@ class M_Marketplace{
 
         // Insert product
         $this->db->query("INSERT INTO products
-            (item_name, seller_id, category, description, region, unit_type, price_per_unit, available_quantity, image_url, status)
-            VALUES (:name, :seller_id, :category, :description, :region, :unit_type, :price, :available, :image, :status)");
+            (item_name, seller_id, category, description,province, region, unit_type, price_per_unit, available_quantity, image_url, status)
+            VALUES (:name, :seller_id, :category, :description, :province, :region, :unit_type, :price, :available, :image, :status)");
         
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':seller_id', $data['seller_id']);
         $this->db->bind(':category', $data['category']);
         $this->db->bind(':description', $data['description']);
+        $this->db->bind(':province', $data['province']);
         $this->db->bind(':region', $data['region']);
         $this->db->bind(':unit_type', $data['unit_type']);
         $this->db->bind(':price', $data['price']);
@@ -72,12 +73,13 @@ public function getProductsByCategory($category) {
 
 
     //update
-     public function updateProduct($data) {
+public function updateProduct($item_id, $data) {
     $this->db->query("UPDATE products SET 
         item_name = :item_name,
         category = :category,
         description = :description,
         status = :status,
+        province = :province,
         region = :region,
         unit_type = :unit_type,
         price_per_unit = :price_per_unit,
@@ -90,16 +92,17 @@ public function getProductsByCategory($category) {
     $this->db->bind(':category', $data['category']);
     $this->db->bind(':description', $data['description']);
     $this->db->bind(':status', $data['status']);
+    $this->db->bind(':province', $data['province']);
     $this->db->bind(':region', $data['region']);
     $this->db->bind(':unit_type', $data['unit_type']);
     $this->db->bind(':price_per_unit', $data['price_per_unit']);
     $this->db->bind(':available_quantity', $data['available_quantity']);
     $this->db->bind(':image_url', $data['image_url']);
-    $this->db->bind(':item_id', $data['item_id']);
+    $this->db->bind(':item_id', $item_id);
 
-    // Execute and return true/false
     return $this->db->execute();
 }
+
 
 
     //delete

@@ -44,7 +44,7 @@
           <?php require APPROOT . '/views/inc/components/translate.php'; ?>
           </script>
           <!-- main links -->
-          <a href="<?php echo URLROOT; ?>/farmerdashboard"><i class="fa fa-home"></i> Home</a>
+          <a href="<?php echo URLROOT; ?>/Sellerdashboard"><i class="fa fa-home"></i> Home</a>
           <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
           <a href="<?php echo URLROOT; ?>/Help/help"><i class="fa fa-question-circle"></i> Help</a>
           <a href="<?php echo URLROOT; ?>/FarmerProfile"><i class="fa-regular fa-circle-user"></i> Profile</a>
@@ -68,27 +68,15 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <ul class="sidebar-menu">
-      <li><a href="<?php echo URLROOT; ?>/FarmerDashboard" class="active" data-tooltip="Home">
+      <li><a href="<?php echo URLROOT; ?>/SellerDashboard" class="active" data-tooltip="Home">
         <i class="fas fa-home"></i>
         <span class="menu-text">Home</span>
-      </a></li>
-      <li><a href="<?php echo URLROOT; ?>/FarmerTimeline" data-tooltip="Cultivation Timeline">
-        <i class="fas fa-calendar-alt"></i>
-        <span class="menu-text">Cultivation Timeline</span>
-      </a></li>
-      <li><a href="<?php echo URLROOT; ?>/FertilizerCalculator" data-tooltip="Fertilizer Calculator">
-        <i class="fas fa-calculator"></i>
-        <span class="menu-text">Fertilizer Calculator</span>
-      </a></li>
-      <li><a href="<?php echo URLROOT; ?>/Disease/viewReports" data-tooltip="Disease Detector">
-        <i class="fas fa-bug"></i>
-        <span class="menu-text">Disease Detector</span>
       </a></li>
       <li><a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterFarmer" data-tooltip="Knowledge Center">
         <i class="fas fa-book"></i>
         <span class="menu-text">Knowledge Center</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/Marketplace/farmer" data-tooltip="Marketplace">
+      <li><a href="<?php echo URLROOT; ?>/Marketplace/seller" data-tooltip="Marketplace">
         <i class="fas fa-store"></i>
         <span class="menu-text">Marketplace</span>
       </a></li>
