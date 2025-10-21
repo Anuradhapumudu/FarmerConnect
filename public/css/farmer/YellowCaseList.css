@@ -9,6 +9,7 @@
     box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
 }
 
+/* ===== Header ===== */
 .content-header {
     margin-bottom: 25px;
     border-bottom: 2px solid rgba(255, 255, 255, 0.1);
@@ -27,7 +28,7 @@
     font-size: 1rem;
 }
 
-/* --- Action Bar --- */
+/* ===== Create Button ===== */
 .action-bar {
     display: flex;
     justify-content: flex-start;
@@ -52,7 +53,7 @@
     box-shadow: 0 3px 10px rgba(212, 172, 13, 0.4);
 }
 
-/* --- Table Styling --- */
+/* ===== Table ===== */
 .table-wrapper {
     overflow-x: auto;
 }
@@ -71,6 +72,7 @@
     padding: 14px 16px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
+    font-size: 0.95rem;
 }
 
 .yellowcase-table th {
@@ -85,7 +87,7 @@
     background: rgba(255, 255, 0, 0.05);
 }
 
-/* --- Status Styling --- */
+/* ===== Status Badges ===== */
 .status {
     padding: 6px 12px;
     border-radius: 20px;
@@ -109,7 +111,7 @@
     color: #004085;
 }
 
-/* --- Buttons --- */
+/* ===== Buttons ===== */
 .btn-cell {
     display: flex;
     gap: 8px;
@@ -145,21 +147,66 @@
     background: #2e86c1;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* ===== Mobile Card Layout (hidden by default) ===== */
+.case-cards {
+    display: none;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 1150px) {
     .yellowcase-list {
         padding: 20px;
         width: 95%;
     }
 
-    .yellowcase-table th, .yellowcase-table td {
-        font-size: 0.9rem;
-        padding: 10px;
+    /* Hide Table on Mobile */
+    .yellowcase-table {
+        display: none;
     }
 
-    .btn-cell {
+    /* Show Card Layout */
+    .case-cards {
+        display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 15px;
+    }
+
+    .case-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .case-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .case-card-header h4 {
+        margin: 0;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .case-card-body p {
+        margin: 4px 0;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .case-card-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .case-card-actions .btn {
+        font-size: 0.85rem;
+        padding: 6px 10px;
     }
 
     .action-bar {

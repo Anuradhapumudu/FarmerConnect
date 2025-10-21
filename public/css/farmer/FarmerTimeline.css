@@ -212,3 +212,101 @@
   font-weight: 500;
 }
 
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Medium screens (tablets) */
+@media (max-width: 992px) {
+  .timeline-container {
+    width: 95%;
+    padding: 25px 15px;
+  }
+
+  .task-row {
+    justify-content: center; /* Center tasks */
+    gap: 20px;
+  }
+
+  .task {
+    width: 180px;
+  }
+
+  .circle {
+    width: 140px;
+    height: 140px;
+  }
+
+  .label {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small screens (mobiles) */
+@media (max-width: 600px) {
+  .timeline-container {
+    width: 96%;
+    padding: 20px 12px;
+    box-shadow: none;
+  }
+
+  .timeline-container h2 {
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+  }
+
+  .plr-selector label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .plr-selector select {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .stage-section {
+    padding: 15px;
+    margin-bottom: 30px;
+  }
+
+  .stage-section h3 {
+    font-size: 1.2rem;
+    padding-left: 8px;
+    margin-bottom: 15px;
+  }
+
+  .task-row {
+    flex-direction: column; /* Stack tasks vertically */
+    align-items: center;
+    gap: 18px;
+  }
+
+  .task {
+    width: 90%;
+    max-width: 260px;
+    background: #fafafa;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 15px;
+  }
+
+  .circle {
+    width: 120px;
+    height: 120px;
+    border-width: 4px;
+  }
+
+  .label {
+    font-size: 0.9rem;
+  }
+
+  .info {
+    font-size: 0.8rem;
+  }
+
+  .status-selector button {
+    width: 100%;
+    max-width: 200px;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+}
+

@@ -62,6 +62,55 @@
                 </tr>
             </tbody>
         </table>
+
+                <!-- ✅ Mobile Cards View -->
+        <div class="case-cards">
+        <div class="case-card">
+            <div class="case-card-header">
+            <h4>001 — Leaf discoloration in paddy</h4>
+            <span class="status pending">Pending</span>
+            </div>
+            <div class="case-card-body">
+            <p><strong>Observation Date:</strong> 2025-10-12</p>
+            <p><strong>Submitted On:</strong> 2025-10-13</p>
+            </div>
+            <div class="case-card-actions">
+            <button class="btn view-btn">View</button>
+            <button class="btn reply-btn">View Reply</button>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <div class="case-card-header">
+            <h4>002 — Stem borer damage</h4>
+            <span class="status replied">Replied</span>
+            </div>
+            <div class="case-card-body">
+            <p><strong>Observation Date:</strong> 2025-09-29</p>
+            <p><strong>Submitted On:</strong> 2025-09-30</p>
+            </div>
+            <div class="case-card-actions">
+            <button class="btn view-btn">View</button>
+            <button class="btn reply-btn">View Reply</button>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <div class="case-card-header">
+            <h4>003 — Brown spot disease</h4>
+            <span class="status resolved">Resolved</span>
+            </div>
+            <div class="case-card-body">
+            <p><strong>Observation Date:</strong> 2025-08-15</p>
+            <p><strong>Submitted On:</strong> 2025-08-16</p>
+            </div>
+            <div class="case-card-actions">
+            <button class="btn view-btn">View</button>
+            <button class="btn reply-btn">View Reply</button>
+            </div>
+        </div>
+        </div>
+
     </div>
 </div>
 
