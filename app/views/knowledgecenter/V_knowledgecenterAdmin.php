@@ -6,10 +6,6 @@
 <main class="main-content" id="mainContent">
   <div class="container">
 
-    <div class="top-actions">
-      <button class="add-article-btn"><i class="fa-solid fa-pen-to-square"></i> Add Article</button>
-    </div>
-
     <h2 class="knowledgecenter-heading">Knowledge Center</h2>
     <p class="knowledgecenter-description">
       Explore expert insights, guides, and resources – empowering you with the knowledge to grow smarter and farm better.
