@@ -1,10 +1,10 @@
-<?php require_once APPROOT . '/views/inc/adminheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/create_announcements.css">
 
 
 <main class="main-content" id="mainContent">
-    <h1>Create Announcement</h1>
-    <form method="POST" action="<?php echo URLROOT; ?>/Announcements/CreateAnnouncements/create" enctype="multipart/form-data">
+    <h1>Edit Announcement</h1>
+    <form method="POST" action="<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $data['announcement_id']; ?>" enctype="multipart/form-data">
         <div class="input-group">
             <label for="title">Title<span class="required">*</span></label>
             <input type="text" name="title" id="title" required value="<?php echo $data['title']; ?>">
@@ -29,7 +29,7 @@
             <input type="file" name="attachFiles[]" id="attachFiles" multiple>
         </div>
         <div class="btn-group">
-            <button type="submit" class="create-btn">Upload</button>
+            <button type="submit" class="create-btn">Update</button>
             <button type="button" class="cancel-btn" onclick="window.location.href='<?= URLROOT ?>/Announcements/Announcements'">Cancel</button>
         </div>
     </form>

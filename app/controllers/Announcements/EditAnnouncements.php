@@ -81,7 +81,14 @@ class EditAnnouncements extends Controller{
                 'attachFiles' => '',
                 'attachment_path' => $announcement->attachment_path
             ];
-            $this->view('announcements/v_edit_announcements', $data);
+            $this->loadViewByRole('edit_announcements', $data);
+        }
+    }
+    private function loadViewByRole($baseViewName, $data) {
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
+            $this->view('announcements/v_admin_' . $baseViewName, $data);
+        } else {
+            $this->view('announcements/v_officer_' . $baseViewName, $data);
         }
     }
 }
