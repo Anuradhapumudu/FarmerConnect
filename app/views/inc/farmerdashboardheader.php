@@ -17,6 +17,13 @@
   <script src="<?php echo URLROOT; ?>/js/default.js" defer></script>
 </head>
 <body>
+
+    
+<!-- Hidden checkbox -->
+  <input type="checkbox" id="mobile-menu-toggle" hidden>
+
+  <!-- Mobile overlay -->
+  <div class="mobile-overlay"></div>
   <!-- Header -->
   <header>
     <div class="header-container">
@@ -37,9 +44,10 @@
           <a href="<?php echo URLROOT; ?>/FarmerProfile"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
 
-        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Toggle navigation menu">
+        <!-- Mobile menu toggle -->
+        <label for="mobile-menu-toggle" id="mobileMenuBtn" class="mobile-menu-label">
           <i class="fas fa-bars"></i>
-        </button>
+        </label>
       </nav>
     </div>
   </header>
