@@ -56,11 +56,11 @@
       <p>Track planting, harvesting, and seasonal activities efficiently.</p>
     </div>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/admin/CalculatorUpdate" class="feature">
       <i class="fa-solid fa-calculator fa-2x"></i>
       <h3>Fertilizer Calculator</h3>
       <p>Get accurate fertilizer recommendations based on crop and soil.</p>
-    </div>
+    </a>
 
     <div class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>

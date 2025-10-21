@@ -1,14 +1,26 @@
-.container { max-width: 1200px; margin: auto; }
+.container { 
+  max-width: 1200px; 
+  margin: auto; 
+  padding: 20px;
+}
 
+/* ==== Header ==== */
 .officer-header {
   text-align: center;
   margin-bottom: 30px;
   padding: 20px;
 }
-.officer-header h1 { color: #2e7d32; margin-bottom: 10px; }
-.officer-header p { color: #558b2f; }
+.officer-header h1 { 
+  color: #2e7d32; 
+  margin-bottom: 10px; 
+  font-weight: 700;
+}
+.officer-header p { 
+  color: #558b2f; 
+  font-size: 1rem;
+}
 
-/* Stats cards */
+/* ==== Stats Section ==== */
 .stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -26,10 +38,17 @@
 .card:hover {
   transform: translateY(-5px);
 }
-.card h2 { margin: 0; font-size: 28px; color: #2e7d32; }
-.card p { margin: 5px 0 0; color: #555; }
+.card h2 { 
+  margin: 0; 
+  font-size: 28px; 
+  color: #2e7d32; 
+}
+.card p { 
+  margin: 5px 0 0; 
+  color: #555; 
+}
 
-/* Search + filter */
+/* ==== Search + Filter ==== */
 .search-box {
   background: white;
   border-radius: 16px;
@@ -43,14 +62,12 @@
 }
 .search-input {
   flex: 1;
-  width: 350px;   /* Increase to any size you want (300px, 400px, etc.) */
-  max-width: 100%;
+  min-width: 250px;
   padding: 12px 15px 12px 40px;
   border: 2px solid #c8e6c9;
   border-radius: 8px;
   font-size: 16px;
   background: #f9f9f9;
-  position: relative;
   transition: border-color 0.3s ease;
 }
 .search-input:focus {
@@ -78,14 +95,16 @@
   border-color: #2e7d32;
 }
 
-/* Table */
+/* ==== Farmer Table ==== */
 .farmer-table-wrapper {
   background: white;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
-  overflow: hidden;
+  overflow-x: auto; /* ✅ scroll for smaller screens */
   margin-bottom: 20px;
+  padding-bottom: 5px;
 }
+
 .farmer-table-header {
   background: linear-gradient(to right, #2e7d32, #4caf50);
   color: white;
@@ -93,15 +112,31 @@
   font-size: 18px;
   font-weight: 600;
 }
-table { width: 100%; border-collapse: collapse; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px; /* ✅ keeps columns readable */
+}
+
 th, td {
   padding: 15px 20px;
   text-align: left;
   border-bottom: 1px solid #e8f5e9;
+  font-size: 0.95rem;
 }
-th { background: #f9f9f9; font-weight: 600; color: #2e7d32; }
-tr:hover { background: #f5f9f5; }
 
+th { 
+  background: #f9f9f9; 
+  font-weight: 600; 
+  color: #2e7d32; 
+}
+
+tr:hover { 
+  background: #f5f9f5; 
+}
+
+/* ==== Status Badges ==== */
 .status-badge {
   display: inline-block;
   padding: 6px 12px;
@@ -113,27 +148,52 @@ tr:hover { background: #f5f9f5; }
 .status-inactive { background: #fff3cd; color: #856404; }
 .status-pending { background: #cce5ff; color: #004085; }
 
+
+/* ==== Action Buttons (New Professional Look) ==== */
 .action-btn {
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   transition: all 0.3s ease;
   border: none;
-  margin-right: 5px;
-  text-decoration: none;
   display: inline-flex;
   align-items: center;
+  gap: 8px;
+  text-decoration: none;
 }
-.view-btn { background: #2e7d32; color: white; }
-.view-btn:hover { background: #1b5e20; }
-.edit-btn { background: #ff9800; color: white; }
-.edit-btn:hover { background: #f57c00; }
-.delete-btn { background: #f44336; color: white; }
-.delete-btn:hover { background: #d32f2f; }
 
-/* Pagination */
+/* Timeline Button */
+.view-btn {
+  background: linear-gradient(135deg, #2e7d32, #4caf50);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(46, 125, 50, 0.25);
+}
+.view-btn:hover {
+  background: linear-gradient(135deg, #1b5e20, #388e3c);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(46, 125, 50, 0.35);
+}
+
+/* Profile Details Button */
+.edit-btn {
+  background: linear-gradient(135deg, #ffb300, #ff9800);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(255, 152, 0, 0.25);
+}
+.edit-btn:hover {
+  background: linear-gradient(135deg, #f57c00, #ef6c00);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(255, 152, 0, 0.35);
+}
+
+/* Optional Icon Styling */
+.action-btn i {
+  font-size: 14px;
+  opacity: 0.9;
+}
+/* ==== Pagination ==== */
 .pagination {
   display: flex;
   justify-content: center;
@@ -155,13 +215,71 @@ tr:hover { background: #f5f9f5; }
   border-color: #2e7d32;
 }
 
-/* Responsive Adjustments */
+/* ==== Mobile Card View ==== */
+.farmer-cards {
+  display: none;
+}
+
+/* ✅ Show cards on small screens */
+@media (max-width: 1135px) {
+  table {
+    display: none; /* Hide table */
+  }
+
+  .farmer-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .farmer-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  }
+
+  .farmer-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .farmer-card-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #2e7d32;
+  }
+
+  .farmer-card-body {
+    font-size: 0.9rem;
+    color: #333;
+  }
+
+  .farmer-card-body p {
+    margin: 4px 0;
+  }
+
+  .farmer-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    gap: 6px;
+  }
+
+  .farmer-card-actions button {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+}
+
+/* ✅ Smaller Mobile Adjustments */
 @media (max-width: 768px) {
   .search-box { flex-direction: column; align-items: stretch; }
   .stats { grid-template-columns: repeat(2, 1fr); }
-  th, td { padding: 10px 15px; }
-  .action-btn { padding: 6px 8px; margin-bottom: 5px; }
 }
-@media (max-width: 480px) {
+@media (max-width: 500px) {
   .stats { grid-template-columns: 1fr; }
 }
+

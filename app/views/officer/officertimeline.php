@@ -49,8 +49,8 @@
             <td>Kamal Perera</td>
             <td><span class="status-badge status-active">Active</span></td>
             <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> View Profile Details</button>
+              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
+              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
             </td>
           </tr>
           <tr>
@@ -59,8 +59,8 @@
             <td>Nimal Silva</td>
             <td><span class="status-badge status-inactive">Inactive</span></td>
             <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> View Profile Details</button>
+              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
+              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
             </td>
           </tr>
           <tr>
@@ -69,8 +69,8 @@
             <td>Sanduni Fernando</td>
             <td><span class="status-badge status-active">Active</span></td>
             <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> View Profile Details</button>
+              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
+              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
             </td>
           </tr>
           <tr>
@@ -79,8 +79,8 @@
             <td>Sunil Jayasuriya</td>
             <td><span class="status-badge status-active">Active</span></td>
             <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> View Profile Details</button>
+              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
+              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
             </td>
           </tr>
           <tr>
@@ -89,12 +89,47 @@
             <td>Anusha Rajapaksa</td>
             <td><span class="status-badge status-inactive">Inactive</span></td>
             <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> View Profile Details</button>
+              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
+              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
             </td>
           </tr>
         </tbody>
       </table>
+            <!-- ✅ Mobile View -->
+      <div class="farmer-cards">
+        <div class="farmer-card">
+          <div class="farmer-card-header">
+            <h4>02/25/00083/002/P/0003</h4>
+            <span class="status-badge status-active">Active</span>
+          </div>
+          <div class="farmer-card-body">
+            <p><strong>NIC:</strong> 992334567V</p>
+            <p><strong>Name:</strong> Kamal Perera</p>
+          </div>
+          <div class="farmer-card-actions">
+            <button class="action-btn view-btn"><i class="fas fa-route"></i> Timeline</button>
+            <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile</button>
+          </div>
+        </div>
+
+        <div class="farmer-card">
+          <div class="farmer-card-header">
+            <h4>02/25/00083/002/P/0004</h4>
+            <span class="status-badge status-inactive">Inactive</span>
+          </div>
+          <div class="farmer-card-body">
+            <p><strong>NIC:</strong> 993456789V</p>
+            <p><strong>Name:</strong> Nimal Silva</p>
+          </div>
+          <div class="farmer-card-actions">
+            <button class="action-btn view-btn"><i class="fas fa-route"></i> Timeline</button>
+            <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile</button>
+          </div>
+        </div>
+
+        <!-- You can repeat for the rest of the farmers -->
+      </div>
+
     </div>
 
     <!-- Pagination -->
