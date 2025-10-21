@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/YellowcaseReplyForm.css?v=<?= time(); ?>">
 
 <div class="yellowcase-card">
@@ -51,7 +51,7 @@
 
         <div class="form-col readonly-view">
                 <label>Officer ID:</label>
-                <div class="readonly-field">197510296V</div>
+                <div class="readonly-field">Ag-001</div>
         </div>
 
         <div class="form-group">

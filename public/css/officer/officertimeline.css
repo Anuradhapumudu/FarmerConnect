@@ -15,6 +15,18 @@
   margin-bottom: 10px; 
   font-weight: 700;
 }
+
+.officer-header h1::after
+{
+    content: "";
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: 2px;
+  background: #c8e6c9;
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
 .officer-header p { 
   color: #558b2f; 
   font-size: 1rem;
@@ -32,8 +44,10 @@
   border-radius: 16px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  box-shadow:  5px 5px rgba(46, 125, 50, 0.1);
   transition: transform 0.3s ease;
+  border-left: 6px solid #2ecc71;
+  border-top: 0.5px solid #c5ead5;
 }
 .card:hover {
   transform: translateY(-5px);
@@ -62,7 +76,8 @@
 }
 .search-input {
   flex: 1;
-  min-width: 250px;
+  width: 350px;   /* Increase to any size you want (300px, 400px, etc.) */
+  max-width: 100%;
   padding: 12px 15px 12px 40px;
   border: 2px solid #c8e6c9;
   border-radius: 8px;

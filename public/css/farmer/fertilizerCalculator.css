@@ -5,12 +5,12 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
   background-color: rgba(202, 255, 200, 0.7);
   color: #333;
 }
 
 main{
+  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
