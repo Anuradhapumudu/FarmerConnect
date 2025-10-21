@@ -29,6 +29,12 @@
       <p>View Yellow case Reports and Reply to them.</p>
     </a>
 
+    <a href="<?php echo URLROOT; ?>/officer/CalculatorOfficer" class="feature">
+      <i class="fa-solid fa-calculator fa-2x"></i>
+      <h3>Fertilizer Calculator</h3>
+      <p>Get accurate fertilizer recommendations based on crop and soil.</p>
+    </a>
+
     <a href="<?php echo URLROOT; ?>/officerDashboard/viewDiseaseReports" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>

@@ -8,9 +8,9 @@
     <label for="plrSelect">Select PLR Number:</label>
     <select id="plrSelect">
       <option value="">-- Select PLR --</option>
-      <option value="PLR-001">PLR-001</option>
-      <option value="PLR-002">PLR-002</option>
-      <option value="PLR-003">PLR-003</option>
+      <option value="PLR-001">02/25/00083/001/P/0056</option>
+      <option value="PLR-002">02/25/00083/001/P/0045</option>
+      <option value="PLR-003">02/25/00083/001/P/0067</option>
     </select>
   </div>
 
@@ -101,7 +101,7 @@
     <div class="task pending">
       <div class="label">Sowing</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
-        <img src="<?php echo URLROOT; ?>/img/sowing.jpg" alt="Sowing">
+        <img src="<?php echo URLROOT; ?>/img/sowing.webp" alt="Sowing">
       </div>
       <div class="info">Estimated date<br><span>2025.07.01</span></div>
       <div class="status-selector">
@@ -115,7 +115,7 @@
     <div class="task pending">
       <div class="label">Fertilization I</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
-        <img src="<?php echo URLROOT; ?>/img/fertilizer1.jpg" alt="Fertilization I">
+        <img src="<?php echo URLROOT; ?>/img/fertilization1.jpg" alt="Fertilization I">
       </div>
       <div class="info">Estimated date<br><span>2025.07.10</span></div>
       <div class="status-selector">
@@ -129,7 +129,7 @@
     <div class="task pending">
       <div class="label">Fertilization II</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
-        <img src="<?php echo URLROOT; ?>/img/fertilizer2.jpg" alt="Fertilization II">
+        <img src="<?php echo URLROOT; ?>/img/fertilization2.jpeg" alt="Fertilization II">
       </div>
       <div class="info">Estimated date<br><span>2025.07.20</span></div>
       <div class="status-selector">
@@ -143,7 +143,7 @@
     <div class="task pending">
       <div class="label">Fertilization III</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
-        <img src="<?php echo URLROOT; ?>/img/fertilizer3.jpg" alt="Fertilization III">
+        <img src="<?php echo URLROOT; ?>/img/fertilization3.jpg" alt="Fertilization III">
       </div>
       <div class="info">Estimated date<br><span>2025.07.30</span></div>
       <div class="status-selector">
@@ -157,7 +157,7 @@
     <div class="task pending">
       <div class="label">Harvesting</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
-        <img src="<?php echo URLROOT; ?>/img/harvesting.jpg" alt="Harvesting">
+        <img src="<?php echo URLROOT; ?>/img/harvesting.webp" alt="Harvesting">
       </div>
       <div class="info">Estimated date<br><span>2025.08.15</span></div>
       <div class="status-selector">
