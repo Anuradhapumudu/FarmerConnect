@@ -49,8 +49,8 @@
       </div>
 
       <div class="link">
-            <a href="#"><i class="fa-solid fa-leaf"></i> Know more</a>
-            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Buy Fertilizer</a>
+            <a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterFarmer"><i class="fa-solid fa-leaf"></i> Know more</a>
+            <a href="<?php echo URLROOT; ?>/viewProduct/fertilizer"><i class="fa-solid fa-cart-shopping"></i> Buy Fertilizer</a>
       </div>
     </div>
 

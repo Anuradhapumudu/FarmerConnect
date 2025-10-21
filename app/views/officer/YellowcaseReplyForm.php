@@ -12,7 +12,7 @@
         <h2>Farmer Report Details</h2>
         <div class="form-group readonly-view">
             <label>Case ID:</label>
-            <div class="readonly-field">YC-003</div>
+            <div class="readonly-field">YC-2025-00452</div>
         </div>
 
         <div class="form-row">
@@ -27,40 +27,32 @@
         </div>
 
         <div class="form-row">
-            <div class="form-col readonly-view">
-                <label>Observation Date:</label>
-                <div class="readonly-field">2025-10-14</div>
-            </div>
+
             <div class="form-col readonly-view">
                 <label>Submitted On:</label>
-                <div class="readonly-field">2025-10-15</div>
+                <div class="readonly-field">2025-10-19</div>
             </div>
         </div>
 
         <div class="form-group readonly-view">
             <label>Case Title:</label>
-            <div class="readonly-field">Unusual Yellowing in Paddy Leaves</div>
-        </div>
-
-        <div class="form-group readonly-view">
-            <label>Case Description:</label>
-            <div class="readonly-field">
-                The farmer observed rapid yellowing of paddy leaves over the past week. The area affected covers around 50% of the paddy field.
-            </div>
-        </div>
-
-        <div class="form-group readonly-view">
-            <label>Attached Media:</label>
-            <div class="uploaded-files has-files">
-                <div class="uploaded-file">yellowing1.jpg</div>
-                <div class="uploaded-file">field_video.mp4</div>
-            </div>
+            <div class="readonly-field">Low Water Supply to Cultivation Area</div>
         </div>
     </div>
 
     <!-- Officer Reply Section -->
     <form action="<?php echo URLROOT; ?>/yellowcase/reply" method="POST" enctype="multipart/form-data" class="yellowcase-form">
         <h2>Officer Response</h2>
+
+        <div class="form-col readonly-view">
+                <label>Officer Name:</label>
+                <div class="readonly-field">R.A.Rathnayake</div>
+        </div>
+
+        <div class="form-col readonly-view">
+                <label>Officer ID:</label>
+                <div class="readonly-field">197510296V</div>
+        </div>
 
         <div class="form-group">
             <label for="officerReply" class="required">Your Reply / Recommendation</label>
