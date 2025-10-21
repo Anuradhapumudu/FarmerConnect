@@ -37,12 +37,12 @@
         
         <div class="form-group-split">
             <div class="form-group-half">
-                <label for="observationDate" class="required">Date of Observation</label>
+                <label for="observationDate" style="color:#2e7d32; font-weight:600">Date of Observation</label>
                 <input type="date" id="observationDate" name="observationDate" value="<?php echo $data['observationDate']; ?>">
                 <span class="error"><?php echo $data['observationDate_error']; ?></span>
             </div>
             <div class="form-group-half">
-                <label for="todayDate">Today's Date</label>
+                <label for="todayDate" style="color:#2e7d32; font-weight:600">Today's Date</label>
                 <input type="date" id="todayDate" name="todayDate" readonly>
             </div>
         </div>
@@ -63,6 +63,9 @@
         
         <div class="form-group">
             <label for="media">Upload Images / Video</label>
+            <div class="blinking-text-container">
+                <p class="blinking-text">‼️ Reports with photos/videos get faster response from officers!</p>
+            </div>
             <div class="file-upload" id="mediaUploadArea">
                 <div>
                     <i class="upload-icon"><img style="width: 30px; height: 30px;" src="https://cdn-icons-png.flaticon.com/128/10024/10024248.png"></i>
@@ -158,10 +161,11 @@
         <div class="form-group">
             <div class="checkbox-container">
                 <label for="terms" class="checkbox-label required">
-                    <input type="checkbox" id="terms" name="terms" required>
+                    <input type="checkbox" id="terms" name="terms">
                     I agree to the <a href="<?php echo URLROOT; ?>/pages/terms/disease" class="terms-link" target="_blank">terms and conditions</a>
                 </label>
             </div>
+            <span class="error"><?php echo $data['terms_error']; ?></span>
         </div>
         
         <!-- Required fields notice -->
@@ -342,7 +346,33 @@
     .severity-low { color: var(--primary-light); }
     .severity-medium { color: var(--secondary); }
     .severity-high { color: #e74c3c; }
-    
+
+    .blinking-text-container {
+    margin-bottom: 20px;
+    text-align: center;
+    }
+
+    .blinking-text {
+        color: #d84315;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin: 0;
+        padding: 0;
+        animation: pulse-text 1.5s ease-in-out infinite;
+        text-shadow: 1px;
+    }
+
+    @keyframes pulse-text {
+        0%, 100% { 
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% { 
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+    }
+
     .file-upload {
         border: 2px dashed var(--card-border);
         padding: 25px;

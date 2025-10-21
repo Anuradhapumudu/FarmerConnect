@@ -52,10 +52,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 FarmerConnect.lk. All Rights Reserved. | 
-                    <a href="<?php echo URLROOT; ?>/pages/privacy-policy.html" style="color: var(--primary);">Privacy Policy</a> | 
-                    <a href="<?php echo URLROOT; ?>/pages/terms-of-service.html" style="color: var(--primary);">Terms of Service</a>
-                </p>
+                <p>&copy; 2025 FarmerConnect.lk. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
