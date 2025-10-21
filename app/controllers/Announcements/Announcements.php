@@ -28,7 +28,7 @@ class Announcements extends Controller {
         ];
 
         // Load the view with data
-        $this->view('announcements/v_announcements', $data);
+        $this->loadViewByRole('Announcements', $data);
     }
     public function togglePin($id) {
         if (!isset($_SESSION['user_type']) || 
@@ -55,6 +55,14 @@ class Announcements extends Controller {
         ];
 
         $this->view('announcements/v_view_announcements', $data);
+    }
+    // Helper to load role-specific views in the same folder
+    private function loadViewByRole($baseViewName, $data) {
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
+            $this->view('announcements/V_Admin' . $baseViewName, $data);
+        } else {
+            $this->view('announcements/V_Officer' . $baseViewName, $data);
+        }
     }
 }
 ?>

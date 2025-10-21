@@ -18,7 +18,15 @@ class CreateAnnouncements extends Controller{
             'attachFiles' => '',
             'attachment_path' => ''  
         ];
-        $this->view('announcements/v_create_announcements', $data);
+        $this->loadViewByRole('create_announcements', $data);
+    }
+    // Function to load the correct view based on user role
+    private function loadViewByRole($baseViewName, $data) {
+        if ($_SESSION['user_type'] === 'admin') {
+            $this->view('announcements/v_admin_' . $baseViewName, $data);
+        } else {
+            $this->view('announcements/v_officer_' . $baseViewName, $data);
+        }
     }
     public function create(){
         
@@ -62,12 +70,12 @@ class CreateAnnouncements extends Controller{
                                 font-size: 20px; 
                                 color: green;'>
                                 Announcement created successfully! <br>
-                                Redirecting to Announcements page in 5 seconds...
+                                Redirecting to Announcements page in 2 seconds...
                             </div>
                             <script>
                                 setTimeout(function(){
                                     window.location.href = '" . URLROOT . "/Announcements/Announcements';
-                                }, 5000);
+                                }, 2000);
                             </script>
                         ";
                 } else {
@@ -84,7 +92,7 @@ class CreateAnnouncements extends Controller{
                 'attachFiles' => '',
                 'attachment_path' => ''  
             ];
-            $this->view('announcements/v_create_announcements', $data);
+            $this->loadViewByRole('create_announcements', $data);
         }
     }
 }

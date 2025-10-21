@@ -43,10 +43,10 @@
           <!-- translator -->
           <?php require APPROOT . '/views/inc/components/translate.php'; ?>
           <!-- main links -->
-          <a href="<?php echo URLROOT; ?>/farmerdashboard"><i class="fa fa-home"></i> Home</a>
-          <a href="<?php echo URLROOT; ?>/Announcements/AnnouncementsFarmer"><i class="fa fa-bullhorn"></i> Announcement</a>
-          <a href="<?php echo URLROOT; ?>/Help/help"><i class="fa fa-question-circle"></i> Help</a>
-          <a href="<?php echo URLROOT; ?>/FarmerProfile"><i class="fa-regular fa-circle-user"></i> Profile</a>
+          <a href="<?php echo URLROOT; ?>/officerdashboard"><i class="fa fa-home"></i> Home</a>
+          <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
+          <a href="<?php echo URLROOT; ?>/Help/helpOfficer"><i class="fa fa-question-circle"></i> Help</a>
+          <a href="<?php echo URLROOT; ?>/ProfileView/officerProfile"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
 
         
@@ -67,29 +67,29 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <ul class="sidebar-menu">
-      <li><a href="<?php echo URLROOT; ?>/FarmerDashboard" class="active" data-tooltip="Home">
+      <li><a href="<?php echo URLROOT; ?>/officerdashboard" class="active" data-tooltip="Home">
         <i class="fas fa-home"></i>
         <span class="menu-text">Home</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/FarmerTimeline" data-tooltip="Cultivation Timeline">
+      <li><a href="<?php echo URLROOT; ?>/officer/officertimeline" data-tooltip="Cultivation Timeline">
         <i class="fas fa-calendar-alt"></i>
         <span class="menu-text">Cultivation Timeline</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/FertilizerCalculator" data-tooltip="Fertilizer Calculator">
+      <li><a href="<?php echo URLROOT; ?>/Officer/CalculatorUpdate" data-tooltip="Fertilizer Calculator">
         <i class="fas fa-calculator"></i>
         <span class="menu-text">Fertilizer Calculator</span>
+      </a></li>
+      <li><a href="<?php echo URLROOT; ?>/officer/officerYellowCase" data-tooltip="Yellow Case">
+        <i class="fa-solid fa-file-circle-exclamation yellow-report-icon"></i>
+        <span class="menu-text">Yellow Case Reports</span>
       </a></li>
       <li><a href="<?php echo URLROOT; ?>/Disease/viewReports" data-tooltip="Disease Detector">
         <i class="fas fa-bug"></i>
         <span class="menu-text">Disease Detector</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterFarmer" data-tooltip="Knowledge Center">
+      <li><a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterOfficer" data-tooltip="Knowledge Center">
         <i class="fas fa-book"></i>
         <span class="menu-text">Knowledge Center</span>
-      </a></li>
-      <li><a href="<?php echo URLROOT; ?>/Marketplace/farmer" data-tooltip="Marketplace">
-        <i class="fas fa-store"></i>
-        <span class="menu-text">Marketplace</span>
       </a></li>
       <li><a href="#" data-tooltip="Complain">
         <i class="fas fa-exclamation-circle"></i>

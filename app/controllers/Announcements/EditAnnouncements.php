@@ -57,12 +57,12 @@ class EditAnnouncements extends Controller{
                                 font-size: 20px; 
                                 color: green;'>
                                 Announcement updated successfully! <br>
-                                Redirecting to Announcements page in 5 seconds...
+                                Redirecting to Announcements page in 2 seconds...
                             </div>
                             <script>
                                 setTimeout(function(){
                                     window.location.href = '" . URLROOT . "/Announcements/Announcements';
-                                }, 5000);
+                                }, 2000);
                             </script>
                         ";
                 } else {
