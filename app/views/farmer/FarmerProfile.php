@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/farmerdashboardheader.php'; ?>
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/FarmerProfile.css?v=<?= time(); ?>">
 
@@ -417,4 +417,4 @@ function deletePaddy() {
 </script>
 
 
-<?php require_once APPROOT . '/views/inc/footer.php'; ?>
+<?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>

@@ -23,11 +23,11 @@
       <p>View assinged farmers timelines.</p>
     </a>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/officer/officerYellowCase" class="feature">
       <i class="fa-solid fa-calculator fa-2x"></i>
       <h3>Yellow Case Reports</h3>
       <p>View Yellow case Reports and Reply to them.</p>
-    </div>
+    </a>
 
     <div class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>

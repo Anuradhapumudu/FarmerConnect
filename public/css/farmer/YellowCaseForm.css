@@ -1,7 +1,6 @@
 /* 🌾 Yellow Case Form Styles */
 .yellowcase-card {
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
+    background: #ffffff;
     border-radius: 15px;
     padding: 30px;
     margin: 30px auto 50px;
@@ -30,6 +29,7 @@
     margin: 5px 0 15px;
 }
 
+/* Case ID */
 .case-id-display {
     background: rgba(255, 255, 0, 0.1);
     border: 1px solid rgba(255, 215, 0, 0.4);
@@ -39,6 +39,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .case-id-display label {
@@ -56,6 +57,7 @@
     border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
+/* ===== FORM ===== */
 .yellowcase-form {
     width: 100%;
 }
@@ -68,10 +70,12 @@
     display: flex;
     gap: 20px;
     margin-bottom: 25px;
+    flex-wrap: wrap;
 }
 
 .form-col {
     flex: 1;
+    min-width: 250px; /* ✅ Prevents text boxes from collapsing */
 }
 
 label {
@@ -86,15 +90,16 @@ label {
     color: #e74c3c;
 }
 
+/* Input Fields */
 input, select, textarea {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid var(--card-border);
+    border: 1px solid var(--card-border, #ddd);
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.9);
     font-size: 1rem;
-    color: var(--dark);
-    transition: var(--transition);
+    color: var(--dark, #333);
+    transition: var(--transition, 0.3s);
     box-sizing: border-box;
 }
 
@@ -111,12 +116,12 @@ textarea {
 
 /* Upload Section */
 .file-upload {
-    border: 2px dashed var(--card-border);
+    border: 2px dashed var(--card-border, #ddd);
     padding: 25px;
     text-align: center;
     border-radius: 8px;
     cursor: pointer;
-    transition: var(--transition);
+    transition: var(--transition, 0.3s);
     background: rgba(255, 255, 255, 0.7);
 }
 
@@ -158,7 +163,7 @@ textarea {
     font-size: 0.9rem;
 }
 
-/* Button */
+/* Submit Button */
 .btn-yellow {
     width: 100%;
     padding: 14px;
@@ -176,13 +181,70 @@ textarea {
     background: #c7a700;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Submit Button */
+.btn-reply {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    background: #229fd4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-reply:hover {
+    background: #207ee2;
+}
+
+/* Readonly fields */
+.readonly-view .readonly-field {
+    background: #f8f8f8;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    margin-top: 4px;
+    color: #333;
+    font-size: 15px;
+    white-space: pre-wrap;
+}
+
+/* ===== Responsive Fixes ===== */
+@media (max-width: 992px) {
     .yellowcase-card {
-        padding: 20px;
+        padding: 25px;
         width: 95%;
     }
     .form-row {
         flex-direction: column;
+        gap: 15px;
+    }
+    .form-col {
+        width: 100%;
+    }
+    input, select, textarea {
+        font-size: 0.95rem;
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .yellowcase-card {
+        padding: 20px;
+        width: 96%;
+    }
+    .yellowcase-header h1 {
+        font-size: 1.7rem;
+    }
+    .case-id-display {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    input, select, textarea {
+        width: 100%;
+        font-size: 0.9rem;
     }
 }

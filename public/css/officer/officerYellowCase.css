@@ -1,0 +1,388 @@
+.yellowcase-dashboard {
+  padding: 30px;
+  color: var(--text-primary);
+  margin-left: 160px; /* ✅ matches sidebar width */
+  margin-right: 100px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.page-header {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f5b400;
+  margin-bottom: 8px;
+}
+
+.page-header .subtitle {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+/* ==== Stats Section ==== */
+.stats-cards {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 35px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 250px;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.stat-card .count {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-card.total { border-left: 6px solid #f5b400; }
+.stat-card.pending { border-left: 6px solid #ff5f57; }
+.stat-card.replied { border-left: 6px solid #2ecc71; }
+
+/* Search + filter */
+.search-box {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.search-input {
+  flex: 1;
+  width: 350px;   /* Increase to any size you want (300px, 400px, etc.) */
+  max-width: 100%;
+  padding: 12px 15px 12px 40px;
+  border: 2px solid #c8e6c9;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #f9f9f9;
+  position: relative;
+  transition: border-color 0.3s ease;
+}
+.search-input:focus {
+  outline: none;
+  border-color: #2e7d32;
+}
+.search-icon {
+  position: absolute;
+  margin-left: 15px;
+  margin-top: 14px;
+  color: #2e7d32;
+  z-index: 1;
+}
+.filter-select {
+  padding: 12px;
+  border: 2px solid #c8e6c9;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+.filter-select:focus {
+  outline: none;
+  border-color: #2e7d32;
+}
+
+
+/* ==== Table ==== */
+.case-table-container {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow-x: auto; /* ✅ enable scroll on small screens */
+}
+
+.case-table-container h2 {
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.case-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,0.85);
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 700px; /* ✅ keeps table readable on scroll */
+}
+
+.case-table th, .case-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95rem;
+}
+
+.case-table th {
+  background: rgba(245, 180, 0, 0.2);
+  color: #444;
+  font-weight: 600;
+}
+
+.case-table tbody tr:hover {
+  background: rgba(255, 255, 0, 0.08);
+  transition: 0.2s;
+}
+
+/* ==== Status Badges ==== */
+.status {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.status.pending {
+  background: rgba(255, 95, 87, 0.1);
+  color: #e74c3c;
+}
+
+.status.replied {
+  background: rgba(46, 204, 113, 0.1);
+  color: #27ae60;
+}
+
+/* ==== Buttons (Updated Professional Look) ==== */
+.btn-view, .btn-reply {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* View Button — Clean Blue Gradient */
+.btn-view {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: #fff;
+}
+.btn-view:hover {
+  background: linear-gradient(135deg, #5dade2, #2471a3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.4);
+}
+
+/* Reply Button — Bright Yellow Accent */
+.btn-reply {
+  background: linear-gradient(135deg, #f5b400, #e6a700);
+  color: #fff;
+}
+.btn-reply:hover {
+  background: linear-gradient(135deg, #ffd34e, #e1a100);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(245, 180, 0, 0.4);
+}
+
+/* Disabled Reply Button */
+.btn-reply.disabled {
+  background: #dcdcdc;
+  color: #777;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  opacity: 0.7;
+}
+
+/* Uniform button size inside table */
+.case-table td .btn-view,
+.case-table td .btn-reply {
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Buttons inside mobile cards */
+.case-card-actions .btn-view,
+.case-card-actions .btn-reply {
+  flex: 1;
+  text-align: center;
+}
+
+/* ==== Layout Fix for Sidebar ==== */
+.yellowcase-dashboard {
+  padding: 30px;
+  color: var(--text-primary);
+  margin-left: 160px; /* ✅ Adjusted to fit sidebar width properly */
+  margin-right: 80px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  transition: margin 0.3s ease;
+}
+
+/* ==== Responsive Design ==== */
+@media (max-width: 1300px) {
+  .yellowcase-dashboard {
+    margin-left: 120px;
+    margin-right: 20px;
+    padding: 25px;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+
+  .case-table th, .case-table td {
+    padding: 12px 10px;
+  }
+}
+
+/* ✅ Tablet & Mobile Adjustments */
+@media (max-width: 768px) {
+  .yellowcase-dashboard {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 20px;
+  }
+
+  .stats-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-card {
+    width: 90%;
+  }
+
+  .case-table-container {
+    padding: 15px;
+  }
+
+  /* Table horizontal scroll for mid-size screens */
+  .case-table {
+    min-width: 600px;
+  }
+}
+
+/* Hide mobile cards by default */
+.case-cards {
+  display: none;
+}
+
+/* ✅ Small Mobile - Transform Table into Cards */
+/* ✅ Small Mobile - Transform Table into Cards */
+@media (max-width: 1150px) {
+  .case-table {
+    display: none; /* Hide normal table */
+  }
+
+  .case-cards {
+    display: flex; /* Show mobile cards */
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .case-card {
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .case-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .case-card-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #444;
+  }
+
+  .case-card-header .status {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+  }
+
+  .case-card-body {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .case-card-body p {
+    margin: 5px 0;
+  }
+
+  .case-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    gap: 6px;
+  }
+
+  .case-card-actions button {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+}
+
+
+/* ✅ Tablet & Mobile Adjustments */
+@media (max-width: 768px) {
+  .yellowcase-dashboard {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 20px;
+  }
+
+  .stats-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-card {
+    width: 90%;
+  }
+
+  .case-table-container {
+    padding: 15px;
+  }
+
+  /* Table horizontal scroll for mid-size screens */
+  .case-table {
+    min-width: 600px;
+  }
+}
+
+
+

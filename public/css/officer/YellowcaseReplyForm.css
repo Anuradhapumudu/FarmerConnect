@@ -1,0 +1,150 @@
+.yellowcase-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    margin: 30px auto 50px;
+    max-width: 1100px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.yellowcase-header {
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(34, 159, 212, 0.2);
+    padding-bottom: 15px;
+}
+
+.yellowcase-header h1 {
+    color: #229fd4;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.yellowcase-subtitle {
+    color: #555;
+    font-size: 1rem;
+}
+
+/* Section Titles */
+.case-info h2, .yellowcase-form h2 {
+    font-size: 1.3rem;
+    color: #229fd4;
+    margin: 25px 0 15px;
+    border-left: 4px solid #229fd4;
+    padding-left: 10px;
+}
+
+/* Readonly Fields */
+.readonly-view .readonly-field {
+    background: #f8f8f8;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    margin-top: 4px;
+    color: #333;
+    font-size: 15px;
+    white-space: pre-wrap;
+}
+
+/* Upload Section */
+.file-upload {
+    border: 2px dashed #ccc;
+    padding: 25px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.file-upload:hover {
+    border-color: #229fd4;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.upload-subtext {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.uploaded-files.has-files {
+    display: block;
+    background: rgba(34, 159, 212, 0.05);
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.uploaded-file {
+    background: rgba(34, 159, 212, 0.1);
+    color: #229fd4;
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin: 2px 0;
+    display: inline-block;
+}
+
+/* Inputs */
+input, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: rgba(255, 255, 255, 0.95);
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input:focus, textarea:focus {
+    border-color: #229fd4;
+    box-shadow: 0 0 0 3px rgba(34, 159, 212, 0.2);
+    outline: none;
+}
+
+/* Buttons */
+.btn-reply {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    background: #229fd4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-reply:hover {
+    background: #1b7fb2;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .yellowcase-card {
+        padding: 25px;
+        width: 95%;
+    }
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    .yellowcase-card {
+        padding: 20px;
+        width: 96%;
+    }
+    .yellowcase-header h1 {
+        font-size: 1.6rem;
+    }
+}
