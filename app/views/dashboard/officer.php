@@ -49,11 +49,6 @@
    
     </a>
 
-    <a href="<?php echo URLROOT; ?>/Announcements/Announcements" class="feature">
-      <i class="fa fa-bullhorn"></i>
-      <h3>Announcements</h3>
-      <p>Make Announcements for farmers.</p>
-    </a>
 
  
 
