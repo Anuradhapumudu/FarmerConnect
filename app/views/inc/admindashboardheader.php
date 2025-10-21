@@ -34,7 +34,7 @@
           <a href="#"><i class="fa fa-home"></i> Home</a>
           <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
           <a href="<?php echo URLROOT; ?>/Help/HelpAdmin"><i class="fa fa-question-circle"></i> Help</a>
-          <a href="#"><i class="fa-regular fa-circle-user"></i> Profile</a>
+          <a href="<?php echo URLROOT; ?>/ProfileView/adminprofile"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
 
         <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Toggle navigation menu">

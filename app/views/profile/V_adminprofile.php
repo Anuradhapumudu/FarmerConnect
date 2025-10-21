@@ -1,4 +1,4 @@
-  <?php require_once APPROOT . '/views/inc/sellerheader.php'; ?>
+  <?php require_once APPROOT . '/views/inc/adminheader.php'; ?>
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/FarmerProfile.css?v=<?= time(); ?>">
 

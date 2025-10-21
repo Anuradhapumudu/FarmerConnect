@@ -50,11 +50,7 @@
  
   <div class="features_block">
 
-    <div class="feature">
-      <i class="fa-solid fa-clock fa-2x"></i>
-      <h3>Timeline</h3>
-      <p>Track planting, harvesting, and seasonal activities efficiently.</p>
-    </div>
+
 
     <a href="<?php echo URLROOT; ?>/admin/CalculatorUpdate" class="feature">
       <i class="fa-solid fa-calculator fa-2x"></i>
