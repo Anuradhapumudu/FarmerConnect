@@ -1,9 +1,9 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/YellowCaseForm.css?v=<?= time(); ?>">
 
 <div class="yellowcase-card">
     <div class="yellowcase-header">
-        <h1>🟡 Yellow Case Report (View Only)</h1>
+        <h1>Yellow Case Report (View Only)</h1>
         <p class="yellowcase-subtitle">This is a submitted yellow case record regarding a cultivational issue.</p>
     </div>
     

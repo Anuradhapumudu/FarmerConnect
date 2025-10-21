@@ -4,9 +4,17 @@
   padding: 0;
 }
 
+<<<<<<< HEAD
 
+=======
+body {
+  background-color: rgba(202, 255, 200, 0.7);
+  color: #333;
+}
+>>>>>>> 3789445641cb515dbca6bdb4925ec4bab555a608
 
 main{
+  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;

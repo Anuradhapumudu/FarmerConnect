@@ -5,7 +5,7 @@
 
   <!-- Dashboard Header -->
   <div class="page-header">
-    <h1>🟡 Yellow Case Management</h1>
+    <h1>Yellow Case Management</h1>
     <p class="subtitle">Monitor, review, and respond to farmer-submitted yellow case reports</p>
   </div>
 
