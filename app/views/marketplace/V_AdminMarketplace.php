@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/adminheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/adminmarketplace.css?v=<?= time(); ?>">
 
 <main class="main-content" id="mainContent">

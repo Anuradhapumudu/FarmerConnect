@@ -4,11 +4,7 @@
   padding: 0;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: rgba(202, 255, 200, 0.7);
-  color: #333;
-}
+
 
 main{
   display: flex;
