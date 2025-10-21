@@ -75,7 +75,7 @@
         <i class="fas fa-calendar-alt"></i>
         <span class="menu-text">Cultivation Timeline</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/Officer/CalculatorUpdate" data-tooltip="Fertilizer Calculator">
+      <li><a href="<?php echo URLROOT; ?>/officer/CalculatorOfficer" data-tooltip="Fertilizer Calculator">
         <i class="fas fa-calculator"></i>
         <span class="menu-text">Fertilizer Calculator</span>
       </a></li>
