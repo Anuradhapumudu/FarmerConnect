@@ -1,0 +1,49 @@
+
+.card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    border: none;
+}
+.text-xs {
+    font-size: 0.7rem;
+}
+.font-weight-bold {
+    font-weight: 700;
+}
+.list-group-item {
+    border-left: none;
+    border-right: none;
+}
+.list-group-item:first-child {
+    border-top: none;
+}
+.list-group-item:last-child {
+    border-bottom: none;
+}
+.list-group-item-action:hover {
+    background-color: #f8f9fc;
+}
+.badge-sm {
+    font-size: 0.7rem;
+}
+code {
+    font-size: 0.8em;
+    background-color: #f1f3f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
+.card-footer {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+.card-footer a:hover {
+    text-decoration: none;
+    opacity: 0.8;
+}
+.btn-lg i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
