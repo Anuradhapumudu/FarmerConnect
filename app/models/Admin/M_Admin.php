@@ -7,7 +7,7 @@ class M_Admin {
     }
 
     public function getAllSellers() {
-        $this->db->query("SELECT * FROM sellers ORDER BY created_at DESC");
+        $this->db->query("SELECT * FROM sellers ORDER BY seller_id DESC");
         return $this->db->resultSet();
     }
 

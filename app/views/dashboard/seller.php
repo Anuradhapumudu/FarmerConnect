@@ -26,11 +26,11 @@
    
     </a>
     
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/Knwoledgecenter/KnowledgecenterSeller " class="feature"></a>
       <i class="fa-solid fa-book-open fa-2x"></i>
       <h3>Knowledge Center</h3>
       <p>Access guides, tutorials, and expert advice on agriculture.</p>
-    </div>
+</a>
  
 
   </div>

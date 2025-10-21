@@ -72,7 +72,7 @@
         <i class="fas fa-home"></i>
         <span class="menu-text">Home</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterFarmer" data-tooltip="Knowledge Center">
+      <li><a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterSeller" data-tooltip="Knowledge Center">
         <i class="fas fa-book"></i>
         <span class="menu-text">Knowledge Center</span>
       </a></li>
