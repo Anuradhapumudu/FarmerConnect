@@ -19,13 +19,15 @@
                     $this->db->execute();
                     $registration_id = $this->db->lastInsertId();
                     // Insert to farmers table
+                    // Combine first name and last name into full_name
+                    $full_name = trim($data['first_name'] . ' ' . $data['last_name']);
+
                     $this->db->query("INSERT INTO farmers
-                        (nic, first_name, last_name, phone_no, registration_id, password)
-                        VALUES (:nic, :first_name, :last_name, :phone_no, :registration_id, :password)
+                        (nic, full_name, phone_no, registration_id, password)
+                        VALUES (:nic, :full_name, :phone_no, :registration_id, :password)
                     ");
                     $this->db->bind(':nic', $data['nic']);
-                    $this->db->bind(':first_name', $data['first_name']);
-                    $this->db->bind(':last_name', $data['last_name']);
+                    $this->db->bind(':full_name', $full_name);
                     $this->db->bind(':phone_no', $data['phone_no']);
                     $this->db->bind(':registration_id', $registration_id);
                     $this->db->bind(':password', $data['password']);
