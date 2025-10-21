@@ -5,22 +5,25 @@
 
 
 <main class="main-content" id="mainContent">
-  <div class="container">
-    <!-- My Orders Button -->
-        <div class="myOrders">
-          <a href="<?php echo URLROOT; ?>/Marketplace/trackOrdersFarmer">
-            <button>
-              <i class="fa fa-shopping-cart"></i> My Orders
-            </button>
-          </a>
-        </div>
+  <div class="containers">
+    <div class="marketplace-header">
+      <h1 class="marketplace-heading">Marketplace</h1>
+    </div>
 
-
-    <h2 class="marketplace-heading">Marketplace</h2>
     <p class="marketplace-description">
       Discover premium agricultural products and services - one of many powerful tools in
       your complete farming platform.
     </p>
+
+    <div class="marketplace-actions">
+      <div class="myOrders">
+        <a href="<?php echo URLROOT; ?>/Marketplace/trackOrdersFarmer">
+          <button>
+            <i class="fa fa-shopping-cart"></i> My Orders
+          </button>
+        </a>
+      </div>
+    </div>
 
     <!-- Marketplace Cards -->
     <div class="features_block">
@@ -30,7 +33,6 @@
           <h3>Fertilizer</h3>
           <p>High-quality fertilizers for optimal crop growth</p>
           <a href="<?php echo URLROOT; ?>/Marketplace/viewProduct/fertilizer" class="btn">Shop Now</a>
-
         </div>
       </div>
 

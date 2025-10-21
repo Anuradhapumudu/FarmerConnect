@@ -4,60 +4,68 @@
   padding: 0;
 }
 
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  transition: margin-left 0.3s ease;
-}
-
-#mainContent {
-  min-height: 100vh;
-  padding-bottom: 40px;
-  transition: margin-left 0.3s ease;
-}
-
 .marketplace-heading {
-    font-size: 50px !important;
-    font-weight: bold;
-    color: #2f9b63;
-    text-align: center;
-    margin-top: 0px;
-    margin-bottom: 20px;
+  font-size: 2.8rem !important;
+  font-weight: 700 !important;
+  color: #2e7d32;
+  width: 100%;
+  text-align: center !important;
+  margin-top: 0px;
+  text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.08);
+  position: relative;
+  padding-bottom: 20px;
+  border-bottom: none;
 }
 
+.marketplace-heading::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 3px;
+  background-color: #c8e6c9;
+  border-radius: 2px;
+}
+
+/* Marketplace actions section */
+.marketplace-actions {
+  display: flex;
+  justify-content: center;
+  margin: 50px 20px 20px 20px;
+}
 
 .marketplace-description {
-  font-size: 18px;
-  color: #444;
-  max-width: 700px;
-  margin: 0 auto 40px auto;
-  line-height: 1.5;
+  font-size: 1rem;
+  color: #4b6e34;
+  margin-top: -5px;
+  margin-bottom: -30px;
   text-align: center;
+  font-weight: 500;
 }
-
 
 .myOrders {
   display: flex;
-  justify-content: flex-end; /* align right */
-   margin: 0px 30px 0px 30px; /* spacing below navbar */
+  justify-content: center;
+  margin: 0px 20px 10px 20px;
 }
 
 .myOrders button {
-  padding: 18px 40px;
+  padding: 12px 30px;
   background: linear-gradient(135deg, #28a745, #20c997);
   color: white;
   font-weight: bold;
   border: none;
-  border-radius: 25px; /* pill shape */
+  border-radius: 25px;
   cursor: pointer;
   font-size: 22px;
   display: inline-flex;
   align-items: center;
-  gap: 12px; /* space between icon and text */
+  gap: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   transition: all 0.3s ease;
+  margin-bottom: 10px;
 }
 
 .myOrders button:hover {
@@ -69,7 +77,6 @@ body {
 .myOrders button i {
   font-size: 26px;
 }
-
 
 /* Marketplace cards */
 .features_block {
@@ -156,52 +163,200 @@ body {
   transform: scale(1.05);
 }
 
-/* Responsive */
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet Landscape */
+@media (max-width: 1200px) {
+  .marketplace-heading::after {
+    width: 600px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .features_block {
+    gap: 40px;
+    max-width: 900px;
+  }
+  
+  .marketplace-heading::after {
+    width: 500px;
+  }
+}
+
+/* Small Tablet */
 @media (max-width: 900px) {
   .features_block {
     grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 700px;
+  }
+  
+  .marketplace-heading {
+    font-size: 2.5rem !important;
+  }
+  
+  .marketplace-heading::after {
+    width: 400px;
+  }
+  
+  .marketplace-description {
+    font-size: 0.95rem;
+    margin: 10px 20px -20px 20px;
   }
 }
 
+/* Large Mobile */
+@media (max-width: 768px) {
+  .marketplace-heading {
+    font-size: 2.2rem !important;
+    padding-bottom: 15px;
+  }
+  
+  .marketplace-heading::after {
+    width: 300px;
+    height: 2px;
+  }
+  
+  .marketplace-actions {
+    margin: 40px 15px 15px 15px;
+  }
+  
+  .myOrders button {
+    padding: 10px 25px;
+    font-size: 18px;
+    gap: 10px;
+  }
+  
+  .myOrders button i {
+    font-size: 22px;
+  }
+  
+  .features_block {
+    gap: 25px;
+    padding: 0 15px;
+  }
+  
+  .feature-card {
+    max-width: 280px;
+  }
+  
+  .feature-top {
+    height: 160px;
+  }
+}
+
+/* Medium Mobile */
 @media (max-width: 700px) {
   .features_block {
     grid-template-columns: 1fr;
+    gap: 30px;
+    max-width: 400px;
   }
-}
-
-/* Mobile responsiveness for My Orders button */
-@media (max-width: 700px) {
-  .myOrders {
-    justify-content: center;  /* center button */
-    margin: 20px auto;        /* spacing around */
+  
+  .feature-card {
+    max-width: 100%;
   }
-
-  .myOrders button {
-    padding: 14px 28px;       /* smaller padding */
-    font-size: 18px;          /* slightly smaller text */
-    border-radius: 20px;      /* keep pill shape */
-  }
-
-  .myOrders button i {
-    font-size: 22px;          /* smaller icon */
-  }
-}
-
-@media (max-width: 500px) {
-  .myOrders button {
-    width: 90%;               /* full-width button look */
-    justify-content: center;  /* center icon + text */
-  }
-}
-
-@media (max-width: 768px) {
+  
   .marketplace-heading {
-    font-size: 50px;
+    font-size: 2rem !important;
+  }
+  
+  .marketplace-heading::after {
+    width: 250px;
+  }
+  
+  .marketplace-description {
+    font-size: 0.9rem;
+    margin: 10px 15px -15px 15px;
+    line-height: 1.6;
   }
 }
 
+/* Small Mobile */
 @media (max-width: 480px) {
   .marketplace-heading {
-    font-size: 36px;
+    font-size: 1.8rem !important;
+    padding-bottom: 12px;
+  }
+  
+  .marketplace-heading::after {
+    width: 200px;
+  }
+  
+  .marketplace-actions {
+    margin: 30px 10px 10px 10px;
+  }
+  
+  .myOrders {
+    margin: 0px 15px 10px 15px;
+  }
+  
+  .myOrders button {
+    padding: 8px 20px;
+    font-size: 16px;
+    gap: 8px;
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+  
+  .myOrders button i {
+    font-size: 20px;
+  }
+  
+  .features_block {
+    padding: 0 10px;
+    gap: 25px;
+  }
+  
+  .feature-card {
+    border-radius: 15px;
+  }
+  
+  .feature-top {
+    height: 140px;
+  }
+  
+  .feature-bottom {
+    padding: 15px 8px;
+  }
+  
+  .feature-bottom h3 {
+    font-size: 18px;
+  }
+  
+  .feature-bottom p {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .feature-bottom .btn {
+    padding: 6px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .marketplace-heading {
+    font-size: 1.6rem !important;
+  }
+  
+  .marketplace-heading::after {
+    width: 150px;
+  }
+  
+  .marketplace-description {
+    font-size: 0.85rem;
+    margin: 8px 10px -10px 10px;
+  }
+  
+  .features_block {
+    gap: 20px;
+  }
+  
+  .feature-top {
+    height: 120px;
   }
 }

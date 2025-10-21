@@ -3,6 +3,7 @@
 
 <main class="timeline-container">
   <h2>Cultivation Timeline Tracker</h2>
+  <p class="timeline-subtext"> Monitor each stage of your cultivation process and track your field progress efficiently.</p>
 
   <div class="plr-selector">
     <label for="plrSelect">Select PLR Number:</label>
