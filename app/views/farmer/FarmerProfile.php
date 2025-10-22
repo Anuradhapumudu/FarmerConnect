@@ -3,14 +3,31 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/FarmerProfile.css?v=<?= time(); ?>">
 
 
+
 <main>
+
+    <div class="logout-container">
+        <a href="<?php echo URLROOT; ?>/users/logout" class="btn logout-btn" title="Log out">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
 
     <div class="profile-pic">
         <div class="pic-wrapper">
-            <img src="<?php echo !empty($data['farmer']->profile_image) 
-                ? URLROOT . $data['farmer']->profile_image 
-                : 'https://cdn-icons-png.flaticon.com/512/847/847969.png'; ?>" 
-                alt="Profile Photo" id="profileImage">
+            <?php
+    // compute image src safely (handle absolute URLs, relative paths, missing file)
+    $profile = $data['farmer']->profile_image ?? '';
+    if (!empty($profile)) {
+        $isAbsolute = preg_match('/^https?:\/\//i', $profile);
+        // ensure proper leading slash for relative paths
+        $imgSrc = $isAbsolute ? $profile : URLROOT . (strpos($profile, '/') === 0 ? $profile : '/' . $profile);
+    } else {
+        $imgSrc = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+    }
+?>
+<img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES); ?>"
+     alt="Profile Photo" id="profileImage"
+     onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/847/847969.png';">
 
             <div class="buttons">
                 <input type="file" id="uploadInput" accept="image/*" style="display:none;">

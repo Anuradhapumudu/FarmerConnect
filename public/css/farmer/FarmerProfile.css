@@ -1,18 +1,12 @@
 /* =======================
    General Styles
 ======================= */
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f6f9;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
+
 
 main {
   width: 100%;
-  max-width: 1400px;
-  margin: 120px auto;
+  max-width: 1200px;
+  margin: 25px auto;
   padding: 0 40px;
   box-sizing: border-box;
 }
@@ -31,6 +25,7 @@ main {
   border-left: 8px solid #4caf50;
   padding-left: 14px;
   margin: 0;
+  margin-left: 40px;
 }
 
 /* =======================
@@ -41,11 +36,12 @@ main {
   border-radius: 14px;
   padding: 30px;
   margin-bottom: 40px;
+  margin-left: 40px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   display: flex;
   justify-content: space-between;
   gap: 50px;
-  align-items: flex-start;
+  align-items: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
 }
@@ -213,6 +209,7 @@ form {
   align-items: center;
   gap: 15px;
   margin: 20px 0;
+  margin-left: 40px;
 }
 
 .plr-selector label {
@@ -273,7 +270,39 @@ form {
   background: #0277bd;
 }
 
+    /* Logout button styles */
+    .logout-container {
+        display: flex;
+        justify-content: flex-end;
+        margin: 10px 0 18px;
+    }
 
+    .logout-btn {
+        background: #dc3545;
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background .15s ease, transform .08s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .logout-btn i { font-size: 14px; }
+
+    .logout-btn:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+        .logout-container { justify-content: center; }
+        .logout-btn { padding: 8px 10px; font-size: 14px; }
+    }
 
 /* Layout: Farmer Form = 1 column */
 #farmerForm {
@@ -313,5 +342,104 @@ form {
   .plr-selector{
     display: flex;
     flex-direction: column;
+  }
+}
+
+/* Additional mobile responsive tweaks */
+@media (max-width: 768px) {
+  main {
+    padding: 0 16px;
+    max-width: 760px;
+    margin: 16px auto;
+  }
+
+  .page-title {
+    margin: 18px 0;
+    text-align: center;
+  }
+
+  .page-title h2 {
+    margin-left: 0;
+    padding-left: 12px;
+    border-left-width: 6px;
+  }
+
+  .profile-card {
+    margin-left: 0;
+    padding: 18px;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .profile-pic {
+    order: -1; /* put picture above details */
+    margin-top: 0;
+  }
+
+  .profile-pic img {
+    width: 140px;
+    height: 140px;
+  }
+
+  .buttons {
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn {
+    width: auto;
+    min-width: 120px;
+    flex: 1 1 auto;
+  }
+
+  .form-actions {
+    text-align: center;
+  }
+
+  .plr-selector {
+    margin-left: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 12px;
+    margin: 12px auto;
+  }
+
+  .page-title h2 {
+    font-size: 1.4rem;
+  }
+
+  .profile-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .profile-pic img {
+    width: 110px;
+    height: 110px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: none;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 12px;
   }
 }

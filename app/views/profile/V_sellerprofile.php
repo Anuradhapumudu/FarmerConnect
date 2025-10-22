@@ -3,23 +3,33 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/FarmerProfile.css?v=<?= time(); ?>">
 
 
+
 <main>
 
+    <div class="logout-container">
+        <a href="<?php echo URLROOT; ?>/users/logout" class="btn logout-btn" title="Log out">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
 
-<!-- PROFILE PICTURE -->
+    <div class="profile-pic">
+        <div class="pic-wrapper">
+            <img src="<?php echo !empty($data['farmer']->profile_image) 
+                ? URLROOT . $data['farmer']->profile_image 
+                : 'https://cdn-icons-png.flaticon.com/512/847/847969.png'; ?>" 
+                alt="Profile Photo" id="profileImage">
 
-
-<div class="profile-pic">
-    <div class="pic-wrapper">
-        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Default User Icon" id="profileImage">
-
-        <div class="buttons">
-            <input type="file" id="uploadInput" accept="image/*" style="display:none;">
-            <button type="button" class="btn upload-btn" onclick="document.getElementById('uploadInput').click();">Upload Photo</button>
-            <button type="button" class="btn remove-btn" onclick="removeProfilePic()">Remove Photo</button>
+            <div class="buttons">
+                <input type="file" id="uploadInput" accept="image/*" style="display:none;">
+                <button type="button" class="btn upload-btn" onclick="document.getElementById('uploadInput').click();">
+                    Upload Photo
+                </button>
+                <button type="button" class="btn remove-btn" onclick="removeProfilePic()">
+                    Remove Photo
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
 <!-- SELLER DETAILS -->
 <div class="page-title">
@@ -30,7 +40,12 @@
         <form id="sellerForm" method="POST" onsubmit="event.preventDefault(); alert('This is dummy data!');">
             <div class="form-group">
                 <label for="SellerID">Seller ID</label>
-                <input type="text" id="SellerID" name="SellerID" value="SLLR00123" readonly>
+                <input type="text" id="SellerID" name="SellerID" value="SE003" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="SellerID">BRN number:</label>
+                <input type="text" id="SellerID" name="SellerID" value="65793" readonly>
             </div>
 
             <div class="form-group">
@@ -57,6 +72,8 @@
                 <label for="Email">Email</label>
                 <input type="email" id="Email" name="Email" value="kamalperera@gmail.com">
             </div>
+
+            
 
             <div class="form-group">
                 <label for="RegistrationDate">Registration Date</label>
