@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <main class="main-content" id="mainContent">
-  <div class="container">
+  <div class="containers">
 
     <h2 class="knowledgecenter-heading">Knowledge Center</h2>
     <p class="knowledgecenter-description">
@@ -18,7 +18,7 @@
         <div class="feature-bottom">
           <h3>Rice Varieties</h3>
           <p>Explore high-yield and climate-smart rice types.</p>
-          <a href="<?php echo URLROOT; ?>/Knowledgecenter/viewproduct" class="btn">Read More</a>
+          <a href="<?php echo URLROOT; ?>/knowledgecenter/KnowledgecenterAdmin/ricevarieties" class="btn">Read More</a>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
         <div class="feature-bottom">
           <h3>Fertilizer Management</h3>
           <p>Smart fertilizer use for better crop nutrition.</p>
-          <a href="<?php echo URLROOT; ?>/Knowledgecenter/viewproduct" class="btn">Read More</a>
+          <a href="<?php echo URLROOT; ?>/knowledgecenter/KnowledgecenterAdmin/fertilizer" class="btn">Read More</a>
         </div>
       </div>
 

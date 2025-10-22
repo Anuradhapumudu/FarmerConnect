@@ -53,9 +53,14 @@
                     // Validate farmer inputs
                     if (empty($data['first_name'])) {
                         $data['first_name_error'] = 'Please enter your first name';
+                    } elseif (!preg_match("/^[a-zA-Z]+$/", $data['first_name'])) {
+                        $data['first_name_error'] = 'First name can only contain letters (no spaces or symbols)';
                     }
+
                     if (empty($data['last_name'])) {
                         $data['last_name_error'] = 'Please enter your last name';
+                    } elseif (!preg_match("/^[a-zA-Z]+$/", $data['last_name'])) {
+                        $data['last_name_error'] = 'Last name can only contain letters (no spaces or symbols)';
                     }
                     if (empty($data['nic'])) {
                         $data['nic_error'] = 'Please enter your NIC';
@@ -74,7 +79,9 @@
                         }
                     }
                     if (empty($data['password'])) {
-                        $data['password_error'] = 'Please enter your password';
+                        $data['password_error'] = 'Please enter a password';
+                    } elseif (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#]{6,}$/", $data['password'])) {
+                        $data['password_error'] = 'Password must be at least 6 characters and include both letters and numbers';
                     }
                     if ($data['password'] !== $data['confirm_password']) {
                         $data['confirm_password_error'] = 'Passwords do not match';
@@ -111,9 +118,14 @@
                     // Validate officer inputs
                     if (empty($data['first_name'])) {
                         $data['first_name_error'] = 'Please enter your first name';
+                    } elseif (!preg_match("/^[a-zA-Z]+$/", $data['first_name'])) {
+                        $data['first_name_error'] = 'First name can only contain letters (no spaces or symbols)';
                     }
+
                     if (empty($data['last_name'])) {
                         $data['last_name_error'] = 'Please enter your last name';
+                    } elseif (!preg_match("/^[a-zA-Z]+$/", $data['last_name'])) {
+                        $data['last_name_error'] = 'Last name can only contain letters (no spaces or symbols)';
                     }
                     if (empty($data['nic'])) {
                         $data['nic_error'] = 'Please enter your NIC';
@@ -141,7 +153,9 @@
                         }
                     }
                     if (empty($data['password'])) {
-                        $data['password_error'] = 'Please enter your password';
+                        $data['password_error'] = 'Please enter a password';
+                    } elseif (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#]{6,}$/", $data['password'])) {
+                        $data['password_error'] = 'Password must be at least 6 characters and include both letters and numbers';
                     }
                     if ($data['password'] !== $data['confirm_password']) {
                         $data['confirm_password_error'] = 'Passwords do not match';
@@ -177,9 +191,14 @@
                     // Validate seller inputs
                     if (empty($data['first_name'])) {
                         $data['first_name_error'] = 'Please enter your first name';
+                    } elseif (!preg_match("/^[a-zA-Z]+$/", $data['first_name'])) {
+                        $data['first_name_error'] = 'First name can only contain letters (no spaces or symbols)';
                     }
+
                     if (empty($data['last_name'])) {
                         $data['last_name_error'] = 'Please enter your last name';
+                    } elseif (!preg_match("/^[a-zA-Z]+$/", $data['last_name'])) {
+                        $data['last_name_error'] = 'Last name can only contain letters (no spaces or symbols)';
                     }
                     if (empty($data['nic'])) {
                         $data['nic_error'] = 'Please enter your NIC';
@@ -211,7 +230,9 @@
                         $data['address_error'] = 'Please enter your address';
                     }
                     if (empty($data['password'])) {
-                        $data['password_error'] = 'Please enter your password';
+                        $data['password_error'] = 'Please enter a password';
+                    } elseif (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#]{6,}$/", $data['password'])) {
+                        $data['password_error'] = 'Password must be at least 6 characters and include both letters and numbers';
                     }
                     if ($data['password'] !== $data['confirm_password']) {
                         $data['confirm_password_error'] = 'Passwords do not match';
