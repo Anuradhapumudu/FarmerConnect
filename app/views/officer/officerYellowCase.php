@@ -63,7 +63,7 @@
           <td><span class="status pending">Pending</span></td>
           <td>
             <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-            <a href="<?php echo URLROOT; ?>/officer/YellowCaseReplyForm" class="btn-reply">Reply</a>
+            <a href="#" class="btn-reply">Timeline</a>
           </td>
         </tr>
         <tr>
@@ -75,7 +75,7 @@
           <td><span class="status replied">Replied</span></td>
           <td>
             <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-            <a href="<?php echo URLROOT; ?>/officer/YellowCaseReplyForm" class="btn-reply disabled">Reply</a>
+            <a href="#" class="btn-reply">Timeline</a>
           </td>
         </tr>
         <tr>
@@ -87,7 +87,7 @@
           <td><span class="status pending">Pending</span></td>
           <td>
             <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-            <a href="<?php echo URLROOT; ?>/officer/YellowCaseReplyForm" class="btn-reply">Reply</a>
+            <a href="#" class="btn-reply">Timeline</a>
           </td>
         </tr>
         <tr>
@@ -99,7 +99,7 @@
           <td><span class="status replied">Replied</span></td>
           <td>
             <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-            <a href="<?php echo URLROOT; ?>/officer/YellowCaseReplyForm" class="btn-reply disabled">Reply</a>
+            <a href="#" class="btn-reply">Timeline</a>
           </td>
         </tr>
       </tbody>
@@ -120,7 +120,7 @@
         </div>
         <div class="case-card-actions">
           <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-          <a href="<?php echo URLROOT; ?>/officer/YellowCaseReplyForm" class="btn-reply">Reply</a>
+          <a href="#" class="btn-reply">Timeline</a>
         </div>
       </div>
 
@@ -137,7 +137,7 @@
         </div>
         <div class="case-card-actions">
           <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-          <a href="<?php echo URLROOT; ?>/officer/YellowCaseReplyForm" class="btn-reply disabled">Reply</a>
+          <a href="#" class="btn-reply">Timeline</a>
         </div>
       </div>
 
@@ -154,7 +154,7 @@
         </div>
         <div class="case-card-actions">
           <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-          <a href="<?php echo URLROOT; ?>/officer/YellowCaseReplyForm" class="btn-reply">Reply</a>
+          <a href="#" class="btn-reply">Timeline</a>
         </div>
       </div>
 
@@ -171,7 +171,7 @@
         </div>
         <div class="case-card-actions">
           <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-          <a href="<?php echo URLROOT; ?>/officer/YellowCaseReplyForm" class="btn-reply disabled">Reply</a>
+          <a href="#" class="btn-reply">Timeline</a>
         </div>
       </div>
     </div>

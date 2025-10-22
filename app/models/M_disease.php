@@ -112,7 +112,11 @@ class M_disease {
     // READ - Get a single report by report_code
         public function getReportByCode($reportCode) {
         try {
+<<<<<<< HEAD
             $this->db->query("SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic LEFT JOIN paddy p ON dr.pirNumber = p.PLR AND dr.farmerNIC = p.NIC_FK WHERE dr.report_code = :report_code");
+=======
+            $this->db->query("SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic WHERE dr.report_code = :report_code");
+>>>>>>> origin/main
             $this->db->bind(':report_code', $reportCode);
             return $this->db->single();
         } catch (Exception $e) {
@@ -122,7 +126,11 @@ class M_disease {
     }    // READ - Get all reports (for admin/overview)
     public function getAllReports($limit = null, $offset = null) {
         try {
+<<<<<<< HEAD
             $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic LEFT JOIN paddy p ON dr.pirNumber = p.PLR AND dr.farmerNIC = p.NIC_FK ORDER BY dr.created_at DESC";
+=======
+            $sql = "SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic ORDER BY dr.created_at DESC";
+>>>>>>> origin/main
 
             if ($limit !== null) {
                 $sql .= " LIMIT :limit";
@@ -172,7 +180,11 @@ class M_disease {
                 return []; // No search criteria provided
             }
 
+<<<<<<< HEAD
             $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic LEFT JOIN paddy p ON dr.pirNumber = p.PLR AND dr.farmerNIC = p.NIC_FK WHERE " . implode(' AND ', $conditions) . " ORDER BY dr.created_at DESC";
+=======
+            $sql = "SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic WHERE " . implode(' AND ', $conditions) . " ORDER BY dr.created_at DESC";
+>>>>>>> origin/main
             $this->db->query($sql);
 
             foreach ($params as $param => $value) {

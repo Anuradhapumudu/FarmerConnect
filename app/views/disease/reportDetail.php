@@ -75,9 +75,15 @@
                     </div>
                     <div class="overview-content">
                         <h4>Farmer Details</h4>
+<<<<<<< HEAD
                         <p class="primary-text"><?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></p>
                         <p class="secondary-text"><strong>NIC:</strong> <?php echo htmlspecialchars($report->farmerNIC); ?></p>
                         <p class="secondary-text"><strong>PLR:</strong> <?php echo htmlspecialchars($report->pirNumber); ?></p>
+=======
+                        <p><strong>Name:</strong> <?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></p>
+                        <p><strong>NIC:</strong> <?php echo htmlspecialchars($report->farmerNIC); ?></p>
+                        <p><strong>PLR:</strong> <?php echo htmlspecialchars($report->pirNumber); ?></p>
+>>>>>>> origin/main
                     </div>
                 </div>
 
@@ -354,10 +360,15 @@
                             </td>
                             <td>
                                 <div class="farmer-info">
+<<<<<<< HEAD
                                     <div class="farmer-name"><?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></div>
                                     <small>NIC: <?php echo htmlspecialchars($report->farmerNIC); ?></small>
                                     <br>
                                     <small>PLR: <?php echo htmlspecialchars($report->pirNumber); ?></small>
+=======
+                                    <div><?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></div>
+                                    <small>NIC: <?php echo htmlspecialchars($report->farmerNIC); ?> | PLR: <?php echo htmlspecialchars($report->pirNumber); ?></small>
+>>>>>>> origin/main
                                 </div>
                             </td>
                             <td>

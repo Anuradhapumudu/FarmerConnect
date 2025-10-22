@@ -53,15 +53,25 @@ class Announcements extends Controller {
         $data = [
             'announcement' => $announcement
         ];
-
-        $this->view('announcements/v_view_announcements', $data);
+        $this->loadViewByRole1('view_announcements', $data);
     }
     // Helper to load role-specific views in the same folder
     private function loadViewByRole($baseViewName, $data) {
         if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
             $this->view('announcements/V_Admin' . $baseViewName, $data);
+        }else if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'seller') {
+            $this->view('announcements/V_Seller' . $baseViewName, $data);
         } else {
             $this->view('announcements/V_Officer' . $baseViewName, $data);
+        }
+    }
+    private function loadViewByRole1($baseViewName, $data) {
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
+            $this->view('announcements/v_admin_' . $baseViewName, $data);
+        } else if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'seller') {
+            $this->view('announcements/v_seller_' . $baseViewName, $data);
+        } else {
+            $this->view('announcements/v_officer_' . $baseViewName, $data);
         }
     }
 }

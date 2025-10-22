@@ -10,16 +10,24 @@ class Disease extends Controller{
 
         // Check if farmer is logged in and pre-populate NIC
         $farmerNIC = '';
+<<<<<<< HEAD
         $paddyFields = [];
         if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
             $farmerNIC = $_SESSION['nic'];
             // Get farmer's paddy fields for PLR dropdown
             $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC);
+=======
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            $farmerNIC = $_SESSION['nic'];
+>>>>>>> origin/main
         }
 
         $data = [
             'farmerNIC' => $farmerNIC,
+<<<<<<< HEAD
             'paddyFields' => $paddyFields,
+=======
+>>>>>>> origin/main
             'plrNumber' => '',
             'paddySize' => '',
             'observationDate' => '',
@@ -212,9 +220,12 @@ class Disease extends Controller{
             }
         }
 
+<<<<<<< HEAD
         // Get farmer's paddy fields for PLR dropdown
         $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($report->farmerNIC);
 
+=======
+>>>>>>> origin/main
         // Populate form with existing data
         $data = [
             'reportCode' => $report->report_code,
@@ -926,16 +937,24 @@ class Disease extends Controller{
             // Handle GET request - show empty form
             // Check if farmer is logged in and pre-populate NIC
             $farmerNIC = '';
+<<<<<<< HEAD
             $paddyFields = [];
             if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
                 $farmerNIC = $_SESSION['nic'];
                 // Get farmer's paddy fields for PLR dropdown
                 $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC);
+=======
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                $farmerNIC = $_SESSION['nic'];
+>>>>>>> origin/main
             }
 
             $data = [
                 'farmerNIC' => $farmerNIC,
+<<<<<<< HEAD
                 'paddyFields' => $paddyFields,
+=======
+>>>>>>> origin/main
                 'plrNumber' => '',
                 'paddySize' => '',
                 'observationDate' => '',

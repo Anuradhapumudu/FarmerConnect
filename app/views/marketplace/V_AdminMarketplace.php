@@ -1,13 +1,13 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/adminheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/adminmarketplace.css?v=<?= time(); ?>">
 
 <main class="main-content" id="mainContent">
 
-<div class="container">
+<div class="containers">
    <!-- Page heading -->
   <h2 class="marketplace-heading">Marketplace</h2>
   <p class="marketplace-description">
-    Discover premium agricultural products and services - one of many powerful tools in your complete farming platform.
+    Monitor and manage all marketplace activities.
   </p>
 
   <!-- Dashboard Cards -->

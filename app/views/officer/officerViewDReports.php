@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/officerdashboardheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
 
 <div class="content-card">
     <div class="content-header">
@@ -564,4 +564,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>
+<?php require_once APPROOT . '/views/inc/footer.php'; ?>

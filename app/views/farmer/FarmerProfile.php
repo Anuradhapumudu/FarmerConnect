@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/farmerdashboardheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/header.php'; ?>
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/FarmerProfile.css?v=<?= time(); ?>">
 
@@ -176,7 +176,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="Yaya">Yaya Number</label>
+                    <label for="Yaya">Yaya Name</label>
                     <input type="text" id="Yaya" name="Yaya" value="" required>
                 </div>
 

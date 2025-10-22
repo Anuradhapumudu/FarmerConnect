@@ -3,7 +3,7 @@
 
 <div class="yellowcase-card">
     <div class="yellowcase-header">
-        <h1>🟡 Yellow Case Report</h1>
+        <h1> Yellow Case Report</h1>
         <p class="yellowcase-subtitle">Submit a Yellow Case to notify officers of any urgent or special agricultural situation.</p>
     </div>
     

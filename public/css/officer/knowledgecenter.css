@@ -74,7 +74,7 @@ body {
 }
 
 .feature-card {
-  background: linear-gradient(180deg, #ffffff 0%, #bfc0bf 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f2f3f2 100%);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);

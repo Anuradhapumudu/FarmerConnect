@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/adminheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/create_announcements.css">
 
 

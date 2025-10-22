@@ -204,22 +204,22 @@
 
 /* View Button — Clean Blue Gradient */
 .btn-view {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background:#3498db;
   color: #fff;
 }
 .btn-view:hover {
-  background: linear-gradient(135deg, #5dade2, #2471a3);
+  background:#5dade2;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(52, 152, 219, 0.4);
 }
 
 /* Reply Button — Bright Yellow Accent */
 .btn-reply {
-  background: linear-gradient(135deg, #f5b400, #e6a700);
+  background:#339e39;
   color: #fff;
 }
 .btn-reply:hover {
-  background: linear-gradient(135deg, #ffd34e, #e1a100);
+  background:#2e7d32;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(245, 180, 0, 0.4);
 }

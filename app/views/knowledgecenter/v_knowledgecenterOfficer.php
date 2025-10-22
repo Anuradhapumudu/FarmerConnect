@@ -1,10 +1,10 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
 <!-- Knowledge Center-specific CSS -->
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/knowledgecenter.css?v=<?= time(); ?>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <main class="main-content" id="mainContent">
-  <div class="container">
+  <div class="containers">
 
     <div class="top-actions">
       <button class="add-article-btn"><i class="fa-solid fa-pen-to-square"></i> Add Article</button>
@@ -22,7 +22,7 @@
         <div class="feature-bottom">
           <h3>Rice Varieties</h3>
           <p>Explore high-yield and climate-smart rice types.</p>
-          <a href="<?php echo URLROOT; ?>/Knowledgecenter/viewproduct" class="btn">Read More</a>
+          <a href="<?php echo URLROOT; ?>/knowledgecenter/KnowledgecenterOfficer/ricevarieties" class="btn">Read More</a>
         </div>
       </div>
 
@@ -31,7 +31,7 @@
         <div class="feature-bottom">
           <h3>Fertilizer Management</h3>
           <p>Smart fertilizer use for better crop nutrition.</p>
-          <a href="<?php echo URLROOT; ?>/Knowledgecenter/viewproduct" class="btn">Read More</a>
+          <a href="<?php echo URLROOT; ?>/knowledgecenter/KnowledgecenterOfficer/fertilizer" class="btn">Read More</a>
         </div>
       </div>
 
