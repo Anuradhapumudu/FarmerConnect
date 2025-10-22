@@ -1,5 +1,5 @@
 <?php require_once APPROOT . '/views/inc/admindashboardheader.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=<?= time(); ?>">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard2.css?v=<?= time(); ?>">
 
 <!-- Hero Section -->
 <section class="hero">
