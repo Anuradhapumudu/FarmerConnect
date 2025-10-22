@@ -6,9 +6,9 @@
 
    <!-- Help Section -->
     <section class="help-section">
-        <div class="container">
+        <div class="containers">
             <div class="section-title">
-                <h2>Help Center</h2>
+                <h1>Help Center</h1>
                 <p>Get in touch with our dedicated agricultural support team for assistance</p>
             </div>
             

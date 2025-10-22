@@ -1,7 +1,7 @@
         
         
         .help-section {
-            padding: 60px 0;
+            padding: 0px 0;
         }
         
         .section-title {
@@ -10,15 +10,38 @@
             color: #2E7D32;
         }
         
-        .section-title h2 {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
+        .section-title h1 {
+            font-size: 2.8rem !important;
+            font-weight: 700 !important;
+            color: #2e7d32;
+            width: 100%;
+            text-align: center !important;
+            margin-top: 0px;
+            text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.08);
+            position: relative;
+            padding-bottom: 20px;
+            border-bottom: none;
         }
+
+        .section-title h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 3px;
+            background-color: #c8e6c9;
+            border-radius: 2px;
+}
         
         .section-title p {
-            color: var(--text-light);
-            max-width: 700px;
-            margin: 0 auto;
+            font-size: 1rem;
+            color: #4b6e34;
+            margin-top: -5px;
+            margin-bottom: -30px;
+            text-align: center;
+            font-weight: 500;
         }
         
         .contact-grid {
@@ -114,7 +137,8 @@
             border-radius: 10px;
             padding: 40px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 50px;
+            margin: 50px auto; /* Centers horizontally */
+            max-width: 1000px;
         }
         
         .team-grid {
@@ -219,7 +243,10 @@
             padding: 40px;
             text-align: center;
             color: white;
-            margin-bottom: 50px;
+            margin: 50px auto; /* Centers horizontally */
+            max-width: 1000px;
+            
+            
         }
         
         .emergency-contact h3 {
@@ -314,16 +341,78 @@
             margin-top: 20px;
         }
 
-        @media (max-width: 768px) {
-            .contact-grid, .team-grid, .hours-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .team-section, .operation-hours, .emergency-contact {
-                padding: 25px;
-            }
-            
-            .emergency-number {
-                font-size: 2rem;
-            }
-        }
+@media (max-width: 768px) {
+  /* General padding adjustments */
+ 
+
+  .section-title h1 {
+    font-size: 2rem !important;
+  }
+
+  .section-title h1::after {
+    width: 200px; /* Shorter underline for smaller screens */
+  }
+
+  .section-title p {
+    margin-bottom: 10px;
+  }
+
+  /* Grid layouts become single-column */
+  .contact-grid,
+  .team-grid,
+  .hours-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* Team section and emergency contact padding adjustments */
+  .team-section,
+  .operation-hours,
+  .emergency-contact {
+    padding: 25px 15px;
+    margin: 30px auto;
+    max-width: 100%;
+  }
+
+  /* Emergency section adjustments */
+  .emergency-contact h3 {
+    font-size: 1.4rem;
+  }
+
+  .emergency-number {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  .emergency-text {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .officer-actions {
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* Form adjustments */
+  .form-control {
+    font-size: 15px;
+    padding: 10px 12px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  
+}
