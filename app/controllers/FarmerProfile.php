@@ -7,6 +7,17 @@ class FarmerProfile extends Controller
 
     public function __construct()
     {
+            // Ensure session started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            // ✅ Check if logged-in and correct user type
+            if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'farmer') {
+                header('Location: ' . URLROOT . '/users/login');
+                exit;
+            }
+
         $this->farmerModel = $this->model('Farmer');
         $this->paddyModel = $this->model('Paddy');
     }
@@ -15,44 +26,43 @@ class FarmerProfile extends Controller
     // Display Farmer Profile and Paddy List
     // --------------------------------------------------------
     public function index()
-    {
-        $dummyNIC = '200011223344';
-        $dummyName = 'K.R.Aberathna';
+{
+    $farmerNIC = $_SESSION['nic']; // from session after login
 
-        // Get farmer details
-        $farmer = $this->farmerModel->getFarmerByNIC($dummyNIC);
+    // Get farmer details
+    $farmer = $this->farmerModel->getFarmerByNIC($farmerNIC);
 
-        if (!$farmer) {
-            $this->farmerModel->updateFarmer([
-                'NIC' => $dummyNIC,
-                'Address' => '',
-                'TelNo' => '',
-                'Birthday' => '',
-                'Gender' => ''
-            ]);
+    if (!$farmer) {
+        // If first login and farmer not in table yet, create one
+        $this->farmerModel->updateFarmer([
+            'NIC' => $farmerNIC,
+            'Name' => 'Unknown Farmer', // You can replace this if you store names separately
+            'Address' => '',
+            'TelNo' => '',
+            'Birthday' => '',
+            'Gender' => ''
+        ]);
 
-            $farmer = (object)[
-                'NIC' => $dummyNIC,
-                'Name' => $dummyName,
-                'Address' => '',
-                'TelNo' => '',
-                'Birthday' => '',
-                'Gender' => ''
-            ];
-        } else {
-            $farmer->Name = $dummyName;
-        }
-
-        // Get all paddy rows for this farmer
-        $paddyList = $this->paddyModel->getPaddyByNIC($dummyNIC);
-
-        $data = [
-            'farmer' => $farmer,
-            'paddyFields' => $paddyList
+        $farmer = (object)[
+            'nic' => $farmerNIC,
+            'full_name' => 'Unknown Farmer',
+            'address' => '',
+            'phone_no' => '',
+            'birthdate' => '',
+            'gender' => ''
         ];
-
-        $this->view('farmer/FarmerProfile', $data);
     }
+
+    // Get all paddy rows for this farmer
+    $paddyList = $this->paddyModel->getPaddyByNIC($farmerNIC);
+
+    $data = [
+        'farmer' => $farmer,
+        'paddyFields' => $paddyList
+    ];
+
+    $this->view('farmer/FarmerProfile', $data);
+}
 
     // --------------------------------------------------------
     // Update Farmer Profile
@@ -76,7 +86,7 @@ class FarmerProfile extends Controller
             // Ensure we have the farmer Name (updateFarmer expects Name)
             // Try to fetch existing farmer from DB to preserve Name if not sent in form
             $existingFarmer = $this->farmerModel->getFarmerByNIC($data['NIC']);
-            $data['Name'] = $existingFarmer->Name ?? '';
+            $data['Name'] = $existingFarmer->full_name ?? '';
 
             // -------------------------
             // TelNo validation (server-side)
@@ -171,8 +181,8 @@ class FarmerProfile extends Controller
 
                 $data = [
                     'PLR' => trim($_POST['PLR']),
-                    'NIC' => trim($_POST['NIC']),
-                    'OfficerID' => 1111, // constant for now
+                    'NIC' => $_SESSION['nic'],
+                    'OfficerID' => 'O2', // constant for now
                     'Paddy_Seed_Variety' => trim($_POST['Paddy_Seed_Variety']),
                     'Paddy_Size' => trim($_POST['Paddy_Size']),
                     'Province' => trim($_POST['Province']),
@@ -280,4 +290,79 @@ class FarmerProfile extends Controller
             echo json_encode(['success' => false]);
         }
     }
+
+    // --------------------------------------------------------
+    // Upload Profile Picture
+    // --------------------------------------------------------
+    public function uploadProfilePic()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_image'])) {
+            $nic = $_SESSION['nic'];
+            $file = $_FILES['profile_image'];
+
+            // Check for upload errors
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                echo json_encode(['success' => false, 'message' => 'Upload error.']);
+                return;
+            }
+
+            // Validate file type
+            $allowed = ['jpg', 'jpeg', 'png'];
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+            if (!in_array($ext, $allowed)) {
+                echo json_encode(['success' => false, 'message' => 'Only JPG and PNG allowed.']);
+                return;
+            }
+
+            // Create upload directory if not exists
+            $uploadDir = APPROOT . '/../public/uploads/farmer_profiles/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            // Unique file name
+            $fileName = 'farmer_' . $nic . '.' . $ext;
+            $filePath = $uploadDir . $fileName;
+
+            // ✅ If file already exists, remove it first
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+
+            // Move file
+            if (move_uploaded_file($file['tmp_name'], $filePath)) {
+                // Save relative path in DB
+                $relativePath = '/uploads/farmer_profiles/' . $fileName;
+                $this->farmerModel->updateProfilePic($nic, $relativePath);
+                echo json_encode(['success' => true, 'image' => URLROOT . $relativePath]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to save file.']);
+            }
+        }
+    }
+
+    // --------------------------------------------------------
+    // Remove Profile Picture
+    // --------------------------------------------------------
+    public function removeProfilePic()
+    {
+        $nic = $_SESSION['nic'];
+        $farmer = $this->farmerModel->getFarmerByNIC($nic);
+
+        if (!empty($farmer->profile_image)) {
+            // ✅ Correct path to the public folder
+            $filePath = APPROOT . '/../public' . $farmer->profile_image;
+
+            if (file_exists($filePath)) {
+                unlink($filePath); // delete file from folder
+            }
+
+            // ✅ Clear DB entry
+            $this->farmerModel->updateProfilePic($nic, NULL);
+        }
+
+        echo json_encode(['success' => true]);
+    }
 }
+

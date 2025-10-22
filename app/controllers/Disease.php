@@ -10,13 +10,18 @@ class Disease extends Controller{
 
         // Check if farmer is logged in and pre-populate NIC
         $farmerNIC = '';
+        $paddyFields = [];
         if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
             $farmerNIC = $_SESSION['nic'];
+            // Get farmer's paddy fields for PLR dropdown
+            $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC);
         }
 
         $data = [
             'farmerNIC' => $farmerNIC,
+            'paddyFields' => $paddyFields,
             'plrNumber' => '',
+            'paddySize' => '',
             'observationDate' => '',
             'todayDate' => '',
             'title' => '',
@@ -26,6 +31,7 @@ class Disease extends Controller{
             'terms' => '',
             'farmerNIC_error' => '',
             'plrNumber_error' => '',
+            'paddySize_error' => '',
             'observationDate_error' => '',
             'title_error' => '',
             'description_error' => '',
@@ -206,11 +212,16 @@ class Disease extends Controller{
             }
         }
 
+        // Get farmer's paddy fields for PLR dropdown
+        $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($report->farmerNIC);
+
         // Populate form with existing data
         $data = [
-            'reportCode' => $report->report_code, 
+            'reportCode' => $report->report_code,
             'farmerNIC' => $report->farmerNIC,
+            'paddyFields' => $paddyFields,
             'plrNumber' => $report->pirNumber,
+            'paddySize' => '',
             'observationDate' => $report->observationDate,
             'title' => $report->title,
             'description' => $report->description,
@@ -222,6 +233,7 @@ class Disease extends Controller{
             // Error fields
             'farmerNIC_error' => '',
             'plrNumber_error' => '',
+            'paddySize_error' => '',
             'observationDate_error' => '',
             'title_error' => '',
             'description_error' => '',
@@ -282,10 +294,17 @@ class Disease extends Controller{
                 }
 
                 // Validate PLR Number
+                $plrPattern = '/^\d{2}\/\d{2}\/\d{5}\/\d{3}\/[A-Za-z]\/\d{4}$/';
                 if (empty($data['plrNumber'])) {
-                    $data['plrNumber_error'] = 'Please enter your PLR number';
-                } elseif (!preg_match('/^PLR[0-9]+$/', $data['plrNumber'])) {
-                    $data['plrNumber_error'] = 'Invalid PLR format. Must start with PLR followed by numbers';
+                    $data['plrNumber_error'] = 'PLR number is required.';
+                } elseif (!preg_match($plrPattern, $data['plrNumber'])) {
+                    $data['plrNumber_error'] = 'Invalid PLR format. Use format: 02/25/00083/001/P/0066';
+                } else {
+                    // Check if PLR exists in paddy table for this farmer
+                    $paddyRecord = $this->model('M_disease')->getPaddyByPLR($data['plrNumber']);
+                    if (!$paddyRecord || $paddyRecord->NIC_FK !== $data['farmerNIC']) {
+                        $data['plrNumber_error'] = 'PLR number not found in your registered paddy fields.';
+                    }
                 }
 
                 // Validate Observation Date
@@ -415,14 +434,34 @@ class Disease extends Controller{
                     }
                 }
 
-                $data['media'] = !empty($finalMediaList) ? implode(',', $finalMediaList) : null;
+                $data['media'] = !empty($finalMediaList) ? implode(',', $finalMediaList) : '';
+
+                // Always populate paddy fields for form display
+                $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($data['farmerNIC']);
+                $data['paddyFields'] = $paddyFields;
 
                 // Check for validation errors
                 $hasErrors = !empty($data['farmerNIC_error']) || !empty($data['plrNumber_error']) ||
-                            !empty($data['observationDate_error']) || !empty($data['title_error']) ||
-                            !empty($data['description_error']) || !empty($data['media_error']) ||
-                            !empty($data['severity_error']) || !empty($data['affectedArea_error']) ||
-                            !empty($data['terms_error']);
+                            !empty($data['paddySize_error']) || !empty($data['observationDate_error']) ||
+                            !empty($data['title_error']) || !empty($data['description_error']) ||
+                            !empty($data['media_error']) || !empty($data['severity_error']) ||
+                            !empty($data['affectedArea_error']) || !empty($data['terms_error']);
+
+                // Debug validation errors
+                if ($hasErrors) {
+                    error_log("Validation errors found: " . json_encode([
+                        'farmerNIC_error' => $data['farmerNIC_error'],
+                        'plrNumber_error' => $data['plrNumber_error'],
+                        'paddySize_error' => $data['paddySize_error'],
+                        'observationDate_error' => $data['observationDate_error'],
+                        'title_error' => $data['title_error'],
+                        'description_error' => $data['description_error'],
+                        'media_error' => $data['media_error'],
+                        'severity_error' => $data['severity_error'],
+                        'affectedArea_error' => $data['affectedArea_error'],
+                        'terms_error' => $data['terms_error']
+                    ]));
+                }
 
                 if (!$hasErrors) {
                     // Update in database
@@ -629,6 +668,7 @@ class Disease extends Controller{
                 $data = [
                     'farmerNIC' => isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '',
                     'plrNumber' => isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '',
+                    'paddySize' => isset($_POST['paddySize']) ? trim($_POST['paddySize']) : '',
                     'observationDate' => isset($_POST['observationDate']) ? trim($_POST['observationDate']) : '',
                     'title' => isset($_POST['title']) ? trim($_POST['title']) : '',
                     'description' => isset($_POST['description']) ? trim($_POST['description']) : '',
@@ -640,6 +680,7 @@ class Disease extends Controller{
                     // Error fields
                     'farmerNIC_error' => '',
                     'plrNumber_error' => '',
+                    'paddySize_error' => '',
                     'observationDate_error' => '',
                     'title_error' => '',
                     'description_error' => '',
@@ -660,10 +701,24 @@ class Disease extends Controller{
                 }
 
                 // Validate PLR Number
+                $plrPattern = '/^\d{2}\/\d{2}\/\d{5}\/\d{3}\/[A-Za-z]\/\d{4}$/';
                 if (empty($data['plrNumber'])) {
-                    $data['plrNumber_error'] = 'Please enter your PLR number';
-                } elseif (!preg_match('/^PLR[0-9]+$/', $data['plrNumber'])) {
-                    $data['plrNumber_error'] = 'Invalid PLR format. Must start with PLR followed by numbers';
+                    $data['plrNumber_error'] = 'PLR number is required.';
+                } elseif (!preg_match($plrPattern, $data['plrNumber'])) {
+                    $data['plrNumber_error'] = 'Invalid PLR format. Use format: 02/25/00083/001/P/0066';
+                } else {
+                    // Check if PLR exists in paddy table for this farmer
+                    $paddyRecord = $this->model('M_disease')->getPaddyByPLR($data['plrNumber']);
+                    if (!$paddyRecord || $paddyRecord->NIC_FK !== $data['farmerNIC']) {
+                        $data['plrNumber_error'] = 'PLR number not found in your registered paddy fields.';
+                    }
+                }
+
+                // ✅ Paddy Size validation
+                if (empty($data['paddySize'])) {
+                    $data['paddySize_error'] = 'Paddy size is required.';
+                } elseif (!is_numeric($data['paddySize']) || $data['paddySize'] <= 0) {
+                    $data['paddySize_error'] = 'Paddy size must be a positive number greater than 0.';
                 }
 
                 // Validate Observation Date
@@ -723,7 +778,7 @@ class Disease extends Controller{
                     $data['terms_error'] = 'You must agree to the terms and conditions';
                 }
                 // Handle Media Upload - Store files in filesystem
-                $data['media'] = null;
+                $data['media'] = '';
                 if (!empty($_FILES['media']['name'][0])) {
                     try {
                         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi', 'video/quicktime', 'video/x-ms-wmv'];
@@ -787,6 +842,10 @@ class Disease extends Controller{
                     }
                 }
 
+                // Always populate paddy fields for form display
+                $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($data['farmerNIC']);
+                $data['paddyFields'] = $paddyFields;
+
                 // Check if there are any validation errors
                 $hasErrors = !empty($data['farmerNIC_error']) || !empty($data['plrNumber_error']) ||
                             !empty($data['observationDate_error']) || !empty($data['title_error']) ||
@@ -796,7 +855,10 @@ class Disease extends Controller{
 
                 if (!$hasErrors) {
                     // All validations passed, submit to database
+                    error_log("About to submit disease report with data: " . json_encode($data));
+
                     $reportCode = $this->model('M_disease')->submitDReport($data); // This now returns the generated report code
+                    error_log("submitDReport returned: " . ($reportCode ? $reportCode : 'false'));
 
                     if ($reportCode) {
                         // SUCCESS - Rename any temporary files with the actual report code
@@ -832,7 +894,13 @@ class Disease extends Controller{
                                 }
                             }
                         }
-                        $data['media_error'] = 'Database insertion failed. Please try again.';
+
+                        // Check if reportCode is an array with error details
+                        if (is_array($reportCode) && isset($reportCode['error'])) {
+                            $data['media_error'] = $reportCode['error'];
+                        } else {
+                            $data['media_error'] = 'Database insertion failed. Please try again.';
+                        }
                         $this->view('disease/disease', $data);
                     }
                 } else {
@@ -858,13 +926,18 @@ class Disease extends Controller{
             // Handle GET request - show empty form
             // Check if farmer is logged in and pre-populate NIC
             $farmerNIC = '';
+            $paddyFields = [];
             if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
                 $farmerNIC = $_SESSION['nic'];
+                // Get farmer's paddy fields for PLR dropdown
+                $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC);
             }
 
             $data = [
                 'farmerNIC' => $farmerNIC,
+                'paddyFields' => $paddyFields,
                 'plrNumber' => '',
+                'paddySize' => '',
                 'observationDate' => '',
                 'todayDate' => '',
                 'title' => '',
@@ -874,6 +947,7 @@ class Disease extends Controller{
                 'terms' => '',
                 'farmerNIC_error' => '',
                 'plrNumber_error' => '',
+                'paddySize_error' => '',
                 'observationDate_error' => '',
                 'title_error' => '',
                 'description_error' => '',

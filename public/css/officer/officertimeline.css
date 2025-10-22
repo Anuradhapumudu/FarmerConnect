@@ -1,4 +1,4 @@
-.container { 
+.containers { 
   max-width: 1200px; 
   margin: auto; 
   padding: 20px;
@@ -181,26 +181,22 @@ tr:hover {
 
 /* Timeline Button */
 .view-btn {
-  background: linear-gradient(135deg, #2e7d32, #4caf50);
+  background:#4caf50;
   color: #fff;
-  box-shadow: 0 3px 8px rgba(46, 125, 50, 0.25);
 }
 .view-btn:hover {
-  background: linear-gradient(135deg, #1b5e20, #388e3c);
+  background:#388e3c;
   transform: translateY(-2px);
-  box-shadow: 0 5px 12px rgba(46, 125, 50, 0.35);
 }
 
 /* Profile Details Button */
 .edit-btn {
-  background: linear-gradient(135deg, #ffb300, #ff9800);
+  background: #ffb300;
   color: #fff;
-  box-shadow: 0 3px 8px rgba(255, 152, 0, 0.25);
 }
 .edit-btn:hover {
-  background: linear-gradient(135deg, #f57c00, #ef6c00);
+  background:#f57c00;
   transform: translateY(-2px);
-  box-shadow: 0 5px 12px rgba(255, 152, 0, 0.35);
 }
 
 /* Optional Icon Styling */

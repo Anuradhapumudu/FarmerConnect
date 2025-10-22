@@ -1,5 +1,19 @@
 
-// Form functionality
+// Load paddy size when PLR is selected
+function loadPaddySize() {
+    const plrSelect = document.getElementById('plrNumber');
+    const paddySizeInput = document.getElementById('paddySize');
+    const selectedOption = plrSelect.options[plrSelect.selectedIndex];
+
+    if (selectedOption.value) {
+        const paddySize = selectedOption.getAttribute('data-size');
+        paddySizeInput.value = paddySize;
+    } else {
+        paddySizeInput.value = '';
+    }
+}
+
+// Initialize paddy size on page load if PLR is already selected
 document.addEventListener('DOMContentLoaded', function() {
     // Set dates
     const today = new Date().toISOString().split('T')[0];
@@ -8,6 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('observationDate').value = today;
         document.getElementById('observationDate').max = today;
     }
+
+    // Initialize paddy size if PLR is pre-selected
+    const plrSelect = document.getElementById('plrNumber');
+    if (plrSelect.value) {
+        loadPaddySize();
+    }
+
     // File upload with preview
     const uploadArea = document.getElementById('mediaUploadArea');
     const fileInput = document.getElementById('media');

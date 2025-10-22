@@ -250,7 +250,7 @@
         backdrop-filter: var(--glass-blur);
         border-radius: 15px;
         padding: 30px;
-        margin: 20px auto 40px;
+        margin: calc(var(--header-height) + 20px) auto 40px;
         max-width: 1400px;
         width: 90%;
     }

@@ -6,14 +6,28 @@ class M_disease {
         $this->db = new Database;
     }
 
-    // CREATE - Submit the report (returns generated report_code)
+    // CREATE - Submit the report (returns generated report_code or error array)
     public function submitDReport($data) {
         try {
             // Generate report code first
             $reportCode = $this->generateReportCode();
 
             $this->db->query("INSERT INTO disease_reports (report_code, farmerNIC, pirNumber, observationDate, title, description, media, severity, affectedArea, status, created_at)
-                              VALUES (:report_code, :farmerNIC, :pirNumber, :observationDate, :title, :description, :media, :severity, :affectedArea, :status, NOW())");
+                               VALUES (:report_code, :farmerNIC, :pirNumber, :observationDate, :title, :description, :media, :severity, :affectedArea, :status, NOW())");
+
+            // Debug: Log the data being inserted
+            error_log("Inserting disease report: " . json_encode([
+                'report_code' => $reportCode,
+                'farmerNIC' => $data['farmerNIC'],
+                'pirNumber' => $data['plrNumber'],
+                'observationDate' => $data['observationDate'],
+                'title' => $data['title'],
+                'description' => $data['description'],
+                'media' => $data['media'],
+                'severity' => $data['severity'],
+                'affectedArea' => $data['affectedArea'],
+                'status' => isset($data['status']) ? $data['status'] : 'pending'
+            ]));
 
             // Bind values
             $this->db->bind(':report_code', $reportCode);
@@ -28,15 +42,29 @@ class M_disease {
             $this->db->bind(':status', isset($data['status']) ? $data['status'] : 'pending');
 
             // Execute
-            if ($this->db->execute()) {
-                return $reportCode;
+            $result = $this->db->execute();
+            error_log("Database execute result: " . ($result ? 'true' : 'false'));
+
+            if ($result) {
+                // Verify the insert worked
+                $this->db->query("SELECT COUNT(*) as count FROM disease_reports WHERE report_code = :report_code");
+                $this->db->bind(':report_code', $reportCode);
+                $verify = $this->db->single();
+                error_log("Verification count: " . ($verify ? $verify->count : 'null'));
+
+                if ($verify && $verify->count > 0) {
+                    return $reportCode;
+                } else {
+                    error_log("Insert verification failed - record not found after insert");
+                    return ['error' => 'Database insertion verification failed. Record was not found after insert.'];
+                }
             } else {
                 error_log("Database execution failed in submitDReport");
-                return false;
+                return ['error' => 'Database execution failed. Please check database connection and try again.'];
             }
         } catch (Exception $e) {
             error_log("Exception in submitDReport: " . $e->getMessage());
-            return false;
+            return ['error' => 'Database error: ' . $e->getMessage()];
         }
     }
 
@@ -60,7 +88,7 @@ class M_disease {
     // READ - Get all reports by farmer NIC
     public function getReportsByFarmerNIC($farmerNIC) {
         try {
-            $this->db->query("SELECT * FROM disease_reports WHERE farmerNIC = :farmerNIC ORDER BY created_at DESC");
+            $this->db->query("SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic LEFT JOIN paddy p ON dr.pirNumber = p.PLR AND dr.farmerNIC = p.NIC_FK WHERE dr.farmerNIC = :farmerNIC ORDER BY dr.created_at DESC");
             $this->db->bind(':farmerNIC', $farmerNIC);
             return $this->db->resultSet();
         } catch (Exception $e) {
@@ -82,21 +110,19 @@ class M_disease {
     }
 
     // READ - Get a single report by report_code
-    public function getReportByCode($reportCode) {
+        public function getReportByCode($reportCode) {
         try {
-            $this->db->query("SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic WHERE dr.report_code = :report_code");
+            $this->db->query("SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic LEFT JOIN paddy p ON dr.pirNumber = p.PLR AND dr.farmerNIC = p.NIC_FK WHERE dr.report_code = :report_code");
             $this->db->bind(':report_code', $reportCode);
             return $this->db->single();
         } catch (Exception $e) {
             error_log("Exception in getReportByCode: " . $e->getMessage());
             return false;
         }
-    }
-
-    // READ - Get all reports (for admin/overview)
+    }    // READ - Get all reports (for admin/overview)
     public function getAllReports($limit = null, $offset = null) {
         try {
-            $sql = "SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic ORDER BY dr.created_at DESC";
+            $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic LEFT JOIN paddy p ON dr.pirNumber = p.PLR AND dr.farmerNIC = p.NIC_FK ORDER BY dr.created_at DESC";
 
             if ($limit !== null) {
                 $sql .= " LIMIT :limit";
@@ -146,7 +172,7 @@ class M_disease {
                 return []; // No search criteria provided
             }
 
-            $sql = "SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic WHERE " . implode(' AND ', $conditions) . " ORDER BY dr.created_at DESC";
+            $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic LEFT JOIN paddy p ON dr.pirNumber = p.PLR AND dr.farmerNIC = p.NIC_FK WHERE " . implode(' AND ', $conditions) . " ORDER BY dr.created_at DESC";
             $this->db->query($sql);
 
             foreach ($params as $param => $value) {
@@ -635,6 +661,19 @@ class M_disease {
             error_log("Exception in getOfficerResponses: " . $e->getMessage());
             return [];
         }
+    }
+
+    public function getPaddyByPLR($plr) {
+        $this->db->query("SELECT * FROM paddy WHERE PLR = :plr");
+        $this->db->bind(':plr', $plr);
+        return $this->db->single();
+    }
+
+    // Get all paddy fields for a specific farmer
+    public function getPaddyFieldsByFarmer($farmerNIC) {
+        $this->db->query("SELECT PLR, Paddy_Size FROM paddy WHERE NIC_FK = :nic ORDER BY PLR ASC");
+        $this->db->bind(':nic', $farmerNIC);
+        return $this->db->resultSet();
     }
 }
 ?>
