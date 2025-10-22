@@ -72,18 +72,16 @@
         <i class="fas fa-home"></i>
         <span class="menu-text">Home</span>
       </a></li>
+        <li><a href="<?php echo URLROOT; ?>/Marketplace/seller" data-tooltip="Marketplace">
+        <i class="fas fa-store"></i>
+        <span class="menu-text">Marketplace</span>
+      </a></li>
       <li><a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterSeller" data-tooltip="Knowledge Center">
         <i class="fas fa-book"></i>
         <span class="menu-text">Knowledge Center</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/Marketplace/seller" data-tooltip="Marketplace">
-        <i class="fas fa-store"></i>
-        <span class="menu-text">Marketplace</span>
-      </a></li>
-      <li><a href="#" data-tooltip="Complain">
-        <i class="fas fa-exclamation-circle"></i>
-        <span class="menu-text">Complain</span>
-      </a></li>
+    
+  
     </ul>
   </aside>
 
