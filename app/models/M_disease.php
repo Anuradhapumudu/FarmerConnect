@@ -84,7 +84,7 @@ class M_disease {
     // READ - Get a single report by report_code
     public function getReportByCode($reportCode) {
         try {
-            $this->db->query("SELECT * FROM disease_reports WHERE report_code = :report_code");
+            $this->db->query("SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic WHERE dr.report_code = :report_code");
             $this->db->bind(':report_code', $reportCode);
             return $this->db->single();
         } catch (Exception $e) {
@@ -96,7 +96,7 @@ class M_disease {
     // READ - Get all reports (for admin/overview)
     public function getAllReports($limit = null, $offset = null) {
         try {
-            $sql = "SELECT * FROM disease_reports ORDER BY created_at DESC";
+            $sql = "SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic ORDER BY dr.created_at DESC";
 
             if ($limit !== null) {
                 $sql .= " LIMIT :limit";
@@ -128,17 +128,17 @@ class M_disease {
             $params = [];
 
             if (!empty($farmerNIC)) {
-                $conditions[] = "farmerNIC = :farmerNIC";
+                $conditions[] = "dr.farmerNIC = :farmerNIC";
                 $params[':farmerNIC'] = $farmerNIC;
             }
 
             if (!empty($plrNumber)) {
-                $conditions[] = "pirNumber = :pirNumber";
+                $conditions[] = "dr.pirNumber = :pirNumber";
                 $params[':pirNumber'] = $plrNumber;
             }
 
             if (!empty($reportCode)) {
-                $conditions[] = "report_code = :report_code";
+                $conditions[] = "dr.report_code = :report_code";
                 $params[':report_code'] = $reportCode;
             }
 
@@ -146,7 +146,7 @@ class M_disease {
                 return []; // No search criteria provided
             }
 
-            $sql = "SELECT * FROM disease_reports WHERE " . implode(' AND ', $conditions) . " ORDER BY created_at DESC";
+            $sql = "SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic WHERE " . implode(' AND ', $conditions) . " ORDER BY dr.created_at DESC";
             $this->db->query($sql);
 
             foreach ($params as $param => $value) {
@@ -376,7 +376,7 @@ class M_disease {
     // Get reports by farmer with pagination
     public function getReportsByFarmerWithPagination($farmerNIC, $limit = 10, $offset = 0) {
         try {
-            $this->db->query("SELECT * FROM disease_reports WHERE farmerNIC = :farmerNIC ORDER BY created_at DESC LIMIT :limit OFFSET :offset");
+            $this->db->query("SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic WHERE dr.farmerNIC = :farmerNIC ORDER BY dr.created_at DESC LIMIT :limit OFFSET :offset");
             $this->db->bind(':farmerNIC', $farmerNIC);
             $this->db->bind(':limit', $limit, PDO::PARAM_INT);
             $this->db->bind(':offset', $offset, PDO::PARAM_INT);
@@ -584,7 +584,7 @@ class M_disease {
                 $sortOrder = 'DESC';
             }
 
-            $this->db->query("SELECT * FROM disease_reports WHERE farmerNIC = :farmerNIC ORDER BY {$sortBy} {$sortOrder}");
+            $this->db->query("SELECT dr.*, f.full_name as farmer_name FROM disease_reports dr LEFT JOIN farmers f ON dr.farmerNIC = f.nic WHERE dr.farmerNIC = :farmerNIC ORDER BY dr.{$sortBy} {$sortOrder}");
             $this->db->bind(':farmerNIC', $farmerNIC);
             return $this->db->resultSet();
         } catch (Exception $e) {

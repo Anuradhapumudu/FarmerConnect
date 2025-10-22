@@ -25,8 +25,8 @@
 
         <div class="form-group">
             <label for="farmerNIC" class="required">Farmer NIC Number</label>
-            <input type="text" id="farmerNIC" name="farmerNIC" 
-                   placeholder="Enter your National Identity Card number" value="<?php echo $data['farmerNIC']; ?>">
+            <input type="text" id="farmerNIC" name="farmerNIC"
+                   placeholder="Enter your National Identity Card number" value="<?php echo $data['farmerNIC']; ?>" readonly>
             <span class="error"><?php echo $data['farmerNIC_error']; ?></span>
         </div>
         
