@@ -316,7 +316,7 @@ class FarmerProfile extends Controller
             }
 
             // Create upload directory if not exists
-            $uploadDir = APPROOT . '/dev/uploads/farmer_profiles/';
+            $uploadDir = APPROOT . '/../public/uploads/farmer_profiles/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
@@ -325,10 +325,15 @@ class FarmerProfile extends Controller
             $fileName = 'farmer_' . $nic . '.' . $ext;
             $filePath = $uploadDir . $fileName;
 
+            // ✅ If file already exists, remove it first
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+
             // Move file
             if (move_uploaded_file($file['tmp_name'], $filePath)) {
                 // Save relative path in DB
-                $relativePath = '/dev/uploads/farmer_profiles/' . $fileName;
+                $relativePath = '/uploads/farmer_profiles/' . $fileName;
                 $this->farmerModel->updateProfilePic($nic, $relativePath);
                 echo json_encode(['success' => true, 'image' => URLROOT . $relativePath]);
             } else {
@@ -346,15 +351,18 @@ class FarmerProfile extends Controller
         $farmer = $this->farmerModel->getFarmerByNIC($nic);
 
         if (!empty($farmer->profile_image)) {
-            $filePath = APPROOT . $farmer->profile_image;
+            // ✅ Correct path to the public folder
+            $filePath = APPROOT . '/../public' . $farmer->profile_image;
+
             if (file_exists($filePath)) {
-                unlink($filePath);
+                unlink($filePath); // delete file from folder
             }
+
+            // ✅ Clear DB entry
             $this->farmerModel->updateProfilePic($nic, NULL);
         }
 
         echo json_encode(['success' => true]);
     }
-
 }
 
