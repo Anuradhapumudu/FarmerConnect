@@ -1,6 +1,5 @@
-<?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/create_announcements.css">
-
+<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/createannouncementnew.css?v=<?php echo time(); ?>">
 
 <main class="main-content" id="mainContent">
     <h1>Create Announcement</h1>
@@ -34,4 +33,5 @@
         </div>
     </form>
 </main>
+
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
