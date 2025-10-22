@@ -2,9 +2,26 @@
 class Disease extends Controller{
 
     public function index(){
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
+        // Check if farmer is logged in and pre-populate NIC
+        $farmerNIC = '';
+        $paddyFields = [];
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            $farmerNIC = $_SESSION['nic'];
+            // Get farmer's paddy fields for PLR dropdown
+            $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC);
+        }
+
         $data = [
-            'farmerNIC' => '',
+            'farmerNIC' => $farmerNIC,
+            'paddyFields' => $paddyFields,
             'plrNumber' => '',
+            'paddySize' => '',
             'observationDate' => '',
             'todayDate' => '',
             'title' => '',
@@ -14,6 +31,7 @@ class Disease extends Controller{
             'terms' => '',
             'farmerNIC_error' => '',
             'plrNumber_error' => '',
+            'paddySize_error' => '',
             'observationDate_error' => '',
             'title_error' => '',
             'description_error' => '',
@@ -27,33 +45,73 @@ class Disease extends Controller{
 
     // Show form to search/view reports
     public function viewReports(){
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            // Handle search form submission
-            $farmerNIC = isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '';
-            $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
-            $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
 
-            $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+        // Check if farmer is logged in - they should only see their own reports
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            $farmerNIC = $_SESSION['nic'];
 
-            $data = [
-                'reports' => $reports,
-                'farmerNIC' => $farmerNIC,
-                'plrNumber' => $plrNumber,
-                'reportCode' => $reportCode,
-                'searched' => true,
-                'message' => count($reports) . ' report(s) found'
-            ];
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                // Handle search form submission - but only for this farmer's reports
+                $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
+                $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+
+                $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+
+                $data = [
+                    'reports' => $reports,
+                    'farmerNIC' => $farmerNIC,
+                    'plrNumber' => $plrNumber,
+                    'reportCode' => $reportCode,
+                    'searched' => true,
+                    'message' => count($reports) . ' of your report(s) found'
+                ];
+            } else {
+                // Show only this farmer's reports by default
+                $reports = $this->model('M_disease')->getReportsByFarmerNIC($farmerNIC);
+                $data = [
+                    'reports' => $reports,
+                    'farmerNIC' => $farmerNIC,
+                    'plrNumber' => '',
+                    'reportCode' => '',
+                    'searched' => false,
+                    'message' => 'Showing your reports (' . count($reports) . ' total)'
+                ];
+            }
         } else {
-            // Show all reports by default
-            $reports = $this->model('M_disease')->getAllReports();
-            $data = [
-                'reports' => $reports,
-                'farmerNIC' => '',
-                'plrNumber' => '',
-                'reportCode' => '',
-                'searched' => false,
-                'message' => 'Showing all reports (' . count($reports) . ' total)'
-            ];
+            // For officers/admins - show all reports
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                // Handle search form submission
+                $farmerNIC = isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '';
+                $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
+                $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+
+                $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+
+                $data = [
+                    'reports' => $reports,
+                    'farmerNIC' => $farmerNIC,
+                    'plrNumber' => $plrNumber,
+                    'reportCode' => $reportCode,
+                    'searched' => true,
+                    'message' => count($reports) . ' report(s) found'
+                ];
+            } else {
+                // Show all reports by default
+                $reports = $this->model('M_disease')->getAllReports();
+                $data = [
+                    'reports' => $reports,
+                    'farmerNIC' => '',
+                    'plrNumber' => '',
+                    'reportCode' => '',
+                    'searched' => false,
+                    'message' => 'Showing all reports (' . count($reports) . ' total)'
+                ];
+            }
         }
 
         // Add officer responses to each report
@@ -66,6 +124,12 @@ class Disease extends Controller{
 
     // View all submitted reports in table format or single report details
     public function viewReport($reportCode = '') {
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (!empty($reportCode)) {
             // Show specific report details
             $report = $this->model('M_disease')->getReportByCode($reportCode);
@@ -74,6 +138,15 @@ class Disease extends Controller{
                 $_SESSION['error_message'] = 'Report not found';
                 header('Location: ' . URLROOT . '/disease/viewReports');
                 exit();
+            }
+
+            // Check if farmer is logged in and trying to view their own report
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                if ($report->farmerNIC !== $_SESSION['nic']) {
+                    $_SESSION['error_message'] = 'You can only view your own reports';
+                    header('Location: ' . URLROOT . '/disease/viewReports');
+                    exit();
+                }
             }
 
             // Get officer responses for this report
@@ -86,13 +159,24 @@ class Disease extends Controller{
                 'message' => 'Report details for ' . $reportCode
             ];
         } else {
-            // Show all reports by default
-            $reports = $this->model('M_disease')->getAllReports();
-            $data = [
-                'reports' => $reports,
-                'singleReport' => false,
-                'message' => 'Showing all reports (' . count($reports) . ' total)'
-            ];
+            // Check if farmer is logged in - they should only see their own reports
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                $farmerNIC = $_SESSION['nic'];
+                $reports = $this->model('M_disease')->getReportsByFarmerNIC($farmerNIC);
+                $data = [
+                    'reports' => $reports,
+                    'singleReport' => false,
+                    'message' => 'Showing your reports (' . count($reports) . ' total)'
+                ];
+            } else {
+                // Show all reports by default for officers/admins
+                $reports = $this->model('M_disease')->getAllReports();
+                $data = [
+                    'reports' => $reports,
+                    'singleReport' => false,
+                    'message' => 'Showing all reports (' . count($reports) . ' total)'
+                ];
+            }
         }
 
         $this->view('disease/reportDetail', $data);
@@ -100,6 +184,12 @@ class Disease extends Controller{
 
     // Show edit form for updating report - UPDATED
     public function editReport($reportCode = '') { // Changed parameter name
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode)) {
             header('Location: ' . URLROOT . '/disease/viewReports');
             exit();
@@ -113,11 +203,25 @@ class Disease extends Controller{
             exit();
         }
 
+        // Check if farmer is logged in and trying to edit their own report
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            if ($report->farmerNIC !== $_SESSION['nic']) {
+                $_SESSION['error_message'] = 'You can only edit your own reports';
+                header('Location: ' . URLROOT . '/disease/viewReports');
+                exit();
+            }
+        }
+
+        // Get farmer's paddy fields for PLR dropdown
+        $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($report->farmerNIC);
+
         // Populate form with existing data
         $data = [
-            'reportCode' => $report->report_code, 
+            'reportCode' => $report->report_code,
             'farmerNIC' => $report->farmerNIC,
+            'paddyFields' => $paddyFields,
             'plrNumber' => $report->pirNumber,
+            'paddySize' => '',
             'observationDate' => $report->observationDate,
             'title' => $report->title,
             'description' => $report->description,
@@ -129,6 +233,7 @@ class Disease extends Controller{
             // Error fields
             'farmerNIC_error' => '',
             'plrNumber_error' => '',
+            'paddySize_error' => '',
             'observationDate_error' => '',
             'title_error' => '',
             'description_error' => '',
@@ -189,10 +294,17 @@ class Disease extends Controller{
                 }
 
                 // Validate PLR Number
+                $plrPattern = '/^\d{2}\/\d{2}\/\d{5}\/\d{3}\/[A-Za-z]\/\d{4}$/';
                 if (empty($data['plrNumber'])) {
-                    $data['plrNumber_error'] = 'Please enter your PLR number';
-                } elseif (!preg_match('/^PLR[0-9]+$/', $data['plrNumber'])) {
-                    $data['plrNumber_error'] = 'Invalid PLR format. Must start with PLR followed by numbers';
+                    $data['plrNumber_error'] = 'PLR number is required.';
+                } elseif (!preg_match($plrPattern, $data['plrNumber'])) {
+                    $data['plrNumber_error'] = 'Invalid PLR format. Use format: 02/25/00083/001/P/0066';
+                } else {
+                    // Check if PLR exists in paddy table for this farmer
+                    $paddyRecord = $this->model('M_disease')->getPaddyByPLR($data['plrNumber']);
+                    if (!$paddyRecord || $paddyRecord->NIC_FK !== $data['farmerNIC']) {
+                        $data['plrNumber_error'] = 'PLR number not found in your registered paddy fields.';
+                    }
                 }
 
                 // Validate Observation Date
@@ -322,14 +434,34 @@ class Disease extends Controller{
                     }
                 }
 
-                $data['media'] = !empty($finalMediaList) ? implode(',', $finalMediaList) : null;
+                $data['media'] = !empty($finalMediaList) ? implode(',', $finalMediaList) : '';
+
+                // Always populate paddy fields for form display
+                $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($data['farmerNIC']);
+                $data['paddyFields'] = $paddyFields;
 
                 // Check for validation errors
                 $hasErrors = !empty($data['farmerNIC_error']) || !empty($data['plrNumber_error']) ||
-                            !empty($data['observationDate_error']) || !empty($data['title_error']) ||
-                            !empty($data['description_error']) || !empty($data['media_error']) ||
-                            !empty($data['severity_error']) || !empty($data['affectedArea_error']) ||
-                            !empty($data['terms_error']);
+                            !empty($data['paddySize_error']) || !empty($data['observationDate_error']) ||
+                            !empty($data['title_error']) || !empty($data['description_error']) ||
+                            !empty($data['media_error']) || !empty($data['severity_error']) ||
+                            !empty($data['affectedArea_error']) || !empty($data['terms_error']);
+
+                // Debug validation errors
+                if ($hasErrors) {
+                    error_log("Validation errors found: " . json_encode([
+                        'farmerNIC_error' => $data['farmerNIC_error'],
+                        'plrNumber_error' => $data['plrNumber_error'],
+                        'paddySize_error' => $data['paddySize_error'],
+                        'observationDate_error' => $data['observationDate_error'],
+                        'title_error' => $data['title_error'],
+                        'description_error' => $data['description_error'],
+                        'media_error' => $data['media_error'],
+                        'severity_error' => $data['severity_error'],
+                        'affectedArea_error' => $data['affectedArea_error'],
+                        'terms_error' => $data['terms_error']
+                    ]));
+                }
 
                 if (!$hasErrors) {
                     // Update in database
@@ -360,6 +492,12 @@ class Disease extends Controller{
 
     // Delete report - UPDATED
     public function deleteReport($reportCode = '') { // Changed parameter name
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode)) {
             $_SESSION['error_message'] = 'Report Code is required';
             header('Location: ' . URLROOT . '/disease/viewReports');
@@ -373,6 +511,15 @@ class Disease extends Controller{
             $_SESSION['error_message'] = 'Report not found';
             header('Location: ' . URLROOT . '/disease/viewReports');
             exit();
+        }
+
+        // Check if farmer is logged in and trying to delete their own report
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            if ($report->farmerNIC !== $_SESSION['nic']) {
+                $_SESSION['error_message'] = 'You can only delete your own reports';
+                header('Location: ' . URLROOT . '/disease/viewReports');
+                exit();
+            }
         }
 
         try {
@@ -409,6 +556,12 @@ class Disease extends Controller{
 
     // Confirm delete page - UPDATED
     public function confirmDelete($reportCode = '') { // Changed parameter name
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode)) {
             header('Location: ' . URLROOT . '/disease/viewReports');
             exit();
@@ -422,6 +575,15 @@ class Disease extends Controller{
             exit();
         }
 
+        // Check if farmer is logged in and trying to delete their own report
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            if ($report->farmerNIC !== $_SESSION['nic']) {
+                $_SESSION['error_message'] = 'You can only delete your own reports';
+                header('Location: ' . URLROOT . '/disease/viewReports');
+                exit();
+            }
+        }
+
         $data = [
             'report' => $report
         ];
@@ -431,6 +593,12 @@ class Disease extends Controller{
 
     // Display media files from file system - UPDATED
     public function viewMedia($reportCode = '', $filename = '') { // Changed parameter name
+        // Check if user is logged in (allow officers/admins who may not have 'nic')
+        if (!isset($_SESSION['user_type'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode) || empty($filename)) {
             http_response_code(404);
             echo "Report Code and filename required";
@@ -451,6 +619,17 @@ class Disease extends Controller{
                     echo "File not associated with this report";
                     return;
                 }
+
+                // Check if farmer is logged in and trying to view their own report's media
+                // Officers and admins can view all media
+                if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                    if ($report->farmerNIC !== $_SESSION['nic']) {
+                        http_response_code(403);
+                        echo "You can only view media from your own reports";
+                        return;
+                    }
+                }
+                // Officers and admins can access all media files
 
                 // Build file path
                 $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
@@ -489,6 +668,7 @@ class Disease extends Controller{
                 $data = [
                     'farmerNIC' => isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '',
                     'plrNumber' => isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '',
+                    'paddySize' => isset($_POST['paddySize']) ? trim($_POST['paddySize']) : '',
                     'observationDate' => isset($_POST['observationDate']) ? trim($_POST['observationDate']) : '',
                     'title' => isset($_POST['title']) ? trim($_POST['title']) : '',
                     'description' => isset($_POST['description']) ? trim($_POST['description']) : '',
@@ -500,6 +680,7 @@ class Disease extends Controller{
                     // Error fields
                     'farmerNIC_error' => '',
                     'plrNumber_error' => '',
+                    'paddySize_error' => '',
                     'observationDate_error' => '',
                     'title_error' => '',
                     'description_error' => '',
@@ -520,10 +701,24 @@ class Disease extends Controller{
                 }
 
                 // Validate PLR Number
+                $plrPattern = '/^\d{2}\/\d{2}\/\d{5}\/\d{3}\/[A-Za-z]\/\d{4}$/';
                 if (empty($data['plrNumber'])) {
-                    $data['plrNumber_error'] = 'Please enter your PLR number';
-                } elseif (!preg_match('/^PLR[0-9]+$/', $data['plrNumber'])) {
-                    $data['plrNumber_error'] = 'Invalid PLR format. Must start with PLR followed by numbers';
+                    $data['plrNumber_error'] = 'PLR number is required.';
+                } elseif (!preg_match($plrPattern, $data['plrNumber'])) {
+                    $data['plrNumber_error'] = 'Invalid PLR format. Use format: 02/25/00083/001/P/0066';
+                } else {
+                    // Check if PLR exists in paddy table for this farmer
+                    $paddyRecord = $this->model('M_disease')->getPaddyByPLR($data['plrNumber']);
+                    if (!$paddyRecord || $paddyRecord->NIC_FK !== $data['farmerNIC']) {
+                        $data['plrNumber_error'] = 'PLR number not found in your registered paddy fields.';
+                    }
+                }
+
+                // ✅ Paddy Size validation
+                if (empty($data['paddySize'])) {
+                    $data['paddySize_error'] = 'Paddy size is required.';
+                } elseif (!is_numeric($data['paddySize']) || $data['paddySize'] <= 0) {
+                    $data['paddySize_error'] = 'Paddy size must be a positive number greater than 0.';
                 }
 
                 // Validate Observation Date
@@ -583,7 +778,7 @@ class Disease extends Controller{
                     $data['terms_error'] = 'You must agree to the terms and conditions';
                 }
                 // Handle Media Upload - Store files in filesystem
-                $data['media'] = null;
+                $data['media'] = '';
                 if (!empty($_FILES['media']['name'][0])) {
                     try {
                         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi', 'video/quicktime', 'video/x-ms-wmv'];
@@ -647,6 +842,10 @@ class Disease extends Controller{
                     }
                 }
 
+                // Always populate paddy fields for form display
+                $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($data['farmerNIC']);
+                $data['paddyFields'] = $paddyFields;
+
                 // Check if there are any validation errors
                 $hasErrors = !empty($data['farmerNIC_error']) || !empty($data['plrNumber_error']) ||
                             !empty($data['observationDate_error']) || !empty($data['title_error']) ||
@@ -656,7 +855,10 @@ class Disease extends Controller{
 
                 if (!$hasErrors) {
                     // All validations passed, submit to database
+                    error_log("About to submit disease report with data: " . json_encode($data));
+
                     $reportCode = $this->model('M_disease')->submitDReport($data); // This now returns the generated report code
+                    error_log("submitDReport returned: " . ($reportCode ? $reportCode : 'false'));
 
                     if ($reportCode) {
                         // SUCCESS - Rename any temporary files with the actual report code
@@ -692,7 +894,13 @@ class Disease extends Controller{
                                 }
                             }
                         }
-                        $data['media_error'] = 'Database insertion failed. Please try again.';
+
+                        // Check if reportCode is an array with error details
+                        if (is_array($reportCode) && isset($reportCode['error'])) {
+                            $data['media_error'] = $reportCode['error'];
+                        } else {
+                            $data['media_error'] = 'Database insertion failed. Please try again.';
+                        }
                         $this->view('disease/disease', $data);
                     }
                 } else {
@@ -716,9 +924,20 @@ class Disease extends Controller{
             }
         } else {
             // Handle GET request - show empty form
+            // Check if farmer is logged in and pre-populate NIC
+            $farmerNIC = '';
+            $paddyFields = [];
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                $farmerNIC = $_SESSION['nic'];
+                // Get farmer's paddy fields for PLR dropdown
+                $paddyFields = $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC);
+            }
+
             $data = [
-                'farmerNIC' => '',
+                'farmerNIC' => $farmerNIC,
+                'paddyFields' => $paddyFields,
                 'plrNumber' => '',
+                'paddySize' => '',
                 'observationDate' => '',
                 'todayDate' => '',
                 'title' => '',
@@ -728,6 +947,7 @@ class Disease extends Controller{
                 'terms' => '',
                 'farmerNIC_error' => '',
                 'plrNumber_error' => '',
+                'paddySize_error' => '',
                 'observationDate_error' => '',
                 'title_error' => '',
                 'description_error' => '',
@@ -742,6 +962,12 @@ class Disease extends Controller{
 
     // Success page method - UPDATED
     public function success($reportCode = '') { // Changed parameter name
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode)) {
             header('Location: ' . URLROOT . '/disease');
             exit();
@@ -753,6 +979,14 @@ class Disease extends Controller{
         if (!$report) {
             header('Location: ' . URLROOT . '/disease');
             exit();
+        }
+
+        // Check if farmer is logged in and trying to view their own report
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            if ($report->farmerNIC !== $_SESSION['nic']) {
+                header('Location: ' . URLROOT . '/disease/viewReports');
+                exit();
+            }
         }
 
         $data = [

@@ -3,7 +3,7 @@
 <script src="<?php echo URLROOT; ?>/js/disease/diseaseReport.js?v=<?= time(); ?>" defer></script>
 <div class="content-card">
     <div class="content-header">
-        <h1>🐛 Disease Detector</h1>
+        <h1>Disease Detector</h1>
         <p class="content-subtitle"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update your disease report' : 'Report plant diseases to help protect our agricultural community'; ?></p>
     </div>
 
@@ -25,16 +25,31 @@
 
         <div class="form-group">
             <label for="farmerNIC" class="required">Farmer NIC Number</label>
-            <input type="text" id="farmerNIC" name="farmerNIC" 
-                   placeholder="Enter your National Identity Card number" value="<?php echo $data['farmerNIC']; ?>">
+            <input type="text" id="farmerNIC" name="farmerNIC"
+                   placeholder="Enter your National Identity Card number" value="<?php echo $data['farmerNIC']; ?>" readonly>
             <span class="error"><?php echo $data['farmerNIC_error']; ?></span>
         </div>
         
         <div class="form-group">
             <label for="plrNumber" class="required">PLR Number</label>
-            <input type="text" id="plrNumber" name="plrNumber" 
-                   placeholder="Enter your Planters Registration Number" value="<?php echo $data['plrNumber']; ?>">
+            <select id="plrNumber" name="plrNumber" onchange="loadPaddySize()">
+                <option value="">.. Select PLR ..</option>
+                <?php if(!empty($data['paddyFields'])): ?>
+                    <?php foreach($data['paddyFields'] as $paddy): ?>
+                        <option value="<?php echo $paddy->PLR; ?>" data-size="<?php echo $paddy->Paddy_Size; ?>"
+                                <?php echo (isset($_POST['plrNumber']) && $_POST['plrNumber'] == $paddy->PLR) ? 'selected' : ''; ?>>
+                            <?php echo $paddy->PLR; ?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
             <span class="error"><?php echo $data['plrNumber_error']; ?></span>
+        </div>
+
+        <div class="form-group">
+            <label for="paddySize" class="required">Paddy Size (Acres)</label>
+            <input type="number" id="paddySize" name="paddySize" step="0.01" min="0" readonly value="<?php echo isset($_POST['paddySize']) ? $_POST['paddySize'] : $data['paddySize']; ?>">
+            <span class="error"><?php echo $data['paddySize_error']; ?></span>
         </div>
         
         <div class="form-group-split">
