@@ -82,10 +82,10 @@
                 <tbody>
                     <?php foreach ($data['reports'] as $report): ?>
                         <tr>
-                            <td>
+                            <td data-label="Report Code">
                                 <span class="report-code"><?php echo htmlspecialchars($report->report_code); ?></span>
                             </td>
-                            <td>
+                            <td data-label="Title">
                                 <div class="title-cell">
                                     <div class="report-title"><?php echo htmlspecialchars($report->title); ?></div>
                                     <small class="report-description">
@@ -94,19 +94,19 @@
                                     </small>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Farmer Details">
                                 <div class="farmer-info">
                                     <div><?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></div>
                                     <small>NIC: <?php echo htmlspecialchars($report->farmerNIC); ?> | PLR: <?php echo htmlspecialchars($report->pirNumber); ?></small>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Severity">
                                 <span class="severity-badge severity-<?php echo $report->severity; ?>">
                                     <i class="fas fa-exclamation-triangle"></i>
                                     <?php echo ucfirst($report->severity); ?>
                                 </span>
                             </td>
-                            <td>
+                            <td data-label="Status">
                                 <?php if (isset($report->status)): ?>
                                     <span class="status-badge status-<?php echo $report->status; ?>">
                                         <i class="fas fa-<?php
@@ -126,13 +126,13 @@
                                     </span>
                                 <?php endif; ?>
                             </td>
-                            <td>
+                            <td data-label="Date & Area">
                                 <div class="date-info">
                                     <div><?php echo date('M d, Y', strtotime($report->observationDate)); ?></div>
                                     <small><?php echo number_format($report->affectedArea, 1); ?> acres</small>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Officer Response">
                                 <div class="officer-response">
                                     <?php if (!empty($report->officer_responses)): ?>
                                         <?php $latest_response = end($report->officer_responses); ?>
@@ -155,7 +155,7 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Actions">
                                 <div class="action-buttons">
                                     <a href="<?php echo URLROOT; ?>/disease/viewReport/<?php echo htmlspecialchars($report->report_code); ?>"
                                        class="btn btn-info btn-xs" title="View Details">
@@ -322,6 +322,7 @@
         width: 100%;
         border-collapse: collapse;
         font-size: 14px;
+        table-layout: fixed; /* prevent long content from expanding columns */
     }
 
     .reports-table th,
@@ -330,6 +331,34 @@
         text-align: left;
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         vertical-align: middle;
+        white-space: normal; /* allow wrapping inside cells */
+        overflow: hidden; /* hide overflow so clamping works */
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    /* give the Title column a fixed-ish width so description is constrained */
+    .reports-table th:nth-child(2),
+    .reports-table td:nth-child(2) {
+        width: 30%;
+        max-width: 420px;
+    }
+
+    .title-cell {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    /* multi-line clamp for descriptions so they don't overlap other columns */
+    .report-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* show at most 2 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        color: var(--text-secondary);
+        font-size: 13px;
     }
 
     .reports-table th {
@@ -372,11 +401,6 @@
     .report-description {
         color: var(--text-secondary);
         font-size: 13px;
-    }
-
-    .farmer-info {
-        max-width: 250px;
-        word-break: break-word;
     }
 
     .farmer-info div {
@@ -479,7 +503,7 @@
         display: flex;
         gap: 6px;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: flex-end;
         flex-wrap: nowrap;
     }
 
@@ -792,22 +816,67 @@
             padding: 10px;
         }
 
+        /* Mobile: convert table to stacked responsive cards */
+        .reports-table thead {
+            display: none;
+        }
+
+        .reports-table,
+        .reports-table tbody,
+        .reports-table tr,
+        .reports-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .reports-table tr {
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .reports-table td {
+            padding: 8px 10px;
+            border-bottom: none;
+        }
+
+        .reports-table td:before {
+            content: attr(data-label);
+            display: block;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+
+        .title-cell {
+            max-width: 100%;
+        }
+
         .action-buttons {
-            flex-direction: column;
-            gap: 4px;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-right: 10px;
         }
 
         .officer-response {
-            max-width: 150px;
+            max-width: 100%;
         }
 
-        .response-preview small {
-            font-size: 11px;
+        .response-preview small,
+        .report-description,
+        .farmer-info small,
+        .date-info small {
+            font-size: 12px;
         }
 
         .btn {
             padding: 6px 10px;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .modal-content {
@@ -819,20 +888,6 @@
         .modal-body,
         .modal-footer {
             padding: 15px 20px;
-        }
-    }
-
-    @media (max-width: 1080px) {
-        .farmer-info {
-            max-width: 200px;
-        }
-
-        .title-cell {
-            max-width: 300px;
-        }
-
-        .officer-response {
-            max-width: 180px;
         }
     }
 </style>
