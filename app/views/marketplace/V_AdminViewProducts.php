@@ -2,31 +2,77 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/adminviewproducts.css?v=<?= time(); ?>">
 
 <main class="main-content" id="mainContent">
-
   <div class="containers">
-    <div class="header">
+    <div class="header text-center">
       <h1>Product Management</h1>
     </div>
 
- <!-- Filter -->
-  <div class="filter-container">
-    <input type="text" id="searchInput" placeholder="Search product...">
-    <input type="number" id="minPrice" placeholder="Min Price">
-    <input type="number" id="maxPrice" placeholder="Max Price">
+    <!-- Filter -->
+    <div class="filter-container center-content">
+      <div class="filter-wrapper">
+        <input type="text" id="searchInput" placeholder="Search product...">
+        <input type="number" id="minPrice" placeholder="Min Price">
+        <input type="number" id="maxPrice" placeholder="Max Price">
         <select id="categoryFilter">
-         <option value="">All Items</option>
-      <option value="Fertilizer">Fertilizer</option>
-      <option value="Seeds">Paddy seeds</option>
-      <option value="Tools">Tools</option>
-      <option value="Others">Others</option>
-    </select>
+          <option value="">All Items</option>
+          <option value="Fertilizer">Fertilizer</option>
+          <option value="Seeds">Paddy seeds</option>
+          <option value="Tools">Tools</option>
+          <option value="Others">Others</option>
+        </select>
+        <!-- Province Dropdown -->
+<select id="provinceFilter" onchange="updateRegions()">
+  <option value="">All Provinces</option>
+  <option value="Central">Central</option>
+  <option value="Eastern">Eastern</option>
+  <option value="North Central">North Central</option>
+  <option value="North Western">North Western</option>
+  <option value="Northern">Northern</option>
+  <option value="Sabaragamuwa">Sabaragamuwa</option>
+  <option value="Southern">Southern</option>
+  <option value="Uva">Uva</option>
+  <option value="Western">Western</option>
+</select>
+
+    <!-- Region Dropdown (was district) -->
     <select id="regionFilter">
       <option value="">All Regions</option>
-      <option value="Colombo">Colombo</option>
-      <option value="Kandy">Kandy</option>
-      <option value="Galle">Galle</option>
-      <option value="Jaffna">Jaffna</option>
+      <!-- Western -->
+      <option value="Colombo" data-province="Western">Colombo</option>
+      <option value="Gampaha" data-province="Western">Gampaha</option>
+      <option value="Kalutara" data-province="Western">Kalutara</option>
+      <!-- Central -->
+      <option value="Kandy" data-province="Central">Kandy</option>
+      <option value="Matale" data-province="Central">Matale</option>
+      <option value="Nuwara Eliya" data-province="Central">Nuwara Eliya</option>
+      <!-- Southern -->
+      <option value="Galle" data-province="Southern">Galle</option>
+      <option value="Matara" data-province="Southern">Matara</option>
+      <option value="Hambantota" data-province="Southern">Hambantota</option>
+      <!-- Northern -->
+      <option value="Jaffna" data-province="Northern">Jaffna</option>
+      <option value="Kilinochchi" data-province="Northern">Kilinochchi</option>
+      <option value="Mannar" data-province="Northern">Mannar</option>
+      <option value="Vavuniya" data-province="Northern">Vavuniya</option>
+      <option value="Mullaitivu" data-province="Northern">Mullaitivu</option>
+      <!-- Eastern -->
+      <option value="Trincomalee" data-province="Eastern">Trincomalee</option>
+      <option value="Batticaloa" data-province="Eastern">Batticaloa</option>
+      <option value="Ampara" data-province="Eastern">Ampara</option>
+      <!-- North Western -->
+      <option value="Kurunegala" data-province="North Western">Kurunegala</option>
+      <option value="Puttalam" data-province="North Western">Puttalam</option>
+      <!-- North Central -->
+      <option value="Anuradhapura" data-province="North Central">Anuradhapura</option>
+      <option value="Polonnaruwa" data-province="North Central">Polonnaruwa</option>
+      <!-- Uva -->
+      <option value="Badulla" data-province="Uva">Badulla</option>
+      <option value="Monaragala" data-province="Uva">Monaragala</option>
+      <!-- Sabaragamuwa -->
+      <option value="Ratnapura" data-province="Sabaragamuwa">Ratnapura</option>
+      <option value="Kegalle" data-province="Sabaragamuwa">Kegalle</option>
     </select>
+
         <select id="statusFilter">
          <option value="">Any Status</option>
       <option value="Instock">In Stock</option>

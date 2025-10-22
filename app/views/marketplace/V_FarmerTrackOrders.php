@@ -26,7 +26,7 @@
       <div class="order-card">
         <div class="order-main-content">
           <div class="order-image">
-            <img src="<?php echo URLROOT; ?>/img/collage.jpg" alt="Premium Paddy Seeds">
+            <img src="<?php echo URLROOT; ?>/img/paddy seed.webp" alt="Premium Paddy Seeds">
           </div>
           
           <div class="order-content-wrapper">
@@ -137,10 +137,8 @@
       <!-- Order Card 2 -->
       <div class="order-card">
         <div class="order-main-content">
-          <div class="order-image">
-            <div class="product-image">
-              <i class="fas fa-leaf"></i>
-            </div>
+           <div class="order-image">
+            <img src="<?php echo URLROOT; ?>/img/fertilizer.jpg" alt="Premium Paddy Seeds">
           </div>
           
           <div class="order-content-wrapper">

@@ -9,19 +9,20 @@
     <input type="number" id="minPrice" placeholder="Min Price">
     <input type="number" id="maxPrice" placeholder="Max Price">
 
-    <!-- Province Dropdown -->
-    <select id="provinceFilter" onchange="updateRegions()">
-      <option value="">All Provinces</option>
-      <option value="Western">Western</option>
-      <option value="Central">Central</option>
-      <option value="Southern">Southern</option>
-      <option value="Northern">Northern</option>
-      <option value="Eastern">Eastern</option>
-      <option value="North Western">North Western</option>
-      <option value="North Central">North Central</option>
-      <option value="Uva">Uva</option>
-      <option value="Sabaragamuwa">Sabaragamuwa</option>
-    </select>
+<!-- Province Dropdown -->
+<select id="provinceFilter" onchange="updateRegions()">
+  <option value="">All Provinces</option>
+  <option value="Central">Central</option>
+  <option value="Eastern">Eastern</option>
+  <option value="North Central">North Central</option>
+  <option value="North Western">North Western</option>
+  <option value="Northern">Northern</option>
+  <option value="Sabaragamuwa">Sabaragamuwa</option>
+  <option value="Southern">Southern</option>
+  <option value="Uva">Uva</option>
+  <option value="Western">Western</option>
+</select>
+
 
     <!-- Region Dropdown (was district) -->
     <select id="regionFilter">
