@@ -2,7 +2,6 @@
 class Disease extends Controller{
 
     public function index(){
-        // Remove reportId from initial data since it's auto-generated
         $data = [
             'farmerNIC' => '',
             'plrNumber' => '',
@@ -116,7 +115,7 @@ class Disease extends Controller{
 
         // Populate form with existing data
         $data = [
-            'reportCode' => $report->report_code, // Changed from reportId
+            'reportCode' => $report->report_code, 
             'farmerNIC' => $report->farmerNIC,
             'plrNumber' => $report->pirNumber,
             'observationDate' => $report->observationDate,

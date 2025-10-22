@@ -7,20 +7,20 @@
     <meta name="description" content="Connect with agricultural experts, track crop growth, and find trusted sellers. Your complete farming solution platform.">
     <meta name="keywords" content="farming, agriculture, crop timeline, agricultural officers, farming equipment, Sri Lanka">
     <meta name="author" content="FarmerConnect.lk">
-    
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="FarmerConnect.lk - Smart Farming Made Easy">
     <meta property="og:description" content="Connect with agricultural experts, track crop growth, and find trusted sellers.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://farmerconnect.lk">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo URLROOT; ?>/img/download.png">
     <link rel="apple-touch-icon" href="<?php echo URLROOT; ?>/img/logo.png">
-    
+
     <!-- Preload critical resources -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
-    
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/homepage.css">
@@ -45,11 +45,11 @@
                 </div>
                 <div class="logo-text">FarmerConnect.lk</div>
             </a>
-            
+
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mainNav">
                 <i class="fas fa-bars" aria-hidden="true"></i>
             </button>
-            
+
             <nav id="mainNav" role="navigation" aria-label="Main navigation">
                 <ul>
                     <li><a href="#home">Home</a></li>
@@ -59,7 +59,7 @@
                     <li><a href="#marketplace">Marketplace</a></li>
                 </ul>
             </nav>
-            
+
             <div class="nav-signup-buttons">
                 <a href="<?php echo URLROOT; ?>/users/login" class="btn" aria-label="Login to your account">
                     <span>Login</span>
@@ -96,40 +96,40 @@
                         <h1>Smart Farming Made Easy</h1>
                         <p>Get expert agricultural advice, track your crop growth, and connect with trusted sellers all in one place.</p>
                         <div class="hero-btns">
-                            <a href="#features" class="btn" aria-label="Explore our crop timeline feature">
+                            <a href="<?php echo URLROOT; ?>/users/login" class="btn" aria-label="Login to explore crop timeline">
                                 <span>Explore Crop Timeline</span>
                             </a>
-                            <a href="#expert-advice" class="btn btn-outline" aria-label="Ask our agricultural experts">
+                            <a href="<?php echo URLROOT; ?>/users/login" class="btn btn-outline" aria-label="Login to ask agricultural experts">
                                 <span>Ask an Expert</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');" role="img" aria-label="Agricultural officers helping farmers">
                     <div class="slide-content">
                         <h1>Connect With Agri Officers</h1>
                         <p>Get real-time solutions to your farming problems from certified agricultural officers.</p>
                         <div class="hero-btns">
-                            <a href="#quick-actions" class="btn" aria-label="Report a farming issue">
+                            <a href="<?php echo URLROOT; ?>/users/login" class="btn" aria-label="Login to report farming issue">
                                 <span>Report an Issue</span>
                             </a>
-                            <a href="#expert-advice" class="btn btn-outline" aria-label="View answered questions">
+                            <a href="<?php echo URLROOT; ?>/users/login" class="btn btn-outline" aria-label="Login to view answered questions">
                                 <span>View Questions</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');" role="img" aria-label="Farmers connecting with trusted sellers">
                     <div class="slide-content">
                         <h1>Find Trusted Sellers</h1>
                         <p>Connect with verified sellers for seeds, fertilizers, equipment and market your produce.</p>
                         <div class="hero-btns">
-                            <a href="#marketplace" class="btn" aria-label="Browse available sellers">
+                            <a href="<?php echo URLROOT; ?>/users/login" class="btn" aria-label="Login to browse marketplace">
                                 <span>Browse Sellers</span>
                             </a>
-                            <a href="./pages/seller-registration.html" class="btn btn-outline" aria-label="Register as a seller">
+                            <a href="<?php echo URLROOT; ?>/users/register" class="btn btn-outline" aria-label="Register as a seller">
                                 <span>Register as Seller</span>
                             </a>
                         </div>
@@ -147,8 +147,8 @@
         <!-- User Count Section -->
         <section class="features" id="user-count" aria-labelledby="user-count-title">
             <div class="container">
-                <h2 id="user-count-title" class="section-title">Our Community</h2>
-                
+                <h2 id="user-count-title" class="section-title">Join Our Growing Community</h2>
+
                 <div class="features-grid" role="list">
                     <div class="stat-card" role="listitem">
                         <div class="feature-icon" aria-hidden="true">
@@ -158,7 +158,7 @@
                         <p>Dedicated farmers using our platform to improve their agricultural practices and productivity.</p>
                         <div class="stat-value" data-target="2847" aria-label="2847 active farmers">0</div>
                     </div>
-                    
+
                     <div class="stat-card" role="listitem">
                         <div class="feature-icon" aria-hidden="true">
                             <i class="fas fa-user-tie"></i>
@@ -167,7 +167,7 @@
                         <p>Certified agricultural officers ready to help solve your farming challenges 24/7.</p>
                         <div class="stat-value" data-target="156" aria-label="156 agricultural officers">0</div>
                     </div>
-                    
+
                     <div class="stat-card" role="listitem">
                         <div class="feature-icon" aria-hidden="true">
                             <i class="fas fa-store"></i>
@@ -183,8 +183,8 @@
         <!-- Features Section -->
         <section class="features" id="features" aria-labelledby="features-title">
             <div class="container">
-                <h2 id="features-title" class="section-title">Our Services</h2>
-                
+                <h2 id="features-title" class="section-title">All Our Services</h2>
+
                 <div class="features-grid" role="list">
                     <div class="feature-card" role="listitem">
                         <div class="feature-icon" aria-hidden="true">
@@ -193,7 +193,7 @@
                         <h3>Crop Timeline</h3>
                         <p>Plan and track your crop growth stages with smart reminders for each phase of cultivation.</p>
                     </div>
-                    
+
                     <div class="feature-card" role="listitem">
                         <div class="feature-icon" aria-hidden="true">
                             <i class="fas fa-headset"></i>
@@ -201,13 +201,37 @@
                         <h3>Expert Support</h3>
                         <p>Get 24/7 access to agricultural officers who can help solve your farming challenges.</p>
                     </div>
-                    
+
                     <div class="feature-card" role="listitem">
                         <div class="feature-icon" aria-hidden="true">
                             <i class="fas fa-handshake"></i>
                         </div>
                         <h3>Seller Network</h3>
                         <p>Connect with trusted sellers for inputs and buyers for your produce with verified ratings.</p>
+                    </div>
+
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <h3>Report Issues</h3>
+                        <p>Report crop diseases, pests or other farming problems to get expert help quickly.</p>
+                    </div>
+
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <h3>Weather Forecast</h3>
+                        <p>Check localized weather predictions to plan your farming activities effectively.</p>
+                    </div>
+
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h3>Find Sellers</h3>
+                        <p>Locate nearby sellers of seeds, fertilizers and farming equipment in your area.</p>
                     </div>
                 </div>
             </div>
@@ -217,31 +241,31 @@
         <section class="quick-actions" id="quick-actions" aria-labelledby="quick-actions-title">
             <div class="container">
                 <h2 id="quick-actions-title" class="section-title">Quick Actions</h2>
-                
+
                 <div class="action-cards" role="list">
                     <div class="action-card" role="listitem">
                         <i class="fas fa-bug" aria-hidden="true"></i>
                         <h3>Report Issue</h3>
                         <p>Report crop diseases, pests or other farming problems to get expert help quickly.</p>
-                        <a href="./pages/report-issue.html" class="btn" style="margin-top: 15px; padding: 8px 20px;" aria-label="Report a farming issue">
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn" style="margin-top: 15px; padding: 8px 20px;" aria-label="Login to report farming issue">
                             <span>Report Now</span>
                         </a>
                     </div>
-                    
+
                     <div class="action-card" role="listitem">
                         <i class="fas fa-cloud-sun" aria-hidden="true"></i>
                         <h3>Weather Forecast</h3>
                         <p>Check localized weather predictions to plan your farming activities effectively.</p>
-                        <a href="./pages/weather.html" class="btn" style="margin-top: 15px; padding: 8px 20px;" aria-label="View weather forecast">
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn" style="margin-top: 15px; padding: 8px 20px;" aria-label="Login to view weather forecast">
                             <span>View Weather</span>
                         </a>
                     </div>
-                    
+
                     <div class="action-card" role="listitem">
                         <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
                         <h3>Find Sellers</h3>
                         <p>Locate nearby sellers of seeds, fertilizers and farming equipment in your area.</p>
-                        <a href="#marketplace" class="btn" style="margin-top: 15px; padding: 8px 20px;" aria-label="Search for sellers">
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn" style="margin-top: 15px; padding: 8px 20px;" aria-label="Login to search for sellers">
                             <span>Search Now</span>
                         </a>
                     </div>
@@ -253,7 +277,7 @@
         <section class="expert-advice" id="expert-advice" aria-labelledby="expert-advice-title">
             <div class="container">
                 <h2 id="expert-advice-title" class="section-title">Recent Expert Advice</h2>
-                
+
                 <div class="advice-container" role="feed" aria-label="Recent questions and answers">
                     <article class="advice-item" role="article">
                         <h3 class="advice-question">How to control stem borer in rice crops?</h3>
@@ -263,7 +287,7 @@
                             <time datetime="2025-01-18">2 days ago</time>
                         </div>
                     </article>
-                    
+
                     <article class="advice-item" role="article">
                         <h3 class="advice-question">Best fertilizers for tomato farming in red soil?</h3>
                         <div class="advice-answer">For red soil, use a balanced NPK fertilizer (10-10-10) with added micronutrients like zinc and boron. Organic compost is highly recommended to improve soil structure.</div>
@@ -272,7 +296,7 @@
                             <time datetime="2025-01-15">5 days ago</time>
                         </div>
                     </article>
-                    
+
                     <article class="advice-item" role="article">
                         <h3 class="advice-question">When is the best time to plant wheat in northern regions?</h3>
                         <div class="advice-answer">The optimal window is between November 1-15 for most northern regions. Early sowing leads to excessive vegetative growth while late sowing reduces yield potential.</div>
@@ -282,9 +306,9 @@
                         </div>
                     </article>
                 </div>
-                
+
                 <div class="text-center" style="margin-top: 30px;">
-                    <a href="<?php echo URLROOT; ?>/pages/all-questions.html" class="btn" aria-label="View all questions and answers">
+                    <a href="<?php echo URLROOT; ?>/users/login" class="btn" aria-label="Login to view all questions and answers">
                         <span>View All Questions</span>
                     </a>
                 </div>
@@ -294,109 +318,69 @@
         <!-- Marketplace -->
         <section class="marketplace" id="marketplace" aria-labelledby="marketplace-title">
             <div class="container">
-                <h2 id="marketplace-title" class="section-title">Featured Sellers</h2>
-                
-                <div class="seller-grid" role="list">
-                    <article class="seller-card" role="listitem">
-                        <div class="seller-img" style="background-image: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');" role="img" aria-label="Green Fields Seeds store"></div>
-                        <div class="seller-info">
-                            <h3 class="seller-name">Green Fields Seeds</h3>
-                            <div class="seller-rating" aria-label="Rating: 4.5 out of 5 stars, 48 reviews">
-                                <span class="sr-only">Rating: 4.5 out of 5 stars</span>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star-half-alt" aria-hidden="true"></i>
-                                <span class="review-count">(48 reviews)</span>
-                            </div>
-                            <div class="seller-products">Hybrid seeds, Organic fertilizers, Plant nutrients</div>
-                            <div class="seller-contact">
-                                <span class="seller-location">
-                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> 
-                                    <span>15km away</span>
-                                </span>
-                                <button class="contact-btn" aria-label="Contact Green Fields Seeds">Contact</button>
-                            </div>
+                <h2 id="marketplace-title" class="section-title">Buy Agricultural Products</h2>
+                <p class="marketplace-description">Discover premium agricultural products and services - you can buy everything you need for successful farming.</p>
+
+                <!-- Marketplace Cards -->
+                <div class="features-grid" role="list">
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <img src="<?php echo URLROOT; ?>/img/fertilizer.jpg" alt="Fertilizer" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
                         </div>
-                    </article>
-                    
-                    <article class="seller-card" role="listitem">
-                        <div class="seller-img" style="background-image: url('https://images.unsplash.com/photo-1556910633-8b8c9dc7d963?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');" role="img" aria-label="AgriTech Solutions store"></div>
-                        <div class="seller-info">
-                            <h3 class="seller-name">AgriTech Solutions</h3>
-                            <div class="seller-rating" aria-label="Rating: 4 out of 5 stars, 32 reviews">
-                                <span class="sr-only">Rating: 4 out of 5 stars</span>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="far fa-star" aria-hidden="true"></i>
-                                <span class="review-count">(32 reviews)</span>
-                            </div>
-                            <div class="seller-products">Farming tools, Irrigation systems, Equipment</div>
-                            <div class="seller-contact">
-                                <span class="seller-location">
-                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> 
-                                    <span>8km away</span>
-                                </span>
-                                <button class="contact-btn" aria-label="Contact AgriTech Solutions">Contact</button>
-                            </div>
+                        <h3>Fertilizer</h3>
+                        <p>High-quality fertilizers for optimal crop growth</p>
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn">Shop Now</a>
+                    </div>
+
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <img src="<?php echo URLROOT; ?>/img/paddy seed.webp" alt="Paddy Seeds" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
                         </div>
-                    </article>
-                    
-                    <article class="seller-card" role="listitem">
-                        <div class="seller-img" style="background-image: url('https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');" role="img" aria-label="Organic Harvest store"></div>
-                        <div class="seller-info">
-                            <h3 class="seller-name">Organic Harvest</h3>
-                            <div class="seller-rating" aria-label="Rating: 5 out of 5 stars, 76 reviews">
-                                <span class="sr-only">Rating: 5 out of 5 stars</span>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <span class="review-count">(76 reviews)</span>
-                            </div>
-                            <div class="seller-products">Organic pesticides, Vermicompost, Bio-fertilizers</div>
-                            <div class="seller-contact">
-                                <span class="seller-location">
-                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> 
-                                    <span>22km away</span>
-                                </span>
-                                <button class="contact-btn" aria-label="Contact Organic Harvest">Contact</button>
-                            </div>
+                        <h3>Paddy Seeds</h3>
+                        <p>Premium paddy seeds for better paddy fields</p>
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn">Shop Now</a>
+                    </div>
+
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <img src="<?php echo URLROOT; ?>/img/Agrochemicals.jpg" alt="Agrochemicals" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
                         </div>
-                    </article>
-                    
-                    <article class="seller-card" role="listitem">
-                        <div class="seller-img" style="background-image: url('https://images.unsplash.com/photo-1560493676-04071c5f467b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');" role="img" aria-label="Produce Market store"></div>
-                        <div class="seller-info">
-                            <h3 class="seller-name">Produce Market</h3>
-                            <div class="seller-rating" aria-label="Rating: 5 out of 5 stars, 89 reviews">
-                                <span class="sr-only">Rating: 5 out of 5 stars</span>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <span class="review-count">(89 reviews)</span>
-                            </div>
-                            <div class="seller-products">Crop buyers, Storage solutions, Market access</div>
-                            <div class="seller-contact">
-                                <span class="seller-location">
-                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> 
-                                    <span>30km away</span>
-                                </span>
-                                <button class="contact-btn" aria-label="Contact Produce Market">Contact</button>
-                            </div>
+                        <h3>Agrochemicals</h3>
+                        <p>Effective crop chemicals for crop disease</p>
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn">Shop Now</a>
+                    </div>
+
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <img src="<?php echo URLROOT; ?>/img/equipments.jpg" alt="Equipments" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
                         </div>
-                    </article>
+                        <h3>Equipments</h3>
+                        <p>Buy essential farming tools and equipment</p>
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn">Shop Now</a>
+                    </div>
+
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <img src="<?php echo URLROOT; ?>/img/Agricultural_machinery.jpg" alt="Machinery" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                        </div>
+                        <h3>Rent Machinery</h3>
+                        <p>Rent heavy machinery for your farming needs</p>
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn">Shop Now</a>
+                    </div>
+
+                    <div class="feature-card" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <img src="<?php echo URLROOT; ?>/img/collage.jpg" alt="Others" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                        </div>
+                        <h3>Others</h3>
+                        <p>Additional agricultural supplies and services</p>
+                        <a href="<?php echo URLROOT; ?>/users/login" class="btn">Shop Now</a>
+                    </div>
                 </div>
-                
+
                 <div class="text-center" style="margin-top: 40px;">
-                    <a href="<?php echo URLROOT; ?>/pages/all-sellers.html" class="btn" aria-label="Browse all available sellers">
-                        <span>Browse All Sellers</span>
+                    <a href="<?php echo URLROOT; ?>/users/login" class="btn" aria-label="Login to browse all products">
+                        <span>Browse All Products</span>
                     </a>
                 </div>
             </div>
@@ -417,7 +401,7 @@
                         <a href="#" class="social-youtube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links" role="list">
@@ -430,7 +414,7 @@
                         <li role="listitem"><a href="<?php echo URLROOT; ?>/pages/about.html">About Us</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-column">
                     <h3>Resources</h3>
                     <ul class="footer-links" role="list">
@@ -442,7 +426,7 @@
                         <li role="listitem"><a href="<?php echo URLROOT; ?>/pages/contact.html">Contact Us</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-column">
                     <h3>Newsletter</h3>
                     <p>Subscribe to get farming tips, weather updates, and agricultural news.</p>
@@ -456,10 +440,10 @@
                     </form>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
-                <p>&copy; 2025 FarmerConnect.lk. All Rights Reserved. | 
-                    <a href="<?php echo URLROOT; ?>/pages/privacy-policy.html" style="color: var(--primary);">Privacy Policy</a> | 
+                <p>&copy; 2025 FarmerConnect.lk. All Rights Reserved. |
+                    <a href="<?php echo URLROOT; ?>/pages/privacy-policy.html" style="color: var(--primary);">Privacy Policy</a> |
                     <a href="<?php echo URLROOT; ?>/pages/terms-of-service.html" style="color: var(--primary);">Terms of Service</a>
                 </p>
             </div>
