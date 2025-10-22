@@ -11,4 +11,9 @@ class ProfileView extends Controller{
 
         $this->view('profile/V_adminprofile');
 }
+
+    public function officerProfile(){
+
+        $this->view('profile/V_officerprofile');
+}
 }
