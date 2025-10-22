@@ -62,22 +62,7 @@ class CreateAnnouncements extends Controller{
             if(!empty($data['title']) && !empty($data['category']) && !empty($data['content'])) {
                 if($this->announcementModel->createAnnouncement($data)) {
                     // Redirect or show success message
-                    echo "
-                            <div style='
-                                text-align: center; 
-                                margin-top: 50px; 
-                                font-family: Arial, sans-serif; 
-                                font-size: 20px; 
-                                color: green;'>
-                                Announcement created successfully! <br>
-                                Redirecting to Announcements page in 2 seconds...
-                            </div>
-                            <script>
-                                setTimeout(function(){
-                                    window.location.href = '" . URLROOT . "/Announcements/Announcements';
-                                }, 2000);
-                            </script>
-                        ";
+                    $this->loadViewByRole('announcement_success', $data);
                 } else {
                     // Show error message
                     die('Something went wrong. Please try again.');

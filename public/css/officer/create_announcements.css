@@ -1,162 +1,160 @@
+/* --- Base Page Styling --- */
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
+  font-family: "Segoe UI", "Poppins", Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
+
 .main-content {
-  max-width: 600px;
-  width: 70%;
-  margin: 100px auto 20px auto;
-  padding: 30px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
-  color: #333;
+  max-width: 850px;
+  width: 85%;
+  margin: 100px auto 50px auto;
+  padding: 35px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  color: #2f3e2f;
 }
 
-.main-content h1 {
+/* --- Success Section --- */
+.success-container {
   text-align: center;
-  margin-bottom: 25px;
+}
+
+.success-header {
+  margin-bottom: 30px;
+}
+
+.success-header i {
+  font-size: 60px;
+  color: #28a745;
+  margin-bottom: 15px;
+}
+
+.success-header h2 {
+  color: #1f5130;
   font-size: 28px;
-  font-weight: 600;
-  color: #1f2937;
-}
-.main-content h1::after {
-  content: "";
-  display: block;
-  width: 70%;
-  height: 1px;
-  background: #c4c6c4;
-  margin: 10px auto 0 auto;
-  border-radius: 2px;
-}
-.input-group input,
-.input-group textarea,
-.search-group select {
-  font-family: "Segoe UI", Arial, sans-serif;
-}
-.input-group,
-.search-group {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
+  margin: 0;
 }
 
-.input-group label,
-.search-group label {
+.success-header p {
+  color: #555;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.announcement-preview {
+  text-align: left;
+  background: #fdfdfd;
+  border: 1px solid #e0e6e0;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.announcement-preview:hover {
+  transform: scale(1.01);
+}
+
+.announcement-preview h3 {
+  color: #11642b;
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.announcement-preview .category {
+  margin-bottom: 15px;
   font-weight: 500;
-  margin-bottom: 6px;
+  color: #3d3d3d;
+}
+
+.announcement-content {
+  background: #f9fff9;
+  padding: 18px;
+  border: 1px solid #c8e6c9;
+  border-radius: 10px;
   font-size: 15px;
+  line-height: 1.6;
+  color: #2e3a2e;
 }
 
-.required {
-  color: red;
-  margin-left: 3px;
-}
-
-.input-group input,
-.search-group select,
-.input-group textarea {
-  padding: 10px 12px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-
-.input-group input:focus,
-.search-group select:focus,
-.input-group textarea:focus {
-  border-color: #4ca951;
-  box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
-}
-
-#attachFiles {
-  border: 1px dashed #aaa;
-  padding: 8px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: border-color 0.2s;
-}
-
-#attachFiles::file-selector-button {
-    padding: 0.5rem 1rem;
-    margin-right: 1rem;
-    border: none;
-    border-radius: 6px;
-    background-color: #3b82f6;
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-#attachFiles::file-selector-button:hover {
-    background-color: #2563eb;
-}
-
-.btn-group {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+.attachments {
   margin-top: 20px;
 }
 
-.btn-group button {
-  width: 100%;
-  color: #fff;
-  padding: 12px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
-}
-.create-btn {
-  background: #10b981;
-  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
-}
-.cancel-btn {
-  background-color: #f3f4f6; 
-  color: #374151 !important; 
-  border: 1.5px solid #aaaaab !important;
-}
-.create-btn:hover {
-  background: #067d57;
-  transform: scale(1.03);
-  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
-}
-.cancel-btn:hover {
-  background-color: #9a9a9b;
-  border-color: #9ca3af;
-  transform: scale(1.03);
+.attachments h4 {
   color: #374151;
+  margin-bottom: 8px;
 }
-.create-btn:active {
-    transform: translateY(0);
+
+.attachments ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-@media (max-width: 600px) {
+
+.attachments li {
+  margin-bottom: 6px;
+}
+
+.attachments a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.attachments a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* --- Buttons --- */
+.btn-section {
+  margin-top: 35px;
+  text-align: center;
+}
+
+.back-btn {
+  display: inline-block;
+  background: #10b981;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 3px 6px rgba(16,185,129,0.3);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.back-btn:hover {
+  background: #059669;
+  transform: scale(1.05);
+}
+
+/* --- Responsive --- */
+@media (max-width: 650px) {
   .main-content {
-    padding: 15px;
-    width: 90%;
+    width: 92%;
+    padding: 20px;
   }
 
-  .main-content h1 {
+  .announcement-preview {
+    padding: 18px;
+  }
+
+  .success-header h2 {
     font-size: 22px;
   }
 
-  .btn-group {
-    flex-direction: row;
-    gap: 8px;
-    align-items: stretch;
+  .announcement-preview h3 {
+    font-size: 18px;
   }
 
-  .btn-group button {
+  .back-btn {
     width: 100%;
+    font-size: 15px;
+    padding: 10px;
   }
 }

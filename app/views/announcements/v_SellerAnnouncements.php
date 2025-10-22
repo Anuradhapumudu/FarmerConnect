@@ -4,7 +4,7 @@
 
 <div class="main-content" id="mainContent">
   <div class="topcontainer">
-  <div class="container">
+  <div class="containers">
 
     <h2 class="announcements-heading">Announcements</h2>
 
