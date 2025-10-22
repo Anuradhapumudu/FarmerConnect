@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
+<?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/help/help.css?v=<?= time(); ?>">
 
@@ -6,9 +6,9 @@
 
    <!-- Help Section -->
     <section class="help-section">
-        <div class="container">
+        <div class="containers">
             <div class="section-title">
-                <h2>Help Center</h2>
+                <h1>Help Center</h1>
                 <p>Get in touch with our dedicated agricultural support team for assistance</p>
             </div>
             
