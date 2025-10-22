@@ -3,7 +3,7 @@
 
 <div class="content-card yellowcase-list">
     <div class="content-header">
-        <h1>🌾 My Yellow Cases</h1>
+        <h1> My Yellow Cases</h1>
         <p class="content-subtitle">Track and monitor your submitted yellow case reports</p>
     </div>
 
