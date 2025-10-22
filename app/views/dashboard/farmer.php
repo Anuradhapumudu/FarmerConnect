@@ -28,7 +28,7 @@
       <p>Get accurate fertilizer recommendations based on crop and soil.</p>
 </a>
 
-    <a href="<?php echo URLROOT; ?>/Disease" class="feature">
+    <a href="<?php echo URLROOT; ?>/Disease/viewReports" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
       <p>Stay informed about pest and crop disease outbreaks in your area.</p>

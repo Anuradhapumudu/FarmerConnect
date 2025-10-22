@@ -326,6 +326,7 @@
         padding: 12px 18px;
         text-align: left;
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        vertical-align: middle;
     }
 
     .reports-table th {
@@ -469,6 +470,9 @@
     .action-buttons {
         display: flex;
         gap: 6px;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
     }
 
     .btn {
@@ -481,8 +485,16 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 4px;
         transition: var(--transition);
+        white-space: nowrap;
+    }
+    
+    .btn-xs {
+        padding: 6px 10px;
+        font-size: 11px;
+        line-height: 1;
     }
 
     .btn-info {
