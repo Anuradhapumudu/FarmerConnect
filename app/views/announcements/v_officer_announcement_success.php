@@ -1,5 +1,5 @@
 <?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/create_announcements.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/officer/create_announcements.css?v=<?php echo time(); ?>">
 
 <main class="main-content" id="mainContent">
     <div class="success-container">

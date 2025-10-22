@@ -6,7 +6,6 @@
     --warning: #ff9800;
     --danger: #f44336;
     --info: #2196f3;
-    --text-primary: #212529;
     --text-secondary: #6c757d;
     --bg-light: #f8f9fa;
     --border-color: rgba(0, 0, 0, 0.1);
@@ -28,8 +27,8 @@
     backdrop-filter: blur(20px);
     border-radius: var(--radius-lg);
     padding: 32px;
-    margin: 20px auto 40px;
-    max-width: 1400px;
+    margin: 40px auto 40px;
+    max-width: 1000px;
     width: 95%;
     box-shadow: var(--shadow-lg);
 }
@@ -41,11 +40,13 @@
     border-bottom: 2px solid var(--border-color);
 }
 
-.header-content h1 {
-    color: var(--text-primary);
-    font-size: 2rem;
-    margin: 0 0 8px 0;
-    font-weight: 700;
+.content-header h1 {
+    color: #2e7d32;
+    font-size: 2.8rem;
+    margin: 0 0 10px 0;
+    font-weight: 800;
+    text-align: center;
+    border-bottom: 2px solid #c8e6c9;
 }
 
 .content-subtitle {

@@ -2,7 +2,7 @@
 
 <div class="content-card">
     <div class="content-header">
-        <h1>✏️ Update Disease Report</h1>
+        <h1>Update Disease Report</h1>
         <p class="content-subtitle">Modify your disease report information</p>
     </div>
     
@@ -265,6 +265,22 @@
     border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     padding-bottom: 20px;
 }
+
+.content-header h1 {
+    color: var(--text-primary);
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+    text-align: center;
+    border-bottom: 2px solid #c8e6c9;
+}
+.content-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 10px 0;
+    text-align: center;
+}
+
 .report-id-display {
     background: rgba(46, 125, 50, 0.1);
     border: 1px solid rgba(46, 125, 50, 0.3);

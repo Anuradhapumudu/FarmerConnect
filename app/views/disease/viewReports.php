@@ -2,7 +2,7 @@
 
 <div class="content-card">
     <div class="content-header">
-        <h1>📋 <?php echo (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer') ? 'My Submitted Reports' : 'Submitted Reports'; ?></h1>
+        <h1><?php echo (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer') ? 'My Submitted Reports' : 'Submitted Reports'; ?></h1>
         <p class="content-subtitle"><?php echo (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer') ? 'View your submitted disease reports' : 'View all submitted disease reports'; ?></p>
 
         <div class = "create-report-btn">
@@ -264,15 +264,18 @@
 
     .content-header h1 {
         color: var(--text-primary);
-        font-size: 2.2rem;
+        font-size: 2.8rem;
         margin-bottom: 10px;
         font-weight: 800;
+        text-align: center;
+        border-bottom: 2px solid #c8e6c9;
     }
 
     .content-subtitle {
         color: var(--text-secondary);
         font-size: 1.1rem;
         margin: 10px 0;
+        text-align: center;
     }
 
     .alert {

@@ -1,9 +1,9 @@
-<?php require_once APPROOT . '/views/inc/minimalheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/disease/reportDetail.css?v=<?= time(); ?>">
 
 <div class="content-card">
     <div class="content-header">
-        <h1><?php echo isset($data['singleReport']) && $data['singleReport'] ? '📋 Report Details' : '📋 Submitted Reports'; ?></h1>
+        <h1><?php echo isset($data['singleReport']) && $data['singleReport'] ? 'Report Details' : 'Submitted Reports'; ?></h1>
         <p class="content-subtitle"><?php echo isset($data['singleReport']) && $data['singleReport'] ? 'Detailed view of the selected disease report' : 'View all submitted disease reports'; ?></p>
     </div>
 
@@ -54,15 +54,15 @@
                 </div>
             </div>
             <div class="report-actions">
+                <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Reports
+                </a>
                 <a href="<?php echo URLROOT; ?>/disease/editReport/<?php echo htmlspecialchars($report->report_code); ?>" class="btn btn-primary">
                     <i class="fas fa-edit"></i> Edit Report
                 </a>
                 <button type="button" class="btn btn-danger" onclick="openDeleteModal('<?php echo htmlspecialchars($report->report_code); ?>', '<?php echo htmlspecialchars(addslashes($report->title)); ?>', '<?php echo htmlspecialchars($report->farmerNIC); ?>')">
                     <i class="fas fa-trash"></i> Delete Report
                 </button>
-                <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to Reports
-                </a>
             </div>
         </div>
 
@@ -75,15 +75,9 @@
                     </div>
                     <div class="overview-content">
                         <h4>Farmer Details</h4>
-<<<<<<< HEAD
-                        <p class="primary-text"><?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></p>
-                        <p class="secondary-text"><strong>NIC:</strong> <?php echo htmlspecialchars($report->farmerNIC); ?></p>
-                        <p class="secondary-text"><strong>PLR:</strong> <?php echo htmlspecialchars($report->pirNumber); ?></p>
-=======
                         <p><strong>Name:</strong> <?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></p>
                         <p><strong>NIC:</strong> <?php echo htmlspecialchars($report->farmerNIC); ?></p>
                         <p><strong>PLR:</strong> <?php echo htmlspecialchars($report->pirNumber); ?></p>
->>>>>>> origin/main
                     </div>
                 </div>
 
@@ -360,15 +354,8 @@
                             </td>
                             <td>
                                 <div class="farmer-info">
-<<<<<<< HEAD
-                                    <div class="farmer-name"><?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></div>
-                                    <small>NIC: <?php echo htmlspecialchars($report->farmerNIC); ?></small>
-                                    <br>
-                                    <small>PLR: <?php echo htmlspecialchars($report->pirNumber); ?></small>
-=======
                                     <div><?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></div>
                                     <small>NIC: <?php echo htmlspecialchars($report->farmerNIC); ?> | PLR: <?php echo htmlspecialchars($report->pirNumber); ?></small>
->>>>>>> origin/main
                                 </div>
                             </td>
                             <td>
@@ -611,5 +598,21 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('deleteModal').addEventListener('click', e => e.target === document.getElementById('deleteModal') && closeDeleteModal());
 });
 </script>
+<style>
+    .content-header h1 {
+        color: #2e7d32;
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+        font-weight: 800;
+        text-align: center;
+        border-bottom: 2px solid #c8e6c9;
+    }
+    .content-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        margin: 10px 0;
+        text-align: center;
+    }
+</style>
 
 <?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>
