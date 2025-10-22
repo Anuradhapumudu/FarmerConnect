@@ -3,7 +3,7 @@
 <script src="<?php echo URLROOT; ?>/js/disease/diseaseReport.js?v=<?= time(); ?>" defer></script>
 <div class="content-card">
     <div class="content-header">
-        <h1>🐛 Disease Detector</h1>
+        <h1>Disease Detector</h1>
         <p class="content-subtitle"><?php echo isset($data['isEdit']) && $data['isEdit'] ? 'Update your disease report' : 'Report plant diseases to help protect our agricultural community'; ?></p>
     </div>
 
