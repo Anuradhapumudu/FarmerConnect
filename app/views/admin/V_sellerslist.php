@@ -16,6 +16,20 @@
       <div class="card"><h2><?= $data['counts']->pending ?></h2><p>Pending</p></div>
     </div>
 
+       <!-- Search + Filter -->
+    <div class="search-box">
+      <div style="position: relative; flex: 1;">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="Search farmers by NIC or Name...">
+      </div>
+      <select class="filter-select">
+        <option value="all">All Status</option>
+        <option value="active">Approved</option>
+        <option value="inactive">Rejected</option>
+        <option value="pending">Pending</option>
+      </select>
+    </div>
+
     <!-- Sellers Table -->
     <div class="data-table">
       <div class="table-header">All Sellers</div>

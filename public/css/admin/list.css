@@ -1,13 +1,32 @@
 
-    .containers { max-width: 1200px; margin: auto; }
+    .containers { max-width: 1100px; margin: auto; }
 
     .admin-header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-    }
-    .admin-header h1 { color: #2e7d32; margin-bottom: 10px; }
-    .admin-header p { color: #558b2f; }
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+}
+.admin-header h1 { 
+  color: #2e7d32; 
+  margin-bottom: 10px; 
+  font-weight: 700;
+}
+
+.admin-header h1::after
+{
+    content: "";
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: 2px;
+  background: #c8e6c9;
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+.admin-header p { 
+  color: #558b2f; 
+  font-size: 1rem;
+}
 
     /* Stats cards */
     .stats {

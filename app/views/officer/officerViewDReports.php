@@ -2,7 +2,7 @@
 
 <div class="content-card">
     <div class="content-header">
-        <h1>📋 Disease Reports Management</h1>
+        <h1> Disease Reports Management</h1>
         <p class="content-subtitle">Review and manage submitted disease reports</p>
     </div>
 
