@@ -176,7 +176,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="Yaya">Yaya Number</label>
+                    <label for="Yaya">Yaya Name</label>
                     <input type="text" id="Yaya" name="Yaya" value="" required>
                 </div>
 
