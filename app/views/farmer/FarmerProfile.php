@@ -6,23 +6,23 @@
 <main>
 
     <div class="profile-pic">
-         <div class="pic-wrapper">
-                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Default User Icon" id="profileImage">
+        <div class="pic-wrapper">
+            <img src="<?php echo !empty($data['farmer']->profile_image) 
+                ? URLROOT . $data['farmer']->profile_image 
+                : 'https://cdn-icons-png.flaticon.com/512/847/847969.png'; ?>" 
+                alt="Profile Photo" id="profileImage">
 
-                <div class="buttons">
-                         <!-- Hidden file input for upload -->
-                            <input type="file" id="uploadInput" accept="image/*" style="display:none;">
-                             <button type="button" class="btn upload-btn" onclick="document.getElementById('uploadInput').click();">
-                                Upload Photo
-                            </button>
-
-                        <button type="button" class="btn remove-btn" onclick="removeProfilePic()">
-                        Remove Photo
-                        </button>
-                </div>
-         </div>
+            <div class="buttons">
+                <input type="file" id="uploadInput" accept="image/*" style="display:none;">
+                <button type="button" class="btn upload-btn" onclick="document.getElementById('uploadInput').click();">
+                    Upload Photo
+                </button>
+                <button type="button" class="btn remove-btn" onclick="removeProfilePic()">
+                    Remove Photo
+                </button>
+            </div>
+        </div>
     </div>
-</div>
 
     <!-- FARMER DETAILS -->
     <div class="page-title">
@@ -33,16 +33,16 @@
             <form id="farmerForm" action="<?php echo URLROOT; ?>/farmerprofile/update" method="POST">
                 <div class="form-group">
                     <label for="NIC">NIC</label>
-                    <input type="text" id="NIC" name="NIC" value="<?php echo $data['farmer']->NIC ?? ''; ?>" readonly>
+                    <input type="text" id="NIC" name="NIC" value="<?php echo $data['farmer']->nic ?? ''; ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="Name">Name</label>
-                    <input type="text" id="Name" name="Name" value="<?php echo $data['farmer']->Name ?? ''; ?>" readonly>
+                    <input type="text" id="Name" name="Name" value="<?php echo $data['farmer']->full_name ?? ''; ?>" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="Address">Address</label>
-                    <input type="text" id="Address" name="Address" value="<?php echo $data['farmer']->Address ?? ''; ?>">
+                    <input type="text" id="Address" name="Address" value="<?php echo $data['farmer']->address ?? ''; ?>">
                     <?php if (!empty($data['errors']['Address'])): ?>
                         <small class="error" style="color: #d93025;"><?php echo htmlspecialchars($data['errors']['Address']); ?></small>
                     <?php endif; ?>
@@ -51,7 +51,7 @@
                 <div class="form-group">
                     <label for="TelNo">Tel. No</label>
                     <input type="text" id="TelNo" name="TelNo" 
-                        value="<?php echo htmlspecialchars($data['farmer']->TelNo ?? '', ENT_QUOTES); ?>"
+                        value="<?php echo htmlspecialchars($data['farmer']->phone_no ?? '', ENT_QUOTES); ?>"
                         placeholder="0711234567 or +94711234567">
                     <?php if (!empty($data['errors']['TelNo'])): ?>
                         <small class="error" style="color: #d93025;"><?php echo htmlspecialchars($data['errors']['TelNo']); ?></small>
@@ -61,7 +61,7 @@
                 <div class="form-group">
                     <label for="Birthday">Birthday</label>
                     <input type="date" id="Birthday" name="Birthday" 
-                        value="<?php echo htmlspecialchars($data['farmer']->Birthday ?? '', ENT_QUOTES); ?>">
+                        value="<?php echo htmlspecialchars($data['farmer']->birthdate ?? '', ENT_QUOTES); ?>">
                     <?php if (!empty($data['errors']['Birthday'])): ?>
                         <small class="error" style="color: #d93025;"><?php echo htmlspecialchars($data['errors']['Birthday']); ?></small>
                     <?php endif; ?>
@@ -71,8 +71,8 @@
                     <label for="Gender">Gender</label>
                     <select id="Gender" name="Gender">
                         <option value="" disabled selected>-- Select Gender --</option>
-                        <option value="Male" <?php echo (isset($data['farmer']->Gender) && $data['farmer']->Gender=='Male') ? 'selected' : ''; ?>>Male</option>
-                        <option value="Female" <?php echo (isset($data['farmer']->Gender) && $data['farmer']->Gender=='Female') ? 'selected' : ''; ?>>Female</option>
+                        <option value="Male" <?php echo (isset($data['farmer']->gender) && $data['farmer']->gender=='male') ? 'selected' : ''; ?>>Male</option>
+                        <option value="Female" <?php echo (isset($data['farmer']->gender) && $data['farmer']->gender=='female') ? 'selected' : ''; ?>>Female</option>
                     </select>
                     <?php if (!empty($data['errors']['Gender'])): ?>
                         <small class="error" style="color: #d93025;"><?php echo htmlspecialchars($data['errors']['Gender']); ?></small>
@@ -114,7 +114,7 @@
     <div class="profile-card">
         <div class="profile-info">
             <form id="paddyForm" method="POST" action="<?php echo URLROOT; ?>/farmerprofile/savePaddy">
-                <input type="hidden" name="NIC" value="<?php echo $data['farmer']->NIC ?? ''; ?>">
+                <input type="hidden" name="NIC" value="<?php echo $data['farmer']->nic ?? ''; ?>">
 
                 <div class="form-group">
                     <label for="PLR">PLR Number</label>
@@ -413,6 +413,46 @@ function deletePaddy() {
             alert('Error occurred while deleting.');
         });
 }
+
+// ---------- Profile Picture Upload ----------
+document.getElementById('uploadInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('profile_image', file);
+
+    fetch('<?php echo URLROOT; ?>/farmerprofile/uploadProfilePic', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('profileImage').src = data.image;
+            alert('Profile picture updated successfully!');
+        } else {
+            alert(data.message || 'Failed to upload image.');
+        }
+    })
+    .catch(() => alert('Error uploading image.'));
+});
+
+// ---------- Profile Picture Remove ----------
+function removeProfilePic() {
+    if (!confirm('Are you sure you want to remove your profile picture?')) return;
+
+    fetch('<?php echo URLROOT; ?>/farmerprofile/removeProfilePic')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('profileImage').src = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+                alert('Profile picture removed.');
+            }
+        })
+        .catch(() => alert('Error removing image.'));
+}
+
 
 </script>
 
