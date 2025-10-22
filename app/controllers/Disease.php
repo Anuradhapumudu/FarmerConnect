@@ -2,8 +2,20 @@
 class Disease extends Controller{
 
     public function index(){
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
+        // Check if farmer is logged in and pre-populate NIC
+        $farmerNIC = '';
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            $farmerNIC = $_SESSION['nic'];
+        }
+
         $data = [
-            'farmerNIC' => '',
+            'farmerNIC' => $farmerNIC,
             'plrNumber' => '',
             'observationDate' => '',
             'todayDate' => '',
@@ -27,33 +39,73 @@ class Disease extends Controller{
 
     // Show form to search/view reports
     public function viewReports(){
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            // Handle search form submission
-            $farmerNIC = isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '';
-            $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
-            $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
 
-            $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+        // Check if farmer is logged in - they should only see their own reports
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            $farmerNIC = $_SESSION['nic'];
 
-            $data = [
-                'reports' => $reports,
-                'farmerNIC' => $farmerNIC,
-                'plrNumber' => $plrNumber,
-                'reportCode' => $reportCode,
-                'searched' => true,
-                'message' => count($reports) . ' report(s) found'
-            ];
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                // Handle search form submission - but only for this farmer's reports
+                $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
+                $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+
+                $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+
+                $data = [
+                    'reports' => $reports,
+                    'farmerNIC' => $farmerNIC,
+                    'plrNumber' => $plrNumber,
+                    'reportCode' => $reportCode,
+                    'searched' => true,
+                    'message' => count($reports) . ' of your report(s) found'
+                ];
+            } else {
+                // Show only this farmer's reports by default
+                $reports = $this->model('M_disease')->getReportsByFarmerNIC($farmerNIC);
+                $data = [
+                    'reports' => $reports,
+                    'farmerNIC' => $farmerNIC,
+                    'plrNumber' => '',
+                    'reportCode' => '',
+                    'searched' => false,
+                    'message' => 'Showing your reports (' . count($reports) . ' total)'
+                ];
+            }
         } else {
-            // Show all reports by default
-            $reports = $this->model('M_disease')->getAllReports();
-            $data = [
-                'reports' => $reports,
-                'farmerNIC' => '',
-                'plrNumber' => '',
-                'reportCode' => '',
-                'searched' => false,
-                'message' => 'Showing all reports (' . count($reports) . ' total)'
-            ];
+            // For officers/admins - show all reports
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                // Handle search form submission
+                $farmerNIC = isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '';
+                $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
+                $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+
+                $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+
+                $data = [
+                    'reports' => $reports,
+                    'farmerNIC' => $farmerNIC,
+                    'plrNumber' => $plrNumber,
+                    'reportCode' => $reportCode,
+                    'searched' => true,
+                    'message' => count($reports) . ' report(s) found'
+                ];
+            } else {
+                // Show all reports by default
+                $reports = $this->model('M_disease')->getAllReports();
+                $data = [
+                    'reports' => $reports,
+                    'farmerNIC' => '',
+                    'plrNumber' => '',
+                    'reportCode' => '',
+                    'searched' => false,
+                    'message' => 'Showing all reports (' . count($reports) . ' total)'
+                ];
+            }
         }
 
         // Add officer responses to each report
@@ -66,6 +118,12 @@ class Disease extends Controller{
 
     // View all submitted reports in table format or single report details
     public function viewReport($reportCode = '') {
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (!empty($reportCode)) {
             // Show specific report details
             $report = $this->model('M_disease')->getReportByCode($reportCode);
@@ -74,6 +132,15 @@ class Disease extends Controller{
                 $_SESSION['error_message'] = 'Report not found';
                 header('Location: ' . URLROOT . '/disease/viewReports');
                 exit();
+            }
+
+            // Check if farmer is logged in and trying to view their own report
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                if ($report->farmerNIC !== $_SESSION['nic']) {
+                    $_SESSION['error_message'] = 'You can only view your own reports';
+                    header('Location: ' . URLROOT . '/disease/viewReports');
+                    exit();
+                }
             }
 
             // Get officer responses for this report
@@ -86,13 +153,24 @@ class Disease extends Controller{
                 'message' => 'Report details for ' . $reportCode
             ];
         } else {
-            // Show all reports by default
-            $reports = $this->model('M_disease')->getAllReports();
-            $data = [
-                'reports' => $reports,
-                'singleReport' => false,
-                'message' => 'Showing all reports (' . count($reports) . ' total)'
-            ];
+            // Check if farmer is logged in - they should only see their own reports
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                $farmerNIC = $_SESSION['nic'];
+                $reports = $this->model('M_disease')->getReportsByFarmerNIC($farmerNIC);
+                $data = [
+                    'reports' => $reports,
+                    'singleReport' => false,
+                    'message' => 'Showing your reports (' . count($reports) . ' total)'
+                ];
+            } else {
+                // Show all reports by default for officers/admins
+                $reports = $this->model('M_disease')->getAllReports();
+                $data = [
+                    'reports' => $reports,
+                    'singleReport' => false,
+                    'message' => 'Showing all reports (' . count($reports) . ' total)'
+                ];
+            }
         }
 
         $this->view('disease/reportDetail', $data);
@@ -100,6 +178,12 @@ class Disease extends Controller{
 
     // Show edit form for updating report - UPDATED
     public function editReport($reportCode = '') { // Changed parameter name
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode)) {
             header('Location: ' . URLROOT . '/disease/viewReports');
             exit();
@@ -111,6 +195,15 @@ class Disease extends Controller{
             $_SESSION['error_message'] = 'Report not found';
             header('Location: ' . URLROOT . '/disease/viewReports');
             exit();
+        }
+
+        // Check if farmer is logged in and trying to edit their own report
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            if ($report->farmerNIC !== $_SESSION['nic']) {
+                $_SESSION['error_message'] = 'You can only edit your own reports';
+                header('Location: ' . URLROOT . '/disease/viewReports');
+                exit();
+            }
         }
 
         // Populate form with existing data
@@ -360,6 +453,12 @@ class Disease extends Controller{
 
     // Delete report - UPDATED
     public function deleteReport($reportCode = '') { // Changed parameter name
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode)) {
             $_SESSION['error_message'] = 'Report Code is required';
             header('Location: ' . URLROOT . '/disease/viewReports');
@@ -373,6 +472,15 @@ class Disease extends Controller{
             $_SESSION['error_message'] = 'Report not found';
             header('Location: ' . URLROOT . '/disease/viewReports');
             exit();
+        }
+
+        // Check if farmer is logged in and trying to delete their own report
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            if ($report->farmerNIC !== $_SESSION['nic']) {
+                $_SESSION['error_message'] = 'You can only delete your own reports';
+                header('Location: ' . URLROOT . '/disease/viewReports');
+                exit();
+            }
         }
 
         try {
@@ -409,6 +517,12 @@ class Disease extends Controller{
 
     // Confirm delete page - UPDATED
     public function confirmDelete($reportCode = '') { // Changed parameter name
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode)) {
             header('Location: ' . URLROOT . '/disease/viewReports');
             exit();
@@ -422,6 +536,15 @@ class Disease extends Controller{
             exit();
         }
 
+        // Check if farmer is logged in and trying to delete their own report
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            if ($report->farmerNIC !== $_SESSION['nic']) {
+                $_SESSION['error_message'] = 'You can only delete your own reports';
+                header('Location: ' . URLROOT . '/disease/viewReports');
+                exit();
+            }
+        }
+
         $data = [
             'report' => $report
         ];
@@ -431,6 +554,12 @@ class Disease extends Controller{
 
     // Display media files from file system - UPDATED
     public function viewMedia($reportCode = '', $filename = '') { // Changed parameter name
+        // Check if user is logged in (allow officers/admins who may not have 'nic')
+        if (!isset($_SESSION['user_type'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode) || empty($filename)) {
             http_response_code(404);
             echo "Report Code and filename required";
@@ -451,6 +580,17 @@ class Disease extends Controller{
                     echo "File not associated with this report";
                     return;
                 }
+
+                // Check if farmer is logged in and trying to view their own report's media
+                // Officers and admins can view all media
+                if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                    if ($report->farmerNIC !== $_SESSION['nic']) {
+                        http_response_code(403);
+                        echo "You can only view media from your own reports";
+                        return;
+                    }
+                }
+                // Officers and admins can access all media files
 
                 // Build file path
                 $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
@@ -716,8 +856,14 @@ class Disease extends Controller{
             }
         } else {
             // Handle GET request - show empty form
+            // Check if farmer is logged in and pre-populate NIC
+            $farmerNIC = '';
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                $farmerNIC = $_SESSION['nic'];
+            }
+
             $data = [
-                'farmerNIC' => '',
+                'farmerNIC' => $farmerNIC,
                 'plrNumber' => '',
                 'observationDate' => '',
                 'todayDate' => '',
@@ -742,6 +888,12 @@ class Disease extends Controller{
 
     // Success page method - UPDATED
     public function success($reportCode = '') { // Changed parameter name
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         if (empty($reportCode)) {
             header('Location: ' . URLROOT . '/disease');
             exit();
@@ -753,6 +905,14 @@ class Disease extends Controller{
         if (!$report) {
             header('Location: ' . URLROOT . '/disease');
             exit();
+        }
+
+        // Check if farmer is logged in and trying to view their own report
+        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+            if ($report->farmerNIC !== $_SESSION['nic']) {
+                header('Location: ' . URLROOT . '/disease/viewReports');
+                exit();
+            }
         }
 
         $data = [

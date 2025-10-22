@@ -2,8 +2,8 @@
 
 <div class="content-card">
     <div class="content-header">
-        <h1>📋 Submitted Reports</h1>
-        <p class="content-subtitle">View all submitted disease reports</p>
+        <h1>📋 <?php echo (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer') ? 'My Submitted Reports' : 'Submitted Reports'; ?></h1>
+        <p class="content-subtitle"><?php echo (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer') ? 'View your submitted disease reports' : 'View all submitted disease reports'; ?></p>
 
         <div class = "create-report-btn">
         <a href="<?php echo URLROOT; ?>/disease" class="btn btn-success">
@@ -96,8 +96,8 @@
                             </td>
                             <td>
                                 <div class="farmer-info">
-                                    <div><?php echo htmlspecialchars($report->farmerNIC); ?></div>
-                                    <small>PLR: <?php echo htmlspecialchars($report->pirNumber); ?></small>
+                                    <div><?php echo htmlspecialchars($report->farmer_name ?? $report->farmerNIC); ?></div>
+                                    <small>NIC: <?php echo htmlspecialchars($report->farmerNIC); ?> | PLR: <?php echo htmlspecialchars($report->pirNumber); ?></small>
                                 </div>
                             </td>
                             <td>
