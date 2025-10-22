@@ -26,43 +26,45 @@
         <!-- Single Report Details View -->
         <div class="report-header-card">
             <div class="report-header-content">
-                <div class="report-title-section">
-                    <h2><?php echo htmlspecialchars($report->title); ?></h2>
-                    <div class="report-code-display">
-                        <span class="report-code"><?php echo htmlspecialchars($report->report_code); ?></span>
+                <div class="left-section">
+                    <div class="report-title-section">
+                        <h2><?php echo htmlspecialchars($report->title); ?></h2>
+                        <div class="report-code-display">
+                            <span class="report-code"><?php echo htmlspecialchars($report->report_code); ?></span>
+                        </div>
+                    </div>
+                    <div class="report-status-badges">
+                        <span class="severity-badge severity-<?php echo $report->severity; ?>">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <?php echo ucfirst($report->severity); ?> Severity
+                        </span>
+                        <?php if (isset($report->status)): ?>
+                            <span class="status-badge status-<?php echo $report->status; ?>">
+                                <i class="fas fa-<?php
+                                    switch ($report->status) {
+                                        case 'pending': echo 'clock'; break;
+                                        case 'under_review': echo 'eye'; break;
+                                        case 'resolved': echo 'check-circle'; break;
+                                        case 'rejected': echo 'times-circle'; break;
+                                        default: echo 'question-circle';
+                                    }
+                                ?>"></i>
+                                <?php echo ucfirst(str_replace('_', ' ', $report->status)); ?>
+                            </span>
+                        <?php endif; ?>
                     </div>
                 </div>
-                <div class="report-status-badges">
-                    <span class="severity-badge severity-<?php echo $report->severity; ?>">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <?php echo ucfirst($report->severity); ?> Severity
-                    </span>
-                    <?php if (isset($report->status)): ?>
-                        <span class="status-badge status-<?php echo $report->status; ?>">
-                            <i class="fas fa-<?php
-                                switch ($report->status) {
-                                    case 'pending': echo 'clock'; break;
-                                    case 'under_review': echo 'eye'; break;
-                                    case 'resolved': echo 'check-circle'; break;
-                                    case 'rejected': echo 'times-circle'; break;
-                                    default: echo 'question-circle';
-                                }
-                            ?>"></i>
-                            <?php echo ucfirst(str_replace('_', ' ', $report->status)); ?>
-                        </span>
-                    <?php endif; ?>
+                <div class="report-actions">
+                    <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Reports
+                    </a>
+                    <a href="<?php echo URLROOT; ?>/disease/editReport/<?php echo htmlspecialchars($report->report_code); ?>" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit Report
+                    </a>
+                    <button type="button" class="btn btn-danger" onclick="openDeleteModal('<?php echo htmlspecialchars($report->report_code); ?>', '<?php echo htmlspecialchars(addslashes($report->title)); ?>', '<?php echo htmlspecialchars($report->farmerNIC); ?>')">
+                        <i class="fas fa-trash"></i> Delete Report
+                    </button>
                 </div>
-            </div>
-            <div class="report-actions">
-                <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to Reports
-                </a>
-                <a href="<?php echo URLROOT; ?>/disease/editReport/<?php echo htmlspecialchars($report->report_code); ?>" class="btn btn-primary">
-                    <i class="fas fa-edit"></i> Edit Report
-                </a>
-                <button type="button" class="btn btn-danger" onclick="openDeleteModal('<?php echo htmlspecialchars($report->report_code); ?>', '<?php echo htmlspecialchars(addslashes($report->title)); ?>', '<?php echo htmlspecialchars($report->farmerNIC); ?>')">
-                    <i class="fas fa-trash"></i> Delete Report
-                </button>
             </div>
         </div>
 

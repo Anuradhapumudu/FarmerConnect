@@ -374,6 +374,11 @@
         font-size: 13px;
     }
 
+    .farmer-info {
+        max-width: 250px;
+        word-break: break-word;
+    }
+
     .farmer-info div {
         font-weight: 600;
         color: var(--text-primary);
@@ -814,6 +819,20 @@
         .modal-body,
         .modal-footer {
             padding: 15px 20px;
+        }
+    }
+
+    @media (max-width: 1080px) {
+        .farmer-info {
+            max-width: 200px;
+        }
+
+        .title-cell {
+            max-width: 300px;
+        }
+
+        .officer-response {
+            max-width: 180px;
         }
     }
 </style>
