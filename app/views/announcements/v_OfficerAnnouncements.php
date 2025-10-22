@@ -5,7 +5,7 @@
 
 <div class="main-content" id="mainContent">
   <div class="topcontainer">
-  <div class="container">
+  <div class="containers">
     <div class="top-actions">
       <button class="create-announcement-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/CreateAnnouncements/create'"><i class="fas fa-bullhorn"></i> Create Announcement</button>
     </div>

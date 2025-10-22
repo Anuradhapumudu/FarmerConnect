@@ -23,15 +23,16 @@ body {
   position: relative;
 }
 .announcements-heading::after {
-  content: '';
+  content: "";
   position: absolute;
-  bottom: -10px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%;
-  height: 2px;
-  background: linear-gradient(90deg, #7ff57f, #7d7e7d);
+  width: 800px;
+  height: 3px;
+  background-color: #c8e6c9;
   border-radius: 2px;
+
 }
 .search-section {
   margin: 30px auto 0 auto;
@@ -94,14 +95,22 @@ body {
 }
 
 .search-select {
-  padding: 10px 8px;
-  border: 2px solid #e5e7eb;
+  width: 100%;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
   background-color: #f9fafb;
-  transition: all 0.2s ease;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
+  padding: 10px 14px;
+  color: #333;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23777' height='12' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M2 4l4 4 4-4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
 }
+
 
 .search-btn {
   background: #2e7d32;
