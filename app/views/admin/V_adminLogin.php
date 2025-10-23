@@ -10,8 +10,8 @@
         <div class="container">
             <!-- Left Side (Image Section) -->
             <div class="image-section">
-                <img src="<?php echo URLROOT; ?>/img/login_img_desktop.jpg" class="desktop-img" alt="Farmer Connect">
-                <img src="<?php echo URLROOT; ?>/img/login_img_mobile.jpg" class="mobile-img" alt="Farmer Connect">
+                <img src="<?php echo URLROOT; ?>/img/login_img_desktop.jpeg" class="desktop-img" alt="Farmer Connect">
+                <img src="<?php echo URLROOT; ?>/img/login_img_mobile.jpeg" class="mobile-img" alt="Farmer Connect">
             </div>
             <!-- Right Side (Form Section) -->
             <div class="form-section">

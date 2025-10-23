@@ -58,11 +58,11 @@
       <p>Get accurate fertilizer recommendations based on crop and soil.</p>
     </a>
 
-    <div class="feature">
+   <a href="<?php echo URLROOT; ?>/disease/viewReports" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
       <p>Stay informed about pest and crop disease outbreaks in your area.</p>
-    </div>
+    </a>
 
     <a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterAdmin" class="feature">
       <i class="fa-solid fa-book-open fa-2x"></i>
@@ -78,11 +78,11 @@
    
     </a>
 
-    <div class="feature">
+    <a href="<?php echo URLROOT; ?>/complain/admincomplaints" class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>
       <h3>Complain</h3>
       <p>Report issues directly to the relevant agricultural authorities.</p>
-    </div>
+    </a>
 
  
 
