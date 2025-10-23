@@ -120,4 +120,40 @@
 
 </main>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const totalEl = document.getElementById('totalCount');
+    const activeEl = document.getElementById('activeCount');
+    const inactiveEl = document.getElementById('inactiveCount');
+    const rows = document.querySelectorAll('#farmerTable tr');
+
+    if (!totalEl || !activeEl || !inactiveEl) return;
+
+    const total = rows.length;
+    let active = 0;
+    let inactive = 0;
+
+    rows.forEach(row => {
+        const badge = row.querySelector('.status-badge');
+        if (badge) {
+            const cls = badge.className.toLowerCase();
+            if (cls.includes('status-active')) active++;
+            else if (cls.includes('status-inactive')) inactive++;
+            return;
+        }
+        // fallback: check status cell text
+        const statusTd = row.querySelector('td:nth-child(3)');
+        if (statusTd) {
+            const txt = statusTd.textContent.trim().toLowerCase();
+            if (txt.includes('active')) active++;
+            else if (txt.includes('inactive')) inactive++;
+        }
+    });
+
+    totalEl.textContent = total;
+    activeEl.textContent = active;
+    inactiveEl.textContent = inactive;
+});
+</script>
+
 <?php require APPROOT . '/views/inc/footer.php'; ?>
