@@ -14,19 +14,11 @@ class DeleteAnnouncements extends Controller{
 
     if($announcementModel->deleteAnnouncement($id)) {
         echo "
-            <div style='
-                                text-align: center; 
-                                margin-top: 50px; 
-                                font-family: Arial, sans-serif; 
-                                font-size: 20px; 
-                                color: green;'>
-                                Announcement deleted! <br>
-                                Redirecting to Announcements page in 2 seconds...
-                            </div>
+           
                             <script>
                                 setTimeout(function(){
                                     window.location.href = '" . URLROOT . "/Announcements/Announcements';
-                                }, 2000);
+                                }, 0000);
                             </script>
                         ";               
     } else {

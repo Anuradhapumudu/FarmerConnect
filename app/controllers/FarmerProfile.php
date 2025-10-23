@@ -22,9 +22,8 @@ class FarmerProfile extends Controller
         $this->paddyModel = $this->model('Paddy');
     }
 
-    // --------------------------------------------------------
     // Display Farmer Profile and Paddy List
-    // --------------------------------------------------------
+
     public function index()
 {
     $farmerNIC = $_SESSION['nic']; // from session after login
@@ -64,9 +63,9 @@ class FarmerProfile extends Controller
     $this->view('farmer/FarmerProfile', $data);
 }
 
-    // --------------------------------------------------------
+
     // Update Farmer Profile
-    // --------------------------------------------------------
+
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -88,9 +87,9 @@ class FarmerProfile extends Controller
             $existingFarmer = $this->farmerModel->getFarmerByNIC($data['NIC']);
             $data['Name'] = $existingFarmer->full_name ?? '';
 
-            // -------------------------
+            
             // TelNo validation (server-side)
-            // -------------------------
+            
             if (empty($data['TelNo'])) {
                 $data['errors']['TelNo'] = 'Telephone number is required.';
             } else {
@@ -101,9 +100,9 @@ class FarmerProfile extends Controller
                 }
             }
 
-            // -------------------------
+        
             // Birthday validation (server-side)
-            // -------------------------
+            
             if (empty($data['Birthday'])) {
                 $data['errors']['Birthday'] = 'Birthday is required.';
             } else {
@@ -117,16 +116,16 @@ class FarmerProfile extends Controller
                 }
             }
 
-                // -------------------------
+                
                 // Address validation
-                // -------------------------
+                
                 if (empty($data['Address'])) {
                     $data['errors']['Address'] = 'Address is required.';
                 }
 
-                // -------------------------
+                
                 // Gender validation
-                // -------------------------
+                
                 if (empty($data['Gender'])) {
                     $data['errors']['Gender'] = 'Gender is required.';
                 }
@@ -171,9 +170,9 @@ class FarmerProfile extends Controller
 
 
 
-    // --------------------------------------------------------
+    
     // Save or Update Paddy
-    // --------------------------------------------------------
+    
         public function savePaddy()
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -193,9 +192,9 @@ class FarmerProfile extends Controller
                     'errors' => []
                 ];
 
-                // ------------------------------
+                
                 // ✅ Step 1: Validate PLR Number
-                // ------------------------------
+                
                 $plrPattern = '/^\d{2}\/\d{2}\/\d{5}\/\d{3}\/[A-Za-z]\/\d{4}$/';
 
                 if (empty($data['PLR'])) {
@@ -204,7 +203,7 @@ class FarmerProfile extends Controller
                     $data['errors']['PLR'] = 'Invalid PLR format. Use format: 02/25/00083/001/P/0066';
                 }
 
-                // ✅ Paddy Size validation
+                // Paddy Size validation
                 if (empty($data['Paddy_Size'])) {
                     $data['errors']['Paddy_Size'] = 'Paddy size is required.';
                 } elseif (!is_numeric($data['Paddy_Size']) || $data['Paddy_Size'] <= 0) {
@@ -212,15 +211,9 @@ class FarmerProfile extends Controller
                 }
                 
 
-                // 🔸 You can add other field validations here if needed
-                // Example:
-                // if (empty($data['Paddy_Size'])) {
-                //     $data['errors']['Paddy_Size'] = 'Paddy size is required.';
-                // }
-
-                // ------------------------------
-                // ✅ Step 2: Check for errors
-                // ------------------------------
+                
+                
+                //  Step 2: Check for error
                 if (!empty($data['errors'])) {
                     // Load farmer details again for re-render
                     $farmer = $this->farmerModel->getFarmerByNIC($data['NIC']);
@@ -232,9 +225,9 @@ class FarmerProfile extends Controller
                     return;
                 }
 
-                // ------------------------------
-                // ✅ Step 3: Save only if valid
-                // ------------------------------
+                
+                //  Step 3: Save only if valid
+                
                 $this->paddyModel->savePaddy($data);
 
                 header('Location: ' . URLROOT . '/farmerprofile/index');
@@ -242,9 +235,9 @@ class FarmerProfile extends Controller
             }
         }
 
-    // --------------------------------------------------------
+    
     // Fetch Paddy row by PLR for editing
-    // --------------------------------------------------------
+
     public function getPaddy()
     {
         $plr = $_GET['plr'] ?? '';
@@ -252,9 +245,9 @@ class FarmerProfile extends Controller
         echo json_encode($paddy);
     }
 
-    // --------------------------------------------------------
+    
     // Get Agrarian Centers by District
-    // --------------------------------------------------------
+    
     public function getCenters()
     {
         $district = $_GET['district'] ?? '';
@@ -276,9 +269,9 @@ class FarmerProfile extends Controller
         }
     }
 
-    // --------------------------------------------------------
+    
     // Delete Paddy row by PLR
-    // --------------------------------------------------------
+    
     public function deletePaddy()
     {
         $plr = $_GET['plr'] ?? '';
@@ -291,9 +284,9 @@ class FarmerProfile extends Controller
         }
     }
 
-    // --------------------------------------------------------
+    
     // Upload Profile Picture
-    // --------------------------------------------------------
+    
     public function uploadProfilePic()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_image'])) {
@@ -325,7 +318,7 @@ class FarmerProfile extends Controller
             $fileName = 'farmer_' . $nic . '.' . $ext;
             $filePath = $uploadDir . $fileName;
 
-            // ✅ If file already exists, remove it first
+            //  If file already exists, remove it first
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
@@ -342,23 +335,23 @@ class FarmerProfile extends Controller
         }
     }
 
-    // --------------------------------------------------------
+    
     // Remove Profile Picture
-    // --------------------------------------------------------
+    
     public function removeProfilePic()
     {
         $nic = $_SESSION['nic'];
         $farmer = $this->farmerModel->getFarmerByNIC($nic);
 
         if (!empty($farmer->profile_image)) {
-            // ✅ Correct path to the public folder
+            //  Correct path to the public folder
             $filePath = APPROOT . '/../public' . $farmer->profile_image;
 
             if (file_exists($filePath)) {
                 unlink($filePath); // delete file from folder
             }
 
-            // ✅ Clear DB entry
+            //  Clear DB entry
             $this->farmerModel->updateProfilePic($nic, NULL);
         }
 

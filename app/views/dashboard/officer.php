@@ -41,11 +41,7 @@
       <p>Review and manage submitted disease reports from farmers.</p>
     </a>
 
-    <div class="feature">
-      <i class="fa-solid fa-comments fa-2x"></i>
-      <h3>Complain Reports</h3>
-      <p>View Complaint Reports and Reply to them.</p>
-    </div>
+
 
     <a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterOfficer" class="feature">
 
@@ -54,6 +50,12 @@
       <p>Make articles to Knowledge center.</p>
    
     </a>
+
+        <a href="<?php echo URLROOT; ?>/complain/officerComplaints" class="feature">
+      <i class="fa-solid fa-comments fa-2x"></i>
+      <h3>Complain Reports</h3>
+      <p>View Complaint Reports and Reply to them.</p>
+</a>
 
 
  

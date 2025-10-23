@@ -195,7 +195,7 @@ public function editProduct($id) {
         $data['product']['available_quantity'] = trim($_POST['available_quantity'] ?? '');
         $currentImage = $_POST['current_image'] ?? '';
 
-        // --- VALIDATION ---
+        // VALIDATION 
         // Product Name
         if(strlen($data['product']['item_name']) === 0) {
             $data['errors']['name'] = "Product name is required.";

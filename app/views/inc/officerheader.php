@@ -75,14 +75,16 @@
         <i class="fas fa-calendar-alt"></i>
         <span class="menu-text">Cultivation Timeline</span>
       </a></li>
+
+            <li><a href="<?php echo URLROOT; ?>/officer/officerYellowCase" data-tooltip="Yellow Case">
+        <i class="fa-solid fa-file-circle-exclamation yellow-report-icon"></i>
+        <span class="menu-text">Yellow Case Reports</span>
+      </a></li>
       <li><a href="<?php echo URLROOT; ?>/officer/CalculatorOfficer" data-tooltip="Fertilizer Calculator">
         <i class="fas fa-calculator"></i>
         <span class="menu-text">Fertilizer Calculator</span>
       </a></li>
-      <li><a href="<?php echo URLROOT; ?>/officer/officerYellowCase" data-tooltip="Yellow Case">
-        <i class="fa-solid fa-file-circle-exclamation yellow-report-icon"></i>
-        <span class="menu-text">Yellow Case Reports</span>
-      </a></li>
+
       <li><a href="<?php echo URLROOT; ?>/Disease/viewReports" data-tooltip="Disease Detector">
         <i class="fas fa-bug"></i>
         <span class="menu-text">Disease Detector</span>
