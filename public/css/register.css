@@ -5,71 +5,85 @@
 }
 body {
     background: linear-gradient(135deg, rgb(235, 234, 234), rgb(242, 243, 242));
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
-    height: auto;
     overflow-y: auto;
-    padding: 0px 0px;
 }
 .container {
-    display: flex;             
-    flex-direction: row;
-    overflow: hidden;
     margin: 0 auto;
     width: 100%;
     background: #fff;
-    padding: 0px 0px;
-    box-shadow: 0 0 15px rgba(7, 7, 7, 0.1);
-    min-height: 100vh;
-}
-.image-section {
-    flex: 0.5;
-}
-.desktop-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-}
-.mobile-img {
-    display: none;
-}
-.form-section {
-    flex: 0.5;
-    padding: 20px 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 .form-box {
     display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 .form-box.active {
     display: block;
 }
 .signup {
-    color: rgb(0, 0, 0);
+    color: #1a1a1a;
     text-align: center;
     margin: 10px 0px 30px 0px;
+}
+.signup h1 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #2e7d32;
+    letter-spacing: -0.5px;
 }
 .input-group {
     margin: auto 60px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
+}
+.input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.input-field label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    letter-spacing: 0.2px;
 }
 .input-field input {
     width: 100%;
     padding: 12px;
-    border: 1px solid #c1c2c1;
-    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
     outline: none;
+    background-color: #fdfdfd;
+    transition: all 0.3s ease;
 }
 .input-field input:focus {
-    border-color: rgb(27, 54, 23);
+    border-color: rgb(50, 113, 40);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
 }
 .input-field label span.required {
     color: red;
     margin-left: 2px;
     font-weight: bold;
+}
+.input-field input::placeholder {
+    color: #9e9e9e;
 }
 .create-account {
     margin: auto 60px;
@@ -77,24 +91,26 @@ body {
 .create-account button{
     width: 100%;
     display: block;
-    padding: 10px 20px;
+    padding: 12px 22px;
     margin: 20px 0px;
     border: none;
     border-radius: 8px;
     background: #2e7d32;
     color: #fff;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
 }
 .create-account button:hover{
     transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
 }
 .create-account button i {
     margin-left: 8px;
     transition: transform 0.3s ease;
 }
-
 .create-account button:hover i {
     transform: translateX(5px);
 }
@@ -102,6 +118,12 @@ body {
     margin: 10px 0px 25px 0px;
     font-size: 16px;
     text-align: right;
+    color: #666;
+    text-decoration: none;
+}
+.have-account a:hover {
+    color: #101857;
+    text-decoration: underline;
 }
 .btn-group {
     margin: 15px 60px;
@@ -109,18 +131,20 @@ body {
     justify-content: space-between;
     background-color: #f9f9f9;
     padding: 5px;               
-    border-radius: 8px;  
+    border-radius: 12px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06); 
 }
 .btn-group button {
     flex: 1;
     background: transparent;
     border: none;
-    padding: 12px 12px;
+    padding: 15px 15px;
     font-weight: 500;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.3s;
     position: relative;
+    border-radius: 8px;
 }
 .btn-group button.active {
     background-color: #2e7d32;
@@ -131,6 +155,7 @@ body {
     transform: translateY(-1px);
     outline: 2px solid #2e7d32;
     outline-offset: 2px;
+    transform: translateY(-1px);
 }
 .btn-group button.active:hover {
     color: #fff;
@@ -140,23 +165,63 @@ body {
     transform: translateY(-1px);
 }
 .form-invalid {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
+    color: #e53935;
+    font-size: 13px;
+    margin-top: 4px;
+    font-weight: 400;
+    display: block;
+}
+
+@media (min-width: 1025px) {
+    .container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    .image-section {
+        flex: 0.5;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .desktop-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .mobile-img {
+        display: none;
+    }
+
+    .form-section {
+        flex: 0.5;
+        padding: 20px 30px;
+        height: 100vh;
+        overflow-y: auto;
+    }
 }
 
 @media (max-width: 1024px) {
     .container {
+        display: flex;
         flex-direction: column;
     }
+
     .image-section {
         width: 100%;
         order: -1;
         margin-bottom: 20px;
+        position: relative;
+        height: auto;
     }
 
     .desktop-img {
-        display: none; 
+        display: none;
     }
 
     .mobile-img {
@@ -169,26 +234,8 @@ body {
     .form-section {
         width: 100%;
         padding: 0 15px;
-    }
-    .btn-group {
-        gap: 8px;
-    }
-    .have-account {
-        font-size: 18px;
-    }
-    .btn-group button {
-        font-size: 18px;
-        padding: 12px;
-    }
-    .input-group {
-        gap: 20px;
-    }
-    .input-field label, .input-field input {
-        font-size: 18px;
-    }
-    .create-account button {
-        font-size: 18px;
-        padding: 12px;
+        height: auto;
+        overflow: visible;
     }
 }
 @media (max-width: 480px) {
@@ -198,31 +245,8 @@ body {
         align-items: flex-start; 
     }
 
-    .container {
-    flex-direction: column;
-    }
-    .image-section {
-        width: 100%;
-        order: -1;
-        margin-bottom: 20px;
-    }
-
-    .desktop-img {
-        display: none; 
-    }
-
-    .mobile-img {
-        display: block;
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
     .input-group {
         margin: auto 30px;
-    }
-    .form-section {
-        width: 100%;
-        padding: 0 15px;
     }
     .btn-group {
         flex-direction: row;
@@ -231,20 +255,16 @@ body {
         margin: 20px 30px;
         justify-content: center;
     }
-
     .btn-group button {
         width: 100%;
         padding: 10px;
         font-size: 15px;
         border-radius: 6px;
     }
-
     .signup h1 {
         font-size: 22px;
     }
-
-    .input-field input {
-        padding: 10px;
+    .input-field label, .input-field input {
         font-size: 14px;
     }
     .create-account {
@@ -258,7 +278,6 @@ body {
         border-radius: 6px;
         margin-bottom: 20px;
     }
-
     .have-account {
         font-size: 14px;
     }
