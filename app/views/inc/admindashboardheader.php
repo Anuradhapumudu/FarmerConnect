@@ -44,7 +44,7 @@
           <?php require APPROOT . '/views/inc/components/translate.php'; ?>
           <!-- main links -->
           <a href="<?php echo URLROOT; ?>/admindashboard"><i class="fa fa-home"></i> Home</a>
-          <a href="<?php echo URLROOT; ?>/Announcements/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
+          <a href="<?php echo URLROOT; ?>/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
           <a href="<?php echo URLROOT; ?>/Help/helpAdmin"><i class="fa fa-question-circle"></i> Help</a>
           <a href="<?php echo URLROOT; ?>/ProfileView/adminProfile"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
