@@ -43,13 +43,13 @@ class Core {
 
 
         // After unsetting controller index, the next URL segment is method
-            $methodIndex = isset($folder) ? 2 : 1; // if folder exists, method is at url[2], else url[1]
+        /*    $methodIndex = isset($folder) ? 2 : 1; // if folder exists, method is at url[2], else url[1]
             if(isset($url[$methodIndex]) && method_exists($this->currentController, $url[$methodIndex])) {
                 $this->currentMethod = $url[$methodIndex];
                 unset($url[$methodIndex]);
             }
         // Check for method
-        /*if(isset($url[1])) {
+        if(isset($url[1])) {
             if(method_exists($this->currentController, $url[1])) {
                 $this->currentMethod = $url[1];
                 unset($url[1]);

@@ -1,10 +1,10 @@
 <?php require_once APPROOT . '/views/inc/adminheader.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/create_announcements.css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/createannouncementnew.css">
 
 
 <main class="main-content" id="mainContent">
     <h1>Create Announcement</h1>
-    <form method="POST" action="<?php echo URLROOT; ?>/Announcements/CreateAnnouncements/create" enctype="multipart/form-data">
+    <form method="POST" action="<?php echo URLROOT; ?>/Announcements/create" enctype="multipart/form-data">
         <div class="input-group">
             <label for="title">Title<span class="required">*</span></label>
             <input type="text" name="title" id="title" required value="<?php echo $data['title']; ?>">
@@ -30,7 +30,7 @@
         </div>
         <div class="btn-group">
             <button type="submit" class="create-btn">Upload</button>
-            <button type="button" class="cancel-btn" onclick="window.location.href='<?= URLROOT ?>/Announcements/Announcements'">Cancel</button>
+            <button type="button" class="cancel-btn" onclick="window.location.href='<?= URLROOT ?>/Announcements'">Cancel</button>
         </div>
     </form>
 </main>

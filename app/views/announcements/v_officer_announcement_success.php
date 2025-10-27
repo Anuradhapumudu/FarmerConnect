@@ -45,7 +45,7 @@
         </div>
 
         <div class="btn-section">
-            <a href="<?php echo URLROOT; ?>/Announcements/Announcements" class="back-btn">
+            <a href="<?php echo URLROOT; ?>/Announcements" class="back-btn">
                 ← Back to Announcements
             </a>
         </div>

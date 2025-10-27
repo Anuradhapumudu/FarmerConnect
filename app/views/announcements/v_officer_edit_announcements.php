@@ -4,7 +4,7 @@
 
 <main class="main-content" id="mainContent">
     <h1>Edit Announcement</h1>
-    <form method="POST" action="<?php echo URLROOT; ?>/Announcements/EditAnnouncements/edit/<?php echo $data['announcement_id']; ?>" enctype="multipart/form-data">
+    <form method="POST" action="<?php echo URLROOT; ?>/Announcements/edit/<?php echo $data['announcement_id']; ?>" enctype="multipart/form-data">
         <div class="input-group">
             <label for="title">Title<span class="required">*</span></label>
             <input type="text" name="title" id="title" required value="<?php echo $data['title']; ?>">
@@ -30,7 +30,7 @@
         </div>
         <div class="btn-group">
             <button type="submit" class="create-btn">Update</button>
-            <button type="button" class="cancel-btn" onclick="window.location.href='<?= URLROOT ?>/Announcements/Announcements'">Cancel</button>
+            <button type="button" class="cancel-btn" onclick="window.location.href='<?= URLROOT ?>/Announcements'">Cancel</button>
         </div>
     </form>
 </main>
