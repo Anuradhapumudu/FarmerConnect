@@ -285,7 +285,7 @@ public function editProduct($id) {
 
 
 
-    // ❌ Delete Product
+    //  Delete Product
     public function deleteProduct($id) {
         // Only allow POST for deletion
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -310,7 +310,7 @@ public function editProduct($id) {
         }
     }
 
-    // 👁️ View Products by Category
+    // View Products by Category
     public function viewProduct($categorySlug = null) {
         $categoryMap = [
             'fertilizer' => 'Fertilizer',
@@ -326,7 +326,7 @@ public function editProduct($id) {
         $this->view('marketplace/V_viewProduct', ['category' => $category, 'products' => $products]);
     }
 
-    // 💳 Payment
+    // Payment
     public function payment() {
         $this->view('marketplace/V_paymentGetway');
     }
@@ -376,7 +376,10 @@ public function buyProduct($id = null) {
 
 
     public function adminViewProducts() {
-        $this->view('marketplace/V_AdminViewProducts');
+
+        //fetch all products
+        $products =$this->marketplaceModel->getAllProducts();
+        $this->view('marketplace/V_AdminViewProducts', ['products' => $products]);
     } 
 
        public function adminViewOrders() {

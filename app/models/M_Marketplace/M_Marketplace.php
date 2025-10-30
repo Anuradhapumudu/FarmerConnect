@@ -162,5 +162,22 @@ public function updateProduct($item_id, $data) {
         $this->db->bind(":item_id", $item_id);
         return $this->db->execute();
     }
+
+
+    //get all products
+public function getAllProducts() {
+    $this->db->query("
+        SELECT p.*, 
+               s.first_name AS seller_name,
+               s.company_name AS seller_company,
+               s.address AS seller_address,
+               s.phone_no AS seller_telNo
+        FROM products p
+        LEFT JOIN sellers s ON p.seller_id = s.seller_id
+    ");
+
+    return $this->db->resultSet();
+}
+
 }
 ?>
