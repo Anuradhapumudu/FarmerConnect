@@ -331,7 +331,7 @@ public function editProduct($id) {
         $this->view('marketplace/V_paymentGetway');
     }
 
-    // 🚜 Track Orders (Farmer / Seller)
+    // Track Orders (Farmer / Seller)
     public function trackOrdersFarmer() {
         $this->view('marketplace/V_FarmerTrackOrders');
     }
@@ -340,25 +340,40 @@ public function editProduct($id) {
         $this->view('marketplace/V_SellerTrackOrders');
     }
 
-    // 📦 Buy Product
-    public function buyProduct($id) {
-        $product = $this->marketplaceModel->getProductById($id);
-        if (!$product) die("Product not found");
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $quantity = $_POST['quantity'] ?? 1;
-            $farmer_id = $_SESSION['farmer_id'] ?? 1;
-            $total_price = $product->price_per_unit * $quantity;
-
-            $this->marketplaceModel->createOrder($farmer_id, $id, $quantity, $total_price);
-            $this->marketplaceModel->updateStock($id, $product->available_quantity - $quantity);
-
-            header("Location: " . URLROOT . "/Marketplace/trackOrdersFarmer");
-            exit;
-        }
-
-        $this->view('marketplace/V_buyProduct', ['product' => $product]);
+    // Buy Product
+public function buyProduct($id = null) {
+    // $id is now numeric internal ID
+    if ($id === null) {
+        $_SESSION['error'] = "Product ID is required";
+        header("Location: " . URLROOT . "/Marketplace/farmer");
+        exit;
     }
+
+    // Fetch product by numeric ID
+    $product = $this->marketplaceModel->getProductByInternalId($id);
+    if (!$product) {
+        $_SESSION['error'] = "Product not found";
+        header("Location: " . URLROOT . "/Marketplace/farmer");
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $quantity = $_POST['quantity'] ?? 1;
+        $farmer_id = $_SESSION['farmer_id'] ?? 1;
+        $total_price = $product->price_per_unit * $quantity;
+
+        $this->marketplaceModel->createOrder($farmer_id, $product->item_id, $quantity, $total_price);
+        $this->marketplaceModel->updateStock($id, $product->available_quantity - $quantity);
+
+        header("Location: " . URLROOT . "/Marketplace/trackOrdersFarmer");
+        exit;
+    }
+
+    $this->view('marketplace/V_buyProduct', ['product' => $product]);
+}
+
+
+
 
     public function adminViewProducts() {
         $this->view('marketplace/V_AdminViewProducts');

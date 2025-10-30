@@ -9,6 +9,7 @@ $product = $data['product'];
 
 $price       = floatval($product->price_per_unit);
 $region      = htmlspecialchars($product->region);
+$itemId      = htmlspecialchars($product->item_id);
 $itemName    = htmlspecialchars($product->item_name);
 $sellerName  = htmlspecialchars($product->seller_name);
 $imageUrl    = URLROOT . '/uploads/' . htmlspecialchars($product->image_url);
@@ -29,6 +30,7 @@ $address      = htmlspecialchars($product->seller_address ?? '');
         <img src="<?= $imageUrl ?>" alt="<?= $itemName ?>">
 
         <div class="product-info">
+            <p><b>Product ID:</b> <?= $itemId ?></p>
             <p><b>Product Name:</b> <?= $itemName ?></p>
             <p><b>Price per Unit:</b> Rs. <?= number_format($price, 2) ?></p>
             <p><b>Available Quantity:</b> <?= $available ?></p>

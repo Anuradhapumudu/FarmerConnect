@@ -128,11 +128,12 @@
 
             <hr class="divider">
 
-            <div class="action-buttons">
+          <div class="action-buttons">
               <a href="<?php echo URLROOT; ?>/Marketplace/buyProduct/<?php echo $row->item_id; ?>" class="btn btn-primary">
-                <i class="fas fa-shopping-cart"></i> Buy
+                  <i class="fas fa-shopping-cart"></i> Buy
               </a>
-            </div>
+          </div>
+
           </div>
         </div>
       </div>

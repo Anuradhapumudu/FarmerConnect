@@ -83,7 +83,7 @@
     <button onclick="resetFilter()">Reset</button>
   </div>
 
-
+</div>
   <!-- Products Section -->
     <div class="orders-container">
 
@@ -211,7 +211,7 @@
     </div>
 
 
-</div>
+
 
 
 </main>

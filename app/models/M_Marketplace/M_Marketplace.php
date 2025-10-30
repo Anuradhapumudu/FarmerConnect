@@ -43,20 +43,32 @@ class M_Marketplace{
 
 //read
 
-  public function getProductById($item_id) {
+public function getProductByInternalId($item_id) {
     $this->db->query("
         SELECT 
             p.*, 
             CONCAT(s.first_name, ' ', s.last_name) AS seller_name,
             s.phone_no AS seller_telNo,
             s.address AS seller_address,
-            s.company_name
-        FROM products p
-        JOIN sellers s ON p.seller_id = s.seller_id
+            s.company_name AS seller_company
+        FROM products AS p
+        INNER JOIN sellers AS s ON p.seller_id = s.seller_id
         WHERE p.item_id = :item_id
+        LIMIT 1
     ");
-    $this->db->bind(":item_id", $item_id);
+    
+    $this->db->bind(':item_id', $item_id);
+    
     return $this->db->single();
+}
+
+
+
+public function getProductById($item_id) {
+    $this->db->query("SELECT * FROM products WHERE item_id = :item_id");
+    $this->db->bind(':item_id', $item_id);
+
+    return $this->db->single(); // Fetch one product record
 }
 
 
