@@ -11,18 +11,18 @@ function sendApprovalEmail($toEmail, $sellerId) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'janeeshahasadara@gmail.com';
-        $mail->Password   = 'nyne ltss fobt zwer'; // App password
+        $mail->Username   = 'farmerconnect.lk@gmail.com';
+        $mail->Password   = 'uhnc xtlk sgqh xufa'; // App password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        $mail->setFrom('janeeshahasadara@gmail.com', 'FarmerConnect Admin');
+        $mail->setFrom('farmerconnect.lk@gmail.com', 'FarmerConnect Admin');
         $mail->addAddress($toEmail);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Seller Approval - FarmerConnect';
+        $mail->Subject = 'Seller Approval - FarmerConnect.lk';
         $mail->Body    = "
-            <h2>🎉 Congratulations!</h2>
+            <h2> Congratulations!</h2>
             <p>Your seller account has been <strong>approved</strong>.</p>
             <p>Your Seller ID: <strong>$sellerId</strong></p>
             <p>You can now log in to FarmerConnect and start selling.</p>
