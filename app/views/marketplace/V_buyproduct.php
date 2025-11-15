@@ -42,7 +42,8 @@ $address      = htmlspecialchars($product->seller_address ?? '');
             <p><b>Description:</b> <?= $description ?></p>
         </div>
 
-        <form method="post" class="buy-form">
+        <!-- Add an id to the form -->
+        <form method="post" class="buy-form" id="buyForm">
             <label>
                 <b>Quantity:</b>
                 <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?= $available ?>" onchange="updateTotal()">
@@ -51,6 +52,16 @@ $address      = htmlspecialchars($product->seller_address ?? '');
             <p class="total-price">
                 Total Price: Rs. <span id="total"><?= number_format($price, 2) ?></span>
             </p>
+
+            <label><b>Payment Method:</b></label>
+            <div>
+                <label>
+                    <input type="radio" name="payment_method" value="offline" checked> Offline Payment
+                </label>
+                <label>
+                    <input type="radio" name="payment_method" value="online"> Online Payment
+                </label>
+            </div>
 
             <input type="submit" value="Buy Now" class="btn btn-primary">
         </form>
@@ -64,6 +75,23 @@ function updateTotal() {
     let price = <?= $price ?>;
     document.getElementById("total").innerText = (qty * price).toFixed(2);
 }
+
+// Handle payment redirection
+document.getElementById("buyForm").addEventListener("submit", function(e) {
+    e.preventDefault(); // prevent default form submission
+
+    let paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+    let quantity = document.getElementById("quantity").value;
+    let productId = "<?= $itemId ?>";
+
+    if(paymentMethod === "offline") {
+        // Redirect to offline payment success page
+        window.location.href = "<?= URLROOT ?>/Marketplace/paymentSuccess";
+    } else {
+        // Redirect to online payment page
+        window.location.href = "<?= URLROOT ?>/Marketplace/onlinePayment?product_id=" + productId + "&quantity=" + quantity;
+    }
+});
 </script>
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/marketplace.css?v=<?= time(); ?>">

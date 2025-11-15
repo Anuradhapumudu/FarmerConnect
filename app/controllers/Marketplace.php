@@ -373,6 +373,10 @@ public function buyProduct($id = null) {
 }
 
 
+    public function paymentSuccess() {
+        $this->view('marketplace/V_paymentSucess');
+    }
+
 
 
     public function adminViewProducts() {
