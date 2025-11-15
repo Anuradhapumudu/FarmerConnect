@@ -1,4 +1,4 @@
-<?php require_once APPROOT . '/views/inc/sellerheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/header.php'; ?>
 <!-- Marketplace-specific CSS -->
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/addsuccess.css?v=<?= time(); ?>">
 <main class="main-content" id="mainContent">
@@ -6,7 +6,7 @@
     <div class="sucess_card">
       
 
-      <h2>Your Order Has Been Received!</h2>
+      <h2>Your Order Has Been Placed!</h2>
       
       <p>Your order has been successfully added to the system. </p>
       

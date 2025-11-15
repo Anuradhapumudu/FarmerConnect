@@ -144,24 +144,28 @@ public function updateProduct($item_id, $data) {
 
 
     //buy product
-    // Insert new order
-    public function createOrder($farmer_id, $item_id, $quantity, $total_price) {
-        $this->db->query("INSERT INTO orderDetails (farmer_id, item_id, quantity, total_price, status) 
-                          VALUES (:farmer_id, :item_id, :quantity, :total_price, 'Pending')");
-        $this->db->bind(":farmer_id", $farmer_id);
-        $this->db->bind(":item_id", $item_id);
-        $this->db->bind(":quantity", $quantity);
-        $this->db->bind(":total_price", $total_price);
-        return $this->db->execute();
-    }
+// Place an order
+        public function createOrder($buyer_id, $item_id, $seller_id, $quantity, $total_price, $payment_method) {
+            $this->db->query("INSERT INTO orders (item_id, seller_id, buyer_id, quantity, total_price, payment_method) 
+                            VALUES (:item_id, :seller_id, :buyer_id, :quantity, :total_price, :payment_method)");
+            
+            $this->db->bind(':item_id', $item_id);
+            $this->db->bind(':seller_id', $seller_id);
+            $this->db->bind(':buyer_id', $buyer_id);
+            $this->db->bind(':quantity', $quantity);
+            $this->db->bind(':total_price', $total_price);
+            $this->db->bind(':payment_method', $payment_method);
 
-    // Update stock
-    public function updateStock($item_id, $newQty) {
-        $this->db->query("UPDATE products SET available_quantity = :qty WHERE item_id = :item_id");
-        $this->db->bind(":qty", $newQty);
-        $this->db->bind(":item_id", $item_id);
-        return $this->db->execute();
-    }
+            return $this->db->execute();
+        }
+
+        // Update product stock
+        public function updateStock($item_id, $newQty) {
+            $this->db->query("UPDATE products SET available_quantity = :qty WHERE item_id = :item_id");
+            $this->db->bind(':qty', $newQty);
+            $this->db->bind(':item_id', $item_id);
+            return $this->db->execute();
+        }
 
 
     //get all products
@@ -178,6 +182,8 @@ public function getAllProducts() {
 
     return $this->db->resultSet();
 }
+
+
 
 }
 ?>

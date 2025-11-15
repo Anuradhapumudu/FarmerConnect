@@ -342,14 +342,12 @@ public function editProduct($id) {
 
     // Buy Product
 public function buyProduct($id = null) {
-    // $id is now numeric internal ID
     if ($id === null) {
         $_SESSION['error'] = "Product ID is required";
         header("Location: " . URLROOT . "/Marketplace/farmer");
         exit;
     }
 
-    // Fetch product by numeric ID
     $product = $this->marketplaceModel->getProductByInternalId($id);
     if (!$product) {
         $_SESSION['error'] = "Product not found";
@@ -358,19 +356,55 @@ public function buyProduct($id = null) {
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $quantity = $_POST['quantity'] ?? 1;
-        $farmer_id = $_SESSION['farmer_id'] ?? 1;
+        // Get buyer id from session
+        $buyer_id = $_SESSION['farmer_id'] ?? $_SESSION['user_id'] ?? null;
+        if (!$buyer_id) {
+            $_SESSION['error'] = "You must be logged in to buy a product.";
+            header("Location: " . URLROOT . "/Users/login");
+            exit;
+        }
+
+        // Get form data
+        $quantity = intval($_POST['quantity'] ?? 1);
+        $payment_method = $_POST['payment_method'] ?? 'cash';
+
+        // Validate quantity
+        if($quantity < 1 || $quantity > $product->available_quantity){
+            $_SESSION['error'] = "Invalid quantity selected.";
+            header("Location: " . URLROOT . "/Marketplace/buyProduct/".$id);
+            exit;
+        }
+
+        // Calculate total price
         $total_price = $product->price_per_unit * $quantity;
 
-        $this->marketplaceModel->createOrder($farmer_id, $product->item_id, $quantity, $total_price);
-        $this->marketplaceModel->updateStock($id, $product->available_quantity - $quantity);
+        // Create order
+        $this->marketplaceModel->createOrder(
+            $buyer_id,
+            $product->item_id,
+            $product->seller_id,
+            $quantity,
+            $total_price,
+            $payment_method
+        );
 
-        header("Location: " . URLROOT . "/Marketplace/trackOrdersFarmer");
+        // Update stock
+        $newQty = $product->available_quantity - $quantity;
+        $this->marketplaceModel->updateStock($product->item_id, $newQty);
+
+        // Redirect based on payment method
+        if($payment_method === 'online'){
+            header("Location: " . URLROOT . "/Marketplace/onlinePayment?product_id=".$product->item_id."&quantity=".$quantity);
+        } else {
+            header("Location: " . URLROOT . "/Marketplace/paymentSuccess");
+        }
         exit;
     }
 
     $this->view('marketplace/V_buyProduct', ['product' => $product]);
 }
+
+
 
 
     public function paymentSuccess() {
