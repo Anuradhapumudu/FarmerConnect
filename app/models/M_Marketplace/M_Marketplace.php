@@ -183,6 +183,29 @@ public function getAllProducts() {
     return $this->db->resultSet();
 }
 
+// In M_Marketplace.php
+public function getOrdersByBuyer($buyer_id) {
+    $this->db->query("
+        SELECT o.*, 
+               p.item_name, 
+               p.image_url,
+               s.first_name AS seller_first,
+               s.last_name AS seller_last,
+               s.phone_no AS seller_telNo,
+               s.address AS seller_address,
+               s.company_name AS seller_company
+        FROM orders o
+        JOIN products p ON o.item_id = p.item_id
+        JOIN sellers s ON o.seller_id = s.seller_id
+        WHERE o.buyer_id = :buyer_id
+        ORDER BY o.order_create_date DESC
+    ");
+
+    $this->db->bind(':buyer_id', $buyer_id);
+    return $this->db->resultSet();
+}
+
+
 
 
 }

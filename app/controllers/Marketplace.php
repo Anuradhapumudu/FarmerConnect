@@ -283,8 +283,6 @@ public function editProduct($id) {
 
 
 
-
-
     //  Delete Product
     public function deleteProduct($id) {
         // Only allow POST for deletion
@@ -333,8 +331,18 @@ public function editProduct($id) {
 
     // Track Orders (Farmer / Seller)
     public function trackOrdersFarmer() {
-        $this->view('marketplace/V_FarmerTrackOrders');
+        $buyer_id = $_SESSION['farmer_id'] ?? $_SESSION['user_id'] ?? null;
+        if (!$buyer_id) {
+            $_SESSION['error'] = "You must be logged in to view orders.";
+            header("Location: " . URLROOT . "/Users/login");
+            exit;
+        }
+
+        $orders = $this->marketplaceModel->getOrdersByBuyer($buyer_id);
+        $this->view('marketplace/V_FarmerTrackOrders', ['orders' => $orders]);
     }
+
+
 
     public function trackOrdersSeller() {
         $this->view('marketplace/V_SellerTrackOrders');
