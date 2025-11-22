@@ -22,16 +22,53 @@
     </div>
     
     <div class="orders-container">
-      <?php if(!empty($data['orders'])): ?>
+       <?php if(!empty($data['orders'])): ?>
         <?php foreach($data['orders'] as $order): 
           $orderId = strtolower($order->order_id);
           $statusClass = '';
-          switch(strtolower($order->order_status)) {
-              case 'order_placed': $statusClass = 'status-placed'; break;
-              case 'order_confirmed': $statusClass = 'status-confirmed'; break;
-              case 'ready_to_pickup': $statusClass = 'status-ready'; break;
-              case 'order_picked': $statusClass = 'status-picked'; break;
-              case 'order_cancelled': $statusClass = 'status-cancelled'; break;
+          $statusText = '';
+          
+          // Normalize the status
+          $normalizedStatus = strtolower(trim($order->order_status));
+          
+          switch($normalizedStatus) {
+              case 'order_placed': 
+                $statusClass = 'status-placed'; 
+                $statusText = 'Order Placed';
+                break;
+              case 'order_confirmed': 
+                $statusClass = 'status-confirmed'; 
+                $statusText = 'Order Confirmed';
+                break;
+              case 'order_prepared': 
+                $statusClass = 'status-prepared'; 
+                $statusText = 'Order Prepared';
+                break;
+              case 'ready_to_pickup': 
+              case 'ready_for_pickup':
+                $statusClass = 'status-ready'; 
+                $statusText = 'Ready For Pickup';
+                break;
+              case 'order_picked': 
+              case 'picked_up':
+              case 'picked':
+                $statusClass = 'status-picked'; 
+                $statusText = 'Picked Up';
+                break;
+              case 'order_cancelled': 
+              case 'cancelled': 
+                $statusClass = 'status-cancelled'; 
+                $statusText = 'Cancelled';
+                break;
+              default:
+                  // If status contains "pick", assume it's picked up
+                  if (strpos($normalizedStatus, 'pick') !== false) {
+                      $statusClass = 'status-picked'; 
+                      $statusText = 'Picked Up';
+                  } else {
+                      $statusText = ucwords(str_replace('_', ' ', $order->order_status));
+                      $statusClass = 'status-unknown';
+                  }
           }
         ?>
       <div class="order-card">
@@ -46,7 +83,7 @@
                 <div class="order-id">#<?= htmlspecialchars($order->order_id) ?></div>
                 <div class="order-date"><?= date('M d, Y', strtotime($order->order_create_date)) ?></div>
               </div>
-              <div class="order-status <?= $statusClass ?>"><?= ucfirst($order->order_status) ?></div>
+              <div class="order-status <?= $statusClass ?>"><?= $statusText ?></div>
             </div>
         
             <div class="order-content"> 

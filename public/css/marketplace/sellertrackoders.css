@@ -566,6 +566,12 @@
     gap: 10px;
   }
 
+  .status-unknown {
+    background-color: gray;
+    color: white;
+}
+
+
 /* Responsive design */
 @media (max-width: 768px) {
   .order-main-content {

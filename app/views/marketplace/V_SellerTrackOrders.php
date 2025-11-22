@@ -29,7 +29,10 @@
           $statusClass = '';
           $statusText = '';
           
-          switch(strtolower($order->order_status)) {
+          // Normalize the status
+          $normalizedStatus = strtolower(trim($order->order_status));
+          
+          switch($normalizedStatus) {
               case 'order_placed': 
                 $statusClass = 'status-placed'; 
                 $statusText = 'Order Placed';
@@ -43,63 +46,74 @@
                 $statusText = 'Order Prepared';
                 break;
               case 'ready_to_pickup': 
+              case 'ready_for_pickup':
                 $statusClass = 'status-ready'; 
                 $statusText = 'Ready For Pickup';
                 break;
               case 'order_picked': 
+              case 'picked_up':
+              case 'picked':
                 $statusClass = 'status-picked'; 
                 $statusText = 'Picked Up';
                 break;
               case 'order_cancelled': 
+              case 'cancelled': 
                 $statusClass = 'status-cancelled'; 
                 $statusText = 'Cancelled';
                 break;
               default:
-                $statusText = ucwords(str_replace('_', ' ', $order->order_status));
+                  // If status contains "pick", assume it's picked up
+                  if (strpos($normalizedStatus, 'pick') !== false) {
+                      $statusClass = 'status-picked'; 
+                      $statusText = 'Picked Up';
+                  } else {
+                      $statusText = ucwords(str_replace('_', ' ', $order->order_status));
+                      $statusClass = 'status-unknown';
+                  }
           }
         ?>
 
-      <div class="order-card">
-        <div class="order-main-content">
-          <div class="order-image">
-            <img src="<?= URLROOT . '/uploads/' . htmlspecialchars($order->image_url) ?>" alt="<?= htmlspecialchars($order->item_name) ?>">
-          </div>
-          
-          <div class="order-content-wrapper">
-            <div class="order-header">
-              <div>
-                <div class="order-id">#<?= htmlspecialchars($order->order_id) ?></div>
-                <div class="order-date"><?= date('M d, Y', strtotime($order->order_create_date)) ?></div>
-              </div>
-              <div class="order-status <?= $statusClass ?>"><?= $statusText ?></div>
+        <div class="order-card">
+          <div class="order-main-content">
+            <div class="order-image">
+              <img src="<?= URLROOT . '/uploads/' . htmlspecialchars($order->image_url) ?>" alt="<?= htmlspecialchars($order->item_name) ?>">
             </div>
-        
-            <div class="order-content"> 
-              <div class="product-info">
-                <div class="product-details">
-                  <h3><?= htmlspecialchars($order->item_name) ?></h3>
-                  <p>Quantity: <?= htmlspecialchars($order->quantity) ?></p>
-                  <div class="price">LKR <?= number_format($order->total_price, 2) ?></div>
-                </div>
-                <div class="divider-vertical"></div>
-
-                <div class="customer-details">
-                  <h3>Customer Info</h3>
-                  <p><strong>Name:</strong> <?= htmlspecialchars($order->buyer_full) ?></p>
-                  <p><strong>Contact:</strong> <?= htmlspecialchars($order->buyer_telNo) ?></p>
-                </div>
-              </div>
             
-              <hr class="divider">
-              <div class="action-buttons">
-                <button type="button" class="btn btn-secondary update-status-btn" data-order="<?= $orderId ?>" data-status="<?= strtolower($order->order_status) ?>">
-                  <i class="fas fa-edit"></i> Update
-                </button>
+            <div class="order-content-wrapper">
+              <div class="order-header">
+                <div>
+                  <div class="order-id">#<?= htmlspecialchars($order->order_id) ?></div>
+                  <div class="order-date"><?= date('M d, Y', strtotime($order->order_create_date)) ?></div>
+                </div>
+                <div class="order-status <?= $statusClass ?>"><?= $statusText ?></div>
+              </div>
+          
+              <div class="order-content"> 
+                <div class="product-info">
+                  <div class="product-details">
+                    <h3><?= htmlspecialchars($order->item_name) ?></h3>
+                    <p>Quantity: <?= htmlspecialchars($order->quantity) ?></p>
+                    <div class="price">LKR <?= number_format($order->total_price, 2) ?></div>
+                  </div>
+                  <div class="divider-vertical"></div>
+
+                  <div class="customer-details">
+                    <h3>Customer Info</h3>
+                    <p><strong>Name:</strong> <?= htmlspecialchars($order->buyer_full) ?></p>
+                    <p><strong>Contact:</strong> <?= htmlspecialchars($order->buyer_telNo) ?></p>
+                  </div>
+                </div>
+              
+                <hr class="divider">
+                <div class="action-buttons">
+                  <button type="button" class="btn btn-secondary update-status-btn" data-order="<?= $orderId ?>" data-status="<?= $normalizedStatus ?>">
+                    <i class="fas fa-edit"></i> Update
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
         <?php endforeach; ?>
       <?php else: ?>
         <p>No orders found.</p>
@@ -188,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
     'order_cancelled': 'status-cancelled'
   };
 
+  // Search functionality
   searchInput.addEventListener('input', function() {
     const searchTerm = this.value.toLowerCase();
     orderCards.forEach(card => {
@@ -200,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // Filter functionality
   const filterSelect = document.querySelector('.filter-select');
   filterSelect.addEventListener('change', function() {
     const filterValue = this.value;
@@ -233,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Update status button click handlers
   updateStatusButtons.forEach(button => {
     button.addEventListener('click', function() {
       currentOrderCard = this.closest('.order-card');
@@ -261,15 +278,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // Close modal handlers
   closeModalBtn.addEventListener('click', function() {
     statusModal.style.display = 'none';
-    // Reset all options for next use
     resetStatusOptions();
   });
 
   cancelUpdateBtn.addEventListener('click', function() {
     statusModal.style.display = 'none';
-    // Reset all options for next use
     resetStatusOptions();
   });
 
@@ -283,6 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Save status handler
   saveStatusBtn.addEventListener('click', function() {
     const selectedRadio = document.querySelector('input[name="order-status"]:checked');
     
@@ -321,6 +338,11 @@ document.addEventListener('DOMContentLoaded', function() {
           
           // Show success message
           alert('Order status updated successfully!');
+          
+          // Force page refresh after 1 second to sync with database
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           alert('Error updating order status: ' + (data.message || 'Unknown error'));
         }
@@ -335,6 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
     resetStatusOptions();
   });
 
+  // Close modal when clicking outside
   window.addEventListener('click', function(e) {
     if (e.target === statusModal) {
       statusModal.style.display = 'none';
@@ -342,8 +365,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-
-
 </script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
