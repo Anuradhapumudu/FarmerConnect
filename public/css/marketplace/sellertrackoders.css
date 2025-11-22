@@ -161,8 +161,7 @@
   border-radius: 50px;
   font-weight: 600;
   font-size: 12px;
-  margin-top: 8px;
-  border: 1px solid #558b2f; 
+  margin-top: 8px; 
 }
 
 .order-content {
@@ -274,19 +273,34 @@
   transform: translateY(-2px);
 }
 
+.status-placed {
+    background-color: #dbeafe;
+    color: #1e3a8a;
+    border: 1px solid #93c5fd;
+}
+
+.status-confirmed {
+    background-color: #ede9fe;
+    color: #5b21b6;
+    border: 1px solid #c4b5fd;
+}
+
 .status-ready {
-  background: #d4edda;
-  color: #155724;
+    background-color: #dcfce7;
+    color: #166534;
+     border: 1px solid #86efac;
 }
 
 .status-picked {
-  background: #cce5ff;
-  color: #004085;
+    background-color: #ccfbf1;
+    color: #0f766e;
+    border: 1px solid #99f6e4;
 }
 
 .status-cancelled {
-  background: #f8d7da;
-  color: #721c24;
+    background-color: #fee2e2;
+    color: #b91c1c;
+     border: 1px solid #fecaca;
 }
 
 /* Order Details Container */
@@ -476,41 +490,7 @@
   margin-bottom: 20px;
 }
 
-  .status-placed {
-    background: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeaa7;
-  }
-  
-  .status-confirmed {
-    background: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
-  }
-  
-  .status-prepared {
-    background: #e2e3e5;
-    color: #383d41;
-    border: 1px solid #d6d8db;
-  }
-  
-  .status-ready {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-  }
-  
-  .status-picked {
-    background: #cce5ff;
-    color: #004085;
-    border: 1px solid #b8daff;
-  }
-  
-  .status-cancelled {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }
+
   
   /* Modal styles */
   .modal {

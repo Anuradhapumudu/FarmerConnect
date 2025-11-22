@@ -330,26 +330,66 @@ public function editProduct($id) {
     }
 
     // Track Orders (Farmer / Seller)
-    public function trackOrdersFarmer() {
-        $buyer_id = $_SESSION['farmer_id'] ?? $_SESSION['user_id'] ?? null;
-        if (!$buyer_id) {
-            $_SESSION['error'] = "You must be logged in to view orders.";
-            header("Location: " . URLROOT . "/Users/login");
-            exit;
-        }
+public function trackOrdersFarmer() {
+    // Get buyer NIC from session
+    $buyer_nic = $_SESSION['user_id'] ?? null; // or $_SESSION['nic']
 
-        $orders = $this->marketplaceModel->getOrdersByBuyer($buyer_id);
-        $this->view('marketplace/V_FarmerTrackOrders', ['orders' => $orders]);
+    if (!$buyer_nic) {
+        $_SESSION['error'] = "You must be logged in as a farmer to view your orders.";
+        header("Location: " . URLROOT . "/Users/login");
+        exit;
     }
+
+    $orders = $this->marketplaceModel->getOrdersByBuyer($buyer_nic);
+    $this->view('marketplace/V_FarmerTrackOrders', ['orders' => $orders]);
+}
 
 
 
     public function trackOrdersSeller() {
-        $this->view('marketplace/V_SellerTrackOrders');
+        $seller_id = $_SESSION['seller_id'] ?? null;
+        if (!$seller_id) {
+            $_SESSION['error'] = "You must be logged in to view orders.";
+            header("Location: " . URLROOT . "/Users/login");
+            exit;
+        }
+    $orders = $this->marketplaceModel->getOrdersBySeller($seller_id);
+     $this->view('marketplace/V_SellerTrackOrders', ['orders' => $orders]);
     }
 
+
+    public function updateOrderStatus() {
+    $data = json_decode(file_get_contents("php://input"));
+
+    $order_id = $data->order_id ?? '';
+    $new_status = $data->status ?? '';
+    $user_id = $_SESSION['seller_id'] ?? $_SESSION['user_id'] ?? 'system';
+
+    if (!empty($order_id) && !empty($new_status)) {
+        $order = $this->marketplaceModel->getOrderById($order_id);
+        if (!$order) {
+            echo json_encode(['success' => false, 'message' => 'Order not found']);
+            return;
+        }
+
+        $old_status = $order->order_status;
+
+        if ($this->marketplaceModel->updateOrderStatus($order_id, $new_status)) {
+            $this->marketplaceModel->addOrderStatusHistory($order_id, $old_status, $new_status, $user_id);
+            $history = $this->marketplaceModel->getOrderStatusHistory($order_id);
+
+            echo json_encode(['success' => true, 'history' => $history]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to update status']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Invalid data']);
+    }
+}
+
+    
     // Buy Product
-public function buyProduct($id = null) {
+  public function buyProduct($id = null) {
     if ($id === null) {
         $_SESSION['error'] = "Product ID is required";
         header("Location: " . URLROOT . "/Marketplace/farmer");
@@ -364,13 +404,15 @@ public function buyProduct($id = null) {
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Get buyer id from session
-        $buyer_id = $_SESSION['farmer_id'] ?? $_SESSION['user_id'] ?? null;
-        if (!$buyer_id) {
-            $_SESSION['error'] = "You must be logged in to buy a product.";
-            header("Location: " . URLROOT . "/Users/login");
-            exit;
-        }
+            // Get buyer id from session
+            $buyer_id = $_SESSION['farmer_id'] ?? $_SESSION['user_id'] ?? null;
+
+            // Ensure buyer is not empty and not the seller themselves
+            if (!$buyer_id || $buyer_id == $product->seller_id) {
+                $_SESSION['error'] = "You must be logged in as a farmer to buy this product.";
+                header("Location: " . URLROOT . "/Users/login");
+                exit;
+            }
 
         // Get form data
         $quantity = intval($_POST['quantity'] ?? 1);

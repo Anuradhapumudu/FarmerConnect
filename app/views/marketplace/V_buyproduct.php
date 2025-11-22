@@ -58,10 +58,10 @@ $address      = htmlspecialchars($product->seller_address ?? '');
             <label><b>Payment Method:</b></label>
             <div>
                 <label>
-                    <input type="radio" name="payment_method" value="cash" checked> Offline Payment
+                    <input type="radio" name="payment_method" value="cash" checked> Cash Payment
                 </label>
                 <label>
-                    <input type="radio" name="payment_method" value="online"> Online Payment
+                    <input type="radio" name="payment_method" value="online"> Card Payment
                 </label>
             </div>
 

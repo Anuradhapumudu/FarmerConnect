@@ -205,8 +205,62 @@ public function getOrdersByBuyer($buyer_id) {
     return $this->db->resultSet();
 }
 
+public function getOrdersBySeller($seller_id) {
+    $this->db->query("
+        SELECT 
+            o.order_id,
+            o.order_status,
+            o.order_create_date,
+            o.quantity,
+            o.total_price,
+            p.item_name,
+            p.image_url,
+            f.full_name AS buyer_full,
+            f.phone_no  AS buyer_telNo
+        FROM orders o
+        JOIN products p ON o.item_id = p.item_id
+        JOIN farmers f ON o.buyer_id = f.nic            
+        WHERE p.seller_id = :seller_id
+        ORDER BY o.order_create_date DESC
+    ");
+    $this->db->bind(':seller_id', $seller_id);
+    return $this->db->resultSet();
+}
 
+// Get order by ID (already exists for some uses)
+public function getOrderById($order_id) {
+    $this->db->query("SELECT * FROM orders WHERE order_id = :order_id");
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->single();
+}
 
+// Update order status
+public function updateOrderStatus($order_id, $new_status) {
+    $this->db->query("UPDATE orders SET order_status = :new_status WHERE order_id = :order_id");
+    $this->db->bind(':new_status', $new_status);
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->execute();
+}
+
+// Add order status history
+public function addOrderStatusHistory($order_id, $old_status, $new_status, $changed_by) {
+    $this->db->query("
+        INSERT INTO order_status_history (order_id, old_status, new_status, changed_at, changed_by)
+        VALUES (:order_id, :old_status, :new_status, NOW(), :changed_by)
+    ");
+    $this->db->bind(':order_id', $order_id);
+    $this->db->bind(':old_status', $old_status);
+    $this->db->bind(':new_status', $new_status);
+    $this->db->bind(':changed_by', $changed_by);
+    return $this->db->execute();
+}
+
+//Fetch order status history
+public function getOrderStatusHistory($order_id) {
+    $this->db->query("SELECT * FROM order_status_history WHERE order_id = :order_id ORDER BY changed_at ASC");
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->resultSet();
+}
 
 }
 ?>

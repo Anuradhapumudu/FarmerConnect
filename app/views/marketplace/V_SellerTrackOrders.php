@@ -1,70 +1,98 @@
 <?php require_once APPROOT . '/views/inc/sellerheader.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/sellertrackoders.css?v=<?= time(); ?>">
 
-
 <main class="main-content" id="mainContent">
-
   <div class="containers">
     <div class="header">
       <h1>Seller Order Management</h1>
       <p>Track and update your customer orders</p>
     </div>
     
-     <div class="filter-container">
+    <div class="filter-container">
       <div style="position: relative; flex: 1;">
         <input type="text" class="search-input" placeholder="Search orders by ID, product, or customer...">
       </div>
       <select class="filter-select">
         <option value="all">All Statuses</option>
-        <option value="placed">Placed</option>
-        <option value="confirmed">Confirmed</option>
-        <option value="prepared">Prepared</option>
-        <option value="ready">Ready For Pickup</option>
-        <option value="picked">Picked Up</option>
+        <option value="order_placed">Order Placed</option>
+        <option value="order_confirmed">Confirmed</option>
+        <option value="ready_to_pickup">Ready for Pickup</option>
+        <option value="order_picked">Picked Up</option>
+        <option value="order_cancelled">Cancelled</option>
       </select>
     </div>
     
     <div class="orders-container">
+      <?php if(!empty($data['orders'])): ?>
+        <?php foreach($data['orders'] as $order): 
+          $orderId = strtolower($order->order_id);
+          $statusClass = '';
+          $statusText = '';
+          
+          switch(strtolower($order->order_status)) {
+              case 'order_placed': 
+                $statusClass = 'status-placed'; 
+                $statusText = 'Order Placed';
+                break;
+              case 'order_confirmed': 
+                $statusClass = 'status-confirmed'; 
+                $statusText = 'Order Confirmed';
+                break;
+              case 'order_prepared': 
+                $statusClass = 'status-prepared'; 
+                $statusText = 'Order Prepared';
+                break;
+              case 'ready_to_pickup': 
+                $statusClass = 'status-ready'; 
+                $statusText = 'Ready For Pickup';
+                break;
+              case 'order_picked': 
+                $statusClass = 'status-picked'; 
+                $statusText = 'Picked Up';
+                break;
+              case 'order_cancelled': 
+                $statusClass = 'status-cancelled'; 
+                $statusText = 'Cancelled';
+                break;
+              default:
+                $statusText = ucwords(str_replace('_', ' ', $order->order_status));
+          }
+        ?>
 
-      <!-- Order Card 1 -->
       <div class="order-card">
         <div class="order-main-content">
           <div class="order-image">
-            <img src="<?php echo URLROOT; ?>/img/paddy seed.webp" alt="Premium Paddy Seeds">
+            <img src="<?= URLROOT . '/uploads/' . htmlspecialchars($order->image_url) ?>" alt="<?= htmlspecialchars($order->item_name) ?>">
           </div>
           
           <div class="order-content-wrapper">
             <div class="order-header">
               <div>
-                <div class="order-id">#FM12345</div>
-                <div class="order-date">Dec 9, 2024</div>
+                <div class="order-id">#<?= htmlspecialchars($order->order_id) ?></div>
+                <div class="order-date"><?= date('M d, Y', strtotime($order->order_create_date)) ?></div>
               </div>
-              <div class="order-status status-confirmed">Confirmed</div>
+              <div class="order-status <?= $statusClass ?>"><?= $statusText ?></div>
             </div>
         
             <div class="order-content"> 
               <div class="product-info">
                 <div class="product-details">
-                  <h3>Premium Paddy Seeds</h3>
-                  <p>Quantity: 10 Kg</p>
-                  <div class="price">LKR 5,000.00</div>
+                  <h3><?= htmlspecialchars($order->item_name) ?></h3>
+                  <p>Quantity: <?= htmlspecialchars($order->quantity) ?></p>
+                  <div class="price">LKR <?= number_format($order->total_price, 2) ?></div>
                 </div>
-              
-                <!-- Divider -->
                 <div class="divider-vertical"></div>
 
-                 <!-- Customer Details -->
                 <div class="customer-details">
                   <h3>Customer Info</h3>
-                  <p><strong>Name:</strong> <span class="customer-name">A.J.K Athukorala</span></p>
-                  <p><strong>Location:</strong> Kandy, Sri Lanka</p>
-                  <p><strong>Contact:</strong> +94 71 123 4567</p>
+                  <p><strong>Name:</strong> <?= htmlspecialchars($order->buyer_full) ?></p>
+                  <p><strong>Contact:</strong> <?= htmlspecialchars($order->buyer_telNo) ?></p>
                 </div>
               </div>
             
               <hr class="divider">
               <div class="action-buttons">
-                <button type="button" class="btn btn-secondary update-status-btn" data-order="fm12345">
+                <button type="button" class="btn btn-secondary update-status-btn" data-order="<?= $orderId ?>" data-status="<?= strtolower($order->order_status) ?>">
                   <i class="fas fa-edit"></i> Update
                 </button>
               </div>
@@ -72,59 +100,13 @@
           </div>
         </div>
       </div>
-
-      <!-- Order Card 2 -->
-      <div class="order-card">
-        <div class="order-main-content">
-<div class="order-main-content">
-           <div class="order-image">
-            <img src="<?php echo URLROOT; ?>/img/fertilizer.jpg" alt="Premium Paddy Seeds">
-          </div>
-          
-          <div class="order-content-wrapper">
-            <div class="order-header">
-              <div>
-                <div class="order-id">#FM12347</div>
-                <div class="order-date">Dec 3, 2024</div>
-              </div>
-              <div class="order-status status-ready">Ready For Pickup</div>
-            </div>
-            
-            <div class="order-content">
-              <div class="product-info">
-                <div class="product-details">
-                  <h3>Fertilizer</h3>
-                  <p>Quantity : 10kg</p>
-                  <div class="price">LKR 8,750.00</div>
-                </div>
-              
-                <!-- Divider -->
-                <div class="divider-vertical"></div>
-
-                <!-- Customer Details -->
-                <div class="customer-details">
-                  <h3>Customer Info</h3>
-                  <p><strong>Name:</strong> <span class="customer-name">Fernando</span></p>
-                  <p><strong>Location:</strong> Kandy, Sri Lanka</p>
-                  <p><strong>Contact:</strong> +94 71 123 4567</p>
-                </div>
-              </div>
-              
-              <hr class="divider"> 
-              <div class="action-buttons">
-                <button class="btn btn-secondary update-status-btn" data-order="fm12347">
-                  <i class="fas fa-edit"></i> Update
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>No orders found.</p>
+      <?php endif; ?>
     </div>
   </div>
 
-  <!-- Update Status Modal -->
   <div class="modal" id="status-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -133,23 +115,23 @@
       </div>
       <div class="status-options">
         <label class="status-option">
-          <input type="radio" name="order-status" value="placed">
+          <input type="radio" name="order-status" value="order_placed">
           <span>Order Placed</span>
         </label>
         <label class="status-option">
-          <input type="radio" name="order-status" value="confirmed">
+          <input type="radio" name="order-status" value="order_confirmed">
           <span>Order Confirmed</span>
         </label>
         <label class="status-option">
-          <input type="radio" name="order-status" value="prepared">
-          <span>Order Prepared</span>
+          <input type="radio" name="order-status" value="order_cancelled">
+          <span>Order Cancelled</span>
         </label>
         <label class="status-option">
-          <input type="radio" name="order-status" value="ready">
+          <input type="radio" name="order-status" value="ready_to_pickup">
           <span>Ready For Pickup</span>
         </label>
         <label class="status-option">
-          <input type="radio" name="order-status" value="picked">
+          <input type="radio" name="order-status" value="order_picked">
           <span>Picked Up</span>
         </label>
       </div>
@@ -171,50 +153,107 @@ document.addEventListener('DOMContentLoaded', function() {
   const cancelUpdateBtn = document.getElementById('cancel-update');
   const saveStatusBtn = document.getElementById('save-status');
   const updateStatusButtons = document.querySelectorAll('.update-status-btn');
+  const statusOptions = document.querySelectorAll('.status-option');
   
   let currentOrderCard = null;
+  let currentOrderId = null;
+  let currentStatus = null;
 
-  // Search functionality
+  // Define allowed status transitions
+  const allowedTransitions = {
+    'order_placed': ['order_confirmed', 'order_cancelled'],
+    'order_confirmed': ['ready_to_pickup'],
+    'ready_to_pickup': ['order_picked'],
+    'order_picked': [], // No further changes
+    'order_cancelled': [] // No further changes
+  };
+
+  // Status display texts
+  const statusTexts = {
+    'order_placed': 'Order Placed',
+    'order_confirmed': 'Order Confirmed',
+    'order_prepared': 'Order Prepared',
+    'ready_to_pickup': 'Ready For Pickup',
+    'order_picked': 'Picked Up',
+    'order_cancelled': 'Cancelled'
+  };
+
+  // Status CSS classes
+  const statusClasses = {
+    'order_placed': 'status-placed',
+    'order_confirmed': 'status-confirmed',
+    'order_prepared': 'status-prepared',
+    'ready_to_pickup': 'status-ready',
+    'order_picked': 'status-picked',
+    'order_cancelled': 'status-cancelled'
+  };
+
   searchInput.addEventListener('input', function() {
     const searchTerm = this.value.toLowerCase();
     orderCards.forEach(card => {
       const orderId = card.querySelector('.order-id').textContent.toLowerCase();
       const productName = card.querySelector('.product-details h3').textContent.toLowerCase();
-      
-      // Check if customer name element exists
-      const customerNameElement = card.querySelector('.customer-name');
-      const customerName = customerNameElement ? customerNameElement.textContent.toLowerCase() : '';
+      const customerName = card.querySelector('.customer-details p').textContent.toLowerCase();
       
       const shouldShow = orderId.includes(searchTerm) || productName.includes(searchTerm) || customerName.includes(searchTerm);
       card.style.display = shouldShow ? 'block' : 'none';
     });
   });
 
-  // Filter functionality
   const filterSelect = document.querySelector('.filter-select');
   filterSelect.addEventListener('change', function() {
     const filterValue = this.value;
     orderCards.forEach(card => {
-      const status = card.querySelector('.order-status').textContent.toLowerCase().replace(/\s+/g, '');
-      const shouldShow = filterValue === 'all' || status.includes(filterValue);
+      const statusElement = card.querySelector('.order-status');
+      const statusClass = Array.from(statusElement.classList).find(cls => cls.startsWith('status-'));
+      const shouldShow = filterValue === 'all' || statusClass.includes(filterValue.replace('_', '-'));
       card.style.display = shouldShow ? 'block' : 'none';
     });
   });
 
-  // Modal functionality
+  // Function to update available status options based on current status
+  function updateStatusOptions(currentStatus) {
+    const allowedNextStatuses = allowedTransitions[currentStatus] || [];
+    
+    statusOptions.forEach(option => {
+      const statusValue = option.querySelector('input').value;
+      const isAllowed = allowedNextStatuses.includes(statusValue);
+      
+      // Enable/disable based on allowed transitions
+      option.querySelector('input').disabled = !isAllowed;
+      
+      // Visual indication for disabled options
+      if (!isAllowed) {
+        option.style.opacity = '0.5';
+        option.style.cursor = 'not-allowed';
+      } else {
+        option.style.opacity = '1';
+        option.style.cursor = 'pointer';
+      }
+    });
+  }
+
   updateStatusButtons.forEach(button => {
     button.addEventListener('click', function() {
       currentOrderCard = this.closest('.order-card');
+      currentOrderId = this.dataset.order;
+      currentStatus = this.dataset.status;
       
-      // Pre-select current status in modal
-      const currentStatus = currentOrderCard.querySelector('.order-status').textContent.trim().toLowerCase().replace(/\s+/g, '');
+      // Update available status options based on current status
+      updateStatusOptions(currentStatus);
+      
+      // Set current status as checked and disable it (can't stay in same status)
       const radioButtons = document.querySelectorAll('input[name="order-status"]');
-      
       radioButtons.forEach(radio => {
-        // Normalize the value for comparison
-        const radioValue = radio.value.toLowerCase().replace(/\s+/g, '');
-        if (radioValue === currentStatus) {
+        if (radio.value === currentStatus) {
           radio.checked = true;
+          radio.disabled = true;
+          // Find the parent label and style it
+          const parentLabel = radio.closest('.status-option');
+          parentLabel.style.opacity = '0.5';
+          parentLabel.style.cursor = 'not-allowed';
+        } else {
+          radio.checked = false;
         }
       });
 
@@ -222,51 +261,89 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Close modal events
   closeModalBtn.addEventListener('click', function() {
     statusModal.style.display = 'none';
+    // Reset all options for next use
+    resetStatusOptions();
   });
 
   cancelUpdateBtn.addEventListener('click', function() {
     statusModal.style.display = 'none';
+    // Reset all options for next use
+    resetStatusOptions();
   });
 
-  // Save status event - FIXED
+  // Function to reset all status options to default state
+  function resetStatusOptions() {
+    statusOptions.forEach(option => {
+      const radio = option.querySelector('input');
+      radio.disabled = false;
+      option.style.opacity = '1';
+      option.style.cursor = 'pointer';
+    });
+  }
+
   saveStatusBtn.addEventListener('click', function() {
     const selectedRadio = document.querySelector('input[name="order-status"]:checked');
     
-    if (selectedRadio && currentOrderCard) {
+    if (selectedRadio && currentOrderCard && currentOrderId) {
       const selectedStatus = selectedRadio.value;
-      const statusElement = currentOrderCard.querySelector('.order-status');
       
-      // Update status text
-      let statusText = '';
-      switch(selectedStatus) {
-        case 'placed': statusText = 'Placed'; break;
-        case 'confirmed': statusText = 'Confirmed'; break;
-        case 'prepared': statusText = 'Prepared'; break;
-        case 'ready': statusText = 'Ready For Pickup'; break;
-        case 'picked': statusText = 'Picked Up'; break;
+      // Validate if the transition is allowed
+      const allowedNextStatuses = allowedTransitions[currentStatus] || [];
+      if (!allowedNextStatuses.includes(selectedStatus) && selectedStatus !== currentStatus) {
+        alert(`Invalid status transition! From "${statusTexts[currentStatus]}" you can only transition to: ${allowedNextStatuses.map(s => statusTexts[s]).join(' or ')}`);
+        return;
       }
-      statusElement.textContent = statusText;
 
-      // Update status class - remove all status classes first
-      statusElement.classList.remove('status-placed', 'status-confirmed', 'status-prepared', 'status-ready', 'status-picked', 'status-cancelled');
-      
-      // Add the correct status class
-      statusElement.classList.add(`status-${selectedStatus}`);
+      // Update database via AJAX
+      fetch('<?= URLROOT ?>/marketplace/updateOrderStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          order_id: currentOrderId,
+          status: selectedStatus
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Update the UI
+          const statusElement = currentOrderCard.querySelector('.order-status');
+          statusElement.textContent = statusTexts[selectedStatus];
+          statusElement.className = 'order-status ' + statusClasses[selectedStatus];
+          
+          // Update the button data-status attribute
+          const updateButton = currentOrderCard.querySelector('.update-status-btn');
+          updateButton.dataset.status = selectedStatus;
+          
+          // Show success message
+          alert('Order status updated successfully!');
+        } else {
+          alert('Error updating order status: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating order status. Please try again.');
+      });
     }
 
     statusModal.style.display = 'none';
+    resetStatusOptions();
   });
 
-  // Close modal when clicking outside
   window.addEventListener('click', function(e) {
     if (e.target === statusModal) {
       statusModal.style.display = 'none';
+      resetStatusOptions();
     }
   });
 });
+
+
 </script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

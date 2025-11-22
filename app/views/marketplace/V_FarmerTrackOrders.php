@@ -13,9 +13,11 @@
       </div>
       <select class="filter-select">
         <option value="all">All Statuses</option>
-        <option value="ready">Ready for Pickup</option>
-        <option value="picked">Picked Up</option>
-        <option value="cancelled">Cancelled</option>
+        <option value="order_placed">Order Placed</option>
+        <option value="order_confirmed">Confirmed</option>
+        <option value="ready_to_pickup">Ready for Pickup</option>
+        <option value="order_picked">Picked Up</option>
+        <option value="order_cancelled">Cancelled</option>
       </select>
     </div>
     
@@ -25,9 +27,11 @@
           $orderId = strtolower($order->order_id);
           $statusClass = '';
           switch(strtolower($order->order_status)) {
-              case 'ready': $statusClass = 'status-ready'; break;
-              case 'picked': $statusClass = 'status-picked'; break;
-              case 'cancelled': $statusClass = 'status-cancelled'; break;
+              case 'order_placed': $statusClass = 'status-placed'; break;
+              case 'order_confirmed': $statusClass = 'status-confirmed'; break;
+              case 'ready_to_pickup': $statusClass = 'status-ready'; break;
+              case 'order_picked': $statusClass = 'status-picked'; break;
+              case 'order_cancelled': $statusClass = 'status-cancelled'; break;
           }
         ?>
       <div class="order-card">
