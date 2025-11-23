@@ -341,7 +341,17 @@ public function trackOrdersFarmer() {
     }
 
     $orders = $this->marketplaceModel->getOrdersByBuyer($buyer_nic);
-    $this->view('marketplace/V_FarmerTrackOrders', ['orders' => $orders]);
+    // Create history array indexed by order_id
+    $history = [];
+    foreach ($orders as $order) {
+        $history[$order->order_id] = $this->marketplaceModel->getOrderHistory($order->order_id);
+    }
+
+    // Pass to view
+    $this->view('marketplace/V_FarmerTrackOrders', [
+        'orders' => $orders,
+        'history' => $history
+    ]);
 }
 
 
@@ -471,7 +481,9 @@ public function trackOrdersFarmer() {
     } 
 
        public function adminViewOrders() {
-        $this->view('marketplace/V_AdminViewOrders');
+
+        $order =$this->marketplaceModel->getAllOrders();
+        $this->view('marketplace/V_AdminViewOrders', ['orders' => $order]);
     } 
 }
 ?>

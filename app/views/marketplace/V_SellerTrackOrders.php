@@ -91,9 +91,10 @@
               <div class="order-content"> 
                 <div class="product-info">
                   <div class="product-details">
-                    <h3><?= htmlspecialchars($order->item_name) ?></h3>
-                    <p>Quantity: <?= htmlspecialchars($order->quantity) ?></p>
+                    <h3><?= htmlspecialchars(ucfirst(strtolower($order->item_name))) ?></h3>
+                    <p><strong>Quantity:</strong> <?= htmlspecialchars($order->quantity) ?></p>
                     <div class="price">LKR <?= number_format($order->total_price, 2) ?></div>
+                    <p><strong>Payment Method:</strong> <?= htmlspecialchars(ucfirst(strtolower(str_replace('_', ' ', $order->payment_method)))) ?></p>
                   </div>
                   <div class="divider-vertical"></div>
 

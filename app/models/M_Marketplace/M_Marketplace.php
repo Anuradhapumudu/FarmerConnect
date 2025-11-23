@@ -183,10 +183,34 @@ public function getAllProducts() {
     return $this->db->resultSet();
 }
 
+//get all orders
+public function getAllOrders() {
+    $this->db->query("
+        SELECT o.*,
+            p.item_id,
+               p.item_name, 
+               p.image_url,
+               s.first_name AS seller_first,
+               s.last_name AS seller_last,
+               s.phone_no AS seller_telNo,
+               s.address AS seller_address,
+               s.company_name AS seller_company,
+               f.full_name AS farmer_full,
+               f.phone_no  AS farmer_telNo
+        FROM orders o
+        JOIN products p ON o.item_id = p.item_id
+        JOIN sellers s ON o.seller_id = s.seller_id
+        JOIN farmers f ON o.buyer_id = f.nic
+        ORDER BY o.order_create_date DESC
+    ");
+
+    return $this->db->resultSet();
+}
+
 // In M_Marketplace.php
 public function getOrdersByBuyer($buyer_id) {
     $this->db->query("
-        SELECT o.*, 
+        SELECT o.*,
                p.item_name, 
                p.image_url,
                s.first_name AS seller_first,
@@ -205,14 +229,23 @@ public function getOrdersByBuyer($buyer_id) {
     return $this->db->resultSet();
 }
 
+public function getOrderHistory($order_id) {
+    $this->db->query("
+        SELECT *
+        FROM order_status_history
+        WHERE order_id = :order_id
+        ORDER BY changed_at ASC
+    ");
+
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->resultSet();
+}
+
+
 public function getOrdersBySeller($seller_id) {
     $this->db->query("
         SELECT 
-            o.order_id,
-            o.order_status,
-            o.order_create_date,
-            o.quantity,
-            o.total_price,
+            o.*,
             p.item_name,
             p.image_url,
             f.full_name AS buyer_full,

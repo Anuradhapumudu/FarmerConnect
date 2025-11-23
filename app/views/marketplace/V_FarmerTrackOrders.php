@@ -89,9 +89,10 @@
             <div class="order-content"> 
               <div class="product-info">
                 <div class="product-details">
-                  <h3><?= htmlspecialchars($order->item_name) ?></h3>
-                  <p>Quantity: <?= htmlspecialchars($order->quantity) ?></p>
+                  <h3><?= htmlspecialchars(ucfirst(strtolower($order->item_name))) ?></h3>
+                  <p><strong>Quantity:</strong> <?= htmlspecialchars($order->quantity) ?></p>
                   <div class="price">LKR <?= number_format($order->total_price, 2) ?></div>
+                  <p><strong>Payment Method:</strong> <?= htmlspecialchars(ucfirst(strtolower(str_replace('_', ' ', $order->payment_method)))) ?></p>
                 </div>
                 <div class="divider-vertical"></div>
                 <div class="seller-details">
@@ -105,7 +106,7 @@
               <hr class="divider"> 
               <div class="action-buttons">
                 <button class="btn btn-primary" onclick="toggleOrderDetails('<?= $orderId ?>')">
-                  <i class="fas fa-eye"></i> View Details
+                  <i class="fas fa-eye"></i> View Tracking Details
                 </button>
               </div>
             </div>
@@ -115,7 +116,44 @@
         <div class="order-details-container" id="details-<?= $orderId ?>">
           <!-- You can also fetch real tracking info here if stored -->
           <div class="tracking-content">
-            <p>Order tracking details will appear here.</p>
+
+<?php
+$history = $data['history'][$order->order_id] ?? [];
+$currentStatus = strtolower($order->order_status);
+?>
+
+<div class="tracking-timeline">
+  <h3 class="timeline-title">Order Progress</h3>
+  <div class="timeline">
+
+    <!--Always show order placed -->
+    <div class="timeline-step completed">
+      <div class="timeline-content">
+        <div class="timeline-date"><?= date('M d, Y - h:i A', strtotime($order->order_create_date)) ?></div>
+        <div class="timeline-text">Order Placed</div>
+      </div>
+    </div>
+
+    <!-- Loop through order_history -->
+    <?php foreach ($history as $log):
+      $status = strtolower($log->new_status);
+
+      $stepClass = "completed";
+      if ($status === $currentStatus) {
+        $stepClass = "active";
+      }
+    ?>
+      <div class="timeline-step <?= $stepClass ?>">
+        <div class="timeline-content">
+          <div class="timeline-date"><?= date('M d, Y - h:i A', strtotime($log->changed_at)) ?></div>
+          <div class="timeline-text"><?= ucwords(str_replace('_', ' ', $log->new_status)) ?></div>
+        </div>
+      </div>
+    <?php endforeach; ?>
+
+  </div>
+</div>
+
           </div>
         </div>
       </div>

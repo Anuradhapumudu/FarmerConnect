@@ -97,7 +97,7 @@
               <div class="order-content-wrapper">
                 <div class="order-header">
                   <div>
-                    <div class="order-id"><?php echo htmlspecialchars($product->item_name); ?></div>
+                    <div class="order-id"><?= htmlspecialchars(ucfirst(strtolower($product->item_name))) ?></div>
                     <div class="order-id"><?php echo htmlspecialchars($product->item_id); ?></div>
                   </div>
                   <div class="order-status <?php echo strtolower($product->status); ?>">
