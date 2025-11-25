@@ -190,6 +190,7 @@ public function getAllOrders() {
             p.item_id,
                p.item_name, 
                p.image_url,
+               p.category,
                s.first_name AS seller_first,
                s.last_name AS seller_last,
                s.phone_no AS seller_telNo,

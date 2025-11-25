@@ -12,25 +12,22 @@
 
     <!-- Orders Management Page -->
     <div id="orders-page" class="admin-content active">
-      <div class="filter-container">
+
+    <div class="filter-container">
         <div style="position: relative; flex: 1;">
-          <input type="text" class="search-input" placeholder="Search orders by ID, customer, or product...">
+          <input type="text" class="search-input" placeholder="Search orders by ID, Seller ID, Customer NIC">
         </div>
+
         <select class="filter-select">
           <option value="all">All Statuses</option>
-          <option value="pending">Pending</option>
-          <option value="processing">Processing</option>
-          <option value="shipped">Shipped</option>
-          <option value="delivered">Delivered</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-        <select class="filter-select">
-          <option value="all">All Sellers</option>
-          <option value="seller1">GreenFarm Supplies</option>
-          <option value="seller2">EcoFarm Solutions</option>
-          <option value="seller3">FarmTech Equipment</option>
+          <option value="order_placed">Order Placed</option>
+          <option value="order_confirmed">Confirmed</option>
+          <option value="ready_to_pickup">Ready for Pickup</option>
+          <option value="order_picked">Picked Up</option>
+          <option value="order_cancelled">Cancelled</option>
         </select>
       </div>
+
       
 
       
@@ -56,7 +53,12 @@
             <tbody>
 <?php if (!empty($data['orders'])): ?>
   <?php foreach ($data['orders'] as $order): ?>
-    <tr>
+    <tr
+      data-order="<?= htmlspecialchars($order->order_id) ?>"
+      data-seller="<?= htmlspecialchars($order->seller_id ?? $order->seller_code ?? '') ?>"
+      data-customer="<?= htmlspecialchars($order->farmer_id ?? $order->buyer_id ?? '') ?>"
+      data-status="<?= htmlspecialchars(strtolower($order->order_status ?? '')) ?>"
+    >
       <td>#<?= htmlspecialchars($order->order_id) ?></td>
       <td><?= htmlspecialchars($order->farmer_full ?? '') ?></td>
       <td>
@@ -82,17 +84,20 @@
         <button
           class="action-btn view-btn"
           data-order="<?= htmlspecialchars($order->order_id) ?>"
-         data-image="<?= htmlspecialchars(URLROOT . '/uploads/' . ($order->image_url ?? '')) ?>"
+          data-image="<?= htmlspecialchars(URLROOT . '/uploads/' . ($order->image_url ?? '')) ?>"
           data-customer="<?= htmlspecialchars($order->farmer_full ?? '') ?>"
-          data-product="<?= htmlspecialchars($order->item_name ?? '') ?>"
+          data-product="<?= htmlspecialchars(ucfirst(strtolower($order->item_name ?? ''))) ?>"
+          data-category="<?= htmlspecialchars(ucfirst(strtolower($order->category ?? ''))) ?>"
           data-seller="<?= htmlspecialchars(($order->seller_first ?? '') . ' ' . ($order->seller_last ?? '')) ?>"
           data-date="<?= htmlspecialchars(isset($order->order_create_date) ? date('M j, Y', strtotime($order->order_create_date)) : '') ?>"
+          data-quantity="<?= htmlspecialchars($order->quantity ?? '') ?>"
           data-amount="<?= htmlspecialchars(number_format($order->total_price ?? 0, 2)) ?>"
           data-status="<?= htmlspecialchars(ucwords(str_replace('_', ' ', $order->order_status ?? 'Unknown'))) ?>"
           data-payment-method="<?= htmlspecialchars(ucwords(str_replace('_', ' ', $order->payment_method ?? ''))) ?>"
-          data-payment-status="<?= htmlspecialchars($order->payment_status ?? '') ?>"
           data-phone="<?= htmlspecialchars($order->farmer_telNo ?? '') ?>"
           data-address="<?= htmlspecialchars($order->farmer_address ?? '') ?>"
+          data-seller-phone="<?= htmlspecialchars($order->seller_telNo ?? '') ?>"
+          data-seller-address="<?= htmlspecialchars($order->seller_address ?? '') ?>"
         >
           <i class="fas fa-eye"></i> View
         </button>
@@ -139,6 +144,14 @@
               <span class="detail-value" id="modal-order-status"></span>
             </div>
             <div class="detail-item">
+              <span class="detail-label">Quantity:</span>
+              <span class="detail-value" id="modal-order-quantity"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Category:</span>
+              <span class="detail-value" id="modal-order-category"></span>
+            </div>
+            <div class="detail-item">
               <span class="detail-label">Total Amount:</span>
               <span class="detail-value" id="modal-order-amount"></span>
             </div>
@@ -146,12 +159,24 @@
               <span class="detail-label">Payment Method:</span>
               <span class="detail-value" id="modal-payment-method"></span>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Payment Status:</span>
-              <span class="detail-value" id="modal-payment-status"></span>
-            </div>
           </div>
           
+          <div class="order-section">
+            <h3 class="section-title">Seller Information</h3>
+            <div class="detail-item">
+              <span class="detail-label">Name:</span>
+              <span class="detail-value" id="modal-seller-name"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Phone:</span>
+              <span class="detail-value" id="modal-seller-phone"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Address:</span>
+              <span class="detail-value" id="modal-seller-address"></span>
+            </div>
+          </div>
+
           <div class="order-section">
             <h3 class="section-title">Customer Information</h3>
             <div class="detail-item">
@@ -167,21 +192,10 @@
               <span class="detail-value" id="modal-customer-address"></span>
             </div>
           </div>
+
+
         </div>
         
-        <div class="order-section">
-          <h3 class="section-title">Product Details</h3>
-          <div class="product-detail">
-            <div class="product-image">
-              <img id="modal-product-image" src="https://via.placeholder.com/80" alt="">
-            </div>
-            <div class="product-info">
-              <div class="product-name" id="modal-product-name"></div>
-              <div class="product-meta" id="modal-product-meta"></div>
-            </div>
-            <div class="product-price" id="modal-product-price"></div>
-          </div>
-        </div>
       </div>
       
       <div class="modal-actions">
@@ -227,27 +241,20 @@
         document.getElementById('modal-order-id-2').textContent = '#' + data.order;
         document.getElementById('modal-order-date').textContent = data.date || '';
         document.getElementById('modal-order-status').textContent = data.status || '';
+        document.getElementById('modal-order-quantity').textContent = data.quantity || '';
+        document.getElementById('modal-order-category').textContent = data.category || '';
         document.getElementById('modal-order-amount').textContent = data.amount ? ('LKR ' + data.amount) : '';
         document.getElementById('modal-payment-method').textContent = data['paymentMethod'] || '';
-        document.getElementById('modal-payment-status').textContent = data['paymentStatus'] || '';
 
         document.getElementById('modal-customer-name').textContent = data.customer || '';
         document.getElementById('modal-customer-phone').textContent = data.phone || '';
         document.getElementById('modal-customer-address').textContent = data.address || '';
 
-        document.getElementById('modal-product-name').textContent = data.product || '';
-        document.getElementById('modal-product-meta').textContent = 'Seller: ' + (data.seller || '');
-        document.getElementById('modal-product-price').textContent = data.amount ? ('LKR ' + data.amount) : '';
+        document.getElementById('modal-seller-name').textContent = data.seller || '';
+        document.getElementById('modal-seller-phone').textContent = data.sellerPhone || '';
+        document.getElementById('modal-seller-address').textContent = data.sellerAddress || '';
 
-        // set modal image (use placeholder if not provided)
-        const modalImg = document.getElementById('modal-product-image');
-        if (data.image && data.image.trim() !== '') {
-          modalImg.src = data.image;
-          modalImg.alt = data.product || 'Product image';
-        } else {
-          modalImg.src = "<?= htmlspecialchars(URLROOT . '/images/placeholder.png') ?>";
-          modalImg.alt = 'No image';
-        }
+        // show modal
         orderModal.style.display = 'flex';
       }
 
@@ -259,14 +266,17 @@
             order: ds.order,
             customer: ds.customer,
             product: ds.product,
+            category: ds.category,
             seller: ds.seller,
             date: ds.date,
+            quantity: ds.quantity,
             amount: ds.amount,
             status: ds.status,
             paymentMethod: ds.paymentMethod,
-            paymentStatus: ds.paymentStatus,
             phone: ds.phone,
-            address: ds.address
+            address: ds.address,
+            sellerPhone: ds.sellerPhone,
+            sellerAddress: ds.sellerAddress
           });
         });
       });
@@ -285,37 +295,56 @@
         }
       });
       
-      // Search functionality for orders
+      // Search + filter functionality for orders
       const orderSearchInput = document.querySelector('#orders-page .search-input');
-      const orderRows = document.querySelectorAll('#orders-page tbody tr');
-      
-      if (orderSearchInput) {
-        orderSearchInput.addEventListener('input', function() {
-          const searchTerm = this.value.toLowerCase();
-          
-          orderRows.forEach(row => {
-            const orderId = row.querySelector('td:first-child').textContent.toLowerCase();
-            const customer = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-            const product = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            
-            if (orderId.includes(searchTerm) || customer.includes(searchTerm) || product.includes(searchTerm)) {
-              row.style.display = '';
-            } else {
-              row.style.display = 'none';
-            }
-          });
+      const orderRows = Array.from(document.querySelectorAll('#orders-page tbody tr'));
+      const statusFilterSelect = document.querySelector('#orders-page .filter-select');
+
+      function getRowField(row, key, fallbackSelector) {
+        const ds = row.dataset || {};
+        const v = (ds[key] || '');
+        if (v) return v.toString().toLowerCase();
+        if (fallbackSelector) {
+          const el = row.querySelector(fallbackSelector);
+          return el ? el.textContent.trim().toLowerCase() : '';
+        }
+        return '';
+      }
+
+      function applyOrderFilters() {
+        const searchTerm = (orderSearchInput && orderSearchInput.value || '').trim().toLowerCase();
+        const statusFilter = (statusFilterSelect && statusFilterSelect.value) ? statusFilterSelect.value.toLowerCase() : 'all';
+
+        orderRows.forEach(row => {
+          const orderId = getRowField(row, 'order', 'td:first-child');
+          const sellerId = getRowField(row, 'seller', 'td:nth-child(4)');
+          const customerId = getRowField(row, 'customer', 'td:nth-child(2)');
+          const status = getRowField(row, 'status', 'td:nth-child(7)');
+
+          const matchesSearch = !searchTerm ||
+            orderId.includes(searchTerm) ||
+            sellerId.includes(searchTerm) ||
+            customerId.includes(searchTerm) ||
+            status.includes(searchTerm);
+
+          const matchesStatus = !statusFilter || statusFilter === 'all' ||
+            status === statusFilter ||
+            status.includes(statusFilter) ||
+            statusFilter.includes(status);
+
+          row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
         });
       }
-      
-      // Filter functionality
-      const filterSelects = document.querySelectorAll('.filter-select');
-      
-      filterSelects.forEach(select => {
-        select.addEventListener('change', function() {
-          // This would be implemented based on specific filtering needs
-          console.log('Filter changed:', this.value);
-        });
-      });
+
+      if (orderSearchInput) {
+        orderSearchInput.addEventListener('input', applyOrderFilters);
+      }
+      if (statusFilterSelect) {
+        statusFilterSelect.addEventListener('change', applyOrderFilters);
+      }
+
+      // Run once on load to apply default filter
+      applyOrderFilters();
     });
   </script>
 
