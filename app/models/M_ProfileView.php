@@ -1,0 +1,41 @@
+<?php
+class M_ProfileView {
+    private $db;
+
+    public function __construct() {
+        $this->db = new Database();
+    }
+
+    public function getSellerProfile($seller_id) {
+        $this->db->query("SELECT * FROM sellers WHERE seller_id = :seller_id");
+        $this->db->bind(':seller_id', $seller_id);
+        return $this->db->single();
+    }
+
+  public function updateSellerProfile($data){
+    $this->db->query("
+        UPDATE sellers SET
+            first_name = :first_name,
+            last_name = :last_name,
+            company_name = :company_name,
+            address = :address,
+            phone_no = :phone_no,
+            nic = :nic,
+            image_url = :image_url
+        WHERE seller_id = :seller_id
+    ");
+
+    $this->db->bind(':first_name', $data['first_name']);
+    $this->db->bind(':last_name', $data['last_name']);
+    $this->db->bind(':company_name', $data['company_name']);
+    $this->db->bind(':address', $data['address']);
+    $this->db->bind(':phone_no', $data['phone_no']);
+    $this->db->bind(':nic', $data['nic']);
+    $this->db->bind(':image_url', $data['image_url']);
+    $this->db->bind(':seller_id', $data['seller_id']);
+
+    return $this->db->execute(); 
+}
+
+}
+?>

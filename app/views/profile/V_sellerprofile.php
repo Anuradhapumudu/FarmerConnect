@@ -1,97 +1,144 @@
 <?php require_once APPROOT . '/views/inc/sellerheader.php'; ?>
 
+<?php 
+$old = $_SESSION['old_input'] ?? [];
+$errors = $_SESSION['profile_errors'] ?? [];
+unset($_SESSION['old_input'], $_SESSION['profile_errors']);
+?>
+
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/FarmerProfile.css?v=<?= time(); ?>">
 
-
-
 <main>
-
     <div class="logout-container">
         <a href="<?php echo URLROOT; ?>/users/logout" class="btn logout-btn" title="Log out">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
     </div>
 
-    <div class="profile-pic">
-        <div class="pic-wrapper">
-            <img src="<?php echo !empty($data['farmer']->profile_image) 
-                ? URLROOT . $data['farmer']->profile_image 
-                : 'https://cdn-icons-png.flaticon.com/512/847/847969.png'; ?>" 
-                alt="Profile Photo" id="profileImage">
+    <form id="sellerForm" method="POST" action="<?= URLROOT ?>/ProfileView/updateSeller" enctype="multipart/form-data">
+        <div class="profile-pic">
+            <div class="pic-wrapper">
+        <img src="<?php 
+            // Get the seller's image URL from the database
+            $img = $data['seller']->image_url ?? '';
 
-            <div class="buttons">
-                <input type="file" id="uploadInput" accept="image/*" style="display:none;">
-                <button type="button" class="btn upload-btn" onclick="document.getElementById('uploadInput').click();">
-                    Upload Photo
-                </button>
-                <button type="button" class="btn remove-btn" onclick="removeProfilePic()">
-                    Remove Photo
-                </button>
+            // use default profile image
+            if (empty($img)) {
+                echo 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+            } 
+            // The image URL is an external link (starts with http or https) ,,use as-is
+            elseif (strpos($img, 'http') === 0) {
+                echo $img; 
+            } 
+            // The image URL is a local file path,, prepend URLROOT to generate full URL
+            else {
+                echo URLROOT . '/' . $img; 
+            }
+        ?>" 
+
+        alt="Profile Photo" id="profileImage">
+
+
+                <input type="hidden" name="existing_image" value="<?= $data['seller']->image_url ?? '' ?>">
+                
+                <div class="buttons">
+                    <input type="file" id="uploadInput" name="profile_image" accept="image/*" style="display:none;">
+                    <button type="button" class="btn upload-btn" onclick="document.getElementById('uploadInput').click();">
+                        Upload Photo
+                    </button>
+                    <button type="button" class="btn remove-btn" onclick="removeProfilePic()">
+                        Remove Photo
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-<!-- SELLER DETAILS -->
-<div class="page-title">
-    <h2>Seller Details</h2>
-</div>
-<div class="profile-card">
-    <div class="profile-info">
-        <form id="sellerForm" method="POST" onsubmit="event.preventDefault(); alert('This is dummy data!');">
-            <div class="form-group">
-                <label for="SellerID">Seller ID</label>
-                <input type="text" id="SellerID" name="SellerID" value="SE003" readonly>
+        <div class="page-title">
+            <h2>Seller Details</h2>
+        </div>
+        
+        <div class="profile-card">
+            <div class="profile-info">
+                <input type="hidden" name="seller_id" value="<?= $data['seller']->seller_id ?>">
+
+                <div class="form-group">
+                    <label>BRN number:</label>
+                    <input type="text" name="brn" value="<?= $data['seller']->brn ?>" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>NIC:</label>
+                    <input type="text" name="nic" value="<?= $data['seller']->nic ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" value="<?= $data['seller']->first_name ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" value="<?= $data['seller']->last_name ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" name="company_name" value="<?= $data['seller']->company_name ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" name="address" value="<?= $data['seller']->address ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Telephone Number</label>
+                    <input type="text" name="phone_no" value="<?= $data['seller']->phone_no ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="<?= $data['seller']->email ?>" readonly>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn save-btn">Save Changes</button>
+                </div>
             </div>
+        </div>
+    </form>
 
-            <div class="form-group">
-                <label for="SellerID">BRN number:</label>
-                <input type="text" id="SellerID" name="SellerID" value="65793" readonly>
-            </div>
+    <script>
+        document.getElementById('uploadInput').addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profileImage').src = e.target.result;
+                }
+                reader.readAsDataURL(e.target.files[0]);
 
-            <div class="form-group">
-                <label for="Name">Name</label>
-                <input type="text" id="Name" name="Name" value="Kamal Perera">
-            </div>
+                const removeFlag = document.getElementById('removed_flag');
+                if (removeFlag) removeFlag.remove();
+            }
+        });
 
-            <div class="form-group">
-                <label for="ShopName">Shop Name</label>
-                <input type="text" id="ShopName" name="ShopName" value="Green Harvest Agro Supplies">
-            </div>
+        function removeProfilePic() {
+            document.getElementById('profileImage').src = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+            document.getElementById('uploadInput').value = '';
 
-            <div class="form-group">
-                <label for="Address">Address</label>
-                <input type="text" id="Address" name="Address" value="No. 45, Main Street, Kurunegala">
-            </div>
-
-            <div class="form-group">
-                <label for="TelNo">Tel. No</label>
-                <input type="text" id="TelNo" name="TelNo" value="+94771234567">
-            </div>
-
-            <div class="form-group">
-                <label for="Email">Email</label>
-                <input type="email" id="Email" name="Email" value="kamalperera@gmail.com">
-            </div>
-
-            
-
-            <div class="form-group">
-                <label for="RegistrationDate">Registration Date</label>
-                <input type="date" id="RegistrationDate" name="RegistrationDate" value="2022-08-15">
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn save-btn">Save Changes</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-
-
-
-
+            let removeFlag = document.getElementById('removed_flag');
+            if (!removeFlag) {
+                removeFlag = document.createElement('input');
+                removeFlag.type = 'hidden';
+                removeFlag.name = 'removed_flag';
+                removeFlag.id = 'removed_flag';
+                removeFlag.value = '1';
+                document.getElementById('sellerForm').appendChild(removeFlag);
+            } else {
+                removeFlag.value = '1';
+            }
+        }
+    </script>
 </main>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

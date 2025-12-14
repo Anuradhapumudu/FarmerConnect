@@ -395,7 +395,7 @@ public function editProduct($id) {
         'errors' => []
     ];
 
-    // 2️⃣ Handle POST
+    //  Handle POST
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Get POST values
         $data['product']['item_name'] = trim($_POST['item_name'] ?? '');
