@@ -59,7 +59,10 @@ unset($_SESSION['old_input'], $_SESSION['profile_errors']);
         
         <div class="profile-card">
             <div class="profile-info">
-                <input type="hidden" name="seller_id" value="<?= $data['seller']->seller_id ?>">
+                <div class ="form-group">
+                    <label for="SellerID">Seller ID</label>
+                    <input type="text" id="SellerID" name="SellerID" value="<?= $data['seller']->seller_id ?>" readonly >
+                </div>
 
                 <div class="form-group">
                     <label>BRN number:</label>

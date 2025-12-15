@@ -141,10 +141,83 @@ public function updateSeller() {
 }
 
 
+public function adminProfile() {
+    $admin_id = $_SESSION['user_id'];
 
-    public function adminProfile() {
-        $this->view('profile/V_adminprofile');
+    $adminProfile = $this->profileViewModel->getAdminProfile($admin_id);
+    if (!$adminProfile) {
+        die('Admin profile not found');
     }
+
+    $this->view('profile/V_adminprofile', [
+        'admin' => $adminProfile
+    ]);
+}
+
+public function updateAdmin() {
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: ' . URLROOT . '/ProfileView/adminProfile');
+        exit;
+    }
+
+    $admin_id   = $_POST['admin_id'];
+    $first_name = trim($_POST['first_name']);
+    $last_name  = trim($_POST['last_name']);
+    $phone_no   = trim($_POST['phone_no']);
+
+    $errors = [];
+
+    if (!$first_name) $errors[] = 'First name required';
+    if (!$last_name)  $errors[] = 'Last name required';
+    if (!preg_match('/^[0-9]{10}$/', $phone_no)) {
+        $errors[] = 'Phone must be 10 digits';
+    }
+
+    $admin = $this->profileViewModel->getAdminProfile($admin_id);
+    $image_url = $admin->image_url ??
+        'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+
+    if (isset($_POST['removed_flag'])) {
+        $image_url = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+    }
+
+    elseif (!empty($_FILES['profile_image']['name'])) {
+
+        $dir = 'uploads/admins/';
+        if (!file_exists($dir)) mkdir($dir, 0777, true);
+
+        $ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
+        $file = $dir . $admin_id . '_' . time() . '.' . $ext;
+
+        if ($_FILES['profile_image']['size'] > 2 * 1024 * 1024) {
+            $errors[] = 'Image too large';
+        }
+
+        if (empty($errors) &&
+            move_uploaded_file($_FILES['profile_image']['tmp_name'], $file)) {
+            $image_url = $file;
+        }
+    }
+
+    if (!empty($errors)) {
+        $_SESSION['profile_errors'] = $errors;
+        header('Location: ' . URLROOT . '/ProfileView/adminProfile');
+        exit;
+    }
+
+    $this->profileViewModel->updateAdminProfile([
+        'admin_id'   => $admin_id,
+        'first_name' => $first_name,
+        'last_name'  => $last_name,
+        'phone_no'   => $phone_no,
+        'image_url'  => $image_url
+    ]);
+
+    header('Location: ' . URLROOT . '/ProfileView/adminProfile');
+    exit;
+}
+  
 
     public function officerProfile() {
         $this->view('profile/V_officerprofile');

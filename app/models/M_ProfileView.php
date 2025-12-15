@@ -37,5 +37,31 @@ class M_ProfileView {
     return $this->db->execute(); 
 }
 
+public function getAdminProfile($admin_id) {
+    $this->db->query("SELECT * FROM admins WHERE admin_id = :admin_id");
+    $this->db->bind(':admin_id', $admin_id);
+    return $this->db->single();
+}
+
+public function updateAdminProfile($data) {
+    $this->db->query("
+        UPDATE admins SET
+            first_name = :first_name,
+            last_name  = :last_name,
+            phone_no   = :phone_no,
+            image_url  = :image_url
+        WHERE admin_id = :admin_id
+    ");
+
+    $this->db->bind(':first_name', $data['first_name']);
+    $this->db->bind(':last_name',  $data['last_name']);
+    $this->db->bind(':phone_no',   $data['phone_no']);
+    $this->db->bind(':image_url',  $data['image_url']);
+    $this->db->bind(':admin_id',   $data['admin_id']);
+
+    return $this->db->execute();
+}
+
+
 }
 ?>
