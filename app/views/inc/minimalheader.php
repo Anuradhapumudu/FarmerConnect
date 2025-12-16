@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/styles.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/translate.css">
+  <script src="<?php echo URLROOT; ?>/js/movebtn.js" defer></script>
 </head>
 
 <body class="minimal-layout">
@@ -53,3 +54,4 @@
 
   <!-- Mobile menu overlay -->
   <label for="mobile-menu-toggle" class="mobile-overlay"></label>
+  <button id="toTopBtn">↑</button>

@@ -34,9 +34,9 @@ html {
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: 
-  linear-gradient(rgba(248, 249, 250, 0.3), rgba(232, 245, 233, 0.4)),
-  url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+  background:
+    linear-gradient(rgba(248, 249, 250, 0.3), rgba(232, 245, 233, 0.4)),
+    url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -205,7 +205,8 @@ header {
   background-image: url("data:image/svg+xml;utf8,<svg fill='%232e7d32' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 10px center;
-  padding-right: 34px; /* space for caret */
+  padding-right: 34px;
+  /* space for caret */
 }
 
 .language-selector .custom-select:hover {
@@ -258,13 +259,13 @@ header {
   display: none;
 }
 
-#mobile-menu-toggle:checked ~ .mobile-overlay {
+#mobile-menu-toggle:checked~.mobile-overlay {
   opacity: 1;
   pointer-events: all;
   display: block;
 }
 
-#mobile-menu-toggle:checked ~ header .navbar .nav-links {
+#mobile-menu-toggle:checked~header .navbar .nav-links {
   right: 0;
 }
 
@@ -479,7 +480,7 @@ footer {
 
 /* Minimal layout - pages without sidebar */
 body.minimal-layout .container:first-of-type,
-body.minimal-layout > .container,
+body.minimal-layout>.container,
 body.minimal-layout main,
 body.minimal-layout .page-wrapper {
   margin-top: calc(var(--header-height) + 20px);
@@ -574,7 +575,7 @@ body.minimal-layout .page-wrapper {
 
   /* Minimal layout mobile */
   body.minimal-layout .container:first-of-type,
-  body.minimal-layout > .container,
+  body.minimal-layout>.container,
   body.minimal-layout main,
   body.minimal-layout .page-wrapper {
     margin-top: calc(var(--header-height) + 15px);
@@ -615,17 +616,18 @@ body.minimal-layout .page-wrapper {
     justify-content: flex-start;
     display: flex;
   }
-  
+
   /* Make language selector feel like other menu items on mobile */
   .nav-links .language-selector {
     padding: 18px 15px;
     border-bottom: 1px solid var(--card-border);
   }
+
   .nav-links .language-selector .custom-select {
     width: 100%;
     background-position: right 15px center;
   }
-  
+
   .nav-links a {
     display: block;
     padding: 18px 15px;
@@ -637,7 +639,7 @@ body.minimal-layout .page-wrapper {
     transition: all 0.3s ease;
     position: relative;
   }
-  
+
   .nav-links a::before {
     content: '';
     position: absolute;
@@ -649,31 +651,31 @@ body.minimal-layout .page-wrapper {
     transform: scaleY(0);
     transition: transform 0.3s ease;
   }
-  
+
   .nav-links a:hover::before {
     transform: scaleY(1);
   }
-  
+
   .nav-links a:hover {
     background: rgba(46, 125, 50, 0.05);
     padding-left: 20px;
   }
-  
+
   .nav-links a:last-child {
     border-bottom: none;
   }
-  
+
   .mobile-menu-label {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  #mobile-menu-toggle:checked ~ header .navbar .nav-links {
+  #mobile-menu-toggle:checked~header .navbar .nav-links {
     right: 0;
   }
 
-  #mobile-menu-toggle:checked ~ .mobile-overlay {
+  #mobile-menu-toggle:checked~.mobile-overlay {
     opacity: 1;
     pointer-events: all;
     display: block;
@@ -684,7 +686,7 @@ body.minimal-layout .page-wrapper {
   .container {
     padding: 0 15px;
   }
-  
+
   .logo-text {
     font-size: 1.2rem;
   }
@@ -698,19 +700,19 @@ body.minimal-layout .page-wrapper {
     width: 40px;
     height: 40px;
   }
-  
+
   .footer-content {
     grid-template-columns: 1fr;
     gap: 30px;
   }
-  
+
   .content-card {
     padding: 20px;
     margin-top: calc(var(--header-height) + 20px);
   }
 
   body.minimal-layout .container:first-of-type,
-  body.minimal-layout > .container,
+  body.minimal-layout>.container,
   body.minimal-layout main,
   body.minimal-layout .page-wrapper {
     margin-top: calc(var(--header-height) + 10px);
@@ -729,4 +731,40 @@ body.minimal-layout .page-wrapper {
   .main-content .container {
     padding: 20px 15px;
   }
+}
+
+#toTopBtn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  /* Slightly larger for easier clicking */
+  height: 60px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+  font-size: 0;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#toTopBtn:hover {
+  transform: translateY(-5px) scale(1.1);
+  background: transparent;
+}
+
+#toTopBtn::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/4671/4671098.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Add a subtle shadow for better visibility against any background */
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
 }

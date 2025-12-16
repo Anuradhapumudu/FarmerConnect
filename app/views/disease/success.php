@@ -238,4 +238,29 @@
 }
 </style>
 
+<script>
+    // Auto-redirect after 3 seconds
+    let seconds = 3;
+    const redirectUrl = "<?php echo URLROOT; ?>/disease/viewReport/<?php echo $data['report_id']; ?>";
+    
+    // Create and append countdown element
+    const container = document.querySelector('.success-container');
+    const countdownDiv = document.createElement('div');
+    countdownDiv.style.textAlign = 'center';
+    countdownDiv.style.marginTop = '20px';
+    countdownDiv.style.color = 'var(--text-secondary)';
+    countdownDiv.style.fontWeight = '500';
+    countdownDiv.innerHTML = `Redirecting to report details in <span id="countdown">${seconds}</span> seconds...`;
+    container.appendChild(countdownDiv);
+
+    const timer = setInterval(() => {
+        seconds--;
+        document.getElementById('countdown').textContent = seconds;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = redirectUrl;
+        }
+    }, 1000);
+</script>
+
 <?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>

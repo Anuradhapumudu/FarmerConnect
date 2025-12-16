@@ -15,6 +15,7 @@
 
   <!-- Scripts -->
   <script src="<?php echo URLROOT; ?>/js/default.js" defer></script>
+  <script src="<?php echo URLROOT; ?>/js/movebtn.js" defer></script>
 </head>
 <body>
   <!-- Header -->
@@ -43,3 +44,4 @@
       </nav>
     </div>
   </header>
+  <button id="toTopBtn">↑</button>

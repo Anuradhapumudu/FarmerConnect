@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/sidebar.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/translate.css">
+  <script src="<?php echo URLROOT; ?>/js/movebtn.js" defer></script>
 </head>
 
 <body>
@@ -60,3 +61,4 @@
       </nav>
     </div>
   </header>
+  <button id="toTopBtn">↑</button>
