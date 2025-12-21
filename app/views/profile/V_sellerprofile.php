@@ -71,7 +71,7 @@ unset($_SESSION['old_input'], $_SESSION['profile_errors']);
 
                 <div class="form-group">
                     <label>NIC:</label>
-                    <input type="text" name="nic" value="<?= $data['seller']->nic ?>" required>
+                    <input type="text" name="nic" value="<?= $data['seller']->nic ?>" readonly>
                 </div>
 
                 <div class="form-group">

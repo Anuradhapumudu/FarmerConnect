@@ -25,7 +25,7 @@ class ProfileView extends Controller {
                 $this->adminProfile();
                 break;
             case 'officer':
-                $this->officerProfile();
+                $this->officerProfileView();
                 break;
             default:
                 header('Location: ' . URLROOT . '/users/login');
@@ -57,7 +57,6 @@ public function updateSeller() {
     $company_name = trim($_POST['company_name']);
     $address = trim($_POST['address']);
     $phone_no = trim($_POST['phone_no']);
-    $nic = trim($_POST['nic']);
 
     // Basic required field validations
     if (empty($first_name)) $errors[] = 'First name is required';
@@ -65,14 +64,10 @@ public function updateSeller() {
     if (empty($company_name)) $errors[] = 'Company name is required';
     if (empty($address)) $errors[] = 'Address is required';
     if (empty($phone_no)) $errors[] = 'Phone number is required';
-    if (empty($nic)) $errors[] = 'NIC is required';
 
     // phone number and NIC format validation
     if (!empty($phone_no) && !preg_match('/^[0-9]{10}$/', $phone_no)) {
         $errors[] = 'Phone number must be 10 digits';
-    }
-    if (!empty($nic) && !preg_match('/^[0-9]{9}[vVxX]$|^[0-9]{12}$/', $nic)) {
-        $errors[] = 'Invalid NIC format';
     }
 
     $sellerProfile = $this->profileViewModel->getSellerProfile($seller_id);
@@ -128,7 +123,6 @@ public function updateSeller() {
         'company_name' => $company_name,
         'address'      => $address,
         'phone_no'     => $phone_no,
-        'nic'          => $nic,
         'image_url'    => $image_url
     ];
 
@@ -140,6 +134,100 @@ public function updateSeller() {
     }
 }
 
+    public function officerProfileView() {
+        $officer_id = $_SESSION['user_id'];
+        $officerProfile = $this->profileViewModel->getOfficerProfile($officer_id);
+
+        $data = [
+            'officer' => $officerProfile
+        ];
+        $this->view('profile/V_officerprofile', $data);
+    }
+
+public function updateOfficer() {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: ' . URLROOT . '/profile');
+        exit;
+    }
+
+    $errors = [];
+
+    $officer_id = $_POST['officer_id'];
+    $first_name = trim($_POST['first_name']);
+    $last_name = trim($_POST['last_name']);
+    $phone_no = trim($_POST['phone_no']);
+
+    // Basic required field validations
+    if (empty($first_name)) $errors[] = 'First name is required';
+    if (empty($last_name)) $errors[] = 'Last name is required';
+    if (empty($phone_no)) $errors[] = 'Phone number is required';
+
+    // phone number and NIC format validation
+    if (!empty($phone_no) && !preg_match('/^[0-9]{10}$/', $phone_no)) {
+        $errors[] = 'Phone number must be 10 digits';
+    }
+
+    $officerProfile = $this->profileViewModel->getOfficerProfile($officer_id);
+    $image_url = $officerProfile->image_url ?? 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+
+    // Remove profile picture
+    if (isset($_POST['removed_flag']) && $_POST['removed_flag'] == '1') {
+        $image_url = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+    }
+    // Upload new file
+    else if (!empty($_FILES['profile_image']['name'])) {
+        $uploadDir = 'uploads/officers/'; 
+        if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+
+        $ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
+        $image_name = $officer_id . '_' . time() . '.' . $ext;
+        $targetFile = $uploadDir . $image_name;
+
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+        $fileType = mime_content_type($_FILES['profile_image']['tmp_name']);
+        $fileSize = $_FILES['profile_image']['size'];
+
+        // Validate file type
+        if (!in_array($fileType, $allowedTypes)) {
+            $errors[] = 'Invalid file type. Only JPG, PNG, GIF allowed.';
+        }
+
+        // Validate file size (max 2MB)
+        if ($fileSize > 2 * 1024 * 1024) {
+            $errors[] = 'File size must be less than 2MB';
+        }
+
+        if (empty($errors)) {
+            if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFile)) {
+                $image_url = $targetFile; // save relative path in DB
+            } else {
+                $errors[] = 'Error uploading file';
+            }
+        }
+    }
+
+    if (!empty($errors)) {
+        // You can store errors in session or return to the form
+        $_SESSION['profile_errors'] = $errors;
+        header('Location: ' . URLROOT . '/ProfileView/officerProfileView');
+        exit;
+    }
+
+    $data = [
+        'officer_id'    => $officer_id,
+        'first_name'   => $first_name,
+        'last_name'    => $last_name,
+        'phone_no'     => $phone_no,
+        'image_url'    => $image_url
+    ];
+
+    if ($this->profileViewModel->updateOfficerProfile($data)) {
+        header('Location: ' . URLROOT . '/ProfileView/officerProfileView');
+        exit;
+    } else {
+        die('Something went wrong while updating profile');
+    }
+}
 
 public function adminProfile() {
     $admin_id = $_SESSION['user_id'];
@@ -219,8 +307,5 @@ public function updateAdmin() {
 }
   
 
-    public function officerProfile() {
-        $this->view('profile/V_officerprofile');
-    }
 }
 ?>
