@@ -2,6 +2,12 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/FarmerProfile.css?v=<?= time(); ?>">
 
+<?php 
+$old = $_SESSION['old_input'] ?? [];
+$errors = $_SESSION['profile_errors'] ?? [];
+unset($_SESSION['old_input'], $_SESSION['profile_errors']);
+?>
+
 <main>
 
 <div class="logout-container">

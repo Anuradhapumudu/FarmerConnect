@@ -7,66 +7,70 @@ class Help extends Controller {
         $this->helpModel = $this->model('M_Help');
     }
 
-    // Show Help Admin Page
+    // View page
     public function index() {
-        $members = $this->helpModel->getMembers();
         $data = [
-            'members' => $members
+            'members' => $this->helpModel->getMembers(),
+            'emergencyNumber' => $this->helpModel->getEmergencyContact()
         ];
+
         $this->view('help/V_helpAdmin', $data);
     }
 
-    // Add a member
+    // Add support member
     public function add() {
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-        $id = $_POST['id'];
-        $type = $_POST['type'];
+            $result = $this->helpModel->addMember($_POST['id'], $_POST['type']);
 
-        if($type === 'officer') {
-            $this->helpModel->addOfficer($id);
-        } else {
-            $this->helpModel->addAdmin($id);
+            if (!$result) {
+                die('Failed to add member');
+            }
+
+            header("Location: " . URLROOT . "/help/index");
+            exit;
         }
+    }
 
+    // Remove support member
+    public function delete($id, $type) {
+        $this->helpModel->removeMember($id, $type);
         header("Location: " . URLROOT . "/help/index");
         exit;
     }
-}
 
-
-    // Delete a member
-public function delete($id, $type) {
-    if($type === 'Officer') {
-        $this->helpModel->removeOfficer($id);
-    } else {
-        $this->helpModel->removeAdmin($id);
-    }
-
-    header("Location: " . URLROOT . "/help/index");
-    exit;
-}
-
-
-    // Edit member phone or role
-    public function edit($officer_id) {
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+    // Edit support member
+    public function edit($id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $data = [
-                'officer_id' => $officer_id,
-                'phone' => $_POST['phone'] ?? '',
-                'role' => $_POST['role'] ?? ''
+                'id' => $id,
+                'name' => $_POST['name'],
+                'phone' => $_POST['phone'],
+                'type' => $_POST['type'],
+                'image' => $_POST['existing_image']
             ];
 
-            if($this->helpModel->editMember($data)) {
-                header("Location: " . URLROOT . "/help/index");
-                exit;
-            } else {
-                die('Something went wrong');
+            if (!empty($_FILES['profile_image']['name'])) {
+                $imageName = uniqid() . '_' . $_FILES['profile_image']['name'];
+                $path = 'uploads/help/' . $imageName;
+                move_uploaded_file($_FILES['profile_image']['tmp_name'], $path);
+                $data['image'] = $path;
             }
+
+            $this->helpModel->editMember($data);
+            header("Location: " . URLROOT . "/help/index");
+            exit;
+        }
+    }
+
+    // Update emergency number
+    public function updateEmergency() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->helpModel->updateEmergencyContact($_POST['phone']);
+            header("Location: " . URLROOT . "/help/index");
+            exit;
         }
     }
 }
-?>

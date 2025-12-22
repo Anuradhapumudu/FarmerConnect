@@ -2,6 +2,8 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/help/help.css?v=<?= time(); ?>">
 
+
+
 <main class="main-content" id="mainContent">
     <section class="help-section">
         <div class="containers">
@@ -10,50 +12,186 @@
                 <p>Get in touch with our dedicated agricultural support team for assistance</p>
             </div>
 
+            <!-- Support Team Section -->
             <div class="team-section">
                 <div class="section-title">
                     <h2>Our Support Team</h2>
                 </div>
+
+                <?php if (!empty($data['form_errors']['member'])): ?>
+                    <div class="alert alert-danger">
+                        <ul>
+                            <?php foreach ($data['form_errors']['member'] as $error): ?>
+                                <li><?= htmlspecialchars($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
                 <div class="team-grid">
                     <?php foreach($data['members'] as $member): ?>
+                        <?php
+                            $img = $member->image ?? '';
+                            if (empty($img)) {
+                                $imgUrl = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+                            } elseif (strpos($img, 'http') === 0) {
+                                $imgUrl = $img;
+                            } else {
+                                $imgUrl = URLROOT . '/' . $img;
+                            }
+                        ?>
                         <div class="team-member">
-                            <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="<?= $member->name ?>" class="member-img">
-                            <div class="member-name"><?= $member->name ?></div>
-                            <div class="member-role"><?= $member->type ?></div>
-                            <div class="member-contact">
-                                <p><i class="fas fa-phone"></i> <?= $member->phone ?></p>
-                            </div>
-                            <div class="officer-actions">
-                                <a href="<?= URLROOT ?>/help/delete/<?= $member->id ?>/<?= $member->type ?>" class="btn btn-sm btn-danger">Remove</a>
-                            </div>
+                            <?php if (!empty($data['form_errors']['edit_' . $member->id])): ?>
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        <?php foreach ($data['form_errors']['edit_' . $member->id] as $error): ?>
+                                            <li><?= htmlspecialchars($error) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Live Preview Image -->
+                            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($member->name) ?>" class="member-img" id="memberImage<?= $member->id ?>">
+
+                            <!-- Edit Form -->
+                            <form action="<?= URLROOT ?>/help/edit/<?= $member->id ?>" method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" name="name" value="<?= htmlspecialchars($member->name) ?>" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="text" 
+                                                name="phone" 
+                                                value="<?= htmlspecialchars($member->phone) ?>" 
+                                                placeholder="10 digits only (no spaces)"
+                                                required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Role / Type</label>
+                                    <select name="type" required>
+                                        <option value="Officer" <?= $member->type === 'Officer' ? 'selected' : '' ?>>Officer</option>
+                                        <option value="Admin" <?= $member->type === 'Admin' ? 'selected' : '' ?>>Admin</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Profile Image</label>
+                                    <input type="file" name="profile_image" accept="image/*" onchange="previewImage(event, 'memberImage<?= $member->id ?>')">
+                                    <input type="hidden" name="existing_image" value="<?= htmlspecialchars($member->image) ?>">
+                                </div>
+
+                                <div class="officer-actions">
+                                    <button type="submit" class="btn btn-outline">Save</button>
+                                    <a href="<?= URLROOT ?>/help/delete/<?= $member->id ?>/<?= $member->type ?>" class="btn btn-danger">Remove</a>
+                                </div>
+                            </form>
                         </div>
                     <?php endforeach; ?>
                 </div>
 
+                <!-- Add New Support Member Section -->
                 <div class="section-title">
                     <h2>Add New Support Member</h2>
                 </div>
 
-                <form action="<?= URLROOT ?>/help/add" method="POST" class="add-officer-form">
+                <?php if (!empty($data['form_errors']['add_member'])): ?>
+                    <div class="alert alert-danger">
+                        <ul>
+                            <?php foreach ($data['form_errors']['add_member'] as $error): ?>
+                                <li><?= htmlspecialchars($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <form action="<?= URLROOT ?>/help/add" method="POST" class="add-officer-form" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="id">Member ID</label>
-                        <input type="text" class="form-control" name="id" required>
+                        <input type="text" class="form-control" name="id" value="<?= htmlspecialchars($data['form_data']['id'] ?? '') ?>" required>
                     </div>
+
                     <div class="form-group">
                         <label for="type">Type</label>
                         <select class="form-control" name="type" required>
-                            <option value="officer">Officer</option>
-                            <option value="admin">Admin</option>
+                            <option value="Officer" <?= isset($data['form_data']['type']) && $data['form_data']['type'] === 'Officer' ? 'selected' : '' ?>>Officer</option>
+                            <option value="Admin" <?= isset($data['form_data']['type']) && $data['form_data']['type'] === 'Admin' ? 'selected' : '' ?>>Admin</option>
                         </select>
                     </div>
+
                     <div class="form-actions">
                         <button type="reset" class="btn btn-outline">Cancel</button>
                         <button type="submit" class="btn">Add Member</button>
                     </div>
                 </form>
             </div>
+
+            <!-- Emergency Contact Section -->
+            <div class="emergency-contact">
+                <h3>Emergency Contact</h3>
+
+                <?php if (!empty($data['form_errors']['emergency'])): ?>
+                    <div class="alert alert-danger">
+                        <ul>
+                            <?php foreach ($data['form_errors']['emergency'] as $error): ?>
+                                <li><?= htmlspecialchars($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Display Mode -->
+                <div id="emergencyDisplay" style="display: <?= !empty($data['form_errors']['emergency']) ? 'none' : 'block' ?>;">
+                    <div class="emergency-number">
+                        <?= htmlspecialchars($data['emergencyNumber']->phone ?? 'Not set') ?>
+                    </div>
+
+                    <p class="emergency-text">
+                        Available 24/7 for urgent agricultural issues requiring immediate assistance
+                    </p>
+
+                    <div class="officer-actions">
+                        <button class="btn btn-sm btn-outline" onclick="enableEmergencyEdit()">Edit</button>
+                    </div>
+                </div>
+
+                <!-- Edit Mode -->
+                <form id="emergencyEdit"
+                      action="<?= URLROOT ?>/help/updateEmergency"
+                      method="POST"
+                      style="display: <?= !empty($data['form_errors']['emergency']) ? 'block' : 'none' ?>;">
+
+                <input type="text"
+                    name="phone"
+                    class="form-control emergency-input"
+                    value="<?= htmlspecialchars($data['form_data']['emergency_phone'] ?? ($data['emergencyNumber']->phone ?? '')) ?>"
+                    placeholder="10 digits only (no spaces)"
+                    required>
+
+                    <div class="officer-actions">
+                        <button type="submit" class="btn btn-sm btn-outline">Save</button>
+                        <button type="button" class="btn btn-sm btn-danger"
+                                onclick="cancelEmergencyEdit()">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
 </main>
+
+<script>
+function enableEmergencyEdit() {
+    document.getElementById('emergencyDisplay').style.display = 'none';
+    document.getElementById('emergencyEdit').style.display = 'block';
+}
+
+function cancelEmergencyEdit() {
+    document.getElementById('emergencyEdit').style.display = 'none';
+    document.getElementById('emergencyDisplay').style.display = 'block';
+}
+</script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
