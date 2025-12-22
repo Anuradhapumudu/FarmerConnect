@@ -1,0 +1,125 @@
+<?php require_once APPROOT . '/views/inc/adminheader.php'; ?>
+
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/help/help.css?v=<?= time(); ?>">
+
+<main class="main-content" id="mainContent">
+
+   <!-- Help Section -->
+    <section class="help-section">
+        <div class="containers">
+            <div class="section-title">
+                <h1>Help Center</h1>
+                <p>Get in touch with our dedicated agricultural support team for assistance</p>
+            </div>
+            
+            <div class="team-section">
+                <div class="section-title">
+                    <h2>Our Support Team</h2>
+                    <p>Meet our dedicated agricultural experts ready to assist you</p>
+                </div>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Sarath Soysa" class="member-img">
+                        <div class="member-name">Sarath Soysa</div>
+                        <div class="member-role">Agricultural Officer</div>
+                        <div class="member-contact">
+                            <p><i class="fas fa-phone"></i> 075 612 8962</p>
+                           
+                        </div>
+                                <div class="officer-actions">
+                                <button class="btn btn-sm btn-outline">Edit</button>
+                                <button class="btn btn-sm btn-danger">Remove</button>
+                            </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Nilan Madushan" class="member-img">
+                        <div class="member-name">Nilan Madushan</div>
+                        <div class="member-role">Agricultural Officer</div>
+                        <div class="member-contact">
+                            <p><i class="fas fa-phone"></i> 077 251 1562</p>
+                            
+                        </div>
+                                                    <div class="officer-actions">
+                                <button class="btn btn-sm btn-outline">Edit</button>
+                                <button class="btn btn-sm btn-danger">Remove</button>
+                            </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Kamal Perera" class="member-img">
+                        <div class="member-name">Kamal Perera</div>
+                        <div class="member-role">Admin Support</div>
+                        <div class="member-contact">
+                            <p><i class="fas fa-phone"></i> 077 251 6394</p>
+                            
+                        </div>
+                                                    <div class="officer-actions">
+                                <button class="btn btn-sm btn-outline">Edit</button>
+                                <button class="btn btn-sm btn-danger">Remove</button>
+                            </div>
+                    </div>
+              </div>
+
+                    <div class="section-title">
+                        <h2>Add New Support Officer</h2>
+                        <p>Add a new support officer to your team</p>
+                    </div>
+                    
+                    <form class="add-officer-form">
+                        <div class="form-group">
+                            <label for="name">Officer ID</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" required>
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <label for="role">Role/Position</label>
+                            <select class="form-control" id="role" required>
+                                <option value="Agricultural Officer">Agricultural Officer</option>
+                                <option value="Admin Officer">Admin Officer</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="image">Photo URL</label>
+                            <input type="url" class="form-control" id="image">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="reset" class="btn btn-outline">Cancel</button>
+                            <button type="submit" class="btn">Add Officer</button>
+                        </div>
+                    </form>
+            </div>
+            
+            
+            <div class="emergency-contact">
+                <h3>Emergency Contact</h3>
+                <div class="emergency-number">077 123 45678</div>
+                <p class="emergency-text">Available 24/7 for urgent agricultural issues requiring immediate assistance</p>
+                                                <div class="officer-actions">
+                                <button class="btn btn-sm btn-outline">Edit</button>
+                                <button class="btn btn-sm btn-danger">Remove</button>
+                            </div>
+        </div>
+    </section>
+</main>
+
+    <script>
+
+        
+        // Simulate loading of team member images with fallback
+        document.querySelectorAll('.member-img').forEach(img => {
+            img.onerror = function() {
+                this.src = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22100%22%20height%3D%22100%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%234CAF50%22%20%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-size%3D%2236%22%20fill%3D%22white%22%3E%3Ctspan%20x%3D%2250%25%22%20dy%3D%22.35em%22%3E%3C%2Ftspan%3E%3C%2Ftext%3E%3C%2Fsvg%3E";
+            };
+        });
+    </script>
+<?php require_once APPROOT . '/views/inc/footer.php'; ?>
