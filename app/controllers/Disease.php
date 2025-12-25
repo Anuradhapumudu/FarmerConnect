@@ -52,42 +52,60 @@ class Disease extends Controller{
             $farmerNIC = $_SESSION['nic'];
             $data['farmerNIC'] = $farmerNIC;
 
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                // Handle search form submission - but only for this farmer's reports
-                $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
-                $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+            // Check if filtering parameters exist in GET request
+            if(isset($_GET['reportCode']) || isset($_GET['plrNumber'])){
+                // Handle search form submission
+                $plrNumber = isset($_GET['plrNumber']) ? trim($_GET['plrNumber']) : '';
+                $reportCode = isset($_GET['reportCode']) ? trim($_GET['reportCode']) : '';
 
-                $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
-
-                $data['reports'] = $reports;
-                $data['plrNumber'] = $plrNumber;
-                $data['reportCode'] = $reportCode;
-                $data['searched'] = true;
-                $data['message'] = count($reports) . ' of your report(s) found';
+                // Only search if at least one filter is provided
+                if(!empty($plrNumber) || !empty($reportCode)) {
+                    $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+                    $data['reports'] = $reports;
+                    $data['plrNumber'] = $plrNumber;
+                    $data['reportCode'] = $reportCode;
+                    $data['searched'] = true;
+                    $data['message'] = count($reports) . ' of your report(s) found';
+                } else {
+                    // If parameters exist but are empty, show all
+                     $reports = $this->model('M_disease')->getReportsByFarmerNIC($farmerNIC);
+                    $data['reports'] = $reports;
+                    $data['message'] = 'Showing your reports (' . count($reports) . ' total)';
+                }
             } else {
                 // Show only this farmer's reports by default
                 $reports = $this->model('M_disease')->getReportsByFarmerNIC($farmerNIC);
                 $data['reports'] = $reports;
                 $data['message'] = 'Showing your reports (' . count($reports) . ' total)';
             }
+            
+            // Get farmer's paddy fields for PLR dropdown filter
+            $data['paddyFields'] = $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC);
         } else {
             // For officers/admins - show all reports
             $farmerNIC = '';
             
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            if(isset($_GET['reportCode']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC'])){
                 // Handle search form submission
-                $farmerNIC = isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '';
-                $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
-                $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+                $farmerNIC = isset($_GET['farmerNIC']) ? trim($_GET['farmerNIC']) : '';
+                $plrNumber = isset($_GET['plrNumber']) ? trim($_GET['plrNumber']) : '';
+                $reportCode = isset($_GET['reportCode']) ? trim($_GET['reportCode']) : '';
 
-                $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
-
-                $data['reports'] = $reports;
-                $data['farmerNIC'] = $farmerNIC;
-                $data['plrNumber'] = $plrNumber;
-                $data['reportCode'] = $reportCode;
-                $data['searched'] = true;
-                $data['message'] = count($reports) . ' report(s) found';
+                 if(!empty($farmerNIC) || !empty($plrNumber) || !empty($reportCode)) {
+                    $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+    
+                    $data['reports'] = $reports;
+                    $data['farmerNIC'] = $farmerNIC;
+                    $data['plrNumber'] = $plrNumber;
+                    $data['reportCode'] = $reportCode;
+                    $data['searched'] = true;
+                    $data['message'] = count($reports) . ' report(s) found';
+                 } else {
+                    $reports = $this->model('M_disease')->getAllReports();
+                    $data['reports'] = $reports;
+                    $data['farmerNIC'] = '';
+                    $data['message'] = 'Showing all reports (' . count($reports) . ' total)';
+                 }
             } else {
                 // Show all reports by default
                 $reports = $this->model('M_disease')->getAllReports();

@@ -96,12 +96,12 @@
         
         <div class="form-group">
             <label for="media">Upload Images / Video</label>
-            <div class="blinking-text-container">
-                <p class="blinking-text">‼️ Reports with photos/videos get faster response from officers!</p>
-            </div>
             <label class="file-upload" id="mediaUploadArea" for="media">
                 <div>
                     <i class="upload-icon"><img style="width: 30px; height: 30px;" src="https://cdn-icons-png.flaticon.com/128/10024/10024248.png"></i>
+                    <div class="blinking-text-container">
+                <p class="blinking-text">‼️ Reports with photos/videos get faster response from officers!</p>
+            </div>
                     <p>Click to upload or drag and drop</p>
                     <p class="upload-subtext">PNG, JPG, GIF, MP4 up to 10MB</p>
                 </div>

@@ -11,45 +11,53 @@
         <?php endif; ?>
     </div>
 
-    <!-- Search/Filter Section -->
+    <!-- Filter Section -->
+  <filter>   
+    <?php if(isset($data['farmerNIC']) && !empty($data['farmerNIC'])): ?>
     <div class="search-container">
-        <form action="<?php echo URLROOT; ?>/disease/viewReports" method="POST" class="search-form">
-           <div class="search-grid">
-                <?php if(!isset($data['farmerNIC']) || empty($data['farmerNIC'])): ?>
+        <div class="search-header">
+            <h4><i class="fas fa-search"></i> Filter Reports</h4>
+        </div>
+        <form action="<?php echo URLROOT; ?>/disease/viewReports" method="get">
+            <div class="search-grid">
                 <div class="form-group">
-                    <label>Farmer NIC</label>
-                    <input type="text" name="farmerNIC" placeholder="Search by NIC" value="<?php echo isset($data['farmerNIC']) ? $data['farmerNIC'] : ''; ?>">
+                    <label for="reportCode">Report ID</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-hashtag"></i>
+                        <input type="text" name="reportCode" id="reportCode" placeholder="Search by ID (e.g. DR001)" value="<?php echo isset($data['reportCode']) ? $data['reportCode'] : ''; ?>">
+                    </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="plrNumber">PLR Number</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <select name="plrNumber" id="plrNumber">
+                            <option value="">All PLR Numbers</option>
+                            <?php if(isset($data['paddyFields']) && !empty($data['paddyFields'])): ?>
+                                <?php foreach($data['paddyFields'] as $paddy): ?>
+                                    <option value="<?php echo $paddy->PLR; ?>" <?php echo (isset($data['plrNumber']) && $data['plrNumber'] == $paddy->PLR) ? 'selected' : ''; ?>>
+                                        <?php echo $paddy->PLR; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-actions">
+                <?php if(isset($data['searched']) && $data['searched']): ?>
+                    <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-secondary btn-sm">Clear Filters</a>
                 <?php endif; ?>
-                
-                <div class="form-group">
-                    <label>PLR Number</label>
-                    <input type="text" name="plrNumber" placeholder="Search by PLR" value="<?php echo isset($data['plrNumber']) ? $data['plrNumber'] : ''; ?>">
-                </div>
-                
-                <div class="form-group">
-                    <label>Report Code</label>
-                    <input type="text" name="reportCode" placeholder="Search by Code" value="<?php echo isset($data['reportCode']) ? $data['reportCode'] : ''; ?>">
-                </div>
-           </div>
-           
-           <div class="search-actions">
-               <button type="submit" class="btn btn-secondary">
-                   <i class="fas fa-search"></i> Search
-               </button>
-               <?php if(isset($data['searched']) && $data['searched']): ?>
-                   <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-text">Clear Filters</a>
-               <?php endif; ?>
-           </div>
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-filter"></i> Apply Filters
+                </button>
+            </div>
         </form>
     </div>
-
-    <!-- Message Display -->
-    <?php if(isset($data['message'])): ?>
-        <div class="results-message">
-            <?php echo $data['message']; ?>
-        </div>
     <?php endif; ?>
+   </filter>
 
     <!-- Reports Table -->
     <div class="table-responsive">
@@ -57,7 +65,7 @@
             <div class="empty-state">
                 <div class="empty-icon">📂</div>
                 <h3>No Reports Found</h3>
-                <p>Try adjusting your search filters or create a new report.</p>
+                <p>Create a new report.</p>
                 <?php if(isset($data['farmerNIC']) && !empty($data['farmerNIC'])): ?>
                     <a href="<?php echo URLROOT; ?>/disease" class="btn btn-primary" style="margin-top: 15px;">Create New Report</a>
                 <?php endif; ?>
@@ -68,11 +76,9 @@
                     <tr>
                         <th>Code</th>
                         <th>Date</th>
-                        <th>Farmer</th>
                         <th>PLR Number</th>
                         <th>Title</th>
                         <th>Status</th>
-                        <th>Severity</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -83,11 +89,6 @@
                                 <span class="report-code"><?php echo $report->report_code; ?></span>
                             </td>
                             <td><?php echo date('M d, Y', strtotime($report->observationDate)); ?></td>
-                            <td>
-                                <div class="farmer-info">
-                                    <span class="farmer-name"><?php echo $report->farmer_name ?? 'N/A'; ?></span>
-                                </div>
-                            </td>
                             <td>
                                 <span class="plr-text"><?php echo $report->plrNumber; ?></span>
                             </td>
@@ -100,12 +101,6 @@
                                 <span class="status-badge status-<?php echo strtolower($report->status); ?>">
                                     <?php echo ucfirst($report->status); ?>
                                 </span>
-                            </td>
-                            <td>
-                                <div class="severity-badge severity-<?php echo strtolower($report->severity); ?>">
-                                    <span class="dot"></span>
-                                    <?php echo ucfirst($report->severity); ?>
-                                </div>
                             </td>
                             <td>
                                 <div class="action-buttons">

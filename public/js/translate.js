@@ -106,12 +106,12 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }, 800);
   } else {
-    // No saved preference: default to Sinhala automatically
-    const defaultLang = 'si';
+    // No saved preference: default to English automatically
+    const defaultLang = 'en';
     console.log('No saved language found. Defaulting to:', defaultLang);
     langSelect.value = defaultLang;
     localStorage.setItem('langPref', defaultLang);
     // Apply after a short delay to allow Google Translate to initialize
-    setTimeout(() => setGoogleTranslateLanguage(defaultLang), 1000);
+    setTimeout(() => resetToEnglish(), 1000);
   }
 });

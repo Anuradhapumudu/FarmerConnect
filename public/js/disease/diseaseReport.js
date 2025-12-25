@@ -154,14 +154,29 @@ document.addEventListener('DOMContentLoaded', function () {
         showFilePreview(dt.files);
     }
     // Existing media removal
-    document.querySelectorAll('.remove-file-btn').forEach(btn => {
+    // Existing media removal
+    document.querySelectorAll('.btn-remove-media').forEach(btn => {
         btn.addEventListener('click', function () {
             const filename = this.dataset.filename;
-            if (confirm(`Remove "${filename}"?`)) {
-                this.closest('.existing-file-item').querySelector('input[type="checkbox"]').checked = true;
-                this.closest('.existing-file-item').style.opacity = '0.5';
-                this.textContent = '↶';
-                this.style.background = '#f39c12';
+            const container = this.closest('.media-card');
+            const checkbox = container.querySelector('input[type="checkbox"]');
+
+            if (checkbox.checked) {
+                // Undo removal
+                checkbox.checked = false;
+                container.style.opacity = '1';
+                this.innerHTML = '<i class="fas fa-times"></i>';
+                this.style.background = '#FF5252';
+                this.title = "Remove file";
+            } else {
+                // Remove file
+                if (confirm(`Remove "${filename}"?`)) {
+                    checkbox.checked = true;
+                    container.style.opacity = '0.5';
+                    this.innerHTML = '<i class="fas fa-undo"></i>';
+                    this.style.background = '#f39c12';
+                    this.title = "Undo removal";
+                }
             }
         });
     });

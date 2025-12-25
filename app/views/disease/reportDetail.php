@@ -18,7 +18,7 @@
         
         <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && $_SESSION['nic'] === $data['report']->farmerNIC && $data['report']->status === 'pending'): ?>
             <div class="header-actions">
-                <a href="<?php echo URLROOT; ?>/disease/editReport/<?php echo $data['report']->report_code; ?>" class="btn btn-secondary">
+                <a href="<?php echo URLROOT; ?>/disease/editReport/<?php echo $data['report']->report_code; ?>" class="btn btn-secondary" >
                     <i class="fas fa-edit"></i> Edit
                 </a>
                 <button onclick="confirmDelete('<?php echo $data['report']->report_code; ?>')" class="btn btn-danger-outline">
@@ -58,7 +58,7 @@
 
                 <div class="info-item">
                     <label>PLR Number</label>
-                    <p><?php echo $data['report']->pirNumber; ?></p>
+                    <p><?php echo $data['report']->plrNumber; ?></p>
                 </div>
 
                 <div class="info-item">

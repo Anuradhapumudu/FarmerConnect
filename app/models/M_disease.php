@@ -133,50 +133,6 @@ class M_disease {
         }
     }
 
-    // READ - Search reports by multiple criteria
-    public function searchReports($farmerNIC = '', $plrNumber = '', $reportCode = '') {
-        try {
-            $conditions = [];
-            $params = [];
-
-            // Always filter deleted
-            $conditions[] = "dr.is_deleted = 0";
-
-            if (!empty($farmerNIC)) {
-                $conditions[] = "dr.farmerNIC = :farmerNIC";
-                $params[':farmerNIC'] = $farmerNIC;
-            }
-
-            if (!empty($plrNumber)) {
-                $conditions[] = "dr.plrNumber = :plrNumber";
-                $params[':plrNumber'] = $plrNumber;
-            }
-
-            if (!empty($reportCode)) {
-                $conditions[] = "dr.report_code = :report_code";
-                $params[':report_code'] = $reportCode;
-            }
-
-            $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize 
-                    FROM disease_reports dr 
-                    LEFT JOIN farmers f ON dr.farmerNIC = f.nic 
-                    LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK 
-                    WHERE " . implode(' AND ', $conditions) . " 
-                    ORDER BY dr.created_at DESC";
-            
-            $this->db->query($sql);
-
-            foreach ($params as $param => $value) {
-                $this->db->bind($param, $value);
-            }
-
-            return $this->db->resultSet();
-        } catch (Exception $e) {
-            error_log("Exception in searchReports: " . $e->getMessage());
-            return [];
-        }
-    }
-
     // UPDATE - Update report
     public function updateReport($data) {
         try {
@@ -244,6 +200,44 @@ class M_disease {
     public function getPaddyFieldsByFarmer($farmerNIC) {
         $this->db->query("SELECT PLR, Paddy_Size FROM paddy WHERE NIC_FK = :nic ORDER BY PLR ASC");
         $this->db->bind(':nic', $farmerNIC);
+        return $this->db->resultSet();
+    }
+
+    // Search reports
+    public function searchReports($farmerNIC, $plrNumber, $reportCode) {
+        $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize 
+                FROM disease_reports dr 
+                LEFT JOIN farmers f ON dr.farmerNIC = f.nic 
+                LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK 
+                WHERE dr.is_deleted = 0";
+        
+        $params = [];
+
+        // Add filters
+        if (!empty($farmerNIC)) {
+            $sql .= " AND dr.farmerNIC = :farmerNIC";
+            $params[':farmerNIC'] = $farmerNIC;
+        }
+
+        if (!empty($plrNumber)) {
+            $sql .= " AND dr.plrNumber = :plrNumber";
+            $params[':plrNumber'] = $plrNumber;
+        }
+
+        if (!empty($reportCode)) {
+            $sql .= " AND dr.report_code LIKE :reportCode";
+            $params[':reportCode'] = '%' . $reportCode . '%';
+        }
+
+        $sql .= " ORDER BY dr.created_at DESC";
+
+        $this->db->query($sql);
+
+        // Bind params
+        foreach ($params as $param => $value) {
+            $this->db->bind($param, $value);
+        }
+
         return $this->db->resultSet();
     }
 }
