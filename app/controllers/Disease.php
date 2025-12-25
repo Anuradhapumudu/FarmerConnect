@@ -37,7 +37,7 @@ class Disease extends Controller{
     // Show form to search/view reports
     public function viewReports(){
         // Check if user is logged in
-        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+        if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
             exit();
         }
@@ -84,6 +84,12 @@ class Disease extends Controller{
         } else {
             // For officers/admins - show all reports
             $farmerNIC = '';
+            $includeDeleted = false;
+
+            // Check if current user is Admin
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
+                $includeDeleted = true;
+            }
             
             if(isset($_GET['reportCode']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC'])){
                 // Handle search form submission
@@ -92,7 +98,7 @@ class Disease extends Controller{
                 $reportCode = isset($_GET['reportCode']) ? trim($_GET['reportCode']) : '';
 
                  if(!empty($farmerNIC) || !empty($plrNumber) || !empty($reportCode)) {
-                    $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
+                    $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode, $includeDeleted);
     
                     $data['reports'] = $reports;
                     $data['farmerNIC'] = $farmerNIC;
@@ -101,14 +107,14 @@ class Disease extends Controller{
                     $data['searched'] = true;
                     $data['message'] = count($reports) . ' report(s) found';
                  } else {
-                    $reports = $this->model('M_disease')->getAllReports();
+                    $reports = $this->model('M_disease')->getAllReports(null, null, $includeDeleted);
                     $data['reports'] = $reports;
                     $data['farmerNIC'] = '';
                     $data['message'] = 'Showing all reports (' . count($reports) . ' total)';
                  }
             } else {
                 // Show all reports by default
-                $reports = $this->model('M_disease')->getAllReports();
+                $reports = $this->model('M_disease')->getAllReports(null, null, $includeDeleted);
                 $data['reports'] = $reports;
                 $data['farmerNIC'] = '';
                 $data['message'] = 'Showing all reports (' . count($reports) . ' total)';
@@ -128,14 +134,20 @@ class Disease extends Controller{
     // View all submitted reports in table format or single report details
     public function viewReport($reportCode = '') {
         // Check if user is logged in
-        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+        if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
             exit();
         }
 
         if (!empty($reportCode)) {
             // Show specific report details
-            $report = $this->model('M_disease')->getReportByCode($reportCode);
+            $includeDeleted = false;
+            // Check if current user is Admin
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
+                $includeDeleted = true;
+            }
+
+            $report = $this->model('M_disease')->getReportByCode($reportCode, $includeDeleted);
 
             if (!$report) {
                 $_SESSION['error_message'] = 'Report not found';
@@ -173,7 +185,7 @@ class Disease extends Controller{
     // Show edit form for updating report
     public function editReport($reportCode = '') {
         // Check if user is logged in
-        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+        if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
             exit();
         }
@@ -357,7 +369,7 @@ class Disease extends Controller{
     // Delete report
     public function deleteReport($reportCode = '') {
         // Check if user is logged in
-        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+        if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
             exit();
         }
@@ -391,20 +403,7 @@ class Disease extends Controller{
             $dbResult = $this->model('M_disease')->deleteReport($reportCode);
 
             if ($dbResult) {
-                // Clean up media files
-                if (!empty($report->media)) {
-                    $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
-                    $mediaFiles = explode(',', $report->media);
-
-                    foreach ($mediaFiles as $filename) {
-                        $filename = trim($filename);
-                        $filePath = $uploadDir . $filename;
-                        if (file_exists($filePath)) {
-                            unlink($filePath);
-                        }
-                    }
-                }
-
+                // Media files are preserved for soft delete
                 $_SESSION['success_message'] = 'Report deleted successfully';
             } else {
                 $_SESSION['error_message'] = 'Failed to delete report';

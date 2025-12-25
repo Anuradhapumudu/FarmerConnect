@@ -98,9 +98,13 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="status-badge status-<?php echo strtolower($report->status); ?>">
-                                    <?php echo ucwords(str_replace('_', ' ', $report->status)); ?>
-                                </span>
+                                <?php if(isset($report->is_deleted) && $report->is_deleted == 1): ?>
+                                    <span class="status-badge" style="background-color: #e74c3c; color: white;">DELETED</span>
+                                <?php else: ?>
+                                    <span class="status-badge status-<?php echo strtolower($report->status); ?>">
+                                        <?php echo ucwords(str_replace('_', ' ', $report->status)); ?>
+                                    </span>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <div class="action-buttons">

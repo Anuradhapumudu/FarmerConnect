@@ -56,14 +56,21 @@ class M_disease {
     }
 
     // READ - Get all reports by farmer NIC
-    public function getReportsByFarmerNIC($farmerNIC) {
+    public function getReportsByFarmerNIC($farmerNIC, $includeDeleted = false) {
         try {
-            $this->db->query("SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize 
-                              FROM disease_reports dr 
-                              LEFT JOIN farmers f ON dr.farmerNIC = f.nic 
-                              LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK 
-                              WHERE dr.farmerNIC = :farmerNIC AND dr.is_deleted = 0
-                              ORDER BY dr.created_at DESC");
+            $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize 
+                    FROM disease_reports dr 
+                    LEFT JOIN farmers f ON dr.farmerNIC = f.nic 
+                    LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK 
+                    WHERE dr.farmerNIC = :farmerNIC";
+
+            if (!$includeDeleted) {
+                $sql .= " AND dr.is_deleted = 0";
+            }
+
+            $sql .= " ORDER BY dr.created_at DESC";
+
+            $this->db->query($sql);
             $this->db->bind(':farmerNIC', $farmerNIC);
             return $this->db->resultSet();
         } catch (Exception $e) {
@@ -73,9 +80,17 @@ class M_disease {
     }
 
     // READ - Get all reports by PLR number
-    public function getReportsByPLR($plrNumber) {
+    public function getReportsByPLR($plrNumber, $includeDeleted = false) {
         try {
-            $this->db->query("SELECT * FROM disease_reports WHERE plrNumber = :plrNumber AND is_deleted = 0 ORDER BY created_at DESC");
+            $sql = "SELECT * FROM disease_reports WHERE plrNumber = :plrNumber";
+            
+            if (!$includeDeleted) {
+                $sql .= " AND is_deleted = 0";
+            }
+
+            $sql .= " ORDER BY created_at DESC";
+
+            $this->db->query($sql);
             $this->db->bind(':plrNumber', $plrNumber);
             return $this->db->resultSet();
         } catch (Exception $e) {
@@ -85,13 +100,21 @@ class M_disease {
     }
 
     // READ - Get a single report by report_code
-    public function getReportByCode($reportCode) {
+    public function getReportByCode($reportCode, $includeDeleted = false) {
         try {
-            $this->db->query("SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize 
-                              FROM disease_reports dr 
-                              LEFT JOIN farmers f ON dr.farmerNIC = f.nic 
-                              LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK 
-                              WHERE dr.report_code = :report_code AND dr.is_deleted = 0");
+            $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize, 
+                           o.first_name as officer_first_name, o.last_name as officer_last_name, o.officer_id as updater_id
+                    FROM disease_reports dr 
+                    LEFT JOIN farmers f ON dr.farmerNIC = f.nic 
+                    LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK 
+                    LEFT JOIN officers o ON dr.status_updated_by = o.officer_id
+                    WHERE dr.report_code = :report_code";
+
+            if (!$includeDeleted) {
+                $sql .= " AND dr.is_deleted = 0";
+            }
+
+            $this->db->query($sql);
             $this->db->bind(':report_code', $reportCode);
             return $this->db->single();
         } catch (Exception $e) {
@@ -101,14 +124,18 @@ class M_disease {
     }
 
     // READ - Get all reports (for admin/overview)
-    public function getAllReports($limit = null, $offset = null) {
+    public function getAllReports($limit = null, $offset = null, $includeDeleted = false) {
         try {
             $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize 
                     FROM disease_reports dr 
                     LEFT JOIN farmers f ON dr.farmerNIC = f.nic 
-                    LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK 
-                    WHERE dr.is_deleted = 0
-                    ORDER BY dr.created_at DESC";
+                    LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK";
+            
+            if (!$includeDeleted) {
+                $sql .= " WHERE dr.is_deleted = 0";
+            }
+
+            $sql .= " ORDER BY dr.created_at DESC";
 
             if ($limit !== null) {
                 $sql .= " LIMIT :limit";
@@ -145,6 +172,7 @@ class M_disease {
                               media = :media,
                               severity = :severity,
                               affectedArea = :affectedArea,
+                              is_edited = 1,
                               updated_at = NOW()
                               WHERE report_code = :report_code");
 
@@ -184,7 +212,7 @@ class M_disease {
             $this->db->query("SELECT dor.*, o.first_name, o.last_name 
                               FROM disease_officer_responses dor 
                               LEFT JOIN officers o ON dor.officer_id = o.officer_id 
-                              WHERE dor.report_code = :report_code 
+                              WHERE dor.report_code = :report_code AND dor.is_deleted = 0
                               ORDER BY dor.created_at DESC");
             $this->db->bind(':report_code', $reportCode);
             return $this->db->resultSet();
@@ -208,12 +236,16 @@ class M_disease {
     }
 
     // Search reports
-    public function searchReports($farmerNIC, $plrNumber, $reportCode) {
+    public function searchReports($farmerNIC, $plrNumber, $reportCode, $includeDeleted = false) {
         $sql = "SELECT dr.*, f.full_name as farmer_name, p.Paddy_Size as paddySize 
                 FROM disease_reports dr 
                 LEFT JOIN farmers f ON dr.farmerNIC = f.nic 
                 LEFT JOIN paddy p ON dr.plrNumber = p.PLR AND dr.farmerNIC = p.NIC_FK 
-                WHERE dr.is_deleted = 0";
+                WHERE 1=1"; // Changed WHERE clause base
+        
+        if (!$includeDeleted) {
+            $sql .= " AND dr.is_deleted = 0";
+        }
         
         $params = [];
 
@@ -246,11 +278,24 @@ class M_disease {
     }
 
     // Update report status
-    public function updateReportStatus($reportCode, $status) {
+    public function updateReportStatus($reportCode, $status, $officerId = null) {
         try {
-            $this->db->query("UPDATE disease_reports SET status = :status, updated_at = NOW() WHERE report_code = :report_code");
+            $sql = "UPDATE disease_reports SET status = :status, updated_at = NOW()";
+            
+            if ($officerId) {
+                $sql .= ", status_updated_by = :officer_id";
+            }
+            
+            $sql .= " WHERE report_code = :report_code";
+
+            $this->db->query($sql);
             $this->db->bind(':status', $status);
             $this->db->bind(':report_code', $reportCode);
+            
+            if ($officerId) {
+                $this->db->bind(':officer_id', $officerId);
+            }
+            
             return $this->db->execute();
         } catch (Exception $e) {
             error_log("Exception in updateReportStatus: " . $e->getMessage());
@@ -289,7 +334,7 @@ class M_disease {
     // Update officer response
     public function updateOfficerResponse($id, $message, $media = null) {
         try {
-            $sql = "UPDATE disease_officer_responses SET response_message = :message, updated_at = NOW()";
+            $sql = "UPDATE disease_officer_responses SET response_message = :message, is_edited = 1, updated_at = NOW()";
             if ($media !== null) { // Only update media if provided (chk for null specifically)
                  $sql .= ", response_media = :media";
             }
@@ -311,7 +356,7 @@ class M_disease {
     // Delete officer response
     public function deleteOfficerResponse($id) {
         try {
-            $this->db->query("DELETE FROM disease_officer_responses WHERE id = :id");
+            $this->db->query("UPDATE disease_officer_responses SET is_deleted = 1 WHERE id = :id");
             $this->db->bind(':id', $id);
             return $this->db->execute();
         } catch (Exception $e) {

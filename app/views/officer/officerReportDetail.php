@@ -24,22 +24,36 @@
             <div class="title-row">
                 <h1>Report: <?php echo $data['report']->report_code; ?></h1>
             </div>
-            <p class="report-date">Submitted on <?php echo date('F d, Y \a\t h:i A', strtotime($data['report']->created_at)); ?></p>
+            <p class="report-date">
+                Submitted on <?php echo date('F d, Y \a\t h:i A', strtotime($data['report']->created_at)); ?>
+                <?php if(isset($data['report']->is_edited) && $data['report']->is_edited == '1'): ?>
+                    <span class="status-badge status-edited"><i class="fas fa-pencil-alt"></i> Edited</span>
+                <?php endif; ?>
+            </p>
         </div>
         
         <div class="header-actions">
-             <form method="POST" action="<?php echo URLROOT; ?>/officerDashboard/updateReportStatus" class="status-form-header">
-                <input type="hidden" name="reportCode" value="<?php echo htmlspecialchars($data['report']->report_code); ?>">
-                <input type="hidden" name="redirect_to" value="details">
-                <div class="status-select-wrapper status-<?php echo $data['report']->status; ?>">
-                    <select name="status" onchange="this.form.submit()" class="status-select">
-                        <option value="pending" <?php echo ($data['report']->status == 'pending') ? 'selected' : ''; ?>>Pending</option>
-                        <option value="under_review" <?php echo ($data['report']->status == 'under_review') ? 'selected' : ''; ?>>Under Review</option>
-                        <option value="resolved" <?php echo ($data['report']->status == 'resolved') ? 'selected' : ''; ?>>Resolved</option>
-                        <option value="rejected" <?php echo ($data['report']->status == 'rejected') ? 'selected' : ''; ?>>Rejected</option>
-                    </select>
-                </div>
-            </form>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                <form method="POST" action="<?php echo URLROOT; ?>/officerDashboard/updateReportStatus" class="status-form-header" style="margin: 0;">
+                    <input type="hidden" name="reportCode" value="<?php echo htmlspecialchars($data['report']->report_code); ?>">
+                    <input type="hidden" name="redirect_to" value="details">
+                    <div class="status-select-wrapper status-<?php echo $data['report']->status; ?>">
+                        <select name="status" onchange="this.form.submit()" class="status-select">
+                            <option value="pending" <?php echo ($data['report']->status == 'pending') ? 'selected' : ''; ?>>Pending</option>
+                            <option value="under_review" <?php echo ($data['report']->status == 'under_review') ? 'selected' : ''; ?>>Under Review</option>
+                            <option value="resolved" <?php echo ($data['report']->status == 'resolved') ? 'selected' : ''; ?>>Resolved</option>
+                            <option value="rejected" <?php echo ($data['report']->status == 'rejected') ? 'selected' : ''; ?>>Rejected</option>
+                        </select>
+                    </div>
+                </form>
+                <?php if(isset($data['report']->officer_first_name) && !empty($data['report']->officer_first_name)): ?>
+                    <div class="status-updater-info" style="margin-top: 0; text-align: right;">
+                        <i class="fas fa-history"></i> Updated by: 
+                        <strong><?php echo htmlspecialchars($data['report']->officer_first_name . ' ' . $data['report']->officer_last_name); ?></strong>
+                        (ID: <?php echo htmlspecialchars($data['report']->updater_id); ?>)
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
@@ -80,7 +94,12 @@
 
                 <div class="info-item">
                     <label>Farmer Name</label>
-                    <p><?php echo $data['report']->farmer_name ?? $data['report']->farmerNIC; ?></p>
+                    <p><?php echo $data['report']->farmer_name ?? 'N/A'; ?></p>
+                </div>
+
+                <div class="info-item">
+                    <label>Farmer NIC</label>
+                    <p class="highlight-text"><?php echo $data['report']->farmerNIC; ?></p>
                 </div>
             </div>
 
@@ -158,7 +177,12 @@
                                     <?php endif; ?>
                                 </span>
                                 <div class="response-meta-group">
-                                    <span class="response-date"><?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?></span>
+                                    <span class="response-date">
+                                        <?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?>
+                                        <?php if(isset($response->is_edited) && $response->is_edited == '1'): ?>
+                                            <span style="font-size: 0.8em; color: #888; font-style: italic; margin-left: 5px;">(edited)</span>
+                                        <?php endif; ?>
+                                    </span>
                                     <?php if($response->officer_id === $currentOfficerId): ?>
                                         <div class="response-actions">
                                             <button onclick="openEditModal('<?php echo $response->id; ?>', '<?php echo htmlspecialchars(addslashes($response->response_message)); ?>')" class="btn-icon-small edit" title="Edit">
@@ -204,36 +228,38 @@
         <?php endif; ?>
 
         <!-- Submit New Recommendation Form -->
-        <div class="recommendation-form-wrapper" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-            <h3>Submit New Recommendation</h3>
-            <form action="<?php echo URLROOT; ?>/officerDashboard/submitRecommendation" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="reportCode" value="<?php echo htmlspecialchars($data['report']->report_code); ?>">
-                
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <label for="message" style="display:block; margin-bottom: 5px; font-weight:600;">Recommendation Message</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Enter your recommendation..." required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
-                </div>
-                
-                <div class="form-group" style="margin-bottom: 15px;">
-                     <label style="display:block; margin-bottom: 8px; font-weight:600;">Attach Media</label>
-                     <div class="upload-zone" id="drop-zone">
-                         <input type="file" id="media" name="media[]" accept="image/*,video/*" multiple hidden onchange="handleFileSelect(this)">
-                         <label for="media" class="upload-label">
-                             <div class="upload-icon-circle">
-                                 <i class="fas fa-cloud-upload-alt"></i>
-                             </div>
-                             <span class="upload-text">Drag & drop files here or <span class="highlight">browse</span></span>
-                             <small class="upload-hint">Supported: JPG, PNG, MP4 (Max 10MB)</small>
-                         </label>
-                         <div id="file-list" class="file-preview-list"></div>
-                     </div>
-                </div>
+        <?php if($data['report']->status === 'under_review'): ?>
+            <div class="recommendation-form-wrapper" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                <h3>Submit New Recommendation</h3>
+                <form action="<?php echo URLROOT; ?>/officerDashboard/submitRecommendation" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="reportCode" value="<?php echo htmlspecialchars($data['report']->report_code); ?>">
+                    
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="message" style="display:block; margin-bottom: 5px; font-weight:600;">Recommendation Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Enter your recommendation..." required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 8px; font-weight:600;">Attach Media</label>
+                        <div class="upload-zone" id="drop-zone">
+                            <input type="file" id="media" name="media[]" accept="image/*,video/*" multiple hidden onchange="handleFileSelect(this)">
+                            <label for="media" class="upload-label">
+                                <div class="upload-icon-circle">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <span class="upload-text">Drag & drop files here or <span class="highlight">browse</span></span>
+                                <small class="upload-hint">Supported: JPG, PNG, MP4 (Max 10MB)</small>
+                            </label>
+                            <div id="file-list" class="file-preview-list"></div>
+                        </div>
+                    </div>
 
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Submit Recommendation
-                </button>
-            </form>
-        </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit Recommendation
+                    </button>
+                </form>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 

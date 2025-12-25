@@ -8,24 +8,52 @@
                 <i class="fas fa-arrow-left"></i> Back to Reports
             </a>
             <div class="title-row">
-                <h1>Report : <?php echo $data['report']->report_code; ?></h1>
-                <span class="status-badge status-<?php echo strtolower($data['report']->status); ?>">
-                    <?php echo ucwords(str_replace('_', ' ', $data['report']->status)); ?>
-                </span>
+                <h1>Report: <?php echo $data['report']->report_code; ?></h1>
+                <?php if(isset($data['report']->is_deleted) && $data['report']->is_deleted == 1): ?>
+                    <span class="status-badge" style="background-color: #e74c3c; color: white;">DELETED</span>
+                <?php endif; ?>
             </div>
-            <p class="report-date">Submitted on <?php echo date('F d, Y \a\t h:i A', strtotime($data['report']->created_at)); ?></p>
+            <p class="report-date">
+                Submitted on <?php echo date('F d, Y \a\t h:i A', strtotime($data['report']->created_at)); ?>
+                <?php if(isset($data['report']->is_edited) && $data['report']->is_edited == '1'): ?>
+                    <span class="status-badge status-edited"><i class="fas fa-pencil-alt"></i> Edited</span>
+                <?php endif; ?>
+            </p>
         </div>
         
-        <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && $_SESSION['nic'] === $data['report']->farmerNIC && $data['report']->status === 'pending'): ?>
-            <div class="header-actions">
-                <a href="<?php echo URLROOT; ?>/disease/editReport/<?php echo $data['report']->report_code; ?>" class="btn btn-secondary" >
-                    <i class="fas fa-edit"></i> Edit
-                </a>
-                <button onclick="confirmDelete('<?php echo $data['report']->report_code; ?>')" class="btn btn-danger-outline">
-                    <i class="fas fa-trash"></i> Delete
-                </button>
+        <div class="header-actions">
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                <!-- Status Display -->
+                <?php if(!isset($data['report']->is_deleted) || $data['report']->is_deleted != 1): ?>
+                    <div class="status-select-wrapper status-<?php echo $data['report']->status; ?>" style="background: none; border: none; padding: 0;">
+                         <span class="status-badge status-<?php echo strtolower($data['report']->status); ?>" style="font-size: 1rem; padding: 8px 15px;">
+                            <?php echo ucwords(str_replace('_', ' ', $data['report']->status)); ?>
+                        </span>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Updater Info -->
+                <?php if(isset($data['report']->officer_first_name) && !empty($data['report']->officer_first_name)): ?>
+                    <div class="status-updater-info" style="margin-top: 0; text-align: right;">
+                        <i class="fas fa-history"></i> Updated by: 
+                        <strong><?php echo htmlspecialchars($data['report']->officer_first_name . ' ' . $data['report']->officer_last_name); ?></strong>
+                        (ID: <?php echo htmlspecialchars($data['report']->updater_id); ?>)
+                    </div>
+                <?php endif; ?>
+
+                <!-- Farmer Actions (Edit/Delete) -->
+                <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && $_SESSION['nic'] === $data['report']->farmerNIC && $data['report']->status === 'pending'): ?>
+                    <div style="margin-top: 10px; display: flex; gap: 10px;">
+                        <a href="<?php echo URLROOT; ?>/disease/editReport/<?php echo $data['report']->report_code; ?>" class="btn btn-secondary" style="padding: 5px 15px; font-size: 0.9rem;">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <button onclick="confirmDelete('<?php echo $data['report']->report_code; ?>')" class="btn btn-danger-outline" style="padding: 5px 15px; font-size: 0.9rem;">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                <?php endif; ?>
             </div>
-        <?php endif; ?>
+        </div>
     </div>
 
     <div class="report-grid">
@@ -132,7 +160,12 @@
                                         echo $officerName . ' (' . htmlspecialchars($response->officer_id) . ')'; 
                                     ?>
                                 </span>
-                                <span class="response-date"><?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?></span>
+                                <span class="response-date">
+                                    <?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?>
+                                    <?php if(isset($response->is_edited) && $response->is_edited == '1'): ?>
+                                        <span style="font-size: 0.8em; color: #888; font-style: italic; margin-left: 5px;">(edited)</span>
+                                    <?php endif; ?>
+                                </span>
                             </div>
                             <div class="response-body">
                                 <?php echo nl2br(htmlspecialchars($response->response_message)); ?>

@@ -97,7 +97,8 @@ class OfficerDashboard extends Controller {
                 exit();
             }
 
-            $result = $this->model('M_disease')->updateReportStatus($reportCode, $status);
+            $officerId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+            $result = $this->model('M_disease')->updateReportStatus($reportCode, $status, $officerId);
 
             if ($result) {
                 $_SESSION['success_message'] = 'Report status updated successfully';
@@ -129,6 +130,14 @@ class OfficerDashboard extends Controller {
                 $_SESSION['error_message'] = 'Report code and recommendation message are required';
                 header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
                 exit();
+            }
+
+            // Verify report status
+            $report = $this->model('M_disease')->getReportByCode($reportCode);
+            if (!$report || $report->status !== 'under_review') {
+                 $_SESSION['error_message'] = 'Recommendations can only be submitted when the report is Under Review';
+                 header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
+                 exit();
             }
 
             // Get officer ID from session (assuming it's stored there)
