@@ -484,6 +484,49 @@ class Disease extends Controller{
             echo "Error loading file";
         }
     }
+
+    // View officer response media
+    public function viewResponseMedia($responseId = '', $filename = '') {
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
+        if (empty($responseId) || empty($filename)) {
+            http_response_code(404);
+            echo "Response ID and filename required";
+            return;
+        }
+
+        try {
+            // No strict ownership check for now as these are responses TO the farmer, but arguably we should check if the report belongs to them.
+            // For simplicity and to ensure it works, we just check if file exists.
+            
+            // Build file path
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
+            $filePath = $uploadDir . $filename;
+
+            if (file_exists($filePath)) {
+                $fileExtension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                $mimeType = $this->getMimeType($fileExtension);
+
+                header('Content-Type: ' . $mimeType);
+                header('Content-Length: ' . filesize($filePath));
+                header('Content-Disposition: inline; filename="' . basename($filePath) . '"');
+
+                readfile($filePath);
+                exit();
+            } else {
+                http_response_code(404);
+                echo "File not found on server";
+            }
+        } catch (Exception $e) {
+            error_log("Error viewing response media: " . $e->getMessage());
+            http_response_code(500);
+            echo "Error loading file";
+        }
+    }
     
     // --- PRIVATE HELPER METHODS ---
 

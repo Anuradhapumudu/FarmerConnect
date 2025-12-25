@@ -181,7 +181,11 @@ class M_disease {
     // Get officer responses for a report
     public function getOfficerResponses($reportCode) {
         try {
-            $this->db->query("SELECT * FROM disease_officer_responses WHERE report_code = :report_code ORDER BY created_at DESC");
+            $this->db->query("SELECT dor.*, o.first_name, o.last_name 
+                              FROM disease_officer_responses dor 
+                              LEFT JOIN officers o ON dor.officer_id = o.officer_id 
+                              WHERE dor.report_code = :report_code 
+                              ORDER BY dor.created_at DESC");
             $this->db->bind(':report_code', $reportCode);
             return $this->db->resultSet();
         } catch (Exception $e) {
@@ -239,6 +243,81 @@ class M_disease {
         }
 
         return $this->db->resultSet();
+    }
+
+    // Update report status
+    public function updateReportStatus($reportCode, $status) {
+        try {
+            $this->db->query("UPDATE disease_reports SET status = :status, updated_at = NOW() WHERE report_code = :report_code");
+            $this->db->bind(':status', $status);
+            $this->db->bind(':report_code', $reportCode);
+            return $this->db->execute();
+        } catch (Exception $e) {
+            error_log("Exception in updateReportStatus: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Submit officer response/recommendation
+    public function submitOfficerResponse($reportCode, $officerId, $message, $media = null) {
+        try {
+            $this->db->query("INSERT INTO disease_officer_responses (report_code, officer_id, response_message, response_media, created_at) 
+                              VALUES (:report_code, :officer_id, :message, :media, NOW())");
+            $this->db->bind(':report_code', $reportCode);
+            $this->db->bind(':officer_id', $officerId);
+            $this->db->bind(':message', $message);
+            $this->db->bind(':media', $media);
+            return $this->db->execute();
+        } catch (Exception $e) {
+            error_log("Exception in submitOfficerResponse: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Get single officer response by ID
+    public function getOfficerResponseById($id) {
+        try {
+            $this->db->query("SELECT * FROM disease_officer_responses WHERE id = :id");
+            $this->db->bind(':id', $id);
+            return $this->db->single();
+        } catch (Exception $e) {
+            error_log("Exception in getOfficerResponseById: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Update officer response
+    public function updateOfficerResponse($id, $message, $media = null) {
+        try {
+            $sql = "UPDATE disease_officer_responses SET response_message = :message, updated_at = NOW()";
+            if ($media !== null) { // Only update media if provided (chk for null specifically)
+                 $sql .= ", response_media = :media";
+            }
+            $sql .= " WHERE id = :id";
+            
+            $this->db->query($sql);
+            $this->db->bind(':id', $id);
+            $this->db->bind(':message', $message);
+            if ($media !== null) {
+                $this->db->bind(':media', $media);
+            }
+            return $this->db->execute();
+        } catch (Exception $e) {
+            error_log("Exception in updateOfficerResponse: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Delete officer response
+    public function deleteOfficerResponse($id) {
+        try {
+            $this->db->query("DELETE FROM disease_officer_responses WHERE id = :id");
+            $this->db->bind(':id', $id);
+            return $this->db->execute();
+        } catch (Exception $e) {
+            error_log("Exception in deleteOfficerResponse: " . $e->getMessage());
+            return false;
+        }
     }
 }
 ?>

@@ -8,9 +8,9 @@
                 <i class="fas fa-arrow-left"></i> Back to Reports
             </a>
             <div class="title-row">
-                <h1>Report: <?php echo $data['report']->report_code; ?></h1>
+                <h1>Report : <?php echo $data['report']->report_code; ?></h1>
                 <span class="status-badge status-<?php echo strtolower($data['report']->status); ?>">
-                    <?php echo ucfirst($data['report']->status); ?>
+                    <?php echo ucwords(str_replace('_', ' ', $data['report']->status)); ?>
                 </span>
             </div>
             <p class="report-date">Submitted on <?php echo date('F d, Y \a\t h:i A', strtotime($data['report']->created_at)); ?></p>
@@ -114,7 +114,7 @@
         
         <?php if(empty($data['officer_responses'])): ?>
             <div class="empty-responses">
-                <p>No feedback provided by officers yet.</p>
+                <p>No feedback provided yet.</p>
                 <span class="status-pill pending">Pending Review</span>
             </div>
         <?php else: ?>
@@ -124,16 +124,41 @@
                         <div class="timeline-marker"></div>
                         <div class="timeline-content">
                             <div class="response-header">
-                                <span class="officer-name">Agricultural Officer</span> <!-- You could add officer name if available in join -->
+                                <span class="officer-name">
+                                    <?php 
+                                        $officerName = isset($response->first_name) && isset($response->last_name) 
+                                            ? htmlspecialchars($response->first_name . ' ' . $response->last_name) 
+                                            : 'Agricultural Officer';
+                                        echo $officerName . ' (' . htmlspecialchars($response->officer_id) . ')'; 
+                                    ?>
+                                </span>
                                 <span class="response-date"><?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?></span>
                             </div>
                             <div class="response-body">
-                                <?php echo nl2br(htmlspecialchars($response->response)); ?>
+                                <?php echo nl2br(htmlspecialchars($response->response_message)); ?>
                             </div>
-                            <?php if(!empty($response->recommended_action)): ?>
-                                <div class="recommendation">
-                                    <strong><i class="fas fa-lightbulb"></i> Recommendation:</strong>
-                                    <p><?php echo nl2br(htmlspecialchars($response->recommended_action)); ?></p>
+                            
+                            <?php if(!empty($response->response_media)): ?>
+                                <div class="response-media-gallery">
+                                    <?php 
+                                    $respFiles = explode(',', $response->response_media);
+                                    foreach($respFiles as $rFile):
+                                        $rFile = trim($rFile);
+                                        if(empty($rFile)) continue;
+                                        $rFileUrl = URLROOT . '/disease/viewResponseMedia/' . $response->id . '/' . urlencode($rFile);
+                                        $ext = strtolower(pathinfo($rFile, PATHINFO_EXTENSION));
+                                        $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                    ?>
+                                        <div class="media-item-small" onclick="openLightbox('<?php echo $rFileUrl; ?>', '<?php echo $isImage ? 'image' : 'video'; ?>')">
+                                            <?php if($isImage): ?>
+                                                <img src="<?php echo $rFileUrl; ?>" alt="Evidence">
+                                            <?php else: ?>
+                                                <div class="video-placeholder">
+                                                    <i class="fas fa-play"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endforeach; ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -204,5 +229,47 @@
         document.getElementById('lightbox-video').pause();
     }
 </script>
+
+<style>
+    /* Small Media Grid for Responses */
+    .response-media-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .media-item-small {
+        position: relative;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 1px solid #eee;
+        background: #f9f9f9;
+        transition: transform 0.2s;
+    }
+    
+    .media-item-small:hover {
+        transform: scale(1.02);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .media-item-small img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .media-item-small .video-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        color: white;
+    }
+</style>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

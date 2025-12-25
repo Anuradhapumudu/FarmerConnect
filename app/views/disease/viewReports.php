@@ -99,7 +99,7 @@
                             </td>
                             <td>
                                 <span class="status-badge status-<?php echo strtolower($report->status); ?>">
-                                    <?php echo ucfirst($report->status); ?>
+                                    <?php echo ucwords(str_replace('_', ' ', $report->status)); ?>
                                 </span>
                             </td>
                             <td>
