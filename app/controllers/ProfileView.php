@@ -47,7 +47,7 @@ class ProfileView extends Controller {
             'seller' => $sellerProfile
         ];
 
-                if (!$sellerProfile) {
+        if (!$sellerProfile) {
     // redirect to admin login instead of dying
     header('Location: ' . URLROOT . '/users/login');
     exit;
@@ -55,7 +55,7 @@ class ProfileView extends Controller {
         $this->view('profile/V_sellerprofile', $data);
     }
 
-public function updateSeller() {
+   public function updateSeller() {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         header('Location: ' . URLROOT . '/profile');
         exit;

@@ -19,43 +19,41 @@
                 </div>
                 
                 <div class="team-grid">
+                     <?php foreach($data['members'] as $member): ?>
+                        <?php
+                            $img = $member->image ?? '';
+                            if (empty($img)) {
+                                $imgUrl = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+                            } elseif (strpos($img, 'http') === 0) {
+                                $imgUrl = $img;
+                            } else {
+                                $imgUrl = URLROOT . '/' . $img;
+                            }
+                        ?>
                     <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Sarath Soysa" class="member-img">
-                        <div class="member-name">Sarath Soysa</div>
-                        <div class="member-role">Agricultural Officer</div>
+                        <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($member->name) ?>" class="member-img">
+                        <div class="member-name"><?= htmlspecialchars($member->name) ?></div>
+                        <div class="member-role"><?= htmlspecialchars($member->type) ?></div>
                         <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> 075 612 8962</p>
+                        <p> <i class="fas fa-phone"></i> <?= htmlspecialchars($member->phone) ?></p>
+                        
                            
                         </div>
                     </div>
-                    
-                    <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Nilan Madushan" class="member-img">
-                        <div class="member-name">Nilan Madushan</div>
-                        <div class="member-role">Agricultural Officer</div>
-                        <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> 077 251 1562</p>
-                            
-                        </div>
-                    </div>
-                    
-                    <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Kamal Perera" class="member-img">
-                        <div class="member-name">Kamal Perera</div>
-                        <div class="member-role">Admin Support</div>
-                        <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> 077 251 6394</p>
-                            
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
+
                 </div>
             </div>
             
             
             <div class="emergency-contact">
                 <h3>Emergency Contact</h3>
-                <div class="emergency-number">077 123 45678</div>
-                <p class="emergency-text">Available 24/7 for urgent agricultural issues requiring immediate assistance</p>
+                <div class="emergency-number">
+                    <?= htmlspecialchars($data['emergencyNumber']->phone ?? 'Not set') ?>
+                </div>
+                <p class="emergency-text">
+                    Available 24/7 for urgent agricultural issues requiring immediate assistance
+                </p>
         </div>
     </section>
 </main>

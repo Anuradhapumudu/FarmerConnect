@@ -57,12 +57,12 @@
                             <!-- Edit Form -->
                             <form action="<?= URLROOT ?>/help/edit/<?= $member->id ?>" method="POST" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <label>Name</label>
+                                    <div class="member-name">Name</div>
                                     <input type="text" name="name" value="<?= htmlspecialchars($member->name) ?>" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Phone</label>
+                                    <div class="member-name">Phone</div>
                                     <input type="text" 
                                                 name="phone" 
                                                 value="<?= htmlspecialchars($member->phone) ?>" 
@@ -71,18 +71,13 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Role / Type</label>
+                                    <div class="member-name">Role / Type</div>
                                     <select name="type" required>
                                         <option value="Officer" <?= $member->type === 'Officer' ? 'selected' : '' ?>>Officer</option>
                                         <option value="Admin" <?= $member->type === 'Admin' ? 'selected' : '' ?>>Admin</option>
                                     </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label>Profile Image</label>
-                                    <input type="file" name="profile_image" accept="image/*" onchange="previewImage(event, 'memberImage<?= $member->id ?>')">
-                                    <input type="hidden" name="existing_image" value="<?= htmlspecialchars($member->image) ?>">
-                                </div>
 
                                 <div class="officer-actions">
                                     <button type="submit" class="btn btn-outline">Save</button>

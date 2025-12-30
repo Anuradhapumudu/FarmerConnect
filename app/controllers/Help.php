@@ -4,17 +4,89 @@ class Help extends Controller {
     private $helpModel;
 
     public function __construct() {
+
+        if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+                // Check if logged-in and correct user type
+        if (!isset($_SESSION['user_type'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit;
+        }
+
+            // For admin, make sure they are redirected to admin login if session invalid
+        if ($_SESSION['user_type'] === 'admin' && !isset($_SESSION['user_id'])) {
+        header('Location: ' . URLROOT . '/admin/adminlogin');
+        exit;
+        }
+
         $this->helpModel = $this->model('M_Help');
     }
 
+        public function index() {
+        switch($_SESSION['user_type']) {
+            case 'farmer':
+                $this->helpOfficer();
+                break;
+            case 'seller':
+                $this->helpSeller();
+                break;
+            case 'admin':
+                $this->helpAdmin();
+                break;
+            case 'officer':
+                $this->helpOfficer();
+                break;
+            default:
+                header('Location: ' . URLROOT . '/users/login');
+                exit;
+        }
+    }
+
     // View page
-    public function index() {
+    public function helpAdmin() {
         $data = [
             'members' => $this->helpModel->getMembers(),
             'emergencyNumber' => $this->helpModel->getEmergencyContact()
         ];
 
         $this->view('help/V_helpAdmin', $data);
+    }
+
+    
+    public function helpOfficer() {
+         $data = [
+             'members' => $this->helpModel->getMembers(),
+            'emergencyNumber' => $this->helpModel->getEmergencyContact()
+         ];
+
+        $this->view('help/V_helpOfficer', $data);
+    }
+
+    
+    public function helpSeller() {
+
+        $seller_id = $_SESSION['user_id'];
+
+         $data = [
+             'members' => $this->helpModel->getMembers(),
+            'emergencyNumber' => $this->helpModel->getEmergencyContact()
+         ];
+         
+
+        $this->view('help/V_helpSeller', $data);
+    }
+
+    
+    public function helpFarmer() {
+
+          $data = [
+             'members' => $this->helpModel->getMembers(),
+            'emergencyNumber' => $this->helpModel->getEmergencyContact()
+         ];
+
+        $this->view('help/V_helpFarmer', $data);
     }
 
     // Add support member
@@ -28,7 +100,7 @@ class Help extends Controller {
                 die('Failed to add member');
             }
 
-            header("Location: " . URLROOT . "/help/index");
+            header("Location: " . URLROOT . "/help/helpAdmin");
             exit;
         }
     }
@@ -36,7 +108,7 @@ class Help extends Controller {
     // Remove support member
     public function delete($id, $type) {
         $this->helpModel->removeMember($id, $type);
-        header("Location: " . URLROOT . "/help/index");
+        header("Location: " . URLROOT . "/help/helpAdmin");
         exit;
     }
 
@@ -49,18 +121,13 @@ class Help extends Controller {
                 'name' => $_POST['name'],
                 'phone' => $_POST['phone'],
                 'type' => $_POST['type'],
-                'image' => $_POST['existing_image']
+
             ];
 
-            if (!empty($_FILES['profile_image']['name'])) {
-                $imageName = uniqid() . '_' . $_FILES['profile_image']['name'];
-                $path = 'uploads/help/' . $imageName;
-                move_uploaded_file($_FILES['profile_image']['tmp_name'], $path);
-                $data['image'] = $path;
-            }
+
 
             $this->helpModel->editMember($data);
-            header("Location: " . URLROOT . "/help/index");
+            header("Location: " . URLROOT . "/help/helpAdmin");
             exit;
         }
     }
@@ -69,7 +136,7 @@ class Help extends Controller {
     public function updateEmergency() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->helpModel->updateEmergencyContact($_POST['phone']);
-            header("Location: " . URLROOT . "/help/index");
+            header("Location: " . URLROOT . "/help/helpAdmin");
             exit;
         }
     }
