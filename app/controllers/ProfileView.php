@@ -13,6 +13,12 @@ class ProfileView extends Controller {
             exit;
         }
 
+            // For admin, make sure they are redirected to admin login if session invalid
+        if ($_SESSION['user_type'] === 'admin' && !isset($_SESSION['user_id'])) {
+        header('Location: ' . URLROOT . '/admin/adminlogin');
+        exit;
+        }
+
         $this->profileViewModel = $this->model('M_ProfileView', new Database());
     }
 
@@ -40,6 +46,12 @@ class ProfileView extends Controller {
         $data = [
             'seller' => $sellerProfile
         ];
+
+                if (!$sellerProfile) {
+    // redirect to admin login instead of dying
+    header('Location: ' . URLROOT . '/users/login');
+    exit;
+}
         $this->view('profile/V_sellerprofile', $data);
     }
 
@@ -141,6 +153,12 @@ public function updateSeller() {
         $data = [
             'officer' => $officerProfile
         ];
+
+        if (!$officerProfile) {
+    // redirect to admin login instead of dying
+    header('Location: ' . URLROOT . '/users/login');
+    exit;
+}
         $this->view('profile/V_officerprofile', $data);
     }
 
@@ -233,9 +251,11 @@ public function adminProfile() {
     $admin_id = $_SESSION['user_id'];
 
     $adminProfile = $this->profileViewModel->getAdminProfile($admin_id);
-    if (!$adminProfile) {
-        die('Admin profile not found');
-    }
+if (!$adminProfile) {
+    // redirect to admin login instead of dying
+    header('Location: ' . URLROOT . '/admin/adminlogin');
+    exit;
+}
 
     $this->view('profile/V_adminprofile', [
         'admin' => $adminProfile
