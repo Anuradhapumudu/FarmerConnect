@@ -56,11 +56,11 @@
               </span>
             </td>
           <td data-label="Action">
-              <a href="<?= URLROOT ?>/Admin/SellersList/show/<?= $seller->seller_id ?>" class="action-btn view-btn">
+              <a href="<?= URLROOT ?>/Admin/UserList/show/<?= $seller->seller_id ?>" class="action-btn view-btn">
                   <i class="fas fa-eye"></i> View
               </a>
 
-              <a href="<?= URLROOT ?>/Admin/SellersList/edit/<?= $seller->seller_id ?>" class="action-btn edit-btn">
+              <a href="<?= URLROOT ?>/Admin/UserList/edit/<?= $seller->seller_id ?>" class="action-btn edit-btn">
                   <i class="fas fa-edit"></i> Edit
               </a>
           </td>

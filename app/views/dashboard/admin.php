@@ -17,7 +17,7 @@
     <h2>Who We Serve</h2>
     <div class="user_Information">
 
-      <a href="<?php echo URLROOT; ?>/Admin/FarmersList" class="actor-link">
+      <a href="<?php echo URLROOT; ?>/Admin/UserList/farmerlist" class="actor-link">
         <div class="actor">
           <i class="fa-solid fa-tractor fa-2x"></i>
           <h3>Farmers</h3>
@@ -25,7 +25,7 @@
         </div>
       </a>
 
-      <a href="<?php echo URLROOT; ?>/Admin/OfficersList" class="actor-link">
+      <a href="<?php echo URLROOT; ?>/Admin/UserList/officerlist" class="actor-link">
       <div class="actor">
         <i class="fa-solid fa-seedling fa-2x"></i>
         <h3>Agri Officers</h3>
@@ -33,7 +33,7 @@
       </div>
       </a>
 
-      <a href="<?php echo URLROOT; ?>/Admin/SellersList" class="actor-link">
+      <a href="<?php echo URLROOT; ?>/Admin/UserList/sellerlist" class="actor-link">
       <div class="actor">
         <i class="fa-solid fa-store fa-2x"></i>
         <h3>Seller Agents</h3>
