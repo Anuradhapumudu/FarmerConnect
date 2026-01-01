@@ -90,47 +90,60 @@ class Help extends Controller {
     }
 
     // Add support member
-    public function add() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+public function add() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $result = $this->helpModel->addMember($_POST['id'], $_POST['type']);
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-            if (!$result) {
-                die('Failed to add member');
-            }
+        $id   = trim($_POST['id']);
+        $type = trim($_POST['type']);
 
-            header("Location: " . URLROOT . "/help/helpAdmin");
-            exit;
+        $errors = [];
+
+        // 1️⃣ Check if user exists
+        if (!$this->helpModel->userExists($id, $type)) {
+            $errors[] = "Invalid Member ID. No such $type exists.";
         }
+
+        // 2️⃣ Check if already added
+        if ($this->helpModel->isAlreadyHelpMember($id)) {
+            $errors[] = "This member is already in the Help Center.";
+        }
+
+        // ❌ If errors → reload page with alert
+        if (!empty($errors)) {
+            $data = [
+                'members' => $this->helpModel->getMembers(),
+                'emergencyNumber' => $this->helpModel->getEmergencyContact(),
+                'form_errors' => [
+                    'add_member' => $errors
+                ],
+                'form_data' => [
+                    'id' => $id,
+                    'type' => $type
+                ]
+            ];
+
+            $this->view('help/V_helpAdmin', $data);
+            return;
+        }
+
+        // ✅ Insert if everything is valid
+        $this->helpModel->addMember($id, $type);
+
+        header("Location: " . URLROOT . "/help/helpAdmin");
+        exit;
     }
+}
+
 
     // Remove support member
-    public function delete($id, $type) {
-        $this->helpModel->removeMember($id, $type);
+    public function delete($id) {
+        $this->helpModel->removeMember($id);
         header("Location: " . URLROOT . "/help/helpAdmin");
         exit;
     }
 
-    // Edit support member
-    public function edit($id) {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $data = [
-                'id' => $id,
-                'name' => $_POST['name'],
-                'phone' => $_POST['phone'],
-                'type' => $_POST['type'],
-
-            ];
-
-
-
-            $this->helpModel->editMember($data);
-            header("Location: " . URLROOT . "/help/helpAdmin");
-            exit;
-        }
-    }
 
     // Update emergency number
     public function updateEmergency() {

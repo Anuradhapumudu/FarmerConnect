@@ -29,64 +29,38 @@
                 <?php endif; ?>
 
                 <div class="team-grid">
-                    <?php foreach($data['members'] as $member): ?>
-                        <?php
-                            $img = $member->image ?? '';
-                            if (empty($img)) {
-                                $imgUrl = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
-                            } elseif (strpos($img, 'http') === 0) {
-                                $imgUrl = $img;
-                            } else {
-                                $imgUrl = URLROOT . '/' . $img;
-                            }
-                        ?>
-                        <div class="team-member">
-                            <?php if (!empty($data['form_errors']['edit_' . $member->id])): ?>
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        <?php foreach ($data['form_errors']['edit_' . $member->id] as $error): ?>
-                                            <li><?= htmlspecialchars($error) ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </div>
-                            <?php endif; ?>
+<div class="team-grid">
+    <?php foreach ($data['members'] as $member): ?>
+        <?php
+            $img = $member->image ?? '';
+            if (empty($img)) {
+                $imgUrl = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+            } elseif (strpos($img, 'http') === 0) {
+                $imgUrl = $img;
+            } else {
+                $imgUrl = URLROOT . '/' . $img;
+            }
+        ?>
 
-                            <!-- Live Preview Image -->
-                            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($member->name) ?>" class="member-img" id="memberImage<?= $member->id ?>">
+        <div class="team-member">
+            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($member->name) ?>" class="member-img">
+            <div class="member-name"><?= htmlspecialchars($member->name) ?></div>
+            <div class="member-role"><?= htmlspecialchars($member->type) ?></div>
+            <div class="member-contact">
+                <p><i class="fas fa-phone"></i> <?= htmlspecialchars($member->phone) ?></p>
 
-                            <!-- Edit Form -->
-                            <form action="<?= URLROOT ?>/help/edit/<?= $member->id ?>" method="POST" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <div class="member-name">Name</div>
-                                    <input type="text" name="name" value="<?= htmlspecialchars($member->name) ?>" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="member-name">Phone</div>
-                                    <input type="text" 
-                                                name="phone" 
-                                                value="<?= htmlspecialchars($member->phone) ?>" 
-                                                placeholder="10 digits only (no spaces)"
-                                                required>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="member-name">Role / Type</div>
-                                    <select name="type" required>
-                                        <option value="Officer" <?= $member->type === 'Officer' ? 'selected' : '' ?>>Officer</option>
-                                        <option value="Admin" <?= $member->type === 'Admin' ? 'selected' : '' ?>>Admin</option>
-                                    </select>
-                                </div>
-
-
-                                <div class="officer-actions">
-                                    <button type="submit" class="btn btn-outline">Save</button>
-                                    <a href="<?= URLROOT ?>/help/delete/<?= $member->id ?>/<?= $member->type ?>" class="btn btn-danger">Remove</a>
-                                </div>
-                            </form>
-                        </div>
-                    <?php endforeach; ?>
+                <div class="officer-actions">
+                    <a href="<?= URLROOT ?>/help/delete/<?= $member->id ?>" 
+                       class="btn btn-danger"
+                       onclick="return confirm('Remove this member from Help Center?')">
+                       Remove
+                    </a>
                 </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+</div>
 
                 <!-- Add New Support Member Section -->
                 <div class="section-title">
