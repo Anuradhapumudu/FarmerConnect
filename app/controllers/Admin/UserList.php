@@ -19,6 +19,11 @@ class UserList extends Controller {
         $this->adminModel = $this->model('M_Admin', new Database());
     }
 
+    // Default method so router can call controller without specifying method
+    public function index() {
+        $this->sellerlist();
+    }
+
 
     // List all sellers
     public function sellerlist() {
@@ -29,88 +34,30 @@ class UserList extends Controller {
         $this->view('admin/V_sellerslist', $data);
     }
 
-    // Delete seller
-    public function delete($id) {
-        if ($this->adminModel->deleteSeller($id)) {
-            header('Location: ' . URLROOT . '/Admin/SellersList');
-            exit;
-        }
-        die('Something went wrong while deleting seller.');
-    }
 
     // Show seller details
-    public function show($id = null) {
+    public function showseller($id = null) {
         if (!$id) {
-            header('Location: ' . URLROOT . '/Admin/SellersList');
+            header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
             exit;
         }
 
         $seller = $this->adminModel->getSellerById($id);
 
         if (!$seller) {
-            header('Location: ' . URLROOT . '/Admin/SellersList');
+            header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
             exit;
         }
 
         $this->view('admin/V_sellerview', ['seller' => $seller]);
     }
 
-       public function edit($id = null) {
-        // Handle POST request (form submission)
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $seller_id = $_POST['seller_id'] ?? null;
-
-            if (!$seller_id) {
-                header('Location: ' . URLROOT . '/Admin/SellersList');
-                exit;
-            }
-
-            $data = [
-                'first_name'      => trim($_POST['first_name']),
-                'last_name'       => trim($_POST['last_name']),
-                'nic'             => trim($_POST['nic']),
-                'email'           => trim($_POST['email']),
-                'phone_no'        => trim($_POST['phone_no'] ?? ''),
-                'address'         => trim($_POST['address'] ?? ''),
-                'company_name'    => trim($_POST['company_name'] ?? ''),
-                'brn'             => trim($_POST['brn']),
-                'approval_status' => $_POST['approval_status'] ?? 'Pending'
-            ];
-
-            if ($this->adminModel->updateSeller($seller_id, $data)) {
-                // Send email if status changed to approved
-                if (strtolower($data['approval_status']) === 'approved') {
-                    $seller = $this->adminModel->getSellerById($seller_id);
-                    if (!empty($seller->email)) {
-                        sendApprovalEmail($seller->email, $seller->seller_id);
-                    }
-                }
-                header('Location: ' . URLROOT . '/Admin/SellersList');
-                exit;
-            }
-            die('Something went wrong while updating seller.');
-        }
-
-        // GET request - display form with current values
-        if (!$id) {
-            header('Location: ' . URLROOT . '/Admin/SellersList');
-            exit;
-        }
-
-        $seller = $this->adminModel->getSellerById($id);
-        if (!$seller) {
-            header('Location: ' . URLROOT . '/Admin/SellersList');
-            exit;
-        }
-
-        $this->view('admin/V_selleredit', ['seller' => $seller]);
-    }
 
     // Approve seller
     public function approve($id) {
         $seller = $this->adminModel->getSellerById($id);
         if (!$seller) {
-            header('Location: ' . URLROOT . '/Admin/SellersList');
+            header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
             exit;
         }
 
@@ -119,23 +66,23 @@ class UserList extends Controller {
         foreach ($requiredFields as $field) {
             if (empty($seller->$field)) {
                 $_SESSION['error'] = "Cannot approve seller: Missing required information ($field).";
-                header('Location: ' . URLROOT . '/Admin/SellersList');
+                header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
                 exit;
             }
         }
 
         if (!filter_var($seller->email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['error'] = "Cannot approve seller: Invalid email.";
-            header('Location: ' . URLROOT . '/Admin/SellersList');
+            header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
             exit;
         }
 
-        $this->adminModel->updateStatus($id, 'Approved');
+        $this->adminModel->updateSellerStatus($id, 'Approved');
 
         // Send approval email
         sendApprovalEmail($seller->email, $seller->seller_id);
 
-        header('Location: ' . URLROOT . '/Admin/SellersList');
+        header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
         exit;
     }
 
@@ -143,39 +90,20 @@ class UserList extends Controller {
     public function reject($id) {
         $seller = $this->adminModel->getSellerById($id);
         if (!$seller) {
-            header('Location: ' . URLROOT . '/Admin/SellersList');
+            header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
             exit;
         }
 
-        $this->adminModel->updateStatus($id, 'Rejected');
-        header('Location: ' . URLROOT . '/Admin/SellersList');
+        $this->adminModel->updateSellerStatus($id, 'Rejected');
+        header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
         exit;
     }
 
-    // In SellersList controller
-        public function update($seller_id) {
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $data = [
-            'first_name' => trim($_POST['first_name']),
-            'last_name' => trim($_POST['last_name']),
-            'email' => trim($_POST['email']),
-            'phone_no' => trim($_POST['phone_no'] ?? ''),
-            'address' => trim($_POST['address'] ?? ''),
-            'company_name' => trim($_POST['company_name'] ?? ''),
-            'brn' => trim($_POST['brn'] ?? ''),
-            'approval_status' => $_POST['approval_status'] ?? 'Pending'
-        ];
 
-        if($this->adminModel->updateSeller($seller_id, $data)) {
-            header('Location: ' . URLROOT . '/Admin/SellersList');
-            exit;
-        } else {
-            die('Error updating seller.');
-        }
-    }
-}
+    
 
 
+//farmer list
     public function farmerlist() {
         $data = [
             'farmers' => $this->adminModel->getAllFarmers(),
@@ -185,13 +113,112 @@ class UserList extends Controller {
     }
 
 
+        public function showfarmer($id = null) {
+            // If no ID is provided, redirect back to the farmer list
+        if (!$id) {
+            header('Location: ' . URLROOT . '/Admin/UserList/farmerlist');
+            exit;
+        }
 
+
+        $farmer = $this->adminModel->getFarmerById($id);
+        // If the ID is invalid or the farmer was deleted, redirect back
+        if (!$farmer) {
+            header('Location: ' . URLROOT . '/Admin/UserList/farmerlist');
+            exit;
+        }
+
+        $paddyDetails = $this->adminModel->getPaddyDetailsById($id);
+
+         $this->view('admin/V_farmerview', [
+        'farmer' => $farmer,
+        'paddyDetails' => $paddyDetails
+    ]);
+    }
+
+    
+        public function inactivefarmer($id) {
+        $farmer = $this->adminModel->getFarmerById($id);
+        if (!$farmer) {
+            header('Location: ' . URLROOT . '/Admin/UserList/farmerlist/');
+            exit;
+        }
+
+        $this->adminModel->updateFarmerStatus($id, 'Inactive');
+        header('Location: ' . URLROOT . '/Admin/UserList/farmerlist/');
+        exit;
+    }
+
+        public function activefarmer($id) {
+        $farmer = $this->adminModel->getFarmerById($id);
+        if (!$farmer) {
+            header('Location: ' . URLROOT . '/Admin/UserList/farmerlist');
+            exit;
+        }
+
+        $this->adminModel->updateFarmerStatus($id, 'Active');
+
+        header('Location: ' . URLROOT . '/Admin/UserList/farmerlist');
+        exit;
+    }
+
+
+
+
+
+    //officer list
         public function officerlist() {
         $data = [
             'officers' => $this->adminModel->getAllOfficers(),
             'counts'  => $this->adminModel->getOfficerCounts()
         ];
         $this->view('admin/V_officerslist', $data);
+    }
+
+            public function showofficer($id = null) {
+            // If no ID is provided, redirect back to the farmer list
+        if (!$id) {
+            header('Location: ' . URLROOT . '/Admin/UserList/officerlist');
+            exit;
+        }
+
+
+        $officer = $this->adminModel->getOfficerById($id);
+        // If the ID is invalid or the officer was deleted, redirect back
+        if (!$officer) {
+            header('Location: ' . URLROOT . '/Admin/UserList/officerlist');
+            exit;
+        }
+
+
+
+ $this->view('admin/V_officerview', ['officer' => $officer]);
+    }
+
+
+            public function inactiveofficer($id) {
+        $officer = $this->adminModel->getOfficerById($id);
+        if (!$officer) {
+            header('Location: ' . URLROOT . '/Admin/UserList/officerlist/');
+            exit;
+        }
+
+        $this->adminModel->updateOfficerStatus($id, 'Inactive');
+        header('Location: ' . URLROOT . '/Admin/UserList/officerlist/');
+        exit;
+    }
+
+        public function activeofficer($id) {
+        $officer = $this->adminModel->getOfficerById($id);
+        if (!$officer) {
+            header('Location: ' . URLROOT . '/Admin/UserList/officerlist');
+            exit;
+        }
+
+        $this->adminModel->updateOfficerStatus($id, 'Active');
+
+        header('Location: ' . URLROOT . '/Admin/UserList/officerlist');
+        exit;
     }
 
 }

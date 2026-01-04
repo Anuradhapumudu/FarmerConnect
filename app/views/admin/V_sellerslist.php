@@ -37,7 +37,7 @@
       <table>
         <thead>
           <tr>
-            <th>NIC</th>
+            <th>Seller ID</th>
             <th>Name</th>
             <th>Company</th>
             <th>Status</th>
@@ -47,7 +47,7 @@
         <tbody>
         <?php foreach($data['sellers'] as $seller): ?>
           <tr>
-            <td data-label="NIC"><?= $seller->nic ?></td>
+            <td data-label="Seller ID"><?= $seller->seller_id ?></td>
             <td data-label="Name"><?= $seller->first_name . ' ' . $seller->last_name ?></td>
             <td data-label="Company"><?= $seller->company_name ?></td>
             <td data-label="Status">
@@ -56,13 +56,10 @@
               </span>
             </td>
           <td data-label="Action">
-              <a href="<?= URLROOT ?>/Admin/UserList/show/<?= $seller->seller_id ?>" class="action-btn view-btn">
+              <a href="<?= URLROOT ?>/Admin/UserList/showseller/<?= $seller->seller_id ?>" class="action-btn view-btn">
                   <i class="fas fa-eye"></i> View
               </a>
 
-              <a href="<?= URLROOT ?>/Admin/UserList/edit/<?= $seller->seller_id ?>" class="action-btn edit-btn">
-                  <i class="fas fa-edit"></i> Edit
-              </a>
           </td>
 
           </tr>
@@ -70,8 +67,7 @@
         </tbody>
       </table>
       </div>
-    </div>
- </div>
+ 
 </main>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>

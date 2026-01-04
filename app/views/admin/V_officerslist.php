@@ -6,7 +6,7 @@
  <div class="containers">
     <div class="admin-header">
       <h1>Officers Management</h1>
-      <p>View and manage all registered farmers</p>
+      <p>View and manage all registered Officers</p>
     </div>
 
     <!-- Stats cards -->
@@ -35,7 +35,7 @@
       <table>
         <thead>
           <tr>
-            <th>NIC</th>
+            <th>Officer ID</th>
             <th>Name</th>
             <th>Status</th>
             <th>Action</th>
@@ -52,13 +52,10 @@
               </span>
             </td>
           <td data-label="Action">
-              <a href="<?= URLROOT ?>/Admin/UserList/show/<?= $officer->officer_id ?>" class="action-btn view-btn">
+              <a href="<?= URLROOT ?>/Admin/UserList/showofficer/<?= $officer->officer_id ?>" class="action-btn view-btn">
                   <i class="fas fa-eye"></i> View
               </a>
 
-              <a href="<?= URLROOT ?>/Admin/UserList/edit/<?= $officer->officer_id ?>" class="action-btn edit-btn">
-                  <i class="fas fa-edit"></i> Edit
-              </a>
           </td>
 
           </tr>

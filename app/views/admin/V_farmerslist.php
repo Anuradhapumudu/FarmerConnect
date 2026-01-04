@@ -55,13 +55,10 @@
               </span>
             </td>
           <td data-label="Action">
-              <a href="<?= URLROOT ?>/Admin/UserList/show/<?= $farmer->nic ?>" class="action-btn view-btn">
+              <a href="<?= URLROOT ?>/Admin/UserList/showfarmer/<?= $farmer->nic ?>" class="action-btn view-btn">
                   <i class="fas fa-eye"></i> View
               </a>
 
-              <a href="<?= URLROOT ?>/Admin/UserList/edit/<?= $farmer->nic ?>" class="action-btn edit-btn">
-                  <i class="fas fa-edit"></i> Edit
-              </a>
           </td>
 
           </tr>
@@ -70,7 +67,6 @@
         </tbody>
       </table>
     </div>
-
 
 
 

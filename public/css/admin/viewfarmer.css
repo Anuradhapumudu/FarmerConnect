@@ -1,19 +1,22 @@
 
-    .container {
+    .containers {
       max-width: 1000px;
       margin: 0 auto;
-    }
+        }
     
     /* Header */
     .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      padding: 20px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
+  display: flex;
+  flex-direction: column; /* stack title and button vertically */
+  align-items: center;    /* center horizontally */
+  justify-content: center; /* center vertically */
+  text-align: center;      /* center text */
+  margin-bottom: 30px;
+  padding: 20px;
+  background: transparent; /* fully transparent */
+  border-radius: 16px;
+  box-shadow: none;        /* remove shadow for cleaner transparency */
+  gap: 15px;               /* spacing between elements */
     }
     
     .admin-header h1 {
@@ -45,8 +48,7 @@
     
     /* Main content layout */
     .content-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
+      display: block; /* single column for full width */
       gap: 20px;
     }
     
@@ -119,10 +121,13 @@
     
     /* Paddy details section */
     .paddy-details {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
-      padding: 25px;
+  
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
+  padding: 25px;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 30px;
     }
     
     .section-title {
@@ -140,7 +145,7 @@
     }
     
     .paddy-card {
-      background: #f9f9f9;
+      background: #f9f9f9d3;
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);

@@ -66,12 +66,15 @@ class M_Admin {
         return $this->db->execute();
     }
 
-    public function updateStatus($seller_id, $status) {
+    public function updateSellerStatus($seller_id, $status) {
         $this->db->query("UPDATE sellers SET approval_status = :status WHERE seller_id = :seller_id");
         $this->db->bind(':status', $status);
         $this->db->bind(':seller_id', $seller_id);
         return $this->db->execute();
     }
+
+
+
 
     // Farmers
     public function getAllFarmers() {
@@ -89,11 +92,35 @@ class M_Admin {
         return $this->db->single();
     }
 
+        public function getFarmerById($id) {
+        $this->db->query("SELECT f.* , r.created_at FROM farmers f INNER JOIN registrations r ON f.registration_id = r.registration_id WHERE f.nic = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+    public function getPaddyDetailsById($id)
+{
+    $this->db->query("SELECT * FROM paddy WHERE NIC_FK = :id");
+    $this->db->bind(':id', $id);
+    return $this->db->resultSet();
+}
+
+
+     public function updateFarmerStatus($farmer_id, $status) {
+        $this->db->query("UPDATE farmers SET status = :status WHERE nic = :farmer_id");
+        $this->db->bind(':status', $status);
+        $this->db->bind(':farmer_id', $farmer_id);
+        return $this->db->execute();
+    }
+
+
+
     // Officers
     public function getAllOfficers() {
         $this->db->query("SELECT * FROM officers ORDER BY officer_id DESC");
         return $this->db->resultSet() ?? [];
     }
+
 
     public function getofficerCounts() {
         $this->db->query("\n            SELECT 
@@ -103,5 +130,19 @@ class M_Admin {
             FROM officers
         ");
         return $this->db->single();
+    }
+
+
+     public function getOfficerById($id) {
+        $this->db->query("SELECT o.* , r.created_at FROM officers o INNER JOIN registrations r ON o.registration_id = r.registration_id WHERE o.officer_id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+         public function updateOfficerStatus($officer_id, $status) {
+        $this->db->query("UPDATE officers SET status = :status WHERE officer_id = :officer_id");
+        $this->db->bind(':status', $status);
+        $this->db->bind(':officer_id', $officer_id);
+        return $this->db->execute();
     }
 }

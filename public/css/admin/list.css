@@ -128,8 +128,10 @@
       font-weight: 600;
     }
     .status-active { background: #d4edda; color: #155724; }
-    .status-inactive { background: #fff3cd; color: #856404; }
+    .status-rejected { background: #f8d7da; color: #721c24; }
     .status-pending { background: #cce5ff; color: #004085; }
+     .status-approved { background: #d4edda; color: #155724; }
+    .status-inactive { background: #f8d7da; color: #721c24; }
 
   .action-btn {
   padding: 8px 12px;
