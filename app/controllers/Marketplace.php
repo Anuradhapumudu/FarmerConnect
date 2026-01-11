@@ -9,154 +9,151 @@ class Marketplace extends Controller {
         $this->marketplaceModel = $this->model('M_Marketplace/M_Marketplace', new Database());
     }
 
-    // Real PayPal Online Payment Page
-    public function onlinePayment() {
-        $product_id = $_GET['product_id'] ?? null;
-        $quantity = $_GET['quantity'] ?? 1;
 
-        if (!$product_id) {
-            header("Location: " . URLROOT . "/Marketplace/farmer");
-            exit;
-        }
+private function generatePayHereHash($order_id, $amount, $currency = "LKR") {
+    return strtoupper(
+        md5(
+            PAYHERE_MERCHANT_ID .
+            $order_id .
+            number_format($amount, 2, '.', '') .
+            $currency .
+            strtoupper(md5(PAYHERE_MERCHANT_SECRET))
+        )
+    );
+}
 
-        $product = $this->marketplaceModel->getProductByInternalId($product_id);
-        if (!$product) {
-            $_SESSION['error'] = "Product not found";
-            header("Location: " . URLROOT . "/Marketplace/farmer");
-            exit;
-        }
+public function buyProduct($id = null) {
 
-        $total_price = $product->price_per_unit * $quantity;
-
-        $data = [
-            'product' => $product,
-            'quantity' => $quantity,
-            'total_price' => $total_price,
-            'paypal_client_id' => 'AZozDm3tasgL3JYrCFAR43HQBlu9v_mqlGqlxGd_NCnvTqScZ4zGbeqLp_QcxDUtTU1PGpyPeqZXQidB' 
-        ];
-
-        $this->view('marketplace/V_onlinePayment', $data);
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $product = $this->marketplaceModel->getProductByInternalId($id);
+        $this->view('marketplace/V_buyProduct', ['product' => $product]);
+        return;
     }
 
-    // Handle PayPal Payment Success
-    public function paypalSuccess() {
-        // Get data from POST (PayPal webhook) or session
-        $payment_id = $_POST['payment_id'] ?? $_SESSION['paypal_payment_id'] ?? null;
-        $payer_id = $_POST['payer_id'] ?? $_SESSION['paypal_payer_id'] ?? null;
-        
-        $product_id = $_SESSION['product_id'] ?? null;
-        $quantity = $_SESSION['quantity'] ?? null;
-        $total_price = $_SESSION['total_price'] ?? null;
-        $seller_id = $_SESSION['seller_id'] ?? null;
-        $buyer_id = $_SESSION['farmer_id'] ?? $_SESSION['user_id'] ?? null;
+    $product  = $this->marketplaceModel->getProductByInternalId($id);
+    $quantity = (int) $_POST['quantity'];
+    $method   = $_POST['payment_method'];
 
-        if (!$product_id || !$buyer_id) {
-            $_SESSION['error'] = "Missing order information";
-            header("Location: " . URLROOT . "/Marketplace/farmer");
-            exit;
-        }
+    $total = $product->price_per_unit * $quantity;
 
-        $product = $this->marketplaceModel->getProductByInternalId($product_id);
-        if (!$product) {
-            $_SESSION['error'] = "Product not found";
-            header("Location: " . URLROOT . "/Marketplace/farmer");
-            exit;
-        }
+    // ---------------- CASH PAYMENT ----------------
+    if ($method === 'cash') {
 
-        try {
-            // Create order in database
-            $this->marketplaceModel->createOrder(
-                $buyer_id,
-                $product->item_id,
-                $seller_id,
-                $quantity,
-                $total_price,
-                'online'
-            );
+        $this->marketplaceModel->createOrder(
+            $_SESSION['nic'],
+            $product->item_id,
+            $product->seller_id,
+            $quantity,
+            $total,
+            'cash',
+            'completed',
+            null
+        );
 
-            // Update stock
-            $newQty = $product->available_quantity - $quantity;
-            $this->marketplaceModel->updateStock($product->item_id, $newQty);
+        $this->marketplaceModel->updateStock(
+            $product->item_id,
+            $product->available_quantity - $quantity
+        );
 
-            // Clear session data
-            unset($_SESSION['product_id'], $_SESSION['quantity'], 
-                  $_SESSION['total_price'], $_SESSION['seller_id'],
-                  $_SESSION['paypal_payment_id'], $_SESSION['paypal_payer_id']);
-
-            $_SESSION['success'] = "Payment successful! Order placed. PayPal ID: " . ($payment_id ?? 'N/A');
-            
-            // Return success response for AJAX or redirect
-            if (isset($_POST['payment_id'])) {
-                echo json_encode(['success' => true, 'message' => 'Payment processed successfully']);
-                exit;
-            } else {
-                header("Location: " . URLROOT . "/Marketplace/paymentSuccess");
-                exit;
-            }
-
-        } catch (Exception $e) {
-            error_log("PayPal Success Error: " . $e->getMessage());
-            
-            if (isset($_POST['payment_id'])) {
-                echo json_encode(['success' => false, 'message' => 'Failed to process order: ' . $e->getMessage()]);
-                exit;
-            } else {
-                $_SESSION['error'] = "Failed to process order: " . $e->getMessage();
-                header("Location: " . URLROOT . "/Marketplace/paymentCancel");
-                exit;
-            }
-        }
-    }
-
-    // Handle PayPal Payment Cancellation
-    public function paypalCancel() {
-        unset($_SESSION['product_id'], $_SESSION['quantity'], 
-              $_SESSION['total_price'], $_SESSION['seller_id'],
-              $_SESSION['paypal_payment_id'], $_SESSION['paypal_payer_id']);
-        
-        $_SESSION['error'] = "PayPal payment was cancelled";
-        $this->view('marketplace/V_paymentCancel');
-    }
-
-    // Store order data before PayPal redirect (optional)
-    public function preparePayPalOrder() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode(['success' => false, 'message' => 'Invalid request']);
-            exit;
-        }
-
-        $product_id = $_POST['product_id'] ?? null;
-        $quantity = intval($_POST['quantity'] ?? 1);
-
-        if (!$product_id) {
-            echo json_encode(['success' => false, 'message' => 'Product ID required']);
-            exit;
-        }
-
-        $product = $this->marketplaceModel->getProductByInternalId($product_id);
-        if (!$product) {
-            echo json_encode(['success' => false, 'message' => 'Product not found']);
-            exit;
-        }
-
-        $total_price = $product->price_per_unit * $quantity;
-
-        // Store in session for later use
-        $_SESSION['product_id'] = $product_id;
-        $_SESSION['quantity'] = $quantity;
-        $_SESSION['total_price'] = $total_price;
-        $_SESSION['seller_id'] = $product->seller_id;
-
-        echo json_encode([
-            'success' => true, 
-            'amount' => number_format($total_price, 2, '.', ''),
-            'currency' => 'USD'
-        ]);
+        header("Location: " . URLROOT . "/Marketplace/paymentSuccess");
         exit;
     }
 
-    // Keep your existing methods below...
-    public function paymentSuccess() {
+    // ---------------- ONLINE PAYMENT ----------------
+    $order_id = uniqid("ORD_");
+    $amount   = number_format($total, 2, '.', '');
+    $hash     = $this->generatePayHereHash($order_id, $amount);
+
+    // ✅ SAVE ORDER AS PENDING (CRITICAL)
+    $this->marketplaceModel->createOrder(
+        $_SESSION['nic'],
+        $product->item_id,
+        $product->seller_id,
+        $quantity,
+        $amount,
+        'online',
+        'pending',
+        $order_id
+    );
+
+    $payhere = [
+        "sandbox"     => true,
+        "merchant_id" => PAYHERE_MERCHANT_ID,
+        "return_url"  => URLROOT . "/Marketplace/paymentSuccessOnline",
+        "cancel_url"  => URLROOT . "/Marketplace/paymentCancel",
+        "notify_url"  => "https://YOUR-NGROK-URL/FarmerConnect/Marketplace/paymentNotification",
+
+        "order_id" => $order_id,
+        "items"    => $product->item_name,
+        "amount"   => $amount,
+        "currency" => "LKR",
+        "hash"     => $hash,
+
+        "first_name" => "Farmer",
+        "last_name"  => "User",
+        "email"      => "farmer@example.com",
+        "phone"      => "0771234567",
+        "address"    => "Sri Lanka",
+        "city"       => $product->region,
+        "country"    => "Sri Lanka"
+    ];
+
+    $this->view('marketplace/V_onlinePayment', ['payhere' => $payhere]);
+}
+
+
+public function paymentNotification() {
+
+    // LOG (debug)
+    file_put_contents(
+        APPROOT . '/payhere.log',
+        print_r($_POST, true),
+        FILE_APPEND
+    );
+
+    $merchant_id      = $_POST['merchant_id'] ?? '';
+    $order_id         = $_POST['order_id'] ?? '';
+    $payhere_amount   = $_POST['payhere_amount'] ?? '';
+    $payhere_currency = $_POST['payhere_currency'] ?? '';
+    $status_code      = $_POST['status_code'] ?? '';
+    $md5sig           = $_POST['md5sig'] ?? '';
+
+    $local_md5 = strtoupper(
+        md5(
+            $merchant_id .
+            $order_id .
+            $payhere_amount .
+            $payhere_currency .
+            $status_code .
+            strtoupper(md5(PAYHERE_MERCHANT_SECRET))
+        )
+    );
+
+    // ✅ Verify payment
+    if ($local_md5 === $md5sig && $status_code == 2) {
+
+        $order = $this->marketplaceModel->getOrderByOrderId($order_id);
+
+        if ($order && $order->status !== 'completed') {
+
+            // ✅ Mark order paid
+            $this->marketplaceModel->updateOrderStatus($order_id, 'completed');
+
+            // ✅ Update stock
+            $this->marketplaceModel->updateStock(
+                $order->item_id,
+                $order->available_quantity - $order->quantity
+            );
+        }
+    }
+
+    http_response_code(200);
+}
+
+
+
+
+        public function paymentSuccess() {
         $this->view('marketplace/V_paymentSuccess');
     }
 
@@ -164,66 +161,6 @@ class Marketplace extends Controller {
         $_SESSION['error'] = "Payment was cancelled";
         $this->view('marketplace/V_paymentCancel');
     }
-
-    // Buy Product
-    public function buyProduct($id = null) {
-        if ($id === null) {
-            $_SESSION['error'] = "Product ID is required";
-            header("Location: " . URLROOT . "/Marketplace/farmer");
-            exit;
-        }
-
-        $product = $this->marketplaceModel->getProductByInternalId($id);
-        if (!$product) {
-            $_SESSION['error'] = "Product not found";
-            header("Location: " . URLROOT . "/Marketplace/farmer");
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $buyer_id = $_SESSION['farmer_id'] ?? $_SESSION['user_id'] ?? null;
-
-            if (!$buyer_id || $buyer_id == $product->seller_id) {
-                $_SESSION['error'] = "You must be logged in as a farmer to buy this product.";
-                header("Location: " . URLROOT . "/Users/login");
-                exit;
-            }
-
-            $quantity = intval($_POST['quantity'] ?? 1);
-            $payment_method = $_POST['payment_method'] ?? 'cash';
-
-            if($quantity < 1 || $quantity > $product->available_quantity){
-                $_SESSION['error'] = "Invalid quantity selected.";
-                header("Location: " . URLROOT . "/Marketplace/buyProduct/".$id);
-                exit;
-            }
-
-            $total_price = $product->price_per_unit * $quantity;
-
-            if($payment_method === 'online'){
-                header("Location: " . URLROOT . "/Marketplace/onlinePayment?product_id=".$product->item_id."&quantity=".$quantity);
-                exit;
-            } else {
-                $this->marketplaceModel->createOrder(
-                    $buyer_id,
-                    $product->item_id,
-                    $product->seller_id,
-                    $quantity,
-                    $total_price,
-                    'cash'
-                );
-
-                $newQty = $product->available_quantity - $quantity;
-                $this->marketplaceModel->updateStock($product->item_id, $newQty);
-
-                header("Location: " . URLROOT . "/Marketplace/paymentSuccess");
-                exit;
-            }
-        }
-
-        $this->view('marketplace/V_buyProduct', ['product' => $product]);
-    }
-
 
     //  Marketplace Home (Farmer / Seller)
     public function index() {

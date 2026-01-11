@@ -4,6 +4,7 @@
 
     //Load configurations
     require_once 'config/config.php';
+    require_once 'config/payhere.php';
 
     //Load Libraries
     require_once 'libraries/Core1.php';

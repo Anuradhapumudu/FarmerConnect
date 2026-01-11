@@ -18,6 +18,7 @@ class Controller {
     // To load the view
     public function view($view, $data = []) {
         if(file_exists('../app/views/'.$view.'.php')) {
+            extract($data);
             require_once '../app/views/'.$view.'.php';
         } else {
             require_once '../app/views/404.php';

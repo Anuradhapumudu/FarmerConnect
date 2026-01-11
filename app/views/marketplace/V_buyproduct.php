@@ -44,7 +44,7 @@ $address      = htmlspecialchars($product->seller_address ?? '');
 
         <!-- Buy Form -->
         <form method="post" class="buy-form" id="buyForm">
-            <input type="hidden" name="product_id" value="<?= $itemId ?>">
+            <input type="hidden" name="item_id" value="<?= $itemId ?>">
 
             <label>
                 <b>Quantity:</b>
@@ -82,5 +82,6 @@ function updateTotal() {
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/marketplace.css?v=<?= time(); ?>">
 
 </main>
+
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
