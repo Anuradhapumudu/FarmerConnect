@@ -1,5 +1,6 @@
 .main-content {
-    max-width: 900px;
+    width: 800px;
+    max-width: 90%;
     margin: 2rem auto;
     padding: 2.5rem;
     background: #ffffff;
@@ -14,6 +15,7 @@
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #f0f0f0;
+    text-align: center;
 }
 
 form {
@@ -29,7 +31,6 @@ form {
     gap: 0.5rem;
 }
 
-/* Labels */
 label {
     font-size: 0.95rem;
     font-weight: 500;
@@ -44,7 +45,6 @@ label {
     font-weight: 600;
 }
 
-/* Input Fields */
 input[type="text"],
 textarea,
 select.category {
@@ -73,14 +73,12 @@ select.category:hover {
     border-color: #9ca3af;
 }
 
-/* Textarea Specific */
 textarea {
     min-height: 120px;
     line-height: 1.6;
     resize: vertical;
 }
 
-/* Select Dropdown */
 select.category {
     cursor: pointer;
     appearance: none;
@@ -94,7 +92,6 @@ select.category option {
     padding: 0.5rem;
 }
 
-/* File Input */
 input[type="file"] {
     padding: 0.5rem;
     font-size: 0.9rem;
@@ -117,7 +114,7 @@ input[type="file"]::file-selector-button {
     font-size: 0.9rem;
     font-weight: 500;
     color: #ffffff;
-    background: #3b82f6;
+    background: #34924f;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -125,10 +122,9 @@ input[type="file"]::file-selector-button {
 }
 
 input[type="file"]::file-selector-button:hover {
-    background: #2563eb;
+    background: #1a9039;
 }
 
-/* Button Group */
 .btn-group {
     display: flex;
     gap: 1rem;
@@ -137,7 +133,6 @@ input[type="file"]::file-selector-button:hover {
     border-top: 1px solid #f0f0f0;
 }
 
-/* Buttons */
 .create-btn,
 .cancel-btn {
     flex: 1;
@@ -185,8 +180,51 @@ input[type="file"]::file-selector-button:hover {
     transform: translateY(0);
     background: #d1d5db;
 }
+.toolbar {
+    display: inline-flex;
+    margin-bottom: 0.5rem;
+    background-color: rgb(242, 249, 243);
+    padding: 10px 10px;
+    border-radius: 10px;
+    gap: 5px;
+}
+.toolbar-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #686969;
+    margin-right: 15px;
+}
+.insert-image-btn, .bold-btn {
+    padding: 0.525rem 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #ffffff;
+    background: linear-gradient(135deg, #b7b9b8 0%, #979897 100%);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(59, 246, 121, 0.2);
+}
 
-/* Responsive Design */
+.insert-image-btn:hover, .bold-btn:hover {
+    background: linear-gradient(135deg, #7d7d7d 0%, #656565 100%);
+    box-shadow: 0 4px 8px rgba(59, 246, 100, 0.3);
+    transform: translateY(-1px);
+}
+
+.insert-image-btn:active, .bold-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.insert-image-btn i, .bold-btn i {
+    font-size: 1rem;
+}
+
 @media (max-width: 768px) {
     .main-content {
         margin: 1rem;
@@ -227,13 +265,11 @@ input[type="file"]::file-selector-button:hover {
     }
 }
 
-/* Focus Visible for Accessibility */
 *:focus-visible {
     outline: 2px solid #3b82f6;
     outline-offset: 2px;
 }
 
-/* Disabled State */
 input:disabled,
 textarea:disabled,
 select:disabled,
