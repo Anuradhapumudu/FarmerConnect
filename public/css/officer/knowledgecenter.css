@@ -17,10 +17,16 @@ body {
   padding-bottom: 40px;
   transition: margin-left 0.3s ease;
 }
+.addcategory-button {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0px 10px 0px;
+  border-radius: 8px;
+}
 .top-actions {
   display: flex;
-  justify-content: flex-end; /* Aligns the button to the right */
-  margin-bottom: 1.5rem; /* Optional spacing below */
+  justify-content: flex-end; 
+  margin-bottom: 1.5rem; 
 }
 .add-article-btn {
   background: linear-gradient(135deg, #31c281 0%, #229660 100%);
@@ -43,6 +49,171 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(46, 125, 50, 0.35);
 }
+
+.search-section {
+  max-width: 700px;
+  margin: 0 auto 40px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-form {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+.search-input {
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+.search-input:focus {
+  border-color: #2f9b63;
+}
+.search-button {
+  background-color: #2f9b63;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.search-button:hover {
+  background-color: #20804f;
+  transform: translateY(-2px);
+}
+.search-results {
+  max-width: 1080px;
+  margin: 0 auto 40px auto;
+  padding: 0 20px;
+}
+.section-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2f9b63;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding-bottom: 5px;
+}
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #878988;
+  opacity: 0.4;
+  z-index: -1;
+}
+.clear-results {
+  font-size: 18px;
+  text-decoration: none;
+  color: #555;
+  transition: color 0.2s ease;
+}
+.clear-results:hover {
+  color: #2f9b63;
+}
+.results-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+.no-results {
+  text-align: center;
+  color: #555;
+  padding: 20px 0;
+}
+.results-message {
+  font-size: 18px;
+  margin-top: 10px;
+  color: #888;
+}
+
+@media (max-width: 900px) {
+  .results-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .results-list {
+    grid-template-columns: 1fr;
+  }
+  .search-form {
+    flex-direction: column;
+  }
+  .search-button {
+    width: 100%;
+  }
+}
+
+.feature-inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+.category-options {
+  position: relative;
+  padding: 10px;
+}
+.menu-dots {
+  cursor: pointer;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.menu-dots:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
+}
+
+.options-menu {
+  display: none;
+  position: absolute;
+  top: 45px;
+  right: 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  min-width: 120px;
+  overflow: hidden;
+}
+.option-item {
+  display: block;
+  padding: 6px 8px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.option-item:hover {
+  background: #f4f4f4;
+}
 .knowledgecenter-heading {
     font-size: 50px !important;
     font-weight: bold;
@@ -62,12 +233,11 @@ body {
   text-align: center;
 }
 
-/* knowledgecenter cards */
 .features_block {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 50px;
-  max-width: 980px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 0 20px;
   justify-items: center;
@@ -82,7 +252,7 @@ body {
   cursor: pointer;
   position: relative;
   width: 100%;
-  max-width: 300px;
+  max-width: 350px;
 }
 
 .feature-card:hover {
@@ -147,7 +317,6 @@ body {
   transform: scale(1.05);
 }
 
-/* Responsive */
 @media (max-width: 900px) {
   .features_block {
     grid-template-columns: repeat(2, 1fr);
