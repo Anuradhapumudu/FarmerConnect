@@ -113,8 +113,7 @@ class Announcements extends Controller {
     }
 
     public function edit($id){
-        if (!isset($_SESSION['user_type']) || 
-            !in_array($_SESSION['user_type'], ['officer', 'admin'])) {
+        if (!isset($_SESSION['user_type']) || !in_array($_SESSION['user_type'], ['officer', 'admin'])) {
             die('Access Denied');
             exit();
         }
@@ -180,8 +179,7 @@ class Announcements extends Controller {
     }
 
     public function delete($id) {
-        if (!isset($_SESSION['user_type']) || 
-            !in_array($_SESSION['user_type'], ['officer', 'admin'])) {
+        if (!isset($_SESSION['user_type']) || !in_array($_SESSION['user_type'], ['officer', 'admin'])) {
             die('Access Denied');
             exit();
         }

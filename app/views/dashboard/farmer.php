@@ -34,7 +34,7 @@
       <p>Stay informed about pest and crop disease outbreaks in your area.</p>
 </a>
 
-    <a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterFarmer" class="feature">
+    <a href="<?php echo URLROOT; ?>/Knowledgecenter" class="feature">
       <i class="fa-solid fa-book-open fa-2x"></i>
       <h3>Knowledge Center</h3>
       <p>Access guides, tutorials, and expert advice on agriculture.</p>

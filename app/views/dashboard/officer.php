@@ -43,7 +43,7 @@
 
 
 
-    <a href="<?php echo URLROOT; ?>/Knowledgecenter/KnowledgecenterOfficer" class="feature">
+    <a href="<?php echo URLROOT; ?>/Knowledgecenter" class="feature">
 
       <i class="fa-solid fa-book-open fa-2x"></i>
       <h3>Knowledge Center</h3>
