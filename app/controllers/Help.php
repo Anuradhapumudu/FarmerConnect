@@ -3,25 +3,38 @@ class Help extends Controller {
 
     private $helpModel;
 
-    public function __construct() {
+        public function __construct() {
 
-        if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-                // Check if logged-in and correct user type
-        if (!isset($_SESSION['user_type'])) {
-            header('Location: ' . URLROOT . '/users/login');
-            exit;
-        }
-
-            // For admin, make sure they are redirected to admin login if session invalid
-        if ($_SESSION['user_type'] === 'admin' && !isset($_SESSION['user_id'])) {
-        header('Location: ' . URLROOT . '/admin/adminlogin');
-        exit;
-        }
+        $this->startSession();
+        $this->checkAuth();
 
         $this->helpModel = $this->model('M_Help');
+    }
+
+    // Start session if not already started
+    private function startSession() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+    }
+
+    // Check authentication and user type
+    private function checkAuth() {
+
+        if (!isset($_SESSION['user_type'])) {
+            $this->redirect('/users/login');
+        }
+
+        if ($_SESSION['user_type'] === 'admin' && !isset($_SESSION['user_id'])) {
+            $this->redirect('/admin/adminlogin');
+        }
+    }
+
+    // Redirect helper
+    private function redirect($path) {
+        header('Location: ' . URLROOT . $path);
+        exit;
     }
 
         public function index() {
@@ -46,6 +59,12 @@ class Help extends Controller {
 
     // View page
     public function helpAdmin() {
+
+    //checks again user is admin
+    if ($_SESSION['user_type'] !== 'admin') {
+        $this->redirect('/admin/adminlogin');
+        exit;
+    }
         $data = [
             'members' => $this->helpModel->getMembers(),
             'emergencyNumber' => $this->helpModel->getEmergencyContact()
@@ -56,6 +75,11 @@ class Help extends Controller {
 
     
     public function helpOfficer() {
+
+        if ($_SESSION['user_type'] !== 'officer') {
+        $this->redirect('/users/login');
+        exit;
+    }
          $data = [
              'members' => $this->helpModel->getMembers(),
             'emergencyNumber' => $this->helpModel->getEmergencyContact()
@@ -66,6 +90,11 @@ class Help extends Controller {
 
     
     public function helpSeller() {
+
+            if ($_SESSION['user_type'] !== 'seller') {
+        $this->redirect('/users/login');
+        exit;
+    }
 
         $seller_id = $_SESSION['user_id'];
 
@@ -81,6 +110,12 @@ class Help extends Controller {
     
     public function helpFarmer() {
 
+
+            if ($_SESSION['user_type'] !== 'farmer') {
+        $this->redirect('/users/login');
+        exit;
+    }
+
           $data = [
              'members' => $this->helpModel->getMembers(),
             'emergencyNumber' => $this->helpModel->getEmergencyContact()
@@ -88,6 +123,7 @@ class Help extends Controller {
 
         $this->view('help/V_helpFarmer', $data);
     }
+
 
     // Add support member
 public function add() {
@@ -100,17 +136,14 @@ public function add() {
 
         $errors = [];
 
-        // 1️⃣ Check if user exists
+        // Check if user exists
         if (!$this->helpModel->userExists($id, $type)) {
             $errors[] = "Invalid Member ID. No such $type exists.";
-        }
-
-        // 2️⃣ Check if already added
-        if ($this->helpModel->isAlreadyHelpMember($id)) {
+        } else if ($this->helpModel->isAlreadyHelpMember($id)) {
             $errors[] = "This member is already in the Help Center.";
         }
 
-        // ❌ If errors → reload page with alert
+        //  If errors ,,reload page with alert
         if (!empty($errors)) {
             $data = [
                 'members' => $this->helpModel->getMembers(),
@@ -128,7 +161,7 @@ public function add() {
             return;
         }
 
-        // ✅ Insert if everything is valid
+        // Insert if everything is valid
         $this->helpModel->addMember($id, $type);
 
         header("Location: " . URLROOT . "/help/helpAdmin");
@@ -148,9 +181,46 @@ public function add() {
     // Update emergency number
     public function updateEmergency() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->helpModel->updateEmergencyContact($_POST['phone']);
-            header("Location: " . URLROOT . "/help/helpAdmin");
-            exit;
+
+            $errors = [];
+            $phone = trim($_POST['phone'] ?? '');
+
+            // Check empty
+            if (empty($phone)) {
+                $errors[] = "Emergency contact number is required.";
+            }
+            // Check only digits
+            elseif (!ctype_digit($phone)) {
+                $errors[] = "Emergency contact number must contain only digits.";
+            }
+            // Check length = 10
+            elseif (strlen($phone) !== 10) {
+                $errors[] = "Emergency contact number must be exactly 10 digits.";
+            }
+
+            // If no errors ,,update
+            if (empty($errors)) {
+                $this->helpModel->updateEmergencyContact($phone);
+                header("Location: " . URLROOT . "/help/helpAdmin");
+                exit;
+            }
+
+            $data = [
+                'members' => $this->helpModel->getMembers(),
+                'emergencyNumber' => $this->helpModel->getEmergencyContact(),
+                'form_errors' => [
+                    'emergency' => $errors
+                ],
+                'form_data' => [
+                    'emergency_phone' => $phone
+                ]
+            ];
+
+            $this->view('help/V_helpAdmin', $data);
+            return;
+
+
         }
+
     }
 }

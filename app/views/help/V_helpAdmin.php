@@ -3,7 +3,6 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/help/help.css?v=<?= time(); ?>">
 
 
-
 <main class="main-content" id="mainContent">
     <section class="help-section">
         <div class="containers">
@@ -18,19 +17,11 @@
                     <h2>Our Support Team</h2>
                 </div>
 
-                <?php if (!empty($data['form_errors']['member'])): ?>
-                    <div class="alert alert-danger">
-                        <ul>
-                            <?php foreach ($data['form_errors']['member'] as $error): ?>
-                                <li><?= htmlspecialchars($error) ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
 
-                <div class="team-grid">
-<div class="team-grid">
-    <?php foreach ($data['members'] as $member): ?>
+
+                
+      <div class="team-grid">
+      <?php foreach ($data['members'] as $member): ?>
         <?php
             $img = $member->image ?? '';
             if (empty($img)) {
@@ -57,29 +48,29 @@
                     </a>
                 </div>
             </div>
-        </div>
-    <?php endforeach; ?>
-</div>
-</div>
+          </div>
+           <?php endforeach; ?>
+            </div>
+
 
                 <!-- Add New Support Member Section -->
                 <div class="section-title">
                     <h2>Add New Support Member</h2>
                 </div>
 
-                <?php if (!empty($data['form_errors']['add_member'])): ?>
-                    <div class="alert alert-danger">
-                        <ul>
-                            <?php foreach ($data['form_errors']['add_member'] as $error): ?>
-                                <li><?= htmlspecialchars($error) ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
-
                 <form action="<?= URLROOT ?>/help/add" method="POST" class="add-officer-form" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="id">Member ID</label>
+                        <!--Error checking-->
+                                        <?php if (!empty($data['form_errors']['add_member'])): ?>
+                    <div class="alert alert-danger" id="memberError" >                        
+                            <?php foreach ($data['form_errors']['add_member'] as $error): ?>
+                                    <p style="color: red;">
+                                      <?= htmlspecialchars($error) ?>  </p>
+                            <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                
                         <input type="text" class="form-control" name="id" value="<?= htmlspecialchars($data['form_data']['id'] ?? '') ?>" required>
                     </div>
 
@@ -92,7 +83,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="reset" class="btn btn-outline">Cancel</button>
+                        <button type="button" class="btn btn-outline" onclick="resetMemberForm()">Cancel</button>
                         <button type="submit" class="btn">Add Member</button>
                     </div>
                 </form>
@@ -103,14 +94,16 @@
                 <h3>Emergency Contact</h3>
 
                 <?php if (!empty($data['form_errors']['emergency'])): ?>
-                    <div class="alert alert-danger">
-                        <ul>
-                            <?php foreach ($data['form_errors']['emergency'] as $error): ?>
-                                <li><?= htmlspecialchars($error) ?></li>
-                            <?php endforeach; ?>
-                        </ul>
+                    <div class="alert alert-danger" id="emergencyError">
+                        <?php foreach ($data['form_errors']['emergency'] as $error): ?>
+                            <p style="color: red;">
+                                <?= htmlspecialchars($error) ?>
+                            </p>
+                        <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
+
+
 
                 <!-- Display Mode -->
                 <div id="emergencyDisplay" style="display: <?= !empty($data['form_errors']['emergency']) ? 'none' : 'block' ?>;">
@@ -151,16 +144,7 @@
     </section>
 </main>
 
-<script>
-function enableEmergencyEdit() {
-    document.getElementById('emergencyDisplay').style.display = 'none';
-    document.getElementById('emergencyEdit').style.display = 'block';
-}
+<script src="<?php echo URLROOT; ?>/js/help.js?v=<?= time(); ?>"></script>
 
-function cancelEmergencyEdit() {
-    document.getElementById('emergencyEdit').style.display = 'none';
-    document.getElementById('emergencyDisplay').style.display = 'block';
-}
-</script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

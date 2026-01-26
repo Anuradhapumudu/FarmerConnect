@@ -59,12 +59,12 @@ public function buyProduct($id = null) {
         exit;
     }
 
-    // ---------------- ONLINE PAYMENT ----------------
+    // ONLINE PAYMENT 
     $order_id = uniqid("ORD_");
     $amount   = number_format($total, 2, '.', '');
     $hash     = $this->generatePayHereHash($order_id, $amount);
 
-    // ✅ SAVE ORDER AS PENDING (CRITICAL)
+    // SAVE ORDER AS PENDING (CRITICAL)
     $this->marketplaceModel->createOrder(
         $_SESSION['nic'],
         $product->item_id,
@@ -129,17 +129,17 @@ public function paymentNotification() {
         )
     );
 
-    // ✅ Verify payment
+    // Verify payment
     if ($local_md5 === $md5sig && $status_code == 2) {
 
         $order = $this->marketplaceModel->getOrderByOrderId($order_id);
 
         if ($order && $order->status !== 'completed') {
 
-            // ✅ Mark order paid
+            // Mark order paid
             $this->marketplaceModel->updateOrderStatus($order_id, 'completed');
 
-            // ✅ Update stock
+            // Update stock
             $this->marketplaceModel->updateStock(
                 $order->item_id,
                 $order->available_quantity - $order->quantity
@@ -153,7 +153,7 @@ public function paymentNotification() {
 
 
 
-        public function paymentSuccess() {
+    public function paymentSuccess() {
         $this->view('marketplace/V_paymentSuccess');
     }
 
@@ -213,7 +213,7 @@ public function addProduct() {
         $data['price'] = trim($_POST['price'] ?? '');
         $data['available'] = trim($_POST['available'] ?? '');
 
-        // --- Validation ---
+        //  Validation 
         if(strlen($data['name']) === 0) {
             $data['errors']['name'] = "Product name is required.";
         } elseif(strlen($data['name']) < 3) {
@@ -256,7 +256,7 @@ public function addProduct() {
             $data['errors']['available'] = "Quantity must be a whole number.";
         }
 
-        // --- Image Validation ---
+        // Image Validation 
         if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $allowedExt = ['jpg','jpeg','png','gif'];
             $fileExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
@@ -283,7 +283,7 @@ public function addProduct() {
             $data['errors']['image'] = "Please upload an image.";
         }
 
-        // --- Add product if no errors ---
+        // Add product if no errors
         if(empty($data['errors'])) {
             if($this->marketplaceModel->createProduct($data)) {
                 header("Location: " . URLROOT . "/marketplace/addsuccess");
