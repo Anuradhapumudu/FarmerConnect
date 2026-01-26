@@ -14,6 +14,10 @@ function cancelEmergencyEdit() {
     if (errorBox) {
         errorBox.style.display = 'none';
     }
+
+    //when admin cancels editing, reload the page to helpAdmin
+     window.location.href = "http://localhost/FarmerConnect/help/helpAdmin";
+
 }
 
 function resetMemberForm() {
