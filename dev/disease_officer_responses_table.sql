@@ -3,7 +3,7 @@
 
 CREATE TABLE IF NOT EXISTS `disease_officer_responses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `report_code` varchar(255) NOT NULL,
+  `report_code` varchar(20) NOT NULL,
   `officer_id` varchar(50) NOT NULL,
   `response_message` text NOT NULL,
   `response_media` text,
@@ -13,5 +13,5 @@ CREATE TABLE IF NOT EXISTS `disease_officer_responses` (
   KEY `report_code` (`report_code`),
   KEY `officer_id` (`officer_id`),
   KEY `created_at` (`created_at`),
-  FOREIGN KEY (`report_code`) REFERENCES `disease_reports`(`report_code`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `fk_report_responses` FOREIGN KEY (`report_code`) REFERENCES `disease_reports`(`report_code`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/sidebar.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/translate.css">
+  <script src="<?php echo URLROOT; ?>/js/movebtn.js" defer></script>
 </head>
 
 <body>
@@ -61,6 +62,7 @@
       </nav>
     </div>
   </header>
+  <button id="toTopBtn">↑</button>
 
   <!-- Mobile menu overlay -->
   <label for="mobile-menu-toggle" class="mobile-overlay"></label>
@@ -87,3 +89,4 @@
 
   <!-- Overlay for closing sidebar -->
   <label for="sidebar-toggle" class="sidebar-overlay"></label>
+  <button id="toTopBtn">↑</button>

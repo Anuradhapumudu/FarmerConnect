@@ -14,7 +14,7 @@ function loadPaddySize() {
 }
 
 // Initialize paddy size on page load if PLR is already selected
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Set dates
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('todayDate').value = today;
@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadArea = document.getElementById('mediaUploadArea');
     const fileInput = document.getElementById('media');
     const uploadedFilesDiv = document.getElementById('uploadedFiles');
-    uploadArea.addEventListener('click', () => fileInput.click());
+
+
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadArea.style.borderColor = 'var(--primary)';
@@ -153,15 +154,60 @@ document.addEventListener('DOMContentLoaded', function() {
         showFilePreview(dt.files);
     }
     // Existing media removal
-    document.querySelectorAll('.remove-file-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+    // Existing media removal
+    document.querySelectorAll('.btn-remove-media').forEach(btn => {
+        btn.addEventListener('click', function () {
             const filename = this.dataset.filename;
-            if (confirm(`Remove "${filename}"?`)) {
-                this.closest('.existing-file-item').querySelector('input[type="checkbox"]').checked = true;
-                this.closest('.existing-file-item').style.opacity = '0.5';
-                this.textContent = '↶';
-                this.style.background = '#f39c12';
+            const container = this.closest('.media-card');
+            const checkbox = container.querySelector('input[type="checkbox"]');
+
+            if (checkbox.checked) {
+                // Undo removal
+                checkbox.checked = false;
+                container.style.opacity = '1';
+                this.innerHTML = '<i class="fas fa-times"></i>';
+                this.style.background = '#FF5252';
+                this.title = "Remove file";
+            } else {
+                // Remove file
+                if (confirm(`Remove "${filename}"?`)) {
+                    checkbox.checked = true;
+                    container.style.opacity = '0.5';
+                    this.innerHTML = '<i class="fas fa-undo"></i>';
+                    this.style.background = '#f39c12';
+                    this.title = "Undo removal";
+                }
             }
         });
     });
+
+    // Affected Area Validation
+    const affectedAreaInput = document.getElementById('affectedArea');
+    const paddySizeInput = document.getElementById('paddySize');
+
+    function validateAffectedArea() {
+        const area = parseFloat(affectedAreaInput.value);
+        const maxSize = parseFloat(paddySizeInput.value);
+
+        if (!isNaN(area) && !isNaN(maxSize)) {
+            if (area > maxSize) {
+                affectedAreaInput.setCustomValidity(`Affected area cannot be larger than the paddy size (${maxSize} acres)`);
+                affectedAreaInput.reportValidity();
+            } else {
+                affectedAreaInput.setCustomValidity('');
+            }
+        } else {
+            affectedAreaInput.setCustomValidity('');
+        }
+    }
+
+    if (affectedAreaInput && paddySizeInput) {
+        affectedAreaInput.addEventListener('input', validateAffectedArea);
+        // Also validate when paddy size changes (via PLR selection)
+        // Since paddySize is readonly and updated via JS, we'll hook into the PLR change
+        document.getElementById('plrNumber').addEventListener('change', function () {
+            // Wait for stack to clear so paddySize updates first
+            setTimeout(validateAffectedArea, 100);
+        });
+    }
 });

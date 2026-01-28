@@ -1,1834 +1,327 @@
 <?php require_once APPROOT . '/views/inc/minimalheader.php'; ?>
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/disease/diseaseReport.css?v=<?= time(); ?>">
+
+<?php if (isset($_SESSION['success_message'])): ?>
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i>
+        <div><?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?></div>
+    </div>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['error_message'])): ?>
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i>
+        <div><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
+    </div>
+<?php endif; ?>
 
 <div class="content-card">
-    <div class="content-header">
-        <h1><?php echo isset($data['singleReport']) && $data['singleReport'] ? '📋 Report Details' : '📋 Submitted Reports'; ?></h1>
-        <p class="content-subtitle"><?php echo isset($data['singleReport']) && $data['singleReport'] ? 'Detailed view of the selected disease report' : 'View all submitted disease reports'; ?></p>
+    <div class="report-header">
+        <div class="header-content">
+            <a href="<?php echo URLROOT; ?>/officerDashboard/viewDiseaseReports" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Reports
+            </a>
+            <div class="title-row">
+                <h1>Report: <?php echo $data['report']->report_code; ?></h1>
+            </div>
+            <p class="report-date">
+                Submitted on <?php echo date('F d, Y \a\t h:i A', strtotime($data['report']->created_at)); ?>
+                <?php if(isset($data['report']->is_edited) && $data['report']->is_edited == '1'): ?>
+                    <span class="status-badge status-edited"><i class="fas fa-pencil-alt"></i> Edited</span>
+                <?php endif; ?>
+            </p>
+        </div>
+        
+        <div class="header-actions">
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                <form method="POST" action="<?php echo URLROOT; ?>/officerDashboard/updateReportStatus" class="status-form-header" style="margin: 0;">
+                    <input type="hidden" name="reportCode" value="<?php echo htmlspecialchars($data['report']->report_code); ?>">
+                    <input type="hidden" name="redirect_to" value="details">
+                    <div class="status-select-wrapper status-<?php echo $data['report']->status; ?>">
+                        <select name="status" onchange="this.form.submit()" class="status-select">
+                            <option value="pending" <?php echo ($data['report']->status == 'pending') ? 'selected' : ''; ?>>Pending</option>
+                            <option value="under_review" <?php echo ($data['report']->status == 'under_review') ? 'selected' : ''; ?>>Under Review</option>
+                            <option value="resolved" <?php echo ($data['report']->status == 'resolved') ? 'selected' : ''; ?>>Resolved</option>
+                            <option value="rejected" <?php echo ($data['report']->status == 'rejected') ? 'selected' : ''; ?>>Rejected</option>
+                        </select>
+                    </div>
+                </form>
+                <?php if(isset($data['report']->officer_first_name) && !empty($data['report']->officer_first_name)): ?>
+                    <div class="status-updater-info" style="margin-top: 0; text-align: right;">
+                        <i class="fas fa-history"></i> Updated by: 
+                        <strong><?php echo htmlspecialchars($data['report']->officer_first_name . ' ' . $data['report']->officer_last_name); ?></strong>
+                        (ID: <?php echo htmlspecialchars($data['report']->updater_id); ?>)
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
-    <?php if (isset($_SESSION['success_message'])): ?>
-        <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i>
-            <div><?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?></div>
-        </div>
-    <?php endif; ?>
 
-    <?php if (isset($_SESSION['error_message'])): ?>
-        <div class="alert alert-danger">
-            <i class="fas fa-exclamation-circle"></i>
-            <div><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
-        </div>
-    <?php endif; ?>
 
-    <?php if (isset($data['singleReport']) && $data['singleReport'] && isset($data['report'])): ?>
-        <?php $report = $data['report']; ?>
-        <!-- Single Report Details View -->
-        <div class="report-header-card">
-            <div class="report-header-content">
-                <div class="report-title-section">
-                    <h2><?php echo htmlspecialchars($report->title); ?></h2>
-                    <div class="report-code-display">
-                        <span class="report-code"><?php echo htmlspecialchars($report->report_code); ?></span>
-                    </div>
+    <div class="report-grid">
+        <!-- Main Details -->
+        <div class="details-section">
+            <h3>Report Details</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Report Title</label>
+                    <p class="highlight"><?php echo $data['report']->title; ?></p>
                 </div>
-                <div class="report-status-badges">
-                    <span class="severity-badge severity-<?php echo $report->severity; ?>">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <?php echo ucfirst($report->severity); ?> Severity
-                    </span>
-                    <?php if (isset($report->status)): ?>
-                        <span class="status-badge status-<?php echo $report->status; ?>">
-                            <i class="fas fa-<?php
-                                switch ($report->status) {
-                                    case 'pending': echo 'clock'; break;
-                                    case 'under_review': echo 'eye'; break;
-                                    case 'resolved': echo 'check-circle'; break;
-                                    case 'rejected': echo 'times-circle'; break;
-                                    default: echo 'question-circle';
-                                }
-                            ?>"></i>
-                            <?php echo ucfirst(str_replace('_', ' ', $report->status)); ?>
-                        </span>
-                    <?php endif; ?>
+                
+                <div class="info-item">
+                    <label>Observation Date</label>
+                    <p><?php echo $data['report']->observationDate; ?></p>
+                </div>
+
+                <div class="info-item">
+                    <label>Severity Level</label>
+                    <p>
+                        <span class="severity-dot severity-<?php echo strtolower($data['report']->severity); ?>"></span>
+                        <?php echo ucfirst($data['report']->severity); ?>
+                    </p>
+                </div>
+
+                <div class="info-item">
+                    <label>Affected Area</label>
+                    <p><?php echo $data['report']->affectedArea; ?> Acres</p>
+                </div>
+
+                <div class="info-item">
+                    <label>PLR Number</label>
+                    <p><?php echo $data['report']->plrNumber ?? $data['report']->pirNumber; ?></p>
+                </div>
+
+                <div class="info-item">
+                    <label>Farmer Name</label>
+                    <p><?php echo $data['report']->farmer_name ?? 'N/A'; ?></p>
+                </div>
+
+                <div class="info-item">
+                    <label>Farmer NIC</label>
+                    <p class="highlight-text"><?php echo $data['report']->farmerNIC; ?></p>
+                </div>
+            </div>
+
+            <div class="description-box">
+                <label>Description</label>
+                <div class="text-content">
+                    <?php echo nl2br(htmlspecialchars($data['report']->description)); ?>
                 </div>
             </div>
         </div>
 
-        <!-- overview -->
-        <div class="report-overview">
-            <div class="overview-grid">
-                <div class="overview-card">
-                    <div class="overview-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="overview-content">
-                        <h4>Farmer Details</h4>
-                        <p><strong>NIC:</strong> <?php echo htmlspecialchars($report->farmerNIC); ?></p>
-                        <p><strong>PLR:</strong> <?php echo htmlspecialchars($report->pirNumber); ?></p>
-                    </div>
+        <!-- Media Gallery -->
+        <div class="media-section">
+            <h3>Media Attachments</h3>
+            <?php if(!empty($data['report']->media)): ?>
+                <div class="media-gallery">
+                    <?php 
+                    $mediaFiles = explode(',', $data['report']->media);
+                    foreach($mediaFiles as $file): 
+                        $file = trim($file);
+                        if(empty($file)) continue;
+                        $fileUrl = URLROOT . '/disease/viewMedia/' . $data['report']->report_code . '/' . urlencode($file);
+                        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                        $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif']);
+                    ?>
+                        <div class="media-item" onclick="openLightbox('<?php echo $fileUrl; ?>', '<?php echo $isImage ? 'image' : 'video'; ?>')">
+                            <?php if($isImage): ?>
+                                <img src="<?php echo $fileUrl; ?>" alt="Evidence">
+                            <?php else: ?>
+                                <video src="<?php echo $fileUrl; ?>"></video>
+                                <div class="play-overlay"><i class="fas fa-play"></i></div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-
-                <div class="overview-card">
-                    <div class="overview-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="overview-content">
-                        <h4>Observation Date</h4>
-                        <p class="date-large"><?php echo date('M d, Y', strtotime($report->observationDate)); ?></p>
-                        <p class="date-small"><?php echo date('l, F jS Y', strtotime($report->observationDate)); ?></p>
-                    </div>
+            <?php else: ?>
+                <div class="no-media">
+                    <i class="fas fa-image"></i>
+                    <p>No media attached to this report.</p>
                 </div>
-
-                <div class="overview-card">
-                    <div class="overview-icon">
-                        <i class="fas fa-chart-area"></i>
-                    </div>
-                    <div class="overview-content">
-                        <h4>Affected Area</h4>
-                        <p class="area-large"><?php echo number_format($report->affectedArea, 1); ?> <span>acres</span></p>
-                        <p class="area-conversion"><?php echo number_format($report->affectedArea * 0.405, 1); ?> hectares</p>
-                    </div>
-                </div>
-
-                <div class="overview-card">
-                    <div class="overview-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="overview-content">
-                        <h4>Report Submitted</h4>
-                        <p class="date-large"><?php echo date('M d, Y', strtotime($report->submission_timestamp ?? 'now')); ?></p>
-                        <p class="date-small"><?php echo date('g:i A', strtotime($report->submission_timestamp ?? 'now')); ?></p>
-                    </div>
-                </div>
-            </div>
+            <?php endif; ?>
         </div>
+    </div>
 
-        <!-- Description Section -->
-        <div class="description-section">
-            <div class="section-header">
-                <h3><i class="fas fa-file-alt"></i> Report Description</h3>
-            </div>
-            <div class="description-content">
-                <div class="description-text">
-                    <?php echo nl2br(htmlspecialchars($report->description)); ?>
-                </div>
-            </div>
-        </div>
-
-        <!-- Media Section -->
-        <?php if (!empty($report->media)): ?>
-            <div class="media-section">
-                <div class="section-header">
-                    <h3><i class="fas fa-images"></i> Media Files (<?php echo count(array_filter(explode(',', $report->media))); ?>)</h3>
-                </div>
-                <div class="media-content">
-                    <div class="media-grid">
-                        <?php
-                        $mediaFiles = explode(',', $report->media);
-                        foreach ($mediaFiles as $filename):
-                            $filename = trim($filename);
-                            if (empty($filename)) continue;
-                            $fileUrl = URLROOT . '/disease/viewMedia/' . $report->report_code . '/' . urlencode($filename);
-                            $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-                            $isImage = in_array($fileExt, ['jpg', 'jpeg', 'png', 'gif']);
-                            $isVideo = in_array($fileExt, ['mp4', 'avi', 'mov', 'wmv']);
-                        ?>
-                            <div class="media-item" onclick="openFullscreenModal('<?php echo $fileUrl; ?>', '<?php echo $isImage ? 'image' : ($isVideo ? 'video' : 'other'); ?>', '<?php echo $fileExt; ?>', '<?php echo htmlspecialchars($filename); ?>')">
-                                <?php if ($isImage): ?>
-                                    <img src="<?php echo $fileUrl; ?>" alt="Media file" loading="lazy">
-                                <?php elseif ($isVideo): ?>
-                                    <video muted>
-                                        <source src="<?php echo $fileUrl; ?>" type="video/<?php echo $fileExt; ?>">
-                                        <i class="fas fa-play-circle media-play-icon"></i>
-                                    </video>
-                                <?php else: ?>
-                                    <div class="file-preview">
-                                        <div class="file-icon"><i class="fas fa-file"></i></div>
-                                        <span><?php echo htmlspecialchars($filename); ?></span>
-                                    </div>
-                                <?php endif; ?>
-                                <div class="media-badge"><?php echo strtoupper($fileExt); ?></div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <!-- Officer Recommendations Section -->
-        <?php
-        $responses = $this->model('M_disease')->getOfficerResponses($report->report_code);
+    <!-- Officer Responses -->
+    <div class="responses-section">
+        <h3><i class="fas fa-clipboard-check"></i> Officer Feedback & History</h3>
+        
+        <?php 
+        $responses = $this->model('M_disease')->getOfficerResponses($data['report']->report_code);
+        if(empty($responses)): 
         ?>
-        <div class="description-section">
-            <div class="section-header">
-                <h3><i class="fas fa-comments"></i> Officer Recommendations</h3>
+            <div class="empty-responses">
+                <p>No feedback provided yet.</p>
             </div>
-            <div class="description-content">
-                <?php if (!empty($responses)): ?>
-                    <div class="responses-list">
-                        <?php foreach ($responses as $response): ?>
-                            <div class="response-item">
-                                <div class="response-header">
-                                    <div class="response-meta">
-                                        <span class="officer-id">Officer: <?php echo htmlspecialchars($response->officer_id); ?></span>
-                                        <span class="response-date"><?php echo date('M d, Y g:i A', strtotime($response->created_at)); ?></span>
-                                    </div>
-                                </div>
-                                <div class="response-content">
-                                    <p><?php echo nl2br(htmlspecialchars($response->response_message)); ?></p>
-                                    <?php if (!empty($response->response_media)): ?>
-                                        <div class="response-media">
-                                            <div class="media-files">
-                                                <?php
-                                                $mediaFiles = explode(',', $response->response_media);
-                                                foreach ($mediaFiles as $filename):
-                                                    $filename = trim($filename);
-                                                    if (empty($filename)) continue;
-                                                    $fileUrl = URLROOT . '/officerDashboard/viewResponseMedia/' . $response->id . '/' . urlencode($filename);
-                                                    $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-                                                    $isImage = in_array($fileExt, ['jpg', 'jpeg', 'png', 'gif']);
-                                                    $isVideo = in_array($fileExt, ['mp4', 'avi', 'mov', 'wmv']);
-                                                    $isPdf = $fileExt === 'pdf';
-                                                ?>
-                                                    <div class="media-file-item">
-                                                        <?php if ($isImage): ?>
-                                                            <div class="media-preview-container">
-                                                                <img src="<?php echo $fileUrl; ?>" alt="<?php echo htmlspecialchars($filename); ?>" class="media-preview" onclick="openFullscreenModal('<?php echo $fileUrl; ?>', 'image', '<?php echo $fileExt; ?>', '<?php echo htmlspecialchars($filename); ?>')">
-                                                                <div class="media-overlay">
-                                                                    <i class="fas fa-eye"></i>
-                                                                </div>
-                                                            </div>
-                                                        <?php elseif ($isVideo): ?>
-                                                            <div class="media-preview-container">
-                                                                <video class="media-preview" onclick="openFullscreenModal('<?php echo $fileUrl; ?>', 'video', '<?php echo $fileExt; ?>', '<?php echo htmlspecialchars($filename); ?>')">
-                                                                    <source src="<?php echo $fileUrl; ?>" type="video/<?php echo $fileExt; ?>">
-                                                                </video>
-                                                                <div class="media-overlay">
-                                                                    <i class="fas fa-play"></i>
-                                                                </div>
-                                                            </div>
-                                                        <?php elseif ($isPdf): ?>
-                                                            <a href="<?php echo $fileUrl; ?>" target="_blank" class="media-link pdf-link">
-                                                                <i class="fas fa-file-pdf"></i>
-                                                                <span><?php echo htmlspecialchars($filename); ?></span>
-                                                            </a>
-                                                        <?php else: ?>
-                                                            <a href="<?php echo $fileUrl; ?>" target="_blank" class="media-link">
-                                                                <i class="fas fa-file"></i>
-                                                                <span><?php echo htmlspecialchars($filename); ?></span>
-                                                            </a>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            </div>
+        <?php else: ?>
+            <div class="timeline">
+                <?php 
+                $currentOfficerId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'officer_' . session_id(); 
+                foreach($responses as $response): 
+                ?>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="response-header">
+                                <span class="officer-name">
+                                    <?php 
+                                        $officerName = isset($response->first_name) && isset($response->last_name) 
+                                            ? htmlspecialchars($response->first_name . ' ' . $response->last_name) 
+                                            : 'Officer';
+                                        echo $officerName . ' (' . htmlspecialchars($response->officer_id) . ')'; 
+                                    ?>
+                                    <?php if($response->officer_id === $currentOfficerId): ?>
+                                        <span class="badge-me">(Me)</span>
+                                    <?php endif; ?>
+                                </span>
+                                <div class="response-meta-group">
+                                    <span class="response-date">
+                                        <?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?>
+                                        <?php if(isset($response->is_edited) && $response->is_edited == '1'): ?>
+                                            <span style="font-size: 0.8em; color: #888; font-style: italic; margin-left: 5px;">(edited)</span>
+                                        <?php endif; ?>
+                                    </span>
+                                    <?php if($response->officer_id === $currentOfficerId): ?>
+                                        <div class="response-actions">
+                                            <button onclick="openEditModal('<?php echo $response->id; ?>', '<?php echo htmlspecialchars(addslashes($response->response_message)); ?>')" class="btn-icon-small edit" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button onclick="confirmDeleteRecommendation('<?php echo $response->id; ?>')" class="btn-icon-small delete" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
                                     <?php endif; ?>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php else: ?>
-                    <div class="no-responses">
-                        <p>No recommendations submitted yet.</p>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Submit New Recommendation Form -->
-                <div class="recommendation-form">
-                    <h4>Submit New Recommendation</h4>
-                    <form action="<?php echo URLROOT; ?>/officerDashboard/submitRecommendation" method="POST">
-                        <input type="hidden" name="reportCode" value="<?php echo htmlspecialchars($report->report_code); ?>">
-                        <div class="form-group">
-                            <label for="message">Recommendation Message *</label>
-                            <textarea id="message" name="message" rows="4" placeholder="Enter your recommendation for this disease report..." required></textarea>
-                        </div>
-                        <label for="media" style="color:var(--primary); font-weight:400">Upload Media</label>
-                        <div class="file-upload" id="mediaUploadArea">
-                            <div class="upload-content">
-                                <i class="upload-icon"><img style="width: 30px; height: 30px;" src="https://cdn-icons-png.flaticon.com/128/10024/10024248.png"></i>
-                                <p>Click to upload or drag and drop</p>
-                                <p class="upload-subtext">PNG, JPG, GIF, MP4 up to 10MB</p>
+                            <div class="response-body">
+                                <?php echo nl2br(htmlspecialchars($response->response_message)); ?>
                             </div>
-                            <input type="file" id="media" name="media[]" accept="image/*,video/*" hidden multiple>
+                             <?php if(!empty($response->response_media)): ?>
+                                <div class="response-media-gallery">
+                                    <?php 
+                                    $respFiles = explode(',', $response->response_media);
+                                    foreach($respFiles as $rFile):
+                                        $rFile = trim($rFile);
+                                        if(empty($rFile)) continue;
+                                        $rFileUrl = URLROOT . '/officerDashboard/viewResponseMedia/' . $response->id . '/' . urlencode($rFile);
+                                        $ext = strtolower(pathinfo($rFile, PATHINFO_EXTENSION));
+                                        $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                    ?>
+                                        <div class="media-item-small" onclick="openLightbox('<?php echo $rFileUrl; ?>', '<?php echo $isImage ? 'image' : 'video'; ?>')">
+                                            <?php if($isImage): ?>
+                                                <img src="<?php echo $rFileUrl; ?>" alt="Evidence">
+                                            <?php else: ?>
+                                                <div class="video-placeholder">
+                                                    <i class="fas fa-play"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
-                        <div class="uploaded-files" id="uploadedFiles" style="margin-top: 10px;"></div>
-                        <span class="error"><?php echo isset($data['media_error']) ? $data['media_error'] : ''; ?></span>
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Submit Recommendation
-                            </button>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Submit New Recommendation Form -->
+        <?php if($data['report']->status === 'under_review'): ?>
+            <div class="recommendation-form-wrapper" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                <h3>Submit New Recommendation</h3>
+                <form action="<?php echo URLROOT; ?>/officerDashboard/submitRecommendation" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="reportCode" value="<?php echo htmlspecialchars($data['report']->report_code); ?>">
+                    
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="message" style="display:block; margin-bottom: 5px; font-weight:600;">Recommendation Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Enter your recommendation..." required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 8px; font-weight:600;">Attach Media</label>
+                        <div class="upload-zone" id="drop-zone">
+                            <input type="file" id="media" name="media[]" accept="image/*,video/*" multiple hidden onchange="handleFileSelect(this)">
+                            <label for="media" class="upload-label">
+                                <div class="upload-icon-circle">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <span class="upload-text">Drag & drop files here or <span class="highlight">browse</span></span>
+                                <small class="upload-hint">Supported: JPG, PNG, MP4 (Max 10MB)</small>
+                            </label>
+                            <div id="file-list" class="file-preview-list"></div>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    </div>
 
-
-    <?php elseif (!empty($data['reports'])): ?>
-        <div class="reports-table-container">
-            <table class="reports-table">
-                <thead>
-                    <tr>
-                        <th>Report Code</th>
-                        <th>Title</th>
-                        <th>Farmer Details</th>
-                        <th>Severity</th>
-                        <th>Status</th>
-                        <th>Date & Area</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($data['reports'] as $report): ?>
-                        <tr>
-                            <td>
-                                <span class="report-code"><?php echo htmlspecialchars($report->report_code); ?></span>
-                            </td>
-                            <td>
-                                <div class="title-cell">
-                                    <div class="report-title"><?php echo htmlspecialchars($report->title); ?></div>
-                                    <small class="report-description">
-                                        <?php echo htmlspecialchars(substr($report->description ?? '', 0, 60)); ?>
-                                        <?php if (strlen($report->description ?? '') > 60): ?>...<?php endif; ?>
-                                    </small>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="farmer-info">
-                                    <div><?php echo htmlspecialchars($report->farmerNIC); ?></div>
-                                    <small>PLR: <?php echo htmlspecialchars($report->pirNumber); ?></small>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="severity-badge severity-<?php echo $report->severity; ?>">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <?php echo ucfirst($report->severity); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <?php if (isset($report->status)): ?>
-                                    <span class="status-badge status-<?php echo $report->status; ?>">
-                                        <i class="fas fa-<?php
-                                            switch ($report->status) {
-                                                case 'pending': echo 'clock'; break;
-                                                case 'under_review': echo 'eye'; break;
-                                                case 'resolved': echo 'check-circle'; break;
-                                                case 'rejected': echo 'times-circle'; break;
-                                                default: echo 'question-circle';
-                                            }
-                                        ?>"></i>
-                                        <?php echo ucfirst(str_replace('_', ' ', $report->status)); ?>
-                                    </span>
-                                <?php else: ?>
-                                    <span class="status-badge status-unknown">
-                                        <i class="fas fa-question-circle"></i> Unknown
-                                    </span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <div class="date-info">
-                                    <div><?php echo date('M d, Y', strtotime($report->observationDate)); ?></div>
-                                    <small><?php echo number_format($report->affectedArea, 1); ?> acres</small>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="<?php echo URLROOT; ?>/officerDashboard/viewDiseaseReports"
-                                       class="btn btn-info btn-xs" title="View All Reports">
-                                       <i class="fas fa-eye"></i>
-                                   </a>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    <?php else: ?>
-        <div class="empty-state">
-            <div class="empty-icon">
-                <i class="fas fa-inbox"></i>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit Recommendation
+                    </button>
+                </form>
             </div>
-            <h3>No Reports Found</h3>
-            <p>No disease reports have been submitted yet. Be the first to create a report!</p>
-            <a href="<?php echo URLROOT; ?>/officerDashboard/viewDiseaseReports" class="btn btn-success">
-                <i class="fas fa-plus"></i> Back to Reports
-            </a>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- Edit Recommendation Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <div class="modal-header">
+            <h3>Edit Recommendation</h3>
         </div>
-    <?php endif; ?>
+        <form action="<?php echo URLROOT; ?>/officerDashboard/updateRecommendation" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="reportCode" value="<?php echo htmlspecialchars($data['report']->report_code); ?>">
+            <input type="hidden" name="responseId" id="editResponseId">
+            
+            <div class="form-group">
+                <label for="editMessage">Message</label>
+                <textarea id="editMessage" name="message" rows="4" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+            </div>
+            
+             <div class="form-group" style="margin-top: 15px;">
+                 <label>Add More Media (Optional)</label>
+                 <input type="file" name="media[]" accept="image/*,video/*" multiple style="padding: 10px; background: #f9f9f9; width: 100%; border-radius: 8px;">
+            </div>
+
+            <div class="modal-actions" style="margin-top: 20px; text-align: right;">
+                <button type="button" onclick="closeEditModal()" class="btn btn-secondary">Cancel</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Recommendation Modal -->
+<div id="deleteRecModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDeleteRecModal()">&times;</span>
+        <div class="modal-header">
+            <i class="fas fa-exclamation-triangle" style="color: #e74c3c; font-size: 2rem;"></i>
+            <h3>Delete Recommendation?</h3>
+        </div>
+        <p>Are you sure you want to delete this recommendation?</p>
+        <div class="modal-actions">
+            <button onclick="closeDeleteRecModal()" class="btn btn-secondary">Cancel</button>
+            <a id="confirmRecDeleteLink" href="#" class="btn btn-danger">Yes, Delete It</a>
+        </div>
+    </div>
 </div>
 
 
-<style>
-    .content-card {
-        background: var(--glass-bg);
-        backdrop-filter: var(--glass-blur);
-        border-radius: 15px;
-        padding: 30px;
-        margin: 20px auto 40px;
-        max-width: 1400px;
-        width: 90%;
-    }
 
-    .content-header {
-        margin-bottom: 30px;
-        text-align: left;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        padding-bottom: 20px;
-    }
 
-    .content-header h1 {
-        color: var(--text-primary);
-        font-size: 2.2rem;
-        margin-bottom: 10px;
-        font-weight: 800;
-    }
 
-    .content-subtitle {
-        color: var(--text-secondary);
-        font-size: 1.1rem;
-        margin: 10px 0;
-    }
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="close-lightbox">&times;</span>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+        <img id="lightbox-img" src="" style="display:none;">
+        <video id="lightbox-video" controls style="display:none;"></video>
+    </div>
+</div>
 
-    .alert {
-        padding: 16px 20px;
-        border-radius: var(--border-radius);
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.2);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    }
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/officer/officer_report_detail.css">
+<script src="<?php echo URLROOT; ?>/js/officer/officer_report_detail.js"></script>
 
-    .alert-success {
-        background: rgba(212, 237, 218, 0.9);
-        color: #155724;
-        border-left: 4px solid #28a745;
-    }
-
-    .alert-danger {
-        background: rgba(248, 215, 218, 0.9);
-        color: #721c24;
-        border-left: 4px solid #dc3545;
-    }
-
-    .alert-info {
-        background: rgba(204, 229, 255, 0.9);
-        color: #004085;
-        border-left: 4px solid #17a2b8;
-    }
-
-    .reports-table-container {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(15px);
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        overflow-x: auto;
-        margin-bottom: 20px;
-    }
-
-    .reports-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-    }
-
-    .reports-table th,
-    .reports-table td {
-        padding: 12px 18px;
-        text-align: left;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .reports-table th {
-        background: rgba(46, 125, 50, 0.1);
-        font-weight: 600;
-        color: var(--primary);
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    .reports-table tbody tr:hover {
-        background: rgba(46, 125, 50, 0.05);
-    }
-
-    .report-code {
-        font-family: 'Courier New', monospace;
-        font-weight: 700;
-        color: var(--primary);
-        background: rgba(46, 125, 50, 0.1);
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 13px;
-    }
-
-    .title-cell {
-        max-width: 350px;
-    }
-
-    .report-title {
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 4px;
-    }
-
-    .report-description {
-        color: var(--text-secondary);
-        font-size: 13px;
-    }
-
-    .farmer-info div {
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-
-    .farmer-info small {
-        color: var(--text-secondary);
-        font-size: 13px;
-    }
-
-    .severity-badge, .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        padding: 5px 11px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-    .severity-low, .severity-Low {
-        background: rgba(76, 175, 80, 0.2);
-        color: #2e7d32;
-    }
-
-    .severity-medium, .severity-Medium {
-        background: rgba(255, 193, 7, 0.2);
-        color: #f57c00;
-    }
-
-    .severity-high, .severity-High {
-        background: rgba(244, 67, 54, 0.2);
-        color: #c62828;
-    }
-
-    .status-pending {
-        background: rgba(255, 193, 7, 0.2);
-        color: #f57c00;
-    }
-
-    .status-under_review {
-        background: rgba(33, 150, 243, 0.2);
-        color: #1976d2;
-    }
-
-    .status-resolved {
-        background: rgba(76, 175, 80, 0.2);
-        color: #2e7d32;
-    }
-
-    .status-rejected {
-        background: rgba(244, 67, 54, 0.2);
-        color: #c62828;
-    }
-
-    .status-unknown {
-        background: rgba(158, 158, 158, 0.2);
-        color: #616161;
-    }
-
-    .date-info div {
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-
-    .date-info small {
-        color: var(--text-secondary);
-        font-size: 13px;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 6px;
-    }
-
-    .btn {
-        padding: 8px 12px;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 12px;
-        border: none;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        transition: var(--transition);
-    }
-
-    .btn-info {
-        background: rgba(23, 162, 184, 0.9);
-        color: white;
-    }
-
-    .btn-info:hover {
-        background: rgba(23, 162, 184, 1);
-        transform: translateY(-1px);
-    }
-
-    .btn-primary {
-        background: var(--primary);
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: blue !important;
-        transform: translateY(-1px);
-    }
-
-    .btn-danger {
-        background: rgba(220, 53, 69, 0.9);
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background: rgba(220, 53, 69, 1);
-        transform: translateY(-1px);
-    }
-
-    .btn-success {
-        background: var(--primary);
-        color: white;
-        padding: 12px 20px;
-        font-size: 14px;
-    }
-
-    .btn-success:hover {
-        background: var(--primary-dark);
-        transform: translateY(-1px);
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 80px 40px;
-        color: var(--text-secondary);
-        background: var(--glass-bg);
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--border-radius);
-        box-shadow: var(--shadow-light);
-    }
-
-    .empty-icon {
-        font-size: 4rem;
-        background: var(--primary-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 20px;
-        opacity: 0.8;
-    }
-
-    .empty-state h3 {
-        font-size: 1.8rem;
-        margin-bottom: 10px;
-        color: var(--text-primary);
-        font-weight: 700;
-    }
-
-    .empty-state p {
-        margin-bottom: 30px;
-        line-height: 1.6;
-        font-size: 1rem;
-    }
-
-    .report-header-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(15px);
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 25px;
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 20px;
-    }
-
-    .report-header-content {
-        flex: 1;
-    }
-
-    .report-title-section h2 {
-        color: var(--text-primary);
-        font-size: 1.8rem;
-        margin-bottom: 10px;
-        font-weight: 700;
-    }
-
-    .report-code-display {
-        margin-bottom: 15px;
-    }
-
-    .report-code {
-        font-family: 'Courier New', monospace;
-        font-weight: 700;
-        color: var(--primary);
-        background: rgba(46, 125, 50, 0.1);
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 14px;
-    }
-
-    .report-status-badges {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .severity-badge, .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 13px;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-    .severity-low, .severity-Low {
-        background: rgba(76, 175, 80, 0.2);
-        color: #2e7d32;
-    }
-
-    .severity-medium, .severity-Medium {
-        background: rgba(255, 193, 7, 0.2);
-        color: #f57c00;
-    }
-
-    .severity-high, .severity-High {
-        background: rgba(244, 67, 54, 0.2);
-        color: #c62828;
-    }
-
-    .status-pending {
-        background: rgba(255, 193, 7, 0.2);
-        color: #f57c00;
-    }
-
-    .status-under_review {
-        background: rgba(33, 150, 243, 0.2);
-        color: #1976d2;
-    }
-
-    .status-resolved {
-        background: rgba(76, 175, 80, 0.2);
-        color: #2e7d32;
-    }
-
-    .status-rejected {
-        background: rgba(244, 67, 54, 0.2);
-        color: #c62828;
-    }
-
-    .report-actions {
-        display: flex;
-        gap: 10px;
-        flex-shrink: 0;
-    }
-
-    /* Clean Overview Section */
-    .report-overview {
-        margin-bottom: 40px;
-    }
-
-    .overview-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-        margin-bottom: 20px;
-    }
-
-    .overview-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(15px);
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 24px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        transition: var(--transition);
-    }
-
-    .overview-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    }
-
-    .overview-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        flex-shrink: 0;
-    }
-
-    .overview-content h4 {
-        color: var(--text-primary);
-        font-size: 1rem;
-        font-weight: 600;
-        margin: 0 0 8px 0;
-    }
-
-    .overview-content p {
-        margin: 4px 0;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-    }
-
-    .date-large {
-        font-size: 1.1rem !important;
-        font-weight: 700 !important;
-        color: var(--primary) !important;
-        margin: 0 0 2px 0 !important;
-    }
-
-    .date-small {
-        font-size: 0.8rem !important;
-        color: var(--text-secondary) !important;
-        margin: 0 !important;
-    }
-
-    .area-large {
-        font-size: 1.4rem !important;
-        font-weight: 800 !important;
-        color: var(--primary) !important;
-        margin: 0 0 2px 0 !important;
-    }
-
-    .area-large span {
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: var(--text-secondary);
-    }
-
-    .area-conversion {
-        font-size: 0.8rem !important;
-        color: var(--text-secondary) !important;
-        margin: 0 !important;
-        opacity: 0.8;
-    }
-
-    /* Section Headers */
-    .section-header {
-        margin-bottom: 20px;
-    }
-
-    .section-header h3 {
-        color: var(--text-primary);
-        font-size: 1.3rem;
-        font-weight: 700;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .section-header h3 i {
-        color: var(--primary);
-        font-size: 1.1rem;
-    }
-
-    /* Description Section */
-    .description-section {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(15px);
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 24px;
-        margin-bottom: 30px;
-    }
-
-    .description-content {
-        background: rgba(46, 125, 50, 0.02);
-        border-radius: 12px;
-        padding: 20px;
-        border-left: 4px solid var(--primary);
-    }
-
-    .description-text {
-        color: var(--text-primary);
-        line-height: 1.6;
-        font-size: 1rem;
-        margin: 0;
-    }
-
-    /* Media Section */
-    .media-section {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(15px);
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 24px;
-        margin-bottom: 30px;
-    }
-
-    .media-content {
-        background: rgba(46, 125, 50, 0.02);
-        border-radius: 12px;
-        padding: 20px;
-    }
-
-    .media-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 16px;
-    }
-
-    .media-item {
-        position: relative;
-        border-radius: 12px;
-        overflow: hidden;
-        aspect-ratio: 1;
-        background: rgba(46, 125, 50, 0.05);
-        cursor: pointer;
-        transition: var(--transition);
-        border: 2px solid rgba(46, 125, 50, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
-
-    .media-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        border-color: var(--primary);
-    }
-
-    .media-item img, .media-item video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: var(--transition);
-    }
-
-    .media-item:hover img, .media-item:hover video {
-        transform: scale(1.05);
-    }
-
-    .media-play-icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 2.5rem;
-        color: rgba(255, 255, 255, 0.9);
-        pointer-events: none;
-        z-index: 2;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    .media-item:hover .media-play-icon {
-        color: rgba(255, 255, 255, 1);
-        transform: translate(-50%, -50%) scale(1.1);
-    }
-
-    .media-badge {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: rgba(0,0,0,0.8);
-        color: white;
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        backdrop-filter: blur(4px);
-    }
-
-    .file-preview {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        color: var(--text-secondary);
-        text-decoration: none;
-        background: rgba(46, 125, 50, 0.08);
-        border: 2px dashed rgba(46, 125, 50, 0.3);
-        transition: var(--transition);
-    }
-
-    .media-item:hover .file-preview {
-        background: rgba(46, 125, 50, 0.12);
-        border-color: var(--primary);
-    }
-
-    .file-icon {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        color: var(--primary);
-        opacity: 0.8;
-    }
-
-    .file-preview span {
-        font-size: 0.8rem;
-        font-weight: 500;
-        text-align: center;
-        padding: 0 8px;
-        word-break: break-word;
-    }
-
-    .btn {
-        padding: 10px 16px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 14px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border: none;
-    }
-
-    .btn-primary {
-        background: var(--primary);
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: var(--primary-dark);
-        transform: translateY(-1px);
-    }
-
-    .btn-danger {
-        background: rgba(220, 53, 69, 0.9);
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background: rgba(220, 53, 69, 1);
-        transform: translateY(-1px);
-    }
-
-    .btn-outline-secondary {
-        background: transparent;
-        color: var(--text-secondary);
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-outline-secondary:hover {
-        background: var(--text-secondary);
-        color: white;
-        transform: translateY(-1px);
-    }
-
-    .text-center {
-        text-align: center;
-    }
-
-    .text-muted {
-        color: var(--text-secondary);
-    }
-
-    /* Officer Recommendations Styles */
-    .responses-list {
-        margin-bottom: 30px;
-    }
-
-    .response-item {
-        background: rgba(46, 125, 50, 0.02);
-        border: 1px solid rgba(46, 125, 50, 0.1);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 15px;
-    }
-
-    .response-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid rgba(46, 125, 50, 0.1);
-    }
-
-    .response-meta {
-        display: flex;
-        gap: 15px;
-        align-items: center;
-    }
-
-    .officer-id {
-        font-weight: 600;
-        color: var(--primary);
-        background: rgba(46, 125, 50, 0.1);
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-size: 0.9rem;
-    }
-
-    .response-date {
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-    }
-
-    .response-content p {
-        margin: 0;
-        line-height: 1.6;
-        color: var(--text-primary);
-    }
-
-    .response-media {
-        margin-top: 10px;
-        padding: 10px;
-        background: rgba(46, 125, 50, 0.05);
-        border-radius: 6px;
-        border-left: 3px solid var(--primary);
-    }
-
-    .no-responses {
-        text-align: center;
-        color: var(--text-secondary);
-        font-style: italic;
-        padding: 20px;
-    }
-
-    .recommendation-form {
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(46, 125, 50, 0.2);
-        border-radius: 12px;
-        padding: 25px;
-        margin-top: 20px;
-    }
-
-    .recommendation-form h4 {
-        color: var(--text-primary);
-        margin-bottom: 20px;
-        font-size: 1.1rem;
-        font-weight: 600;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: var(--text-primary);
-        font-size: 0.95rem;
-    }
-
-    .form-group textarea,
-    .form-group input[type="text"] {
-        width: 100%;
-        padding: 12px 16px;
-        border: 2px solid rgba(46, 125, 50, 0.2);
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: var(--transition);
-        background: rgba(255, 255, 255, 0.9);
-    }
-
-    .form-group textarea:focus,
-    .form-group input[type="text"]:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
-    }
-
-    .form-group textarea {
-        resize: vertical;
-        min-height: 100px;
-    }
-
-    .form-actions {
-        text-align: right;
-    }
-
-    .form-actions .btn-primary {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        font-size: 1rem;
-    }
-
-    .form-actions .btn-primary:hover {
-        background: var(--primary-dark);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
-    }
-
-    .form-help {
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-        margin-top: 4px;
-        display: block;
-    }
-
-    .media-files {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-top: 10px;
-    }
-
-    .media-file-item {
-        background: rgba(46, 125, 50, 0.05);
-        border-radius: 6px;
-        padding: 8px 12px;
-        border-left: 3px solid var(--primary);
-    }
-
-    .media-link {
-        color: var(--primary);
-        text-decoration: none;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .media-link:hover {
-        color: var(--primary-dark);
-        text-decoration: underline;
-    }
-
-    .media-link i {
-        font-size: 1rem;
-    }
-
-    /* Media Preview Styles */
-    .media-preview-container {
-        position: relative;
-        display: inline-block;
-        margin: 5px;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: var(--transition);
-        cursor: pointer;
-    }
-
-    .media-preview-container:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .media-preview {
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-        display: block;
-        border-radius: 8px;
-    }
-
-    .media-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        border-radius: 8px;
-    }
-
-    .media-preview-container:hover .media-overlay {
-        opacity: 1;
-    }
-
-    .media-overlay i {
-        color: white;
-        font-size: 1.5rem;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    }
-
-    .pdf-link, .media-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        background: rgba(46, 125, 50, 0.1);
-        border-radius: 6px;
-        text-decoration: none;
-        color: var(--primary);
-        font-size: 0.9rem;
-        margin: 5px;
-        transition: var(--transition);
-    }
-
-    .pdf-link:hover, .media-link:hover {
-        background: rgba(46, 125, 50, 0.2);
-        color: var(--primary-dark);
-        text-decoration: none;
-    }
-
-    .pdf-link i, .media-link i {
-        font-size: 1.1rem;
-    }
-
-    /* File Upload Styles */
-    .file-upload {
-        border: 2px dashed rgba(46, 125, 50, 0.3);
-        border-radius: 8px;
-        padding: 20px;
-        text-align: center;
-        background: rgba(46, 125, 50, 0.02);
-        transition: var(--transition);
-        cursor: pointer;
-        position: relative;
-    }
-
-    .file-upload:hover {
-        border-color: var(--primary);
-        background: rgba(46, 125, 50, 0.05);
-    }
-
-    .upload-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .upload-icon {
-        opacity: 0.7;
-    }
-
-    .file-upload p {
-        margin: 0;
-        color: var(--text-primary);
-        font-weight: 500;
-    }
-
-    .upload-subtext {
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-        margin: 0;
-    }
-
-    .uploaded-files {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .uploaded-file-item {
-        background: rgba(46, 125, 50, 0.1);
-        border: 1px solid rgba(46, 125, 50, 0.2);
-        border-radius: 6px;
-        padding: 8px 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.9rem;
-        color: var(--text-primary);
-    }
-
-    .uploaded-file-item .remove-file {
-        color: #dc3545;
-        cursor: pointer;
-        font-weight: bold;
-        margin-left: 5px;
-    }
-
-    .uploaded-file-item .remove-file:hover {
-        color: #c82333;
-    }
-
-    .error {
-        color: #dc3545;
-        font-size: 0.85rem;
-        margin-top: 5px;
-        display: block;
-    }
-
-    /* Fullscreen Modal Styles */
-    .fullscreen-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.98);
-        backdrop-filter: blur(8px);
-        z-index: 10000;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    .fullscreen-modal.active {
-        display: flex;
-    }
-
-    .fullscreen-modal-content {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    .fullscreen-modal img, .fullscreen-modal video {
-        width: 100%;
-        height: 100%;
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-        display: block;
-    }
-
-    .fullscreen-modal .close {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        color: white;
-        font-size: 2.2rem;
-        cursor: pointer;
-        background: rgba(0,0,0,0.9);
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        border: 2px solid rgba(255,255,255,0.4);
-        z-index: 10002;
-        line-height: 1;
-    }
-
-    .fullscreen-modal .close:hover {
-        background: rgba(255,255,255,0.3);
-        transform: scale(1.1);
-        border-color: rgba(255,255,255,0.7);
-    }
-
-    .fullscreen-modal .filename-display {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: white;
-        background: rgba(0,0,0,0.8);
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-size: 1rem;
-        font-weight: 500;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.2);
-        z-index: 10001;
-    }
-
-    /* Modal Styles */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(5px);
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        animation: fadeIn 0.3s ease;
-    }
-
-    .modal-content {
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        max-width: 500px;
-        width: 90%;
-        max-height: 90vh;
-        overflow-y: auto;
-        animation: slideIn 0.3s ease;
-    }
-
-    .modal-header {
-        padding: 20px 25px;
-        border-bottom: 1px solid #dee2e6;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .modal-title {
-        margin: 0;
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #495057;
-    }
-
-    .close-btn {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: #6c757d;
-        cursor: pointer;
-        padding: 5px;
-        border-radius: 50%;
-        transition: all 0.2s;
-    }
-
-    .close-btn:hover {
-        background: #f8f9fa;
-        color: #495057;
-    }
-
-    .modal-body {
-        padding: 20px 25px;
-    }
-
-    .warning-message {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .warning-text {
-        font-size: 1.1rem;
-        color: #495057;
-        margin-bottom: 15px;
-    }
-
-    .report-info {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 15px 0;
-        text-align: left;
-    }
-
-    .report-info p {
-        margin: 5px 0;
-        font-size: 0.9rem;
-    }
-
-    .danger-text {
-        color: #dc3545;
-        font-weight: 500;
-        font-size: 0.9rem;
-        margin: 15px 0;
-    }
-
-    .confirmation-section {
-        background: #fff3cd;
-        border: 1px solid #ffeaa7;
-        border-radius: 8px;
-        padding: 15px;
-        margin-top: 20px;
-        transition: background-color 0.3s ease;
-    }
-
-    .confirmation-section.checked {
-        background-color: red;
-        color: white;
-    }
-
-    .confirmation-section.checked .form-check-label {
-        color: white;
-    }
-
-    .form-check {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .form-check-input {
-        margin-top: 2px;
-    }
-
-    .form-check-label {
-        font-weight: 500;
-        color: #856404;
-        cursor: pointer;
-    }
-
-    .modal-footer {
-        padding: 15px 25px;
-        border-top: 1px solid #dee2e6;
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes slideIn {
-        from { transform: translateY(-50px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    @media (max-width: 768px) {
-        .content-card {
-            padding: 20px;
-            margin: 15px auto 30px;
-            width: 95%;
-        }
-
-        .content-header h1 {
-            font-size: 1.8rem;
-        }
-
-        .reports-table th,
-        .reports-table td {
-            padding: 10px;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .btn {
-            padding: 6px 10px;
-            font-size: 11px;
-        }
-
-        .overview-grid {
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        .overview-card {
-            padding: 20px;
-        }
-
-        .description-section,
-        .media-section {
-            padding: 20px;
-        }
-
-        .report-header-card {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 15px;
-        }
-
-        .report-actions {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .report-actions .btn {
-            flex: 1;
-            text-align: center;
-        }
-
-        .modal-content {
-            width: 95%;
-            margin: 20px;
-        }
-
-        .modal-header,
-        .modal-body,
-        .modal-footer {
-            padding: 15px 20px;
-        }
-    }
-</style>
-
-<script>
-// Officers should not have delete functionality, so remove delete modal functions
-
-//media view
-window.openFullscreenModal = function(fileUrl, mediaType, fileExt, filename) {
-    // Create modal elements
-    const modal = document.createElement('div');
-    modal.className = 'fullscreen-modal active';
-    modal.onclick = function(e) {
-        if (e.target === modal) closeFullscreenModal();
-    };
-
-    const modalContent = document.createElement('div');
-    modalContent.className = 'fullscreen-modal-content';
-
-    // Close button
-    const closeBtn = document.createElement('span');
-    closeBtn.className = 'close';
-    closeBtn.innerHTML = '&times;';
-    closeBtn.onclick = closeFullscreenModal;
-
-    // Media content
-    let mediaElement;
-    if (mediaType === 'image') {
-        mediaElement = document.createElement('img');
-        mediaElement.src = fileUrl;
-        mediaElement.alt = filename;
-    } else if (mediaType === 'video') {
-        mediaElement = document.createElement('video');
-        mediaElement.src = fileUrl;
-        mediaElement.controls = true;
-    }
-
-    // Assemble modal
-    modalContent.appendChild(closeBtn);
-    modalContent.appendChild(mediaElement);
-    modal.appendChild(modalContent);
-
-    // Add to page
-    document.body.appendChild(modal);
-    document.body.style.overflow = 'hidden';
-
-    function closeFullscreenModal() {
-        modal.remove();
-        document.body.style.overflow = 'auto';
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeFullscreenModal();
-    });
-};
-
-// Modal event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    const checkbox = document.getElementById('confirm-delete-checkbox');
-    const confirmationSection = document.querySelector('.confirmation-section');
-
-    if (checkbox && confirmationSection) {
-        checkbox.addEventListener('change', function() {
-            document.getElementById('confirm-delete-btn').disabled = !this.checked;
-            if (this.checked) {
-                confirmationSection.classList.add('checked');
-            } else {
-                confirmationSection.classList.remove('checked');
-            }
-        });
-    }
-
-    // File upload functionality
-    const mediaUploadArea = document.getElementById('mediaUploadArea');
-    const mediaInput = document.getElementById('media');
-    const uploadedFiles = document.getElementById('uploadedFiles');
-
-    if (mediaUploadArea && mediaInput && uploadedFiles) {
-        // Click to upload
-        mediaUploadArea.addEventListener('click', function() {
-            mediaInput.click();
-        });
-
-        // Drag and drop functionality
-        mediaUploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            mediaUploadArea.style.borderColor = 'var(--primary)';
-            mediaUploadArea.style.background = 'rgba(46, 125, 50, 0.1)';
-        });
-
-        mediaUploadArea.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            mediaUploadArea.style.borderColor = 'rgba(46, 125, 50, 0.3)';
-            mediaUploadArea.style.background = 'rgba(46, 125, 50, 0.02)';
-        });
-
-        mediaUploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            mediaUploadArea.style.borderColor = 'rgba(46, 125, 50, 0.3)';
-            mediaUploadArea.style.background = 'rgba(46, 125, 50, 0.02)';
-
-            const files = e.dataTransfer.files;
-            handleFiles(files);
-        });
-
-        // File input change
-        mediaInput.addEventListener('change', function(e) {
-            handleFiles(e.target.files);
-        });
-
-        function handleFiles(files) {
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                if (validateFile(file)) {
-                    displayFile(file);
-                }
-            }
-        }
-
-        function validateFile(file) {
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi', 'video/quicktime', 'video/x-ms-wmv'];
-            const maxSize = 10 * 1024 * 1024; // 10MB
-
-            if (!allowedTypes.includes(file.type)) {
-                alert('Invalid file type. Please upload images or videos only.');
-                return false;
-            }
-
-            if (file.size > maxSize) {
-                alert('File size exceeds 10MB limit.');
-                return false;
-            }
-
-            return true;
-        }
-
-        function displayFile(file) {
-            const fileItem = document.createElement('div');
-            fileItem.className = 'uploaded-file-item';
-            fileItem.innerHTML = `
-                <span>${file.name}</span>
-                <span class="remove-file" data-file="${file.name}">&times;</span>
-            `;
-
-            uploadedFiles.appendChild(fileItem);
-
-            // Remove file functionality
-            fileItem.querySelector('.remove-file').addEventListener('click', function() {
-                fileItem.remove();
-                // Remove from input files (this is a simplified approach)
-                // In a real implementation, you'd need to manage the FileList properly
-            });
-        }
-    }
-
-});
-</script>
-
-<?php require_once APPROOT . '/views/inc/minimalfooter.php'; ?>
+<?php require_once APPROOT . '/views/inc/footer.php'; ?>

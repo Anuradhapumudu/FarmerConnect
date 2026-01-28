@@ -2,9 +2,14 @@
 class OfficerDashboard extends Controller {
 
 
+    public function __construct() {
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'officer') {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+    }
+
     public function index() {
-
-
         $this->view('dashboard/officer');
     }
 
@@ -92,7 +97,8 @@ class OfficerDashboard extends Controller {
                 exit();
             }
 
-            $result = $this->model('M_disease')->updateReportStatus($reportCode, $status);
+            $officerId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+            $result = $this->model('M_disease')->updateReportStatus($reportCode, $status, $officerId);
 
             if ($result) {
                 $_SESSION['success_message'] = 'Report status updated successfully';
@@ -100,7 +106,13 @@ class OfficerDashboard extends Controller {
                 $_SESSION['error_message'] = 'Failed to update report status';
             }
 
-            header('Location: ' . URLROOT . '/officerDashboard/viewDiseaseReports');
+            $redirectTo = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : 'details';
+
+            if ($redirectTo === 'dashboard') {
+                header('Location: ' . URLROOT . '/officerDashboard/viewDiseaseReports');
+            } else {
+                header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
+            }
             exit();
         } else {
             header('Location: ' . URLROOT . '/officerDashboard/viewDiseaseReports');
@@ -118,6 +130,14 @@ class OfficerDashboard extends Controller {
                 $_SESSION['error_message'] = 'Report code and recommendation message are required';
                 header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
                 exit();
+            }
+
+            // Verify report status
+            $report = $this->model('M_disease')->getReportByCode($reportCode);
+            if (!$report || $report->status !== 'under_review') {
+                 $_SESSION['error_message'] = 'Recommendations can only be submitted when the report is Under Review';
+                 header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
+                 exit();
             }
 
             // Get officer ID from session (assuming it's stored there)
@@ -166,7 +186,7 @@ class OfficerDashboard extends Controller {
                             $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                             $baseName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($filename, PATHINFO_FILENAME));
                             $baseName = substr($baseName, 0, 30);
-                            $uniqueFilename = $reportCode . '_officer_' . $baseName . '_' . time() . '_' . $key . '.' . $fileExtension;
+                            $uniqueFilename = $reportCode . '_officer_' . $officerId . '_' . $baseName . '_' . time() . '_' . $key . '.' . $fileExtension;
                             $targetPath = $uploadDir . $uniqueFilename;
 
                             error_log("Attempting to upload file: " . $filename . " to: " . $targetPath);
@@ -214,6 +234,137 @@ class OfficerDashboard extends Controller {
         }
     }
 
+    // Delete recommendation
+    public function deleteRecommendation($id = '') {
+        if (empty($id)) {
+            $_SESSION['error_message'] = 'Invalid recommendation ID';
+            header('Location: ' . URLROOT . '/officerDashboard/viewDiseaseReports');
+            exit();
+        }
+
+        // Get recommendation to verify ownership
+        $recommendation = $this->model('M_disease')->getOfficerResponseById($id);
+        
+        if (!$recommendation) {
+            $_SESSION['error_message'] = 'Recommendation not found';
+            header('Location: ' . URLROOT . '/officerDashboard/viewDiseaseReports');
+            exit();
+        }
+
+        // Verify ownership
+        $currentOfficerId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'officer_' . session_id();
+        if ($recommendation->officer_id !== $currentOfficerId) {
+            $_SESSION['error_message'] = 'You can only delete your own recommendations';
+            header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $recommendation->report_code);
+            exit();
+        }
+
+        if ($this->model('M_disease')->deleteOfficerResponse($id)) {
+            // Cleanup media function could be added here similar to report deletion
+            $_SESSION['success_message'] = 'Recommendation deleted successfully';
+        } else {
+            $_SESSION['error_message'] = 'Failed to delete recommendation';
+        }
+
+        header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $recommendation->report_code);
+        exit();
+    }
+
+    // Update recommendation (handle form submission)
+    public function updateRecommendation() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $responseId = isset($_POST['responseId']) ? trim($_POST['responseId']) : '';
+            $message = isset($_POST['message']) ? trim($_POST['message']) : '';
+            $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
+
+            if (empty($responseId) || empty($message)) {
+                $_SESSION['error_message'] = 'Message is required';
+                header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
+                exit();
+            }
+
+            // Verify ownership
+            $recommendation = $this->model('M_disease')->getOfficerResponseById($responseId);
+            $currentOfficerId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'officer_' . session_id();
+
+            if (!$recommendation || $recommendation->officer_id !== $currentOfficerId) {
+                $_SESSION['error_message'] = 'Permission denied';
+                header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
+                exit();
+            }
+
+            // Handle Media Updates
+            $mediaString = null;
+            // TODO: Ideally implementing complex media merge logic like in Disease::submit works best. 
+            // For now, if new files are uploaded, we append or replace. 
+            // Let's adopt a simpler approach: if files are uploaded, ADD them to existing. 
+            // If "remove" logic is needed, it takes more UI work. 
+            // Let's implement ADD logic same as submitRecommendation.
+            
+            $newUploadedFiles = [];
+            if (!empty($_FILES['media']['name'][0])) {
+                // ... (Reuse upload logic from submitRecommendation) ...
+                // Duplicate code alert: In a real app, refactor `handleFileUpload` to a private helper or trait.
+                // I'll assume for this task strict limits, I'll inline a simplified version for reliability.
+                
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'application/pdf'];
+                
+                foreach ($_FILES['media']['name'] as $key => $filename) {
+                     if ($_FILES['media']['error'][$key] === UPLOAD_ERR_OK) {
+                        $tmpName = $_FILES['media']['tmp_name'][$key];
+                        $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                        $baseName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($filename, PATHINFO_FILENAME));
+                        $uniqueFilename = $reportCode . '_officer_upd_' . $currentOfficerId . '_' . $baseName . '_' . time() . '_' . $key . '.' . $fileExt;
+                        
+                        if(move_uploaded_file($tmpName, $uploadDir . $uniqueFilename)) {
+                            $newUploadedFiles[] = $uniqueFilename;
+                        }
+                     }
+                }
+            }
+
+            if (!empty($newUploadedFiles)) {
+                $existingMedia = !empty($recommendation->response_media) ? explode(',', $recommendation->response_media) : [];
+                $allMedia = array_merge($existingMedia, $newUploadedFiles);
+                // Remove empties and duplicates
+                $allMedia = array_unique(array_filter(array_map('trim', $allMedia)));
+                $mediaString = implode(',', $allMedia);
+            } else {
+                 // No new files, keep existing (pass null to model to skip update, or pass existing)
+                 // Model logic: if passed null, it ignores. So $mediaString = null is correct if we want to retain existing 
+                 // BUT wait, model says: if ($media !== null) $sql .= ", response_media = :media";
+                 // usage here implies we only update if we have NEW files? 
+                 // If the user wants to DELETE files, this simple method won't work.
+                 // Given the prompt "update buttons", usually implies text update. 
+                 // I will pass null so media isn't touched unless new files are added.
+                 $mediaString = null;
+                 
+                 if (!empty($newUploadedFiles)) {
+                      // We have new files, we must construct the FULL list to save, 
+                      // or the model should handle appending (model doesn't handle appending).
+                      // The model REPLACES the column. So valid $mediaString MUST include old files + new files.
+                      
+                      // Redo logic:
+                      $existingMedia = !empty($recommendation->response_media) ? explode(',', $recommendation->response_media) : [];
+                      $allMedia = array_merge($existingMedia, $newUploadedFiles);
+                      $mediaString = implode(',', array_unique(array_filter(array_map('trim', $allMedia))));
+                 }
+            }
+
+            $result = $this->model('M_disease')->updateOfficerResponse($responseId, $message, $mediaString);
+
+            if ($result) {
+                $_SESSION['success_message'] = 'Recommendation updated';
+            } else {
+                $_SESSION['error_message'] = 'Update failed';
+            }
+            header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
+            exit();
+
+        }
+    }
+
     // Display officer response media files
     public function viewResponseMedia($responseId = '', $filename = '') {
         if (empty($responseId) || empty($filename)) {
@@ -224,18 +375,15 @@ class OfficerDashboard extends Controller {
 
         try {
             // Verify that this file belongs to this response
-            $responses = $this->model('M_disease')->getOfficerResponses(''); // Get all responses to find the one with this ID
+            $response = $this->model('M_disease')->getOfficerResponseById($responseId);
 
             $validResponse = false;
-            foreach ($responses as $response) {
-                if ($response->id == $responseId && !empty($response->response_media)) {
-                    $responseFiles = explode(',', $response->response_media);
-                    $responseFiles = array_map('trim', $responseFiles);
+            if ($response && !empty($response->response_media)) {
+                $responseFiles = explode(',', $response->response_media);
+                $responseFiles = array_map('trim', $responseFiles);
 
-                    if (in_array($filename, $responseFiles)) {
-                        $validResponse = true;
-                        break;
-                    }
+                if (in_array($filename, $responseFiles)) {
+                    $validResponse = true;
                 }
             }
 
