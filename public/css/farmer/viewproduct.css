@@ -76,14 +76,14 @@ body {
 }
 
 .order-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(5px);
   box-shadow: 0 15px 40px rgba(46, 125, 50, 0.2);
 }
 
 .order-main-content {
   flex: 1;
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   width: 100%;
   box-sizing: border-box;
 }
@@ -92,14 +92,7 @@ body {
 .order-image {
   width: 40%;
   max-width: 370px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f9f9f9;
-  overflow: hidden;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-  position: relative;
+  position: relative; 
 }
 
 .order-image img {
@@ -109,9 +102,6 @@ body {
   transition: transform 0.3s ease;
 }
 
-.order-card:hover .order-image img {
-  transform: scale(1.05);
-}
 
 .order-content-wrapper {
   width: 70%;
@@ -136,22 +126,29 @@ body {
   color: #1b5e20;
 }
 
+/* Status Badge - Positioned on image */
+.status {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+}
+
 .status-instock {
-  background: #e8f5e9;
-  color: #2e7d32;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.9em;
-  border: 1.5px solid #2e7d32;
+  background: #4caf50;
+  color: white;
 }
 
 .status-outstock {
-  background: #ffebee;
-  color: #c62828;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.9em;
-  border: 1.5px solid #2e7d32;
+  background: #f44336;
+  color: white;
 }
 
 .order-content {
@@ -429,24 +426,3 @@ body {
   }
 }
 
-/* Ensure images maintain aspect ratio on all devices */
-.order-image img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Prevent image distortion */
-.order-image {
-  position: relative;
-}
-
-.order-image::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.02);
-  pointer-events: none;
-}
