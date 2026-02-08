@@ -506,3 +506,36 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.rating-section {
+  margin-top: 15px;
+}
+
+.stars {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.stars input {
+  display: none;
+}
+
+.stars label {
+  font-size: 22px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.stars input:checked ~ label,
+.stars label:hover,
+.stars label:hover ~ label {
+  color: #f5b301;
+}
+
+.rated-text {
+  color: green;
+  font-weight: bold;
+}
+

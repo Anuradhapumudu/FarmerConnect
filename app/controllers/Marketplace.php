@@ -498,11 +498,39 @@ public function trackOrdersFarmer() {
         $history[$order->order_id] = $this->marketplaceModel->getOrderHistory($order->order_id);
     }
 
-    // Pass to view
-    $this->view('marketplace/V_FarmerTrackOrders', [
-        'orders' => $orders,
-        'history' => $history
+    //create rate array
+    $ratedOrders = [];
+     foreach ($orders as $order) {
+    $ratedOrders[$order->order_id] =
+        $this->marketplaceModel->isOrderRated($order->order_id);
+    }
+
+     $this->view('marketplace/V_FarmerTrackOrders', [
+    'orders' => $orders,
+    'history' => $history,
+    'ratedOrders' => $ratedOrders
     ]);
+
+}
+
+
+public function viewOrderTracking($orderId) {
+    // Get order details
+    $order = $this->marketplaceModel->getOrderById($orderId);
+    
+    // Get order history
+    $history = $this->marketplaceModel->getOrderHistory($orderId);
+    
+    // Get rated status if exists
+    $rated = $this->marketplaceModel->isOrderRated($orderId);
+    
+    $data = [
+        'order' => $order,
+        'history' => $history,
+        'rated' => $rated
+    ];
+    
+    $this->view('marketplace/V_viewTracking', $data);
 }
 
 
@@ -560,6 +588,41 @@ public function trackOrdersFarmer() {
 
         $order =$this->marketplaceModel->getAllOrders();
         $this->view('marketplace/V_AdminViewOrders', ['orders' => $order]);
-    } 
+    }
+    
+    public function submitRating() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $order_id = $_POST['order_id'] ?? '';
+        $rating   = $_POST['rating'] ?? '';
+
+        if (!empty($order_id) && !empty($rating)) {
+            // Check if order is already rated
+            $existing = $this->marketplaceModel->isOrderRated($order_id);
+            if ($existing) {
+                $_SESSION['error'] = "You have already rated this order.";
+            } else {
+                $success = $this->marketplaceModel->addRating($order_id, $rating);
+                if ($success) {
+                    $_SESSION['success'] = "Thank you! Your rating has been submitted ⭐";
+                } else {
+                    $_SESSION['error'] = "Something went wrong. Please try again.";
+                }
+            }
+        } else {
+            $_SESSION['error'] = "Invalid rating submission.";
+        }
+
+        // Redirect back to farmer track orders page
+        header("Location: " . URLROOT . "/Marketplace/trackOrdersFarmer");
+        exit;
+    } else {
+        // Not a POST request
+        header("Location: " . URLROOT . "/Marketplace/trackOrdersFarmer");
+        exit;
+    }
+}
+
+
+
 }
 ?>

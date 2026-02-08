@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/viewproduct.css?v=<?= time(); ?>">
 
 <div id="mainContent">
+  <div class="containers">
 
   <!-- Filter -->
   <div class="filter-container">
@@ -150,6 +151,7 @@
     </div>
   <?php endforeach; ?>
 
+</div>
 </div>
 
 <!-- JS Filter Script -->

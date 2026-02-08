@@ -1,0 +1,299 @@
+
+    /* Add these styles to match the modal look on a separate page */
+    .tracking-page-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .tracking-header {
+        background: linear-gradient(135deg, #2e7d32, #4caf50);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(46, 125, 50, 0.2);
+    }
+
+    .tracking-header h1 {
+        font-family: "Poppins", sans-serif;
+        font-size: 2rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .order-id-display {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 8px 16px;
+        border-radius: 8px;
+        display: inline-block;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+    .tracking-content {
+        background: white;
+        border-radius: 12px;
+        padding: 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e0e0e0;
+    }
+
+    .tracking-title {
+        color: #2e7d32;
+        margin: 0;
+        font-size: 1.3rem;
+    }
+
+    /* Keep all your existing timeline styles from the modal */
+    .tracking-timeline {
+        padding: 25px;
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #c8e6c9;
+    }
+
+    .timeline-step {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .timeline-step:last-child {
+        margin-bottom: 0;
+    }
+
+    .timeline-step::before {
+        content: '';
+        position: absolute;
+        left: -30px;
+        top: 5px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #c8e6c9;
+        border: 3px solid white;
+        box-shadow: 0 0 0 2px #c8e6c9;
+    }
+
+    .timeline-step.active::before {
+        background: #2e7d32;
+        box-shadow: 0 0 0 2px #2e7d32;
+    }
+
+    .timeline-step.completed::before {
+        background: #4caf50;
+        box-shadow: 0 0 0 2px #4caf50;
+    }
+
+    .timeline-content {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #c8e6c9;
+    }
+
+    .timeline-step.active .timeline-content {
+        background: #e8f5e9;
+        border-left: 4px solid #2e7d32;
+    }
+
+    .timeline-step.completed .timeline-content {
+        background: #e8f5e9;
+        border-left: 4px solid #4caf50;
+    }
+
+    .timeline-date {
+        font-size: 12px;
+        color: #558b2f;
+        margin-bottom: 5px;
+    }
+
+    .timeline-text {
+        font-weight: 500;
+    }
+
+    /* Order Information Section */
+    .order-info-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 25px;
+        border-left: 4px solid #2e7d32;
+    }
+
+    .order-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .order-info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .order-info-item {
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .order-info-item h4 {
+        color: #2e7d32;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .order-info-item p {
+        font-weight: 600;
+        margin: 0;
+        color: #333;
+    }
+
+    /* Product and Seller Info */
+    .details-section {
+        padding: 0 25px 25px;
+    }
+
+    .product-display, .seller-display {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #2e7d32;
+    }
+
+    .product-display h3, .seller-display h3 {
+        color: #2e7d32;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin: 25px;
+        flex-wrap: wrap;
+    }
+
+    .btn-back {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-back:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-print {
+        background: #2e7d32;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-print:hover {
+        background: #1b5e20;
+        transform: translateY(-2px);
+    }
+
+    /* Rating Section */
+    .rating-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 25px;
+        border-left: 4px solid #2e7d32;
+        text-align: center;
+    }
+
+    .rating-section h3 {
+        color: #2e7d32;
+        margin-bottom: 15px;
+    }
+
+    .stars {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        gap: 5px;
+        margin: 15px 0;
+    }
+
+    .stars input {
+        display: none;
+    }
+
+    .stars label {
+        font-size: 28px;
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .stars input:checked ~ label,
+    .stars label:hover,
+    .stars label:hover ~ label {
+        color: #f5b301;
+    }
+
+    .rated-text {
+        color: #2e7d32;
+        font-weight: bold;
+        padding: 10px;
+    }
+
+    .btn-submit {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: #218838;
+        transform: translateY(-2px);
+    }

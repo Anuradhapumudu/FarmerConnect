@@ -1,26 +1,13 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  transition: margin-left 0.3s ease;
-}
-
-#mainContent {
-  min-height: 100vh;
-  padding-bottom: 40px;
-  transition: margin-left 0.3s ease;
+.containers {
+  max-width: 1200px;  /* unified width */
+  width: 95%;
+  margin: 0 auto;
 }
 
 /* Filter Container */
 .filter-container {
-  max-width: 1200px;
+  max-width: 1200px;   /* unified with cards */
+  width: 95%;
   margin: 20px auto;
   padding: 15px;
   background: #f1f8f4;
