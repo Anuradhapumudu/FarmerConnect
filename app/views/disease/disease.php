@@ -1,6 +1,7 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/disease/diseaseReport.css?v=<?= time(); ?>">
 <script src="<?php echo URLROOT; ?>/js/disease/diseaseReport.js?v=<?= time(); ?>" defer></script>
+<script src="<?php echo URLROOT; ?>/js/file_upload.js?v=<?= time(); ?>" defer></script>
 
 <div class="content-card">
     <div class="content-header">

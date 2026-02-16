@@ -34,7 +34,7 @@
         </div>
     <?php endif; ?>
 
-    <form action="<?php echo URLROOT; ?>/complaint/<?php echo isset($data['isEdit']) && $data['isEdit'] ? 'updateReport' : 'submit'; ?>" method="POST" id="diseaseReportForm" class="framework-form" enctype="multipart/form-data">
+    <form action="<?php echo URLROOT; ?>/complaint/<?php echo isset($data['isEdit']) && $data['isEdit'] ? 'updateReport' : 'submit'; ?>" method="POST" id="complaintReportForm" class="framework-form" enctype="multipart/form-data">
         <!-- Hidden inputs for edit mode -->
         <?php if (isset($data['isEdit']) && $data['isEdit']): ?>
             <input type="hidden" name="reportCode" value="<?php echo $data['complaint_id']; ?>">
