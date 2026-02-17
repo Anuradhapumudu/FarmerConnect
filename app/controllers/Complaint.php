@@ -38,7 +38,7 @@ class Complaint extends Controller
     public function myComplaints()
     {
         //Check if user is logged in
-        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+        if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
             exit();
         }
@@ -383,5 +383,56 @@ class Complaint extends Controller
 
         return ['media_string' => implode(',', $finalMediaList)];
     }
+
+    public function viewComplaint($reportCode = '')
+    {
+        if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
+        if (!empty($reportCode)) {
+            //show specific complaint details
+            $includeDeleted = false;
+            //check if current user is Admin
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
+                $includeDeleted = true;
+            }
+
+            $report = $this->model('M_complaint')->getComplaintByCode($reportCode, $includeDeleted);
+
+            if (!$report) {
+                //Complaint not found
+                $_SESSION['error_message'] = 'Complaint not found';
+                header('Location: ' . URLROOT . '/complaint/myComplaints');
+                exit();
+            }
+
+            //Check if farmer is logged in and trying to view their own report
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                if ($report->farmerNIC !== $_SESSION['nic']) {
+                    $_SESSION['error_message'] = 'You do not have permission to view this report';
+                    header('Location: ' . URLROOT . '/complaint/myComplaints');
+                    exit();
+                }
+            }
+
+            //Get officer responses to the complaint
+            $officer_responses = $this->model('M_complaint')->getOfficerResponses($reportCode);
+            $data = [
+                'report' => $report,
+                'officer_responses' => $officer_responses,
+                'singleReport' => true,
+                'message' => 'Report details for ' . $reportCode,
+            ];
+        } else {
+            //Redirect to viewReports if not ID provided
+            header('Location: ' . URLROOT . '/complaint/myComplaints');
+            exit();
+        }
+
+        $this->view('complaint/viewComplaint', $data);
+    }
+
 }
 ?>
