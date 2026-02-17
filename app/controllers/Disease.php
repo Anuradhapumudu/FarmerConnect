@@ -1,7 +1,9 @@
 <?php
-class Disease extends Controller{
+class Disease extends Controller
+{
 
-    public function index(){
+    public function index()
+    {
         // Check if user is logged in
         if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
             header('Location: ' . URLROOT . '/users/login');
@@ -35,7 +37,8 @@ class Disease extends Controller{
     }
 
     // Show form to search/view reports
-    public function viewReports(){
+    public function viewReports()
+    {
         // Check if user is logged in
         if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
@@ -46,20 +49,20 @@ class Disease extends Controller{
         $data['searched'] = false;
         $data['plrNumber'] = '';
         $data['reportCode'] = '';
-        
+
         // Check if farmer is logged in - they should only see their own reports
         if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
             $farmerNIC = $_SESSION['nic'];
             $data['farmerNIC'] = $farmerNIC;
 
             // Check if filtering parameters exist in GET request
-            if(isset($_GET['reportCode']) || isset($_GET['plrNumber'])){
+            if (isset($_GET['reportCode']) || isset($_GET['plrNumber'])) {
                 // Handle search form submission
                 $plrNumber = isset($_GET['plrNumber']) ? trim($_GET['plrNumber']) : '';
                 $reportCode = isset($_GET['reportCode']) ? trim($_GET['reportCode']) : '';
 
                 // Only search if at least one filter is provided
-                if(!empty($plrNumber) || !empty($reportCode)) {
+                if (!empty($plrNumber) || !empty($reportCode)) {
                     $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode);
                     $data['reports'] = $reports;
                     $data['plrNumber'] = $plrNumber;
@@ -68,7 +71,7 @@ class Disease extends Controller{
                     $data['message'] = count($reports) . ' of your report(s) found';
                 } else {
                     // If parameters exist but are empty, show all
-                     $reports = $this->model('M_disease')->getReportsByFarmerNIC($farmerNIC);
+                    $reports = $this->model('M_disease')->getReportsByFarmerNIC($farmerNIC);
                     $data['reports'] = $reports;
                     $data['message'] = 'Showing your reports (' . count($reports) . ' total)';
                 }
@@ -78,7 +81,7 @@ class Disease extends Controller{
                 $data['reports'] = $reports;
                 $data['message'] = 'Showing your reports (' . count($reports) . ' total)';
             }
-            
+
             // Get farmer's paddy fields for PLR dropdown filter
             $data['paddyFields'] = $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC);
         } else {
@@ -90,28 +93,28 @@ class Disease extends Controller{
             if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
                 $includeDeleted = true;
             }
-            
-            if(isset($_GET['reportCode']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC'])){
+
+            if (isset($_GET['reportCode']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC'])) {
                 // Handle search form submission
                 $farmerNIC = isset($_GET['farmerNIC']) ? trim($_GET['farmerNIC']) : '';
                 $plrNumber = isset($_GET['plrNumber']) ? trim($_GET['plrNumber']) : '';
                 $reportCode = isset($_GET['reportCode']) ? trim($_GET['reportCode']) : '';
 
-                 if(!empty($farmerNIC) || !empty($plrNumber) || !empty($reportCode)) {
+                if (!empty($farmerNIC) || !empty($plrNumber) || !empty($reportCode)) {
                     $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode, $includeDeleted);
-    
+
                     $data['reports'] = $reports;
                     $data['farmerNIC'] = $farmerNIC;
                     $data['plrNumber'] = $plrNumber;
                     $data['reportCode'] = $reportCode;
                     $data['searched'] = true;
                     $data['message'] = count($reports) . ' report(s) found';
-                 } else {
+                } else {
                     $reports = $this->model('M_disease')->getAllReports(null, null, $includeDeleted);
                     $data['reports'] = $reports;
                     $data['farmerNIC'] = '';
                     $data['message'] = 'Showing all reports (' . count($reports) . ' total)';
-                 }
+                }
             } else {
                 // Show all reports by default
                 $reports = $this->model('M_disease')->getAllReports(null, null, $includeDeleted);
@@ -132,7 +135,8 @@ class Disease extends Controller{
     }
 
     // View all submitted reports in table format or single report details
-    public function viewReport($reportCode = '') {
+    public function viewReport($reportCode = '')
+    {
         // Check if user is logged in
         if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
@@ -175,15 +179,16 @@ class Disease extends Controller{
             ];
         } else {
             // Redirect to viewReports if no ID provided
-             header('Location: ' . URLROOT . '/disease/viewReports');
-             exit();
+            header('Location: ' . URLROOT . '/disease/viewReports');
+            exit();
         }
 
         $this->view('disease/reportDetail', $data);
     }
 
     // Show edit form for updating report
-    public function editReport($reportCode = '') {
+    public function editReport($reportCode = '')
+    {
         // Check if user is logged in
         if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
@@ -223,7 +228,7 @@ class Disease extends Controller{
             'reportCode' => $report->report_code,
             'farmerNIC' => $report->farmerNIC,
             'paddyFields' => $paddyFields,
-            'plrNumber' => $plrNumber, 
+            'plrNumber' => $plrNumber,
             'paddySize' => isset($report->paddySize) ? $report->paddySize : '',
             'observationDate' => $report->observationDate,
             'title' => $report->title,
@@ -240,9 +245,10 @@ class Disease extends Controller{
     }
 
     // Submit method
-    public function submit(){
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            
+    public function submit()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
             // Sanitize and prepare data
             $data = [
                 'farmerNIC' => isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '',
@@ -266,15 +272,15 @@ class Disease extends Controller{
             if (empty($data['errors'])) {
                 // Handle File Uploads
                 $uploadResult = $this->handleFileUpload();
-                
+
                 if (isset($uploadResult['error'])) {
                     $data['errors']['media_error'] = $uploadResult['error'];
                 } else {
                     $data['media'] = $uploadResult['media_string'];
-                    
+
                     // Submit to Database
                     $reportCode = $this->model('M_disease')->submitDReport($data);
-                    
+
                     if ($reportCode && !is_array($reportCode)) {
                         // Display success page
                         $successData = ['report_id' => $reportCode];
@@ -297,8 +303,9 @@ class Disease extends Controller{
     }
 
     // Update report
-    public function updateReport() {
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    public function updateReport()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             try {
                 // Sanitize POST data
                 $data = [
@@ -331,13 +338,13 @@ class Disease extends Controller{
 
                 // Handle Media (Combined existing and new)
                 if (empty($data['errors'])) {
-                     $uploadResult = $this->handleFileUpload($data['existingMedia'], $data['removeMedia'], $data['report_code']);
-                     
-                     if (isset($uploadResult['error'])) {
+                    $uploadResult = $this->handleFileUpload($data['existingMedia'], $data['removeMedia'], $data['report_code']);
+
+                    if (isset($uploadResult['error'])) {
                         $data['errors']['media_error'] = $uploadResult['error'];
-                     } else {
+                    } else {
                         $data['media'] = $uploadResult['media_string'];
-                        
+
                         // Update in database
                         $dbResult = $this->model('M_disease')->updateReport($data);
                         if ($dbResult) {
@@ -347,7 +354,7 @@ class Disease extends Controller{
                         } else {
                             $data['errors']['general_error'] = 'Database update failed. Please try again.';
                         }
-                     }
+                    }
                 }
 
                 // If errors, reload necessary data
@@ -367,7 +374,8 @@ class Disease extends Controller{
     }
 
     // Delete report
-    public function deleteReport($reportCode = '') {
+    public function deleteReport($reportCode = '')
+    {
         // Check if user is logged in
         if (!isset($_SESSION['user_type']) || ($_SESSION['user_type'] === 'farmer' && !isset($_SESSION['nic']))) {
             header('Location: ' . URLROOT . '/users/login');
@@ -417,8 +425,27 @@ class Disease extends Controller{
         exit();
     }
 
+    // Success page - can be accessed directly via URL for testing
+    public function success($report_id = null)
+    {
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type']) || !isset($_SESSION['nic'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
+        if ($report_id === null) {
+            header('Location: ' . URLROOT . '/disease');
+            exit();
+        }
+
+        $successData = ['report_id' => $report_id];
+        $this->view('disease/success', $successData);
+    }
+
     // Display media files from file system
-    public function viewMedia($reportCode = '', $filename = '') {
+    public function viewMedia($reportCode = '', $filename = '')
+    {
         // Check if user is logged in (allow officers/admins who may not have 'nic')
         if (!isset($_SESSION['user_type'])) {
             header('Location: ' . URLROOT . '/users/login');
@@ -485,7 +512,8 @@ class Disease extends Controller{
     }
 
     // View officer response media
-    public function viewResponseMedia($responseId = '', $filename = '') {
+    public function viewResponseMedia($responseId = '', $filename = '')
+    {
         // Check if user is logged in
         if (!isset($_SESSION['user_type'])) {
             header('Location: ' . URLROOT . '/users/login');
@@ -501,7 +529,7 @@ class Disease extends Controller{
         try {
             // No strict ownership check for now as these are responses TO the farmer, but arguably we should check if the report belongs to them.
             // For simplicity and to ensure it works, we just check if file exists.
-            
+
             // Build file path
             $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
             $filePath = $uploadDir . $filename;
@@ -526,7 +554,7 @@ class Disease extends Controller{
             echo "Error loading file";
         }
     }
-    
+
     // --- PRIVATE HELPER METHODS ---
 
     /**
@@ -534,7 +562,8 @@ class Disease extends Controller{
      * @param array $data
      * @return array ['isValid' => bool, 'errors' => array]
      */
-    private function validateReportData($data) {
+    private function validateReportData($data)
+    {
         $errors = [];
 
         // Validate Farmer NIC
@@ -557,7 +586,7 @@ class Disease extends Controller{
                 $errors['plrNumber_error'] = 'PLR number not found in your registered paddy fields.';
             }
         }
-        
+
         // Validate Observation Date
         if (empty($data['observationDate'])) {
             $errors['observationDate_error'] = 'Please select the observation date';
@@ -634,7 +663,8 @@ class Disease extends Controller{
      * @param string $reportCodePrefix Prefix for new filenames (optional)
      * @return array ['media_string' => string, 'error' => string]
      */
-    private function handleFileUpload($existingMedia = '', $filesToRemove = [], $reportCodePrefix = 'NEW') {
+    private function handleFileUpload($existingMedia = '', $filesToRemove = [], $reportCodePrefix = 'NEW')
+    {
         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
         $finalMediaList = [];
 
@@ -666,10 +696,10 @@ class Disease extends Controller{
 
         // 2. Process New Uploads
         if (!empty($_FILES['media']['name'][0])) {
-             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi', 'video/quicktime', 'video/x-ms-wmv'];
-             $maxFileSize = 10 * 1024 * 1024; // 10MB
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi', 'video/quicktime', 'video/x-ms-wmv'];
+            $maxFileSize = 10 * 1024 * 1024; // 10MB
 
-             foreach ($_FILES['media']['name'] as $key => $filename) {
+            foreach ($_FILES['media']['name'] as $key => $filename) {
                 if ($_FILES['media']['error'][$key] === UPLOAD_ERR_OK) {
                     $tmpName = $_FILES['media']['tmp_name'][$key];
                     $fileSize = $_FILES['media']['size'][$key];
@@ -679,7 +709,7 @@ class Disease extends Controller{
                     $fileType = $finfo->file($tmpName);
 
                     if (!in_array($fileType, $allowedTypes)) {
-                         return ['error' => 'Invalid file type: ' . $fileType];
+                        return ['error' => 'Invalid file type: ' . $fileType];
                     }
 
                     // Validate Size
@@ -692,7 +722,7 @@ class Disease extends Controller{
                     $baseName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($filename, PATHINFO_FILENAME));
                     $baseName = substr($baseName, 0, 30);
                     $uniqueFilename = $reportCodePrefix . '_' . $baseName . '_' . time() . '_' . $key . '.' . $fileExtension;
-                    
+
                     $targetPath = $uploadDir . $uniqueFilename;
 
                     if (move_uploaded_file($tmpName, $targetPath)) {
@@ -702,13 +732,14 @@ class Disease extends Controller{
                         return ['error' => 'Failed to upload file: ' . $filename];
                     }
                 }
-             }
+            }
         }
 
         return ['media_string' => implode(',', $finalMediaList)];
     }
 
-    private function getMimeType($extension) {
+    private function getMimeType($extension)
+    {
         $mimeTypes = [
             'jpg' => 'image/jpeg',
             'jpeg' => 'image/jpeg',
