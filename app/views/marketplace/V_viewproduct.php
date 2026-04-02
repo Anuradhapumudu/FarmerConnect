@@ -73,7 +73,7 @@
     <?php 
         $price = floatval($row->price_per_unit);
         $region = htmlspecialchars($row->region);
-        $itemName = htmlspecialchars($row->item_name);
+        $itemName = htmlspecialchars(ucfirst(strtolower($row->item_name)));
         $sellerName = htmlspecialchars($row->seller_name);
         $imageUrl = URLROOT . '/uploads/' . htmlspecialchars($row->image_url);
         $available = intval($row->available_quantity);
@@ -83,6 +83,8 @@
         $unit_type = htmlspecialchars($row->unit_type ?? '');
         $province  = htmlspecialchars($row->province ?? '');
         $address   = htmlspecialchars($row->seller_address ?? '');
+        $rating = round($row->avg_rating ?? 0);
+        $total_rating = $row->total_ratings ?? 0;
     ?>
 
     <div class="order-card product-card" 
@@ -111,10 +113,22 @@
 
         <!-- Product Info -->
         <div class="order-content-wrapper">
-          <div class="order-header">
-            <div class="order-id"><?= $itemName ?></div>
+            <div class="order-header">
+              <!-- Product Name left -->
+              <div class="order-id"><?= $itemName ?></div>
+              <!-- Rating right -->
+              <div class="rating-box">
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                  <span class="<?= ($i <= $rating) ? 'star filled' : 'star'; ?>">★</span>
+                <?php endfor; ?>
+                <small> <?=$rating ?>.0/5 </small>
+                <small>(<?= $total_rating ?> reviews)</small>
+              </div>
 
-          </div>
+
+
+            </div>
+
 
           <div class="order-content">
             <div class="product-info">

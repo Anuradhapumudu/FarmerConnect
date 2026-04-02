@@ -299,7 +299,7 @@ public function addProduct() {
 }
 
 
-    // ✅ Add Success
+    //  Add Success
     public function addSuccess() {
         $this->view('marketplace/V_addsucess');
     }
@@ -311,8 +311,10 @@ public function addProduct() {
             header("Location: " . URLROOT . "/Users/login");
             exit;
         }
+        
         $products = $this->marketplaceModel->getProductsBySeller($seller_id);
-        $this->view('marketplace/V_manageProduct', ['products' => $products]);
+
+    $this->view('marketplace/V_manageProduct', ['products' => $products]);
     }
 
     //  Edit Product
@@ -542,6 +544,8 @@ public function viewOrderTracking($orderId) {
             header("Location: " . URLROOT . "/Users/login");
             exit;
         }
+
+    
     $orders = $this->marketplaceModel->getOrdersBySeller($seller_id);
      $this->view('marketplace/V_SellerTrackOrders', ['orders' => $orders]);
     }

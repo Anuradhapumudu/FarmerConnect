@@ -57,23 +57,18 @@
               case 'order_placed': 
                 $statusClass = 'status-placed'; 
                 $statusText = 'Order Placed';
-                $progressPercent = 20;
+                $progressPercent = 25;
                 break;
               case 'order_confirmed': 
                 $statusClass = 'status-confirmed'; 
                 $statusText = 'Order Confirmed';
-                $progressPercent = 40;
-                break;
-              case 'order_prepared': 
-                $statusClass = 'status-prepared'; 
-                $statusText = 'Order Prepared';
-                $progressPercent = 60;
+                $progressPercent = 50;
                 break;
               case 'ready_to_pickup': 
               case 'ready_for_pickup':
                 $statusClass = 'status-ready'; 
                 $statusText = 'Ready For Pickup';
-                $progressPercent = 80;
+                $progressPercent = 75;
                 break;
               case 'order_picked': 
               case 'picked_up':
@@ -97,7 +92,7 @@
                   } else {
                       $statusText = ucwords(str_replace('_', ' ', $order->order_status));
                       $statusClass = 'status-unknown';
-                      $progressPercent = 20;
+                      $progressPercent = 25;
                   }
           }
         ?>
@@ -158,21 +153,17 @@
               </div>
               
               <div class="progress-steps">
-                <div class="progress-step <?= $progressPercent >= 20 ? 'active' : '' ?>">
-                  <div class="step-dot <?= $progressPercent >= 20 ? 'completed' : '' ?>"></div>
-                  <div class="step-label <?= $progressPercent >= 20 ? 'active' : '' ?>">Placed</div>
+                <div class="progress-step <?= $progressPercent >= 25 ? 'active' : '' ?>">
+                  <div class="step-dot <?= $progressPercent >= 25 ? 'completed' : '' ?>"></div>
+                  <div class="step-label <?= $progressPercent >= 25 ? 'active' : '' ?>">Placed</div>
                 </div>
-                <div class="progress-step <?= $progressPercent >= 40 ? 'active' : '' ?>">
-                  <div class="step-dot <?= $progressPercent >= 40 ? 'completed' : '' ?>"></div>
-                  <div class="step-label <?= $progressPercent >= 40 ? 'active' : '' ?>">Confirmed</div>
+                <div class="progress-step <?= $progressPercent >= 50 ? 'active' : '' ?>">
+                  <div class="step-dot <?= $progressPercent >= 50 ? 'completed' : '' ?>"></div>
+                  <div class="step-label <?= $progressPercent >= 50 ? 'active' : '' ?>">Confirmed</div>
                 </div>
-                <div class="progress-step <?= $progressPercent >= 60 ? 'active' : '' ?>">
-                  <div class="step-dot <?= $progressPercent >= 60 ? 'completed' : '' ?>"></div>
-                  <div class="step-label <?= $progressPercent >= 60 ? 'active' : '' ?>">Prepared</div>
-                </div>
-                <div class="progress-step <?= $progressPercent >= 80 ? 'active' : '' ?>">
-                  <div class="step-dot <?= $progressPercent >= 80 ? 'completed' : '' ?>"></div>
-                  <div class="step-label <?= $progressPercent >= 80 ? 'active' : '' ?>">Ready</div>
+                <div class="progress-step <?= $progressPercent >= 75 ? 'active' : '' ?>">
+                  <div class="step-dot <?= $progressPercent >= 75 ? 'completed' : '' ?>"></div>
+                  <div class="step-label <?= $progressPercent >= 75 ? 'active' : '' ?>">Ready</div>
                 </div>
                 <div class="progress-step <?= $progressPercent >= 100 ? 'active' : '' ?>">
                   <div class="step-dot <?= $progressPercent >= 100 ? 'completed' : '' ?>"></div>

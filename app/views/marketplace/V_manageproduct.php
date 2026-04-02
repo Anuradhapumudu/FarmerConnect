@@ -28,7 +28,24 @@
     <?php echo htmlspecialchars($product->status); ?>
   </span>
 
-  <h2><?php echo htmlspecialchars($product->item_name); ?></h2>
+
+
+ <h2> <?php echo htmlspecialchars(ucfirst(strtolower($product->item_name))); ?></h2>
+
+   <div class="rating">
+    <?php 
+        $rating = round($product->avg_rating);
+        for ($i = 1; $i <= 5; $i++): 
+    ?>
+        <span class="<?= ($i <= $rating) ? 'star filled' : 'star'; ?>">★</span>
+    <?php endfor; ?>
+</div>
+
+<p>
+    <?= $product->avg_rating ?> / 5 
+    (<?= $product->total_ratings ?> reviews)
+</p>
+
   <div>
     <span class="price">Rs <?php echo htmlspecialchars($product->price_per_unit); ?></span>
   </div>

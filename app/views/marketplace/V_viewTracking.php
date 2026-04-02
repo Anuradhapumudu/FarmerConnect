@@ -25,10 +25,6 @@
                     $statusClass = 'status-confirmed'; 
                     $statusText = 'Order Confirmed';
                     break;
-                case 'order_prepared': 
-                    $statusClass = 'status-prepared'; 
-                    $statusText = 'Order Prepared';
-                    break;
                 case 'ready_to_pickup': 
                 case 'ready_for_pickup':
                     $statusClass = 'status-ready'; 
@@ -168,16 +164,6 @@
                         </div>
                     <?php endif; ?>
                     
-                    <!-- If order is picked up, show completion message -->
-                    <?php if($normalizedStatus === 'order_picked'): ?>
-                        <div class="timeline-step completed">
-                            <div class="timeline-content">
-                                <div class="timeline-date"><?= date('M d, Y - h:i A', strtotime($order->order_create_date . ' +2 days')) ?></div>
-                                <div class="timeline-text">Order Completed</div>
-                                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Thank you for your purchase!</p>
-                            </div>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
             

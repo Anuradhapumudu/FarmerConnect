@@ -202,6 +202,20 @@
   transition: all 0.3s ease;
 }
 
+/*raiting*/
+.rating {
+  margin-top: 5px;
+}
+
+.star {
+  font-size: 18px;
+  color: #ccc; /* gray */
+}
+
+.star.filled {
+  color: #fbc02d; /* gold */
+}
+
 /* =========================
    Responsive Design
 ========================= */

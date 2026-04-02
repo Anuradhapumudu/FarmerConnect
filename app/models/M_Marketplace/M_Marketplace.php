@@ -73,26 +73,39 @@ public function getProductById($item_id) {
 
 
     // Get products by seller for 
-    public function getProductsBySeller($seller_id) {
-        $this->db->query("SELECT * FROM products WHERE seller_id = :seller_id");
-        $this->db->bind(':seller_id', $seller_id);
-        return $this->db->resultSet();
-    }
+public function getProductsBySeller($seller_id) {
+    $this->db->query("
+        SELECT 
+            p.*,
+            ROUND(AVG(r.rating), 1) AS avg_rating,
+            COUNT(r.rating) AS total_ratings
+        FROM products p
+        LEFT JOIN orders o ON p.item_id = o.item_id
+        LEFT JOIN ratings r ON o.order_id = r.order_id
+        WHERE p.seller_id = :seller_id
+        GROUP BY p.item_id
+    ");
+
+    $this->db->bind(':seller_id', $seller_id);
+    return $this->db->resultSet();
+}
        public function getProductsByCategory($category) {
     $this->db->query("
         SELECT 
             p.*, 
-            p.unit_type,
-            p.province,
-            p.region,
             CONCAT(s.first_name, ' ', s.last_name) AS seller_name, 
             s.company_name,
             s.phone_no AS seller_telNo,
             s.email,
-            s.address AS seller_address
+            s.address AS seller_address,
+            ROUND(AVG(r.rating), 1) AS avg_rating,
+            COUNT(r.rating) AS total_ratings
         FROM products p
         JOIN sellers s ON p.seller_id = s.seller_id
+        LEFT JOIN orders o ON p.item_id = o.item_id
+        LEFT JOIN ratings r ON o.order_id = r.order_id
         WHERE p.category = :category
+        GROUP BY p.item_id , seller_name,seller_telNo,s.email,seller_address,s.company_name
     ");
 
     $this->db->bind(':category', $category);
@@ -250,10 +263,12 @@ public function getOrdersBySeller($seller_id) {
             p.item_name,
             p.image_url,
             f.full_name AS buyer_full,
-            f.phone_no  AS buyer_telNo
+            f.phone_no  AS buyer_telNo,
+            r.rating
         FROM orders o
         JOIN products p ON o.item_id = p.item_id
-        JOIN farmers f ON o.buyer_id = f.nic            
+        JOIN farmers f ON o.buyer_id = f.nic 
+        LEFT JOIN ratings r ON o.order_id = r.order_id           
         WHERE p.seller_id = :seller_id
         ORDER BY o.order_create_date DESC
     ");

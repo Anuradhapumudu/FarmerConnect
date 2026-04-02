@@ -246,6 +246,46 @@
   transform: translateY(-2px);
 }
 
+
+.rating {
+  margin-top: 5px;
+}
+
+.star {
+  font-size: 18px;
+  color: #ccc; /* gray */
+}
+
+.star.filled {
+  color: #fbc02d; /* gold */
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rating-box {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 14px;
+}
+
+.star {
+  color: #ccc;
+}
+
+.star.filled {
+  color: #ffc107; /* gold */
+}
+
+.rating-box small {
+  margin-left: 5px;
+  color: #666;
+}
+
 /* =========================
    Mobile Responsive Design
 ========================= */
