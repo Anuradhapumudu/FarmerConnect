@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/viewproduct.css?v=<?= time(); ?>">
 
 <div id="mainContent">
+  <div class="containers">
 
   <!-- Filter -->
   <div class="filter-container">
@@ -90,19 +91,29 @@
          data-province="<?= strtolower($province) ?>"
          data-region="<?= strtolower($region) ?>">
 
+      <?php 
+      $statusClass = '';
+      if ($status === 'Instock') $statusClass = 'status-instock';
+      elseif ($status === 'Outstock') $statusClass = 'status-outstock';
+      ?>
+
       <div class="order-main-content">
         <!-- Product Image -->
         <div class="order-image">
-          <img src="<?= $imageUrl ?>" alt="<?= $itemName ?>">
+          <img src="<?= $imageUrl ?>" alt="<?= $itemName ?> " >
+            <span class="status <?php echo $statusClass; ?>">
+           <?php echo htmlspecialchars($status); ?>
+       </span>
         </div>
+
+
+
 
         <!-- Product Info -->
         <div class="order-content-wrapper">
           <div class="order-header">
             <div class="order-id"><?= $itemName ?></div>
-            <div class="status <?= strtolower($status) === 'in stock' ? 'status-instock' : 'status-outstock' ?>">
-                <?= $status ?>
-            </div>
+
           </div>
 
           <div class="order-content">
@@ -140,6 +151,7 @@
     </div>
   <?php endforeach; ?>
 
+</div>
 </div>
 
 <!-- JS Filter Script -->

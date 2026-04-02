@@ -263,10 +263,25 @@ public function getOrdersBySeller($seller_id) {
 
 // Get order by ID (already exists for some uses)
 public function getOrderById($order_id) {
-    $this->db->query("SELECT * FROM orders WHERE order_id = :order_id");
+    $this->db->query("
+        SELECT 
+            o.*,
+            p.item_name,
+            p.image_url,
+            s.first_name AS seller_first,
+            s.last_name AS seller_last,
+            s.address AS seller_address,
+            s.phone_no AS seller_telNo
+        FROM orders o
+        JOIN products p ON o.item_id = p.item_id
+        JOIN sellers s ON o.seller_id = s.seller_id
+        WHERE o.order_id = :order_id
+    ");
+
     $this->db->bind(':order_id', $order_id);
     return $this->db->single();
 }
+
 
 // Update order status
 public function updateOrderStatus($order_id, $new_status) {
@@ -296,5 +311,67 @@ public function getOrderStatusHistory($order_id) {
     return $this->db->resultSet();
 }
 
+    // Check if order already rated
+    public function isOrderRated($order_id){
+        $this->db->query("SELECT rating_id FROM ratings WHERE order_id = :order_id");
+        $this->db->bind(':order_id', $order_id);
+        return $this->db->single();
+    }
+
+
+public function addRating($order_id, $rating){
+    $this->db->query("
+        INSERT INTO ratings (order_id, rating, created_at)
+        VALUES (:order_id, :rating, NOW())
+    ");
+
+    $this->db->bind(':order_id', (int)$order_id);
+    $this->db->bind(':rating', (int)$rating);
+    return $this->db->execute();
+
 }
+
+
+
+public function getRaitingForEachOrder($order_id){
+    $this->db->query("SELECT * FROM ratings WHERE order_id = :order_id ");
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->single();   // one rating per order
+}
+
+public function getOverallProductRating($item_id){
+    $this->db->query("
+        SELECT 
+            ROUND(AVG(r.rating), 1) AS avg_rating,
+            COUNT(r.rating) AS total_ratings
+        FROM ratings r
+        JOIN orders o ON r.order_id = o.order_id
+        WHERE o.item_id = :item_id
+    ");
+
+    $this->db->bind(':item_id', $item_id);
+    return $this->db->single();
+}
+
+public function getSellerRatings($seller_id){
+    $this->db->query("
+        SELECT 
+            o.order_id,
+            r.rating,
+            r.created_at
+        FROM ratings r
+        JOIN orders o ON r.order_id = o.order_id
+        WHERE o.seller_id = :seller_id
+        ORDER BY r.created_at DESC
+    ");
+
+    $this->db->bind(':seller_id', $seller_id);
+    return $this->db->resultSet();
+}
+
+
+}
+
+
+
 ?>
