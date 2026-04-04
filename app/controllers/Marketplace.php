@@ -1,13 +1,80 @@
+
+
 <?php
 class Marketplace extends Controller {
     private $marketplaceModel;
 
     public function __construct() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+
+    require_once APPROOT . '/libraries/Auth.php';
+         Auth::check();
+
         $this->marketplaceModel = $this->model('M_Marketplace/M_Marketplace', new Database());
     }
+
+
+
+////////////////////////////////////////////
+//Marketplace General View
+//////////////////////////////////////////
+
+
+    public function index() {
+        switch($_SESSION['user_type']) {
+            case 'seller':
+                $this->seller();
+                break;
+            case 'admin':
+                $this->admin();
+                break;
+            case 'farmer':
+                $this->farmer();
+                break;
+            default:
+                header('Location: ' . URLROOT . '/users/login');
+                exit;
+        }
+    }
+
+
+    //  Farmer Marketplace View
+    public function farmer() {
+
+        //checks again user is farmer
+     Auth::checkRole('farmer');
+
+        $this->view('marketplace/V_marketplaceFarmer');
+    }
+
+    //  Seller Marketplace View
+    public function seller() {
+
+    Auth::checkRole('seller');
+        
+        $this->view('marketplace/V_markertplaceSeller');
+    }
+
+     //  admin Marketplace View
+    public function admin() {
+
+
+    Auth::checkAdmin();
+
+    $revenue = $this->marketplaceModel->totalRevenue();
+    $activeProducts = $this->marketplaceModel->activeProduct();
+    $totalOrders = $this->marketplaceModel->totalOrders();
+
+    $data = [
+        'revenue' => $revenue,
+        'activeProducts' => $activeProducts,
+        'totalOrders' => $totalOrders
+    ];
+
+    $this->view('marketplace/V_AdminMarketplace', $data);
+    }
+
+
+
 
 
 private function generatePayHereHash($order_id, $amount, $currency = "LKR") {
@@ -162,25 +229,7 @@ public function paymentNotification() {
         $this->view('marketplace/V_paymentCancel');
     }
 
-    //  Marketplace Home (Farmer / Seller)
-    public function index() {
-        $this->view('marketplace/V_marketplaceHome');
-    }
 
-    //  Farmer Marketplace View
-    public function farmer() {
-        $this->view('marketplace/V_marketplaceFarmer');
-    }
-
-    //  Seller Marketplace View
-    public function seller() {
-        $this->view('marketplace/V_markertplaceSeller');
-    }
-
-     //  admin Marketplace View
-    public function admin() {
-        $this->view('marketplace/V_AdminMarketplace');
-    }
 
     //  Add Product
 public function addProduct() {

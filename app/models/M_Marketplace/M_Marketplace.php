@@ -326,8 +326,8 @@ public function getOrderStatusHistory($order_id) {
     return $this->db->resultSet();
 }
 
-    // Check if order already rated
-    public function isOrderRated($order_id){
+    // Check if order already rated 
+public function isOrderRated($order_id){
         $this->db->query("SELECT rating_id FROM ratings WHERE order_id = :order_id");
         $this->db->bind(':order_id', $order_id);
         return $this->db->single();
@@ -354,36 +354,39 @@ public function getRaitingForEachOrder($order_id){
     return $this->db->single();   // one rating per order
 }
 
-public function getOverallProductRating($item_id){
+public function totalRevenue() {
+
     $this->db->query("
-        SELECT 
-            ROUND(AVG(r.rating), 1) AS avg_rating,
-            COUNT(r.rating) AS total_ratings
-        FROM ratings r
-        JOIN orders o ON r.order_id = o.order_id
-        WHERE o.item_id = :item_id
+        SELECT SUM(o.total_price) AS revenue
+        FROM orders o
+        JOIN order_status_history s ON o.order_id = s.order_id
+        WHERE s.new_status = 'order_picked'
     ");
 
-    $this->db->bind(':item_id', $item_id);
     return $this->db->single();
 }
 
-public function getSellerRatings($seller_id){
+
+public function activeProduct() {
+
     $this->db->query("
-        SELECT 
-            o.order_id,
-            r.rating,
-            r.created_at
-        FROM ratings r
-        JOIN orders o ON r.order_id = o.order_id
-        WHERE o.seller_id = :seller_id
-        ORDER BY r.created_at DESC
+        SELECT COUNT(*) AS active_products
+        FROM products
+        WHERE status = 'Instock'
     ");
 
-    $this->db->bind(':seller_id', $seller_id);
-    return $this->db->resultSet();
+    return $this->db->single();
 }
 
+public function totalOrders() {
+
+    $this->db->query("
+        SELECT COUNT(*) AS total_orders
+        FROM orders
+    ");
+
+    return $this->db->single();
+}
 
 }
 
