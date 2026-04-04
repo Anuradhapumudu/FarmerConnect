@@ -311,7 +311,7 @@ class Complaint extends Controller
 
     private function handleFileUpload($existingMedia = '', $filesToRemove = [], $reportCodePrefix = 'NEW')
     {
-        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/complaint_reports/';
+        $uploadDir = APPROOT . '/../public/uploads/complaint_reports/';
         $finalMediaList = [];
 
         // Ensure upload directory exists
