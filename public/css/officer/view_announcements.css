@@ -5,7 +5,7 @@
 }
 
 .announcement-detail-card {
-    position: relative;
+  position: relative;
   background: white;
   padding: 30px;
   border-radius: 12px;
@@ -76,4 +76,72 @@
   color: #1f2937;
   background: #f3f4f6;
   transform: translateX(-4px);
+}
+
+.attachment-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.attachment-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.preview-image {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border: none;
+}
+
+.preview-pdf {
+    width: 100%;
+    max-width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+.hidden {
+    display: none;
+}
+.view-more-btn {
+    margin-top: 10px;
+    padding: 8px 14px;
+    background: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.view-more-btn:hover {
+    background: #256528;
+}
+.overlay-container {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
 }
