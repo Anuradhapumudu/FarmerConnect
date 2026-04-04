@@ -1,6 +1,7 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/disease/diseaseReport.css?v=<?= time(); ?>">
 <script src="<?php echo URLROOT; ?>/js/disease/diseaseReport.js?v=<?= time(); ?>" defer></script>
+<script src="<?php echo URLROOT; ?>/js/file_upload.js?v=<?= time(); ?>" defer></script>
 
 <div class="content-card">
     <div class="content-header">
@@ -62,10 +63,18 @@
             <span class="error"><?php echo $data['errors']['plrNumber_error'] ?? ''; ?></span>
         </div>
 
-        <div class="form-group">
-            <label for="paddySize" class="required">Paddy Size (Acres)</label>
-            <input type="number" id="paddySize" name="paddySize" step="0.01" min="0" readonly value="<?php echo isset($data['paddySize']) ? $data['paddySize'] : ''; ?>" class="<?php echo !empty($data['errors']['paddySize_error']) ? 'is-invalid' : ''; ?>">
-            <span class="error"><?php echo $data['errors']['paddySize_error'] ?? ''; ?></span>
+        <div class="form-group-split">
+            <div class="form-group-half">
+                <label for="paddySize" class="required-label">Paddy Size (Acres)</label>
+                <input type="number" id="paddySize" name="paddySize" step="0.01" min="0" placeholder="Automatically populated from PLR selection" readonly value="<?php echo isset($data['paddySize']) ? $data['paddySize'] : ''; ?>" class="<?php echo !empty($data['errors']['paddySize_error']) ? 'is-invalid' : ''; ?>">
+                <span class="error"><?php echo $data['errors']['paddySize_error'] ?? ''; ?></span>
+            </div>
+            <div class="form-group-half">
+                <label for="affectedArea" class="required-label">Affected Area (Acres) <span class="required-star">*</span></label>
+                <input type="number" id="affectedArea" name="affectedArea" 
+                       placeholder="Enter the size of the affected area" min="0" step="0.1" value="<?php echo $data['affectedArea']; ?>" class="<?php echo !empty($data['errors']['affectedArea_error']) ? 'is-invalid' : ''; ?>">
+                <span class="error"><?php echo $data['errors']['affectedArea_error'] ?? ''; ?></span>
+            </div>
         </div>
         
         <div class="form-group-split">
@@ -181,13 +190,6 @@
                 </label>
             </div>
             <span class="error"><?php echo $data['errors']['severity_error'] ?? ''; ?></span>
-        </div>
-        
-        <div class="form-group">
-            <label for="affectedArea" class="required">Affected Area (in acres)</label>
-            <input type="number" id="affectedArea" name="affectedArea" 
-                   placeholder="Enter the size of the affected area" min="0" step="0.1" value="<?php echo $data['affectedArea']; ?>" class="<?php echo !empty($data['errors']['affectedArea_error']) ? 'is-invalid' : ''; ?>">
-            <span class="error"><?php echo $data['errors']['affectedArea_error'] ?? ''; ?></span>
         </div>
         
         <div class="form-group">
