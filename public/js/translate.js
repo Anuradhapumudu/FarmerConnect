@@ -24,11 +24,13 @@ function clearGoogleTranslateCookies() {
       // Clear without domain (for localhost)
       paths.forEach((p) => {
         document.cookie = `${name}=; ${expires}; path=${p}; SameSite=Lax`;
+        document.cookie = `${name}=; ${expires}; path=${p};`; // fallback without samesite
       });
       // Clear with domain variations
       hosts.forEach((domain) => {
         paths.forEach((p) => {
           document.cookie = `${name}=; ${expires}; path=${p}; domain=${domain}; SameSite=Lax`;
+          document.cookie = `${name}=; ${expires}; path=${p}; domain=${domain};`; // fallback without samesite
         });
       });
     });
@@ -54,11 +56,24 @@ function resetToEnglish() {
 // Set language in Google Translate
 function setGoogleTranslateLanguage(lang) {
   if (!lang || lang === 'en') {
-    // If English or empty, reload the page to restore original content
+    // If English or empty, use the dropdown to trigger revert before reloading
     console.log('Resetting to English - reloading page');
-    clearGoogleTranslateCookies();
     localStorage.setItem('langPref', 'en');
-    window.location.reload();
+    
+    // First try properly using the combo 
+    const combo = document.querySelector('#google_translate_element select.goog-te-combo');
+    if (combo) {
+        combo.value = 'en';
+        combo.dispatchEvent(new Event('change'));
+    }
+    
+    // Clear cookies aggressively
+    clearGoogleTranslateCookies();
+    
+    // Wait a brief moment to allow internal states to update before reloading
+    setTimeout(() => {
+        window.location.reload();
+    }, 300);
     return;
   }
 
