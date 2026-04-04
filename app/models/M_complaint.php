@@ -11,8 +11,8 @@ class M_complaint
     public function submitComplaint($data)
     {
         try {
-            //Generate unique complaint ID
-            $complaint_id = $this->generateComplaintCode();
+            //Use provided complaint ID or generate a new one
+            $complaint_id = isset($data['complaint_id']) ? $data['complaint_id'] : $this->generateComplaintCode();
 
             $this->db->query('INSERT INTO complaints (complaint_id,
                 farmerNIC, plrNumber, observationDate, title, description, media, severity, affectedArea, status) 
@@ -43,7 +43,7 @@ class M_complaint
     }
 
     //Generate unique complaint code
-    private function generateComplaintCode()
+    public function generateComplaintCode()
     {
         try {
             //Get the next availbale ID

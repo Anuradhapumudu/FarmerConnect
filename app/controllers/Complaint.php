@@ -158,8 +158,12 @@ class Complaint extends Controller
 
             // Proceed if no errors
             if (empty($data['errors'])) {
-                // Handle File Uploads
-                $uploadResult = $this->handleFileUpload();
+                // Get the next complaint ID
+                $new_complaint_id = $this->model('M_complaint')->generateComplaintCode();
+                $data['complaint_id'] = $new_complaint_id;
+
+                // Handle File Uploads with the new ID as prefix
+                $uploadResult = $this->handleFileUpload('', [], $new_complaint_id);
 
                 if (isset($uploadResult['error'])) {
                     $data['errors']['media_error'] = $uploadResult['error'];
@@ -307,6 +311,103 @@ class Complaint extends Controller
         }
 
         return ['isValid' => empty($errors), 'errors' => $errors];
+    }
+
+    // Display media files from file system
+    public function viewMedia($reportCode = '', $filename = '')
+    {
+        error_log("viewMedia called: reportCode={$reportCode}, filename={$filename}");
+        // Check if user is logged in
+        if (!isset($_SESSION['user_type'])) {
+            error_log("viewMedia fail: user_type not set");
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
+        if (empty($reportCode) || empty($filename)) {
+            error_log("viewMedia fail: Empty param");
+            http_response_code(404);
+            echo "Report Code and filename required";
+            return;
+        }
+
+        try {
+            // Verify that this file belongs to this report
+            $report = $this->model('M_complaint')->getComplaintByCode($reportCode);
+
+            if ($report && !empty($report->media)) {
+                $reportFiles = explode(',', $report->media);
+                $reportFiles = array_map('trim', $reportFiles);
+
+                // Check if the requested filename exists for this report
+                if (!in_array($filename, $reportFiles)) {
+                    error_log("viewMedia fail: {$filename} not in " . print_r($reportFiles, true));
+                    http_response_code(403);
+                    echo "File not associated with this report";
+                    return;
+                }
+
+                // Check permissions
+                if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer' && isset($_SESSION['nic'])) {
+                    if ($report->farmerNIC !== $_SESSION['nic']) {
+                        error_log("viewMedia fail: farmerNIC mismatch");
+                        http_response_code(403);
+                        echo "You can only view media from your own reports";
+                        return;
+                    }
+                }
+
+                // Build file path
+                $uploadDir = APPROOT . '/../public/uploads/complaint_reports/';
+                $filePath = $uploadDir . $filename;
+                error_log("viewMedia testing path: {$filePath}");
+
+                if (file_exists($filePath)) {
+                    error_log("viewMedia SUCCESS serving file");
+                    $fileExtension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                    $mimeType = $this->getMimeType($fileExtension);
+
+                    // Clean any buffered output to prevent media corruption
+                    if (ob_get_level()) {
+                        ob_end_clean();
+                    }
+
+                    header('Content-Type: ' . $mimeType);
+                    header('Content-Length: ' . filesize($filePath));
+                    header('Content-Disposition: inline; filename="' . basename($filePath) . '"');
+
+                    readfile($filePath);
+                    exit();
+                } else {
+                    error_log("viewMedia fail: file_exists returned false for {$filePath}");
+                    http_response_code(404);
+                    echo "File not found on server";
+                }
+            } else {
+                error_log("viewMedia fail: report not found or media empty");
+                http_response_code(404);
+                echo "Report not found or has no media";
+            }
+        } catch (Exception $e) {
+            error_log("Error viewing media: " . $e->getMessage());
+            http_response_code(500);
+            echo "Error loading file";
+        }
+    }
+
+    private function getMimeType($extension)
+    {
+        $mimeTypes = [
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'mp4' => 'video/mp4',
+            'avi' => 'video/x-msvideo',
+            'mov' => 'video/quicktime',
+            'wmv' => 'video/x-ms-wmv'
+        ];
+        return isset($mimeTypes[$extension]) ? $mimeTypes[$extension] : 'application/octet-stream';
     }
 
     private function handleFileUpload($existingMedia = '', $filesToRemove = [], $reportCodePrefix = 'NEW')
