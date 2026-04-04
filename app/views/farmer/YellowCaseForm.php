@@ -12,17 +12,18 @@
         <span id="caseIdDisplay">Will be generated upon submission</span>
     </div>
 
-    <form action="<?php echo URLROOT; ?>/yellowcase/submit" method="POST" id="yellowCaseForm" class="yellowcase-form" enctype="multipart/form-data">
+    <form action="<?php echo URLROOT; ?>/yellowcaseform/submit" method="POST" id="yellowCaseForm" enctype="multipart/form-data">
+
         <input type="hidden" name="submission_timestamp" value="">
 
         <div class="form-group">
             <label for="farmerNIC" class="required">Farmer NIC Number</label>
-            <input type="text" id="farmerNIC" name="farmerNIC" placeholder="Enter your NIC number" value="197940306V">
+            <input type="text" id="farmerNIC" name="farmerNIC" placeholder="Enter your NIC number" value="<?php echo $_SESSION['nic']?>" readonly>
         </div>
         
         <div class="form-group">
             <label for="plrNumber" class="required">PLR Number</label>
-            <input type="text" id="plrNumber" name="plrNumber" placeholder="Enter your PLR number" value="02/25/00083/002/P/0006">
+            <input type="text" id="plrNumber" name="plrNumber" placeholder="Enter your PLR number" value="<?php echo $_SESSION['selected_plr']?>" readonly>
         </div>
         
         <div class="form-row">
@@ -32,7 +33,7 @@
             </div>
             <div class="form-col">
                 <label for="todayDate">Today's Date</label>
-                <input type="date" id="todayDate" name="todayDate" readonly>
+                <input type="date" id="todayDate" value ="<?php echo date('Y-m-d')?>" name="todayDate" readonly>
             </div>
         </div>
         
@@ -64,5 +65,46 @@
         <button type="submit" class="btn-yellow">Submit Yellow Case</button>
     </form>
 </div>
+
+
+<script> 
+document.addEventListener('DOMContentLoaded', function () {
+
+    const input = document.getElementById('mediaUpload');
+    const preview = document.getElementById('uploadedFiles');
+    const uploadArea = document.getElementById('mediaUploadArea');
+
+    if (!input || !preview || !uploadArea) {
+        console.log("Elements not found");
+        return;
+    }
+
+    // Preview
+    input.addEventListener('change', function () {
+        preview.innerHTML = '';
+
+        Array.from(this.files).forEach(file => {
+
+            const div = document.createElement('div');
+            div.textContent = file.name + " (" + Math.round(file.size/1024) + " KB)";
+            preview.appendChild(div);
+
+            if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.style.width = '80px';
+                img.style.margin = '5px';
+                preview.appendChild(img);
+            }
+        });
+    });
+
+    // Click upload area
+    uploadArea.addEventListener('click', () => {
+        input.click();
+    });
+
+});
+</script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

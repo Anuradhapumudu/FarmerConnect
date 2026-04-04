@@ -1,5 +1,7 @@
 {
     "require": {
-        "phpmailer/phpmailer": "^7.0"
+        "phpmailer/phpmailer": "^7.0",
+        "paypal/paypal-server-sdk": "^2.0"
+        
     }
 }

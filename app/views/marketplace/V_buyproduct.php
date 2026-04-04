@@ -9,6 +9,7 @@ $product = $data['product'];
 
 $price       = floatval($product->price_per_unit);
 $region      = htmlspecialchars($product->region);
+$itemId      = htmlspecialchars($product->item_id);
 $itemName    = htmlspecialchars($product->item_name);
 $sellerName  = htmlspecialchars($product->seller_name);
 $imageUrl    = URLROOT . '/uploads/' . htmlspecialchars($product->image_url);
@@ -29,6 +30,7 @@ $address      = htmlspecialchars($product->seller_address ?? '');
         <img src="<?= $imageUrl ?>" alt="<?= $itemName ?>">
 
         <div class="product-info">
+            <p><b>Product ID:</b> <?= $itemId ?></p>
             <p><b>Product Name:</b> <?= $itemName ?></p>
             <p><b>Price per Unit:</b> Rs. <?= number_format($price, 2) ?></p>
             <p><b>Available Quantity:</b> <?= $available ?></p>
@@ -40,7 +42,10 @@ $address      = htmlspecialchars($product->seller_address ?? '');
             <p><b>Description:</b> <?= $description ?></p>
         </div>
 
-        <form method="post" class="buy-form">
+        <!-- Buy Form -->
+        <form method="post" class="buy-form" id="buyForm">
+            <input type="hidden" name="item_id" value="<?= $itemId ?>">
+
             <label>
                 <b>Quantity:</b>
                 <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?= $available ?>" onchange="updateTotal()">
@@ -49,6 +54,16 @@ $address      = htmlspecialchars($product->seller_address ?? '');
             <p class="total-price">
                 Total Price: Rs. <span id="total"><?= number_format($price, 2) ?></span>
             </p>
+
+            <label><b>Payment Method:</b></label>
+            <div>
+                <label>
+                    <input type="radio" name="payment_method" value="cash" checked> Cash Payment
+                </label>
+                <label>
+                    <input type="radio" name="payment_method" value="online"> Card Payment
+                </label>
+            </div>
 
             <input type="submit" value="Buy Now" class="btn btn-primary">
         </form>
@@ -67,5 +82,6 @@ function updateTotal() {
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/marketplace.css?v=<?= time(); ?>">
 
 </main>
+
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

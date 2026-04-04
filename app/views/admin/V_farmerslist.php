@@ -11,10 +11,9 @@
 
     <!-- Stats cards -->
     <div class="stats">
-      <div class="card"><h2 id="totalCount">0</h2><p>Total Farmers</p></div>
-      <div class="card"><h2 id="activeCount">0</h2><p>Active</p></div>
-      <div class="card"><h2 id="inactiveCount">0</h2><p>Inactive</p></div>
-
+      <div class="card"><h2><?= $data['counts']->total ?></h2><p>Total Farmers</p></div>
+      <div class="card"><h2><?= $data['counts']->active ?></h2><p>Active</p></div>
+      <div class="card"><h2><?= $data['counts']->inactive ?></h2><p>Inactive</p></div>
     </div>
 
     <!-- Search + Filter -->
@@ -27,7 +26,7 @@
         <option value="all">All Status</option>
         <option value="active">Active</option>
         <option value="inactive">Inactive</option>
-        <option value="pending">Pending</option>
+      
       </select>
     </div>
 
@@ -44,118 +43,35 @@
           </tr>
         </thead>
         <tbody id="farmerTable">
+
+         <?php foreach($data['farmers'] as $farmer): ?>
           <tr>
-            <td>992334567V</td>
-            <td>Kamal Perera</td>
-            <td><span class="status-badge status-active">Active</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> Edit</button>
-              <button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
+            <td data-label="NIC"><?= $farmer->nic ?></td>
+            <td data-label="Name"><?= $farmer->full_name  ?></td>
+  
+            <td data-label="Status">
+              <span class="status-badge status-<?= strtolower($farmer->status) ?>">
+                  <?= $farmer->status ?>
+              </span>
             </td>
+          <td data-label="Action">
+              <a href="<?= URLROOT ?>/Admin/UserList/showfarmer/<?= $farmer->nic ?>" class="action-btn view-btn">
+                  <i class="fas fa-eye"></i> View
+              </a>
+
+          </td>
+
           </tr>
-          <tr>
-            <td>993456789V</td>
-            <td>Nimal Silva</td>
-            <td><span class="status-badge status-inactive">Inactive</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> Edit</button>
-              <button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>994123456V</td>
-            <td>Sanduni Fernando</td>
-            <td><span class="status-badge status-pending">Pending</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> Edit</button>
-              <button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>995678912V</td>
-            <td>Sunil Jayasuriya</td>
-            <td><span class="status-badge status-active">Active</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> Edit</button>
-              <button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>996789123V</td>
-            <td>Anusha Rajapaksa</td>
-            <td><span class="status-badge status-pending">Pending</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-eye"></i> View</button>
-              <button class="action-btn edit-btn"><i class="fas fa-edit"></i> Edit</button>
-              <button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
-            </td>
-          </tr>
+        <?php endforeach; ?>
+
         </tbody>
       </table>
     </div>
 
-    <!-- Pagination -->
-    <div class="pagination">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn">Next</button>
-    </div>
-  </div>
 
-  <!-- Delete Modal -->
-  <div class="modal" id="deleteModal">
-    <div class="modal-content">
-      <h3>Confirm Delete</h3>
-      <p>Are you sure you want to delete this farmer?</p>
-      <div class="modal-actions">
-        <button class="cancel-btn">Cancel</button>
-        <button class="confirm-btn">Yes, Delete</button>
-      </div>
-    </div>
-  </div>
 
 </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const totalEl = document.getElementById('totalCount');
-    const activeEl = document.getElementById('activeCount');
-    const inactiveEl = document.getElementById('inactiveCount');
-    const rows = document.querySelectorAll('#farmerTable tr');
 
-    if (!totalEl || !activeEl || !inactiveEl) return;
-
-    const total = rows.length;
-    let active = 0;
-    let inactive = 0;
-
-    rows.forEach(row => {
-        // try to detect by status badge class first
-        const badge = row.querySelector('.status-badge');
-        if (badge) {
-            const cls = badge.className.toLowerCase();
-            if (cls.includes('status-active')) active++;
-            else if (cls.includes('status-inactive')) inactive++;
-            return;
-        }
-        // fallback: detect by text inside third cell
-        const statusTd = row.querySelector('td:nth-child(3)');
-        if (statusTd) {
-            const txt = statusTd.textContent.trim().toLowerCase();
-            if (txt.includes('active')) active++;
-            else if (txt.includes('inactive')) inactive++;
-        }
-    });
-
-    totalEl.textContent = total;
-    activeEl.textContent = active;
-    inactiveEl.textContent = inactive;
-});
-</script>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>

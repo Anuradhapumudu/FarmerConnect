@@ -17,7 +17,8 @@
         Total Revenue LKR
         <i class="fa-solid fa-money-bill"></i>
       </div>
-      <div class="number" id="revenue" data-target="30232.89">LKR 0</div>
+      <?php $rev = isset($data['revenue']) ? floatval($data['revenue']) : 0.00; ?>
+      <div class="number" id="revenue" data-target="<?= htmlspecialchars($rev, ENT_QUOTES) ?>">LKR <?= number_format($rev, 2) ?></div>
     </div>
 
     <div class="card">
@@ -25,7 +26,8 @@
         Active Products
         <i class="fas fa-box"></i>
       </div>
-      <div class="number" id="products" data-target="2350">0</div>
+      <?php $prodCount = isset($data['products']) ? intval($data['products']) : 0; ?>
+      <div class="number" id="products" data-target="<?= htmlspecialchars($prodCount, ENT_QUOTES) ?>"><?= number_format($prodCount) ?></div>
     </div>
 
     <div class="card">
@@ -33,7 +35,8 @@
         Total Orders
         <i class="fas fa-shopping-cart"></i>
       </div>
-      <div class="number" id="orders" data-target="12234">0</div>
+      <?php $ordersCount = isset($data['orders']) ? intval($data['orders']) : 0; ?>
+      <div class="number" id="orders" data-target="<?= htmlspecialchars($ordersCount, ENT_QUOTES) ?>"><?= number_format($ordersCount) ?></div>
     </div>
   </div>
 

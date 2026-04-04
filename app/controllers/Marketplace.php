@@ -6,9 +6,160 @@ class Marketplace extends Controller {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-
-        // Common model for marketplace operations
         $this->marketplaceModel = $this->model('M_Marketplace/M_Marketplace', new Database());
+    }
+
+
+private function generatePayHereHash($order_id, $amount, $currency = "LKR") {
+    return strtoupper(
+        md5(
+            PAYHERE_MERCHANT_ID .
+            $order_id .
+            number_format($amount, 2, '.', '') .
+            $currency .
+            strtoupper(md5(PAYHERE_MERCHANT_SECRET))
+        )
+    );
+}
+
+public function buyProduct($id = null) {
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $product = $this->marketplaceModel->getProductByInternalId($id);
+        $this->view('marketplace/V_buyProduct', ['product' => $product]);
+        return;
+    }
+
+    $product  = $this->marketplaceModel->getProductByInternalId($id);
+    $quantity = (int) $_POST['quantity'];
+    $method   = $_POST['payment_method'];
+
+    $total = $product->price_per_unit * $quantity;
+
+    // ---------------- CASH PAYMENT ----------------
+    if ($method === 'cash') {
+
+        $this->marketplaceModel->createOrder(
+            $_SESSION['nic'],
+            $product->item_id,
+            $product->seller_id,
+            $quantity,
+            $total,
+            'cash',
+            'completed',
+            null
+        );
+
+        $this->marketplaceModel->updateStock(
+            $product->item_id,
+            $product->available_quantity - $quantity
+        );
+
+        header("Location: " . URLROOT . "/Marketplace/paymentSuccess");
+        exit;
+    }
+
+    // ONLINE PAYMENT 
+    $order_id = uniqid("ORD_");
+    $amount   = number_format($total, 2, '.', '');
+    $hash     = $this->generatePayHereHash($order_id, $amount);
+
+    // SAVE ORDER AS PENDING (CRITICAL)
+    $this->marketplaceModel->createOrder(
+        $_SESSION['nic'],
+        $product->item_id,
+        $product->seller_id,
+        $quantity,
+        $amount,
+        'online',
+        'pending',
+        $order_id
+    );
+
+    $payhere = [
+        "sandbox"     => true,
+        "merchant_id" => PAYHERE_MERCHANT_ID,
+        "return_url"  => URLROOT . "/Marketplace/paymentSuccessOnline",
+        "cancel_url"  => URLROOT . "/Marketplace/paymentCancel",
+        "notify_url"  => "https://YOUR-NGROK-URL/FarmerConnect/Marketplace/paymentNotification",
+
+        "order_id" => $order_id,
+        "items"    => $product->item_name,
+        "amount"   => $amount,
+        "currency" => "LKR",
+        "hash"     => $hash,
+
+        "first_name" => "Farmer",
+        "last_name"  => "User",
+        "email"      => "farmer@example.com",
+        "phone"      => "0771234567",
+        "address"    => "Sri Lanka",
+        "city"       => $product->region,
+        "country"    => "Sri Lanka"
+    ];
+
+    $this->view('marketplace/V_onlinePayment', ['payhere' => $payhere]);
+}
+
+
+public function paymentNotification() {
+
+    // LOG (debug)
+    file_put_contents(
+        APPROOT . '/payhere.log',
+        print_r($_POST, true),
+        FILE_APPEND
+    );
+
+    $merchant_id      = $_POST['merchant_id'] ?? '';
+    $order_id         = $_POST['order_id'] ?? '';
+    $payhere_amount   = $_POST['payhere_amount'] ?? '';
+    $payhere_currency = $_POST['payhere_currency'] ?? '';
+    $status_code      = $_POST['status_code'] ?? '';
+    $md5sig           = $_POST['md5sig'] ?? '';
+
+    $local_md5 = strtoupper(
+        md5(
+            $merchant_id .
+            $order_id .
+            $payhere_amount .
+            $payhere_currency .
+            $status_code .
+            strtoupper(md5(PAYHERE_MERCHANT_SECRET))
+        )
+    );
+
+    // Verify payment
+    if ($local_md5 === $md5sig && $status_code == 2) {
+
+        $order = $this->marketplaceModel->getOrderByOrderId($order_id);
+
+        if ($order && $order->status !== 'completed') {
+
+            // Mark order paid
+            $this->marketplaceModel->updateOrderStatus($order_id, 'completed');
+
+            // Update stock
+            $this->marketplaceModel->updateStock(
+                $order->item_id,
+                $order->available_quantity - $order->quantity
+            );
+        }
+    }
+
+    http_response_code(200);
+}
+
+
+
+
+    public function paymentSuccess() {
+        $this->view('marketplace/V_paymentSuccess');
+    }
+
+    public function paymentCancel() {
+        $_SESSION['error'] = "Payment was cancelled";
+        $this->view('marketplace/V_paymentCancel');
     }
 
     //  Marketplace Home (Farmer / Seller)
@@ -62,7 +213,7 @@ public function addProduct() {
         $data['price'] = trim($_POST['price'] ?? '');
         $data['available'] = trim($_POST['available'] ?? '');
 
-        // --- Validation ---
+        //  Validation 
         if(strlen($data['name']) === 0) {
             $data['errors']['name'] = "Product name is required.";
         } elseif(strlen($data['name']) < 3) {
@@ -105,7 +256,7 @@ public function addProduct() {
             $data['errors']['available'] = "Quantity must be a whole number.";
         }
 
-        // --- Image Validation ---
+        // Image Validation 
         if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $allowedExt = ['jpg','jpeg','png','gif'];
             $fileExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
@@ -132,7 +283,7 @@ public function addProduct() {
             $data['errors']['image'] = "Please upload an image.";
         }
 
-        // --- Add product if no errors ---
+        // Add product if no errors
         if(empty($data['errors'])) {
             if($this->marketplaceModel->createProduct($data)) {
                 header("Location: " . URLROOT . "/marketplace/addsuccess");
@@ -181,7 +332,7 @@ public function editProduct($id) {
         'errors' => []
     ];
 
-    // 2️⃣ Handle POST
+    //  Handle POST
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Get POST values
         $data['product']['item_name'] = trim($_POST['item_name'] ?? '');
@@ -283,9 +434,7 @@ public function editProduct($id) {
 
 
 
-
-
-    // ❌ Delete Product
+    //  Delete Product
     public function deleteProduct($id) {
         // Only allow POST for deletion
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -310,7 +459,7 @@ public function editProduct($id) {
         }
     }
 
-    // 👁️ View Products by Category
+    // View Products by Category
     public function viewProduct($categorySlug = null) {
         $categoryMap = [
             'fertilizer' => 'Fertilizer',
@@ -326,46 +475,91 @@ public function editProduct($id) {
         $this->view('marketplace/V_viewProduct', ['category' => $category, 'products' => $products]);
     }
 
-    // 💳 Payment
+    // Payment
     public function payment() {
         $this->view('marketplace/V_paymentGetway');
     }
 
-    // 🚜 Track Orders (Farmer / Seller)
-    public function trackOrdersFarmer() {
-        $this->view('marketplace/V_FarmerTrackOrders');
+    // Track Orders (Farmer / Seller)
+public function trackOrdersFarmer() {
+    // Get buyer NIC from session
+    $buyer_nic = $_SESSION['user_id'] ?? null; // or $_SESSION['nic']
+
+    if (!$buyer_nic) {
+        $_SESSION['error'] = "You must be logged in as a farmer to view your orders.";
+        header("Location: " . URLROOT . "/Users/login");
+        exit;
     }
+
+    $orders = $this->marketplaceModel->getOrdersByBuyer($buyer_nic);
+    // Create history array indexed by order_id
+    $history = [];
+    foreach ($orders as $order) {
+        $history[$order->order_id] = $this->marketplaceModel->getOrderHistory($order->order_id);
+    }
+
+    // Pass to view
+    $this->view('marketplace/V_FarmerTrackOrders', [
+        'orders' => $orders,
+        'history' => $history
+    ]);
+}
+
+
 
     public function trackOrdersSeller() {
-        $this->view('marketplace/V_SellerTrackOrders');
-    }
-
-    // 📦 Buy Product
-    public function buyProduct($id) {
-        $product = $this->marketplaceModel->getProductById($id);
-        if (!$product) die("Product not found");
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $quantity = $_POST['quantity'] ?? 1;
-            $farmer_id = $_SESSION['farmer_id'] ?? 1;
-            $total_price = $product->price_per_unit * $quantity;
-
-            $this->marketplaceModel->createOrder($farmer_id, $id, $quantity, $total_price);
-            $this->marketplaceModel->updateStock($id, $product->available_quantity - $quantity);
-
-            header("Location: " . URLROOT . "/Marketplace/trackOrdersFarmer");
+        $seller_id = $_SESSION['seller_id'] ?? null;
+        if (!$seller_id) {
+            $_SESSION['error'] = "You must be logged in to view orders.";
+            header("Location: " . URLROOT . "/Users/login");
             exit;
         }
-
-        $this->view('marketplace/V_buyProduct', ['product' => $product]);
+    $orders = $this->marketplaceModel->getOrdersBySeller($seller_id);
+     $this->view('marketplace/V_SellerTrackOrders', ['orders' => $orders]);
     }
 
+
+    public function updateOrderStatus() {
+    $data = json_decode(file_get_contents("php://input"));
+
+    $order_id = $data->order_id ?? '';
+    $new_status = $data->status ?? '';
+    $user_id = $_SESSION['seller_id'] ?? $_SESSION['user_id'] ?? 'system';
+
+    if (!empty($order_id) && !empty($new_status)) {
+        $order = $this->marketplaceModel->getOrderById($order_id);
+        if (!$order) {
+            echo json_encode(['success' => false, 'message' => 'Order not found']);
+            return;
+        }
+
+        $old_status = $order->order_status;
+
+        if ($this->marketplaceModel->updateOrderStatus($order_id, $new_status)) {
+            $this->marketplaceModel->addOrderStatusHistory($order_id, $old_status, $new_status, $user_id);
+            $history = $this->marketplaceModel->getOrderStatusHistory($order_id);
+
+            echo json_encode(['success' => true, 'history' => $history]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to update status']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Invalid data']);
+    }
+}
+
+
     public function adminViewProducts() {
-        $this->view('marketplace/V_AdminViewProducts');
+
+        //fetch all products
+        $products =$this->marketplaceModel->getAllProducts();
+        $this->view('marketplace/V_AdminViewProducts', ['products' => $products]);
     } 
 
        public function adminViewOrders() {
-        $this->view('marketplace/V_AdminViewOrders');
+
+        $order =$this->marketplaceModel->getAllOrders();
+        $this->view('marketplace/V_AdminViewOrders', ['orders' => $order]);
     } 
 }
 ?>

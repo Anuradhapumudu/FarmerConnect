@@ -43,20 +43,32 @@ class M_Marketplace{
 
 //read
 
-  public function getProductById($item_id) {
+public function getProductByInternalId($item_id) {
     $this->db->query("
         SELECT 
             p.*, 
             CONCAT(s.first_name, ' ', s.last_name) AS seller_name,
             s.phone_no AS seller_telNo,
             s.address AS seller_address,
-            s.company_name
-        FROM products p
-        JOIN sellers s ON p.seller_id = s.seller_id
+            s.company_name AS seller_company
+        FROM products AS p
+        INNER JOIN sellers AS s ON p.seller_id = s.seller_id
         WHERE p.item_id = :item_id
+        LIMIT 1
     ");
-    $this->db->bind(":item_id", $item_id);
+    
+    $this->db->bind(':item_id', $item_id);
+    
     return $this->db->single();
+}
+
+
+
+public function getProductById($item_id) {
+    $this->db->query("SELECT * FROM products WHERE item_id = :item_id");
+    $this->db->bind(':item_id', $item_id);
+
+    return $this->db->single(); // Fetch one product record
 }
 
 
@@ -132,23 +144,157 @@ public function updateProduct($item_id, $data) {
 
 
     //buy product
-    // Insert new order
-    public function createOrder($farmer_id, $item_id, $quantity, $total_price) {
-        $this->db->query("INSERT INTO orderDetails (farmer_id, item_id, quantity, total_price, status) 
-                          VALUES (:farmer_id, :item_id, :quantity, :total_price, 'Pending')");
-        $this->db->bind(":farmer_id", $farmer_id);
-        $this->db->bind(":item_id", $item_id);
-        $this->db->bind(":quantity", $quantity);
-        $this->db->bind(":total_price", $total_price);
-        return $this->db->execute();
-    }
+// Place an order
+        public function createOrder($buyer_id, $item_id, $seller_id, $quantity, $total_price, $payment_method) {
+            $this->db->query("INSERT INTO orders (item_id, seller_id, buyer_id, quantity, total_price, payment_method) 
+                            VALUES (:item_id, :seller_id, :buyer_id, :quantity, :total_price, :payment_method)");
+            
+            $this->db->bind(':item_id', $item_id);
+            $this->db->bind(':seller_id', $seller_id);
+            $this->db->bind(':buyer_id', $buyer_id);
+            $this->db->bind(':quantity', $quantity);
+            $this->db->bind(':total_price', $total_price);
+            $this->db->bind(':payment_method', $payment_method);
 
-    // Update stock
-    public function updateStock($item_id, $newQty) {
-        $this->db->query("UPDATE products SET available_quantity = :qty WHERE item_id = :item_id");
-        $this->db->bind(":qty", $newQty);
-        $this->db->bind(":item_id", $item_id);
-        return $this->db->execute();
-    }
+            return $this->db->execute();
+        }
+
+        // Update product stock
+        public function updateStock($item_id, $newQty) {
+            $this->db->query("UPDATE products SET available_quantity = :qty WHERE item_id = :item_id");
+            $this->db->bind(':qty', $newQty);
+            $this->db->bind(':item_id', $item_id);
+            return $this->db->execute();
+        }
+
+
+    //get all products
+public function getAllProducts() {
+    $this->db->query("
+        SELECT p.*, 
+               s.first_name AS seller_name,
+               s.company_name AS seller_company,
+               s.address AS seller_address,
+               s.phone_no AS seller_telNo
+        FROM products p
+        LEFT JOIN sellers s ON p.seller_id = s.seller_id
+    ");
+
+    return $this->db->resultSet();
+}
+
+//get all orders
+public function getAllOrders() {
+    $this->db->query("
+        SELECT o.*,
+            p.item_id,
+               p.item_name, 
+               p.image_url,
+               p.category,
+               s.first_name AS seller_first,
+               s.last_name AS seller_last,
+               s.phone_no AS seller_telNo,
+               s.address AS seller_address,
+               s.company_name AS seller_company,
+               f.full_name AS farmer_full,
+               f.phone_no  AS farmer_telNo
+        FROM orders o
+        JOIN products p ON o.item_id = p.item_id
+        JOIN sellers s ON o.seller_id = s.seller_id
+        JOIN farmers f ON o.buyer_id = f.nic
+        ORDER BY o.order_create_date DESC
+    ");
+
+    return $this->db->resultSet();
+}
+
+// In M_Marketplace.php
+public function getOrdersByBuyer($buyer_id) {
+    $this->db->query("
+        SELECT o.*,
+               p.item_name, 
+               p.image_url,
+               s.first_name AS seller_first,
+               s.last_name AS seller_last,
+               s.phone_no AS seller_telNo,
+               s.address AS seller_address,
+               s.company_name AS seller_company
+        FROM orders o
+        JOIN products p ON o.item_id = p.item_id
+        JOIN sellers s ON o.seller_id = s.seller_id
+        WHERE o.buyer_id = :buyer_id
+        ORDER BY o.order_create_date DESC
+    ");
+
+    $this->db->bind(':buyer_id', $buyer_id);
+    return $this->db->resultSet();
+}
+
+public function getOrderHistory($order_id) {
+    $this->db->query("
+        SELECT *
+        FROM order_status_history
+        WHERE order_id = :order_id
+        ORDER BY changed_at ASC
+    ");
+
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->resultSet();
+}
+
+
+public function getOrdersBySeller($seller_id) {
+    $this->db->query("
+        SELECT 
+            o.*,
+            p.item_name,
+            p.image_url,
+            f.full_name AS buyer_full,
+            f.phone_no  AS buyer_telNo
+        FROM orders o
+        JOIN products p ON o.item_id = p.item_id
+        JOIN farmers f ON o.buyer_id = f.nic            
+        WHERE p.seller_id = :seller_id
+        ORDER BY o.order_create_date DESC
+    ");
+    $this->db->bind(':seller_id', $seller_id);
+    return $this->db->resultSet();
+}
+
+// Get order by ID (already exists for some uses)
+public function getOrderById($order_id) {
+    $this->db->query("SELECT * FROM orders WHERE order_id = :order_id");
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->single();
+}
+
+// Update order status
+public function updateOrderStatus($order_id, $new_status) {
+    $this->db->query("UPDATE orders SET order_status = :new_status WHERE order_id = :order_id");
+    $this->db->bind(':new_status', $new_status);
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->execute();
+}
+
+// Add order status history
+public function addOrderStatusHistory($order_id, $old_status, $new_status, $changed_by) {
+    $this->db->query("
+        INSERT INTO order_status_history (order_id, old_status, new_status, changed_at, changed_by)
+        VALUES (:order_id, :old_status, :new_status, NOW(), :changed_by)
+    ");
+    $this->db->bind(':order_id', $order_id);
+    $this->db->bind(':old_status', $old_status);
+    $this->db->bind(':new_status', $new_status);
+    $this->db->bind(':changed_by', $changed_by);
+    return $this->db->execute();
+}
+
+//Fetch order status history
+public function getOrderStatusHistory($order_id) {
+    $this->db->query("SELECT * FROM order_status_history WHERE order_id = :order_id ORDER BY changed_at ASC");
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->resultSet();
+}
+
 }
 ?>

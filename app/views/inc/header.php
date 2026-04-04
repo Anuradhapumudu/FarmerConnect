@@ -47,7 +47,7 @@
           <!-- main links -->
           <a href="<?php echo URLROOT; ?>/farmerdashboard"><i class="fa fa-home"></i> Home</a>
           <a href="<?php echo URLROOT; ?>/Announcements"><i class="fa fa-bullhorn"></i> Announcement</a>
-          <a href="<?php echo URLROOT; ?>/Help/help"><i class="fa fa-question-circle"></i> Help</a>
+          <a href="<?php echo URLROOT; ?>/Help/helpFarmer"><i class="fa fa-question-circle"></i> Help</a>
           <a href="<?php echo URLROOT; ?>/FarmerProfile"><i class="fa-regular fa-circle-user"></i> Profile</a>
         </div>
 

@@ -2,251 +2,167 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/farmertrackorders.css?v=<?= time(); ?>">
 
 <main class="main-content" id="mainContent">
-
   <div class="containers">
     <div class="header">
       <h1>My Orders</h1>
     </div>
     
-     <div class="filter-container">
+    <div class="filter-container">
       <div style="position: relative; flex: 1;">
         <input type="text" class="search-input" placeholder="Search orders by ID, product, or date...">
       </div>
       <select class="filter-select">
         <option value="all">All Statuses</option>
-        <option value="ready">Ready for Pickup</option>
-        <option value="picked">Picked Up</option>
-        <option value="cancelled">Cancelled</option>
+        <option value="order_placed">Order Placed</option>
+        <option value="order_confirmed">Confirmed</option>
+        <option value="ready_to_pickup">Ready for Pickup</option>
+        <option value="order_picked">Picked Up</option>
+        <option value="order_cancelled">Cancelled</option>
       </select>
     </div>
     
     <div class="orders-container">
-
-      <!-- Order Card 1 -->
+       <?php if(!empty($data['orders'])): ?>
+        <?php foreach($data['orders'] as $order): 
+          $orderId = strtolower($order->order_id);
+          $statusClass = '';
+          $statusText = '';
+          
+          // Normalize the status
+          $normalizedStatus = strtolower(trim($order->order_status));
+          
+          switch($normalizedStatus) {
+              case 'order_placed': 
+                $statusClass = 'status-placed'; 
+                $statusText = 'Order Placed';
+                break;
+              case 'order_confirmed': 
+                $statusClass = 'status-confirmed'; 
+                $statusText = 'Order Confirmed';
+                break;
+              case 'order_prepared': 
+                $statusClass = 'status-prepared'; 
+                $statusText = 'Order Prepared';
+                break;
+              case 'ready_to_pickup': 
+              case 'ready_for_pickup':
+                $statusClass = 'status-ready'; 
+                $statusText = 'Ready For Pickup';
+                break;
+              case 'order_picked': 
+              case 'picked_up':
+              case 'picked':
+                $statusClass = 'status-picked'; 
+                $statusText = 'Picked Up';
+                break;
+              case 'order_cancelled': 
+              case 'cancelled': 
+                $statusClass = 'status-cancelled'; 
+                $statusText = 'Cancelled';
+                break;
+              default:
+                  // If status contains "pick", assume it's picked up
+                  if (strpos($normalizedStatus, 'pick') !== false) {
+                      $statusClass = 'status-picked'; 
+                      $statusText = 'Picked Up';
+                  } else {
+                      $statusText = ucwords(str_replace('_', ' ', $order->order_status));
+                      $statusClass = 'status-unknown';
+                  }
+          }
+        ?>
       <div class="order-card">
         <div class="order-main-content">
           <div class="order-image">
-            <img src="<?php echo URLROOT; ?>/img/paddy seed.webp" alt="Premium Paddy Seeds">
+            <img src="<?= URLROOT . '/uploads/' . htmlspecialchars($order->image_url) ?>" alt="<?= htmlspecialchars($order->item_name) ?>">
           </div>
           
           <div class="order-content-wrapper">
             <div class="order-header">
               <div>
-                <div class="order-id">#FM12345</div>
-                <div class="order-date">Dec 9, 2024</div>
+                <div class="order-id">#<?= htmlspecialchars($order->order_id) ?></div>
+                <div class="order-date"><?= date('M d, Y', strtotime($order->order_create_date)) ?></div>
               </div>
-              <div class="order-status status-ready">Ready for Pickup</div>
+              <div class="order-status <?= $statusClass ?>"><?= $statusText ?></div>
             </div>
         
             <div class="order-content"> 
               <div class="product-info">
                 <div class="product-details">
-                  <h3>Premium Paddy Seeds</h3>
-                  <p>Quantity: 10 Kg</p>
-                  <div class="price">LKR 5,000.00</div>
+                  <h3><?= htmlspecialchars(ucfirst(strtolower($order->item_name))) ?></h3>
+                  <p><strong>Quantity:</strong> <?= htmlspecialchars($order->quantity) ?></p>
+                  <div class="price">LKR <?= number_format($order->total_price, 2) ?></div>
+                  <p><strong>Payment Method:</strong> <?= htmlspecialchars(ucfirst(strtolower(str_replace('_', ' ', $order->payment_method)))) ?></p>
                 </div>
-                <!-- Divider -->
                 <div class="divider-vertical"></div>
-
-                <!-- Seller Details -->
                 <div class="seller-details">
                   <h3>Seller Info</h3>
-                  <p><strong>Name:</strong> Green Agro Farm</p>
-                  <p><strong>Location:</strong> Kandy, Sri Lanka</p>
-                  <p><strong>Contact:</strong> +94 71 123 4567</p>
+                  <p><strong>Name:</strong> <?= htmlspecialchars($order->seller_first . ' ' . $order->seller_last) ?></p>
+                  <p><strong>Location:</strong> <?= htmlspecialchars($order->seller_address) ?></p>
+                  <p><strong>Contact:</strong> <?= htmlspecialchars($order->seller_telNo) ?></p>
                 </div>
-
               </div>
             
               <hr class="divider"> 
               <div class="action-buttons">
-                <button class="btn btn-primary" onclick="toggleOrderDetails('fm12345')">
-                  <i class="fas fa-eye"></i> View Details
+                <button class="btn btn-primary" onclick="toggleOrderDetails('<?= $orderId ?>')">
+                  <i class="fas fa-eye"></i> View Tracking Details
                 </button>
               </div>
             </div>
           </div>
         </div>
         
-        <!-- Order Details Section -->
-        <div class="order-details-container" id="details-fm12345">
+        <div class="order-details-container" id="details-<?= $orderId ?>">
+          <!-- You can also fetch real tracking info here if stored -->
           <div class="tracking-content">
-            <div class="product-info">
-              <div class="product-image">
-                <i class="fas fa-seedling"></i>
-              </div>
-              <div class="product-details">
-                <h3>Premium Paddy Seeds</h3>
-                <p>Quantity: 10 Kg</p>
-                <p>Seller: GreenFarm Supplies</p>
-                <div class="price">LKR 5,000.00</div>
-              </div>
-            </div>
 
-            <div class="tracking-timeline">
-              <h3 class="timeline-title">Order Progress</h3>
-              <div class="timeline">
-                <div class="timeline-step completed">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 9, 2024 - 9:15 AM</div>
-                    <div class="timeline-text">Order Placed</div>
-                  </div>
-                </div>
-                <div class="timeline-step completed">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 9, 2024 - 2:15 PM</div>
-                    <div class="timeline-text">Order Confirmed</div>
-                  </div>
-                </div>
-                <div class="timeline-step completed">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 10, 2024 - 10:00 AM</div>
-                    <div class="timeline-text">Order Prepared</div>
-                  </div>
-                </div>
-                <div class="timeline-step active">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 12, 2024</div>
-                    <div class="timeline-text">Ready for Pickup</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<?php
+$history = $data['history'][$order->order_id] ?? [];
+$currentStatus = strtolower($order->order_status);
+?>
 
-            <div class="pickup-info">
-              <h3 class="info-title"><i class="fas fa-store"></i> Pickup Information</h3>
-              <div class="info-details">
-                <div class="info-item">
-                  <span class="info-label">Pickup Location</span>
-                  <span class="info-value">EcoFarmer Supplies Store, Galle</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Pickup Date</span>
-                  <span class="info-value">Dec 12, 2024</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Contact Person</span>
-                  <span class="info-value">Sarah Johnson (+94 77 987 6543)</span>
-                </div>
-              </div>
-            </div>
+<div class="tracking-timeline">
+  <h3 class="timeline-title">Order Progress</h3>
+  <div class="timeline">
+
+    <!--Always show order placed -->
+    <div class="timeline-step completed">
+      <div class="timeline-content">
+        <div class="timeline-date"><?= date('M d, Y - h:i A', strtotime($order->order_create_date)) ?></div>
+        <div class="timeline-text">Order Placed</div>
+      </div>
+    </div>
+
+    <!-- Loop through order_history -->
+    <?php foreach ($history as $log):
+      $status = strtolower($log->new_status);
+
+      $stepClass = "completed";
+      if ($status === $currentStatus) {
+        $stepClass = "active";
+      }
+    ?>
+      <div class="timeline-step <?= $stepClass ?>">
+        <div class="timeline-content">
+          <div class="timeline-date"><?= date('M d, Y - h:i A', strtotime($log->changed_at)) ?></div>
+          <div class="timeline-text"><?= ucwords(str_replace('_', ' ', $log->new_status)) ?></div>
+        </div>
+      </div>
+    <?php endforeach; ?>
+
+  </div>
+</div>
+
           </div>
         </div>
       </div>
-
-      <!-- Order Card 2 -->
-      <div class="order-card">
-        <div class="order-main-content">
-           <div class="order-image">
-            <img src="<?php echo URLROOT; ?>/img/fertilizer.jpg" alt="Premium Paddy Seeds">
-          </div>
-          
-          <div class="order-content-wrapper">
-            <div class="order-header">
-              <div>
-                <div class="order-id">#FM12346</div>
-                <div class="order-date">Dec 5, 2024</div>
-              </div>
-              <div class="order-status status-picked">Picked Up</div>
-            </div>
-            
-            <div class="order-content">
-              <div class="product-info">
-                <div class="product-details">
-                  <h3>Organic Fertilizer - 25kg Bag</h3>
-                  <p>Quantity: 2 Bags</p>
-                  <div class="price">LKR 3,500.00</div>
-                </div>
-              </div>
-              
-              <div class="order-progress">
-                <div class="progress-text">Order date: 2024/12/05</div>
-              </div>
-              
-              <div class="action-buttons">
-                <button class="btn btn-primary" onclick="toggleOrderDetails('fm12346')">
-                  <i class="fas fa-eye"></i> View Details
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Order Details Section -->
-        <div class="order-details-container" id="details-fm12346">
-          <div class="tracking-content">
-            <div class="product-info">
-              <div class="product-image">
-                <i class="fas fa-leaf"></i>
-              </div>
-              <div class="product-details">
-                <h3>Organic Fertilizer - 25kg Bag</h3>
-                <p>Quantity: 2 Bags</p>
-                <p>Seller: EcoFarm Solutions</p>
-                <div class="price">LKR 3,500.00</div>
-              </div>
-            </div>
-
-            <div class="tracking-timeline">
-              <h3 class="timeline-title">Order Progress</h3>
-              <div class="timeline">
-                <div class="timeline-step completed">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 5, 2024 - 9:15 AM</div>
-                    <div class="timeline-text">Order Placed</div>
-                  </div>
-                </div>
-                <div class="timeline-step completed">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 5, 2024 - 1:30 PM</div>
-                    <div class="timeline-text">Order Confirmed</div>
-                  </div>
-                </div>
-                <div class="timeline-step completed">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 6, 2024 - 10:00 AM</div>
-                    <div class="timeline-text">Order Prepared</div>
-                  </div>
-                </div>
-                <div class="timeline-step completed">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 7, 2024 - 11:20 AM</div>
-                    <div class="timeline-text">Ready for Pickup</div>
-                  </div>
-                </div>
-                <div class="timeline-step completed">
-                  <div class="timeline-content">
-                    <div class="timeline-date">Dec 7, 2024 - 3:45 PM</div>
-                    <div class="timeline-text">Picked Up</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="pickup-info">
-              <h3 class="info-title"><i class="fas fa-store"></i> Pickup Information</h3>
-              <div class="info-details">
-                <div class="info-item">
-                  <span class="info-label">Pickup Location</span>
-                  <span class="info-value">EcoFarm Supplies Store, Galle</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Pickup Date</span>
-                  <span class="info-value">Dec 7, 2024</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Contact Person</span>
-                  <span class="info-value">Sarah Johnson (+94 77 987 6543)</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>No orders found.</p>
+      <?php endif; ?>
     </div>
   </div>
-
 </main>
 
 <script>
@@ -254,66 +170,42 @@
     const detailsSection = document.getElementById(`details-${orderId}`);
     const isExpanding = !detailsSection.classList.contains('expanded');
     
-    // Close all other expanded details
-    const allDetails = document.querySelectorAll('.order-details-container');
-    allDetails.forEach(detail => {
-      if (detail.id !== `details-${orderId}` && detail.classList.contains('expanded')) {
-        detail.classList.remove('expanded');
-      }
-    });
+    document.querySelectorAll('.order-details-container.expanded').forEach(d => d.classList.remove('expanded'));
     
-    // Toggle the clicked details section
     detailsSection.classList.toggle('expanded');
     
-    // Scroll to the details if expanding
     if (isExpanding) {
-      setTimeout(() => {
-        detailsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 100);
+      detailsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.querySelector('.search-input');
+    const filterSelect = document.querySelector('.filter-select');
     const orderCards = document.querySelectorAll('.order-card');
 
-    searchInput.addEventListener('input', function() {
-      const searchTerm = this.value.toLowerCase();
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
       orderCards.forEach(card => {
         const orderId = card.querySelector('.order-id').textContent.toLowerCase();
         const productName = card.querySelector('.product-details h3').textContent.toLowerCase();
-        const shouldShow = orderId.includes(searchTerm) || productName.includes(searchTerm);
-        card.style.display = shouldShow ? 'block' : 'none';
-        
-        // Also hide details if parent card is hidden
-        const orderNum = card.querySelector('.order-id').textContent.replace('#', '').toLowerCase();
-        const detailsSection = document.getElementById(`details-${orderNum}`);
-        if (detailsSection) {
-          detailsSection.style.display = shouldShow ? 'block' : 'none';
-          if (!shouldShow) {
-            detailsSection.classList.remove('expanded');
-          }
-        }
+        const show = orderId.includes(term) || productName.includes(term);
+        card.style.display = show ? 'block' : 'none';
+        const detailsId = card.querySelector('.order-id').textContent.replace('#','').toLowerCase();
+        const details = document.getElementById(`details-${detailsId}`);
+        if (details) details.classList.remove('expanded');
       });
     });
 
-    const filterSelect = document.querySelector('.filter-select');
-    filterSelect.addEventListener('change', function() {
-      const filterValue = this.value;
+    filterSelect.addEventListener('change', () => {
+      const filter = filterSelect.value;
       orderCards.forEach(card => {
         const status = card.querySelector('.order-status').textContent.toLowerCase();
-        const shouldShow = filterValue === 'all' || status.includes(filterValue);
-        card.style.display = shouldShow ? 'block' : 'none';
-        
-        // Also hide details if parent card is hidden
-        const orderNum = card.querySelector('.order-id').textContent.replace('#', '').toLowerCase();
-        const detailsSection = document.getElementById(`details-${orderNum}`);
-        if (detailsSection) {
-          detailsSection.style.display = shouldShow ? 'block' : 'none';
-          if (!shouldShow) {
-            detailsSection.classList.remove('expanded');
-          }
-        }
+        const show = filter === 'all' || status.includes(filter);
+        card.style.display = show ? 'block' : 'none';
+        const detailsId = card.querySelector('.order-id').textContent.replace('#','').toLowerCase();
+        const details = document.getElementById(`details-${detailsId}`);
+        if (details) details.classList.remove('expanded');
       });
     });
   });

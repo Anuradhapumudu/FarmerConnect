@@ -26,93 +26,62 @@
                     <th>Actions</th>
                 </tr>
             </thead>
+
             <tbody>
+            <?php if (!empty($data['cases'])): ?>
+                <?php foreach ($data['cases'] as $case): ?>
                 <tr>
-                    <td>001</td>
-                    <td>Leaf discoloration in paddy</td>
-                    <td>2025-10-12</td>
-                    <td>2025-10-13</td>
-                    <td><span class="status pending">Pending</span></td>
+                    <td><?php echo $case->case_id; ?></td>
+                    <td><?php echo htmlspecialchars($case->case_title); ?></td>
+                    <td><?php echo $case->observation_date; ?></td>
+                    <td><?php echo $case->submitted_date; ?></td>
+                    <td>
+                        <span class="status <?php echo strtolower($case->status); ?>">
+                            <?php echo $case->status; ?>
+                        </span>
+                    </td>
                     <td class="btn-cell">
                         <button class="btn view-btn">View</button>
                         <button class="btn reply-btn">View Reply</button>
                     </td>
                 </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
-                    <td>002</td>
-                    <td>Stem borer damage</td>
-                    <td>2025-09-29</td>
-                    <td>2025-09-30</td>
-                    <td><span class="status replied">Replied</span></td>
-                    <td class="btn-cell">
-                        <button class="btn view-btn">View</button>
-                        <button class="btn reply-btn">View Reply</button>
-                    </td>
+                    <td colspan="6">No Yellow Cases Found</td>
                 </tr>
-                <tr>
-                    <td>003</td>
-                    <td>Brown spot disease</td>
-                    <td>2025-08-15</td>
-                    <td>2025-08-16</td>
-                    <td><span class="status resolved">Resolved</span></td>
-                    <td class="btn-cell">
-                        <button class="btn view-btn">View</button>
-                        <button class="btn reply-btn">View Reply</button>
-                    </td>
-                </tr>
+            <?php endif; ?>
             </tbody>
+
         </table>
+    </div>
 
                 <!-- ✅ Mobile Cards View -->
         <div class="case-cards">
-        <div class="case-card">
-            <div class="case-card-header">
-            <h4>001 — Leaf discoloration in paddy</h4>
-            <span class="status pending">Pending</span>
+        <?php if (!empty($data['cases'])): ?>
+            <?php foreach ($data['cases'] as $case): ?>
+            <div class="case-card">
+                <div class="case-card-header">
+                    <h4><?php echo $case->case_id; ?> — <?php echo htmlspecialchars($case->case_title); ?></h4>
+                    <span class="status <?php echo strtolower($case->status); ?>"><?php echo $case->status; ?></span>
+                </div>
+                <div class="case-card-body">
+                    <p><strong>Observation Date:</strong> <?php echo $case->observation_date; ?></p>
+                    <p><strong>Submitted On:</strong> <?php echo $case->submitted_date; ?></p>
+                </div>
+                <div class="case-card-actions">
+                    <a href="<?php echo URLROOT; ?>/YellowCaseForm/view/<?php echo $case->case_id; ?>" class="btn view-btn">View</a>
+                    <button class="btn reply-btn">View Reply</button>
+                </div>
             </div>
-            <div class="case-card-body">
-            <p><strong>Observation Date:</strong> 2025-10-12</p>
-            <p><strong>Submitted On:</strong> 2025-10-13</p>
-            </div>
-            <div class="case-card-actions">
-            <button class="btn view-btn">View</button>
-            <button class="btn reply-btn">View Reply</button>
-            </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No Yellow Cases Found</p>
+        <?php endif; ?>
         </div>
+        </div>
+    
 
-        <div class="case-card">
-            <div class="case-card-header">
-            <h4>002 — Stem borer damage</h4>
-            <span class="status replied">Replied</span>
-            </div>
-            <div class="case-card-body">
-            <p><strong>Observation Date:</strong> 2025-09-29</p>
-            <p><strong>Submitted On:</strong> 2025-09-30</p>
-            </div>
-            <div class="case-card-actions">
-            <button class="btn view-btn">View</button>
-            <button class="btn reply-btn">View Reply</button>
-            </div>
-        </div>
-
-        <div class="case-card">
-            <div class="case-card-header">
-            <h4>003 — Brown spot disease</h4>
-            <span class="status resolved">Resolved</span>
-            </div>
-            <div class="case-card-body">
-            <p><strong>Observation Date:</strong> 2025-08-15</p>
-            <p><strong>Submitted On:</strong> 2025-08-16</p>
-            </div>
-            <div class="case-card-actions">
-            <button class="btn view-btn">View</button>
-            <button class="btn reply-btn">View Reply</button>
-            </div>
-        </div>
-        </div>
-
-    </div>
-</div>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
 

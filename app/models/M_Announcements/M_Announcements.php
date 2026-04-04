@@ -35,7 +35,7 @@
         }
 
         public function editAnnouncement($data) {
-            // Initialize both IDs as NULL
+            
             $officer_id = null;
             $admin_id = null;
 

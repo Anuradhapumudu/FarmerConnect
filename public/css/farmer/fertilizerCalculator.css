@@ -145,6 +145,40 @@ main h1{
   transform: translateY(-2px);
 }
 
+/* Error message text */
+.error {
+    margin-top: 6px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: #842029;                 /* Dark red text */
+    background-color: #f8d7da;      /* Soft red background */
+    border-left: 4px solid #dc3545; /* Accent border */
+    border-radius: 4px;
+}
+
+/* Highlight input field when error exists */
+.info input.error-input,
+.info select.error-input {
+    border: 1px solid #dc3545;
+    background-color: #fff5f5;
+}
+
+/* Smooth appearance */
+.error {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 #recommadtion
 {
   display: flex;
@@ -249,6 +283,8 @@ main h1{
 {
   margin: 20px;
 }
+
+
 
 @media (max-width: 900px) {
     .dashboard-grid {
@@ -368,6 +404,98 @@ main h1{
     margin: 10px 0;
     text-align: center;
     font-size: 0.95rem;
+  }
+}
+
+/* ================================
+   FERTILIZER TABLE — PROFESSIONAL STYLE
+   ================================ */
+
+.table-box {
+  flex: 1;
+  min-width: 420px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 25px;
+}
+
+.table-box h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2e7d32;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.fertilizer-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+/* Header styling */
+.fertilizer-table thead th {
+  background: linear-gradient(135deg, #66bb6a, #43a047);
+  color: white;
+  padding: 12px 10px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* Body rows */
+.fertilizer-table td {
+  padding: 12px 10px;
+  font-size: 0.95rem;
+  color: #2e2e2e;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Row group titles (crop months) */
+.fertilizer-table td[rowspan] {
+  background: #f1f8e9;
+  font-weight: 700;
+  text-align: center;
+  color: #2e7d32;
+  border-right: 1px solid #dcebd5;
+}
+
+/* Hover */
+.fertilizer-table tbody tr:hover td {
+  background: #e8f5e9;
+  transition: 0.25s ease;
+}
+
+.fertilizer-table td.value {
+  font-weight: 700;
+}
+
+.fertilizer-table td.value span {
+  background: #f3faf4;
+  border: 1px solid #e3efe5;
+  padding: 6px 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.fertilizer-table td.value small {
+  color: #6b6b6b;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 700px) {
+  .table-box {
+    padding: 15px;
+  }
+
+  .fertilizer-table td,
+  .fertilizer-table th {
+    font-size: .85rem;
+    padding: 8px;
   }
 }
 

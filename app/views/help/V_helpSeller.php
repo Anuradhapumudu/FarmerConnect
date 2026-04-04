@@ -19,55 +19,44 @@
                 </div>
                 
                 <div class="team-grid">
+                     <?php foreach($data['members'] as $member): ?>
+                        <?php
+                            $img = $member->image ?? '';
+                            if (empty($img)) {
+                                $imgUrl = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+                            } elseif (strpos($img, 'http') === 0) {
+                                $imgUrl = $img;
+                            } else {
+                                $imgUrl = URLROOT . '/' . $img;
+                            }
+                        ?>
                     <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Sarath Soysa" class="member-img">
-                        <div class="member-name">Sarath Soysa</div>
-                        <div class="member-role">Agricultural Officer</div>
+                        <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($member->name) ?>" class="member-img">
+                        <div class="member-name"><?= htmlspecialchars($member->name) ?></div>
+                        <div class="member-role"><?= htmlspecialchars($member->type) ?></div>
                         <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> 075 612 8962</p>
+                        <p> <i class="fas fa-phone"></i> <?= htmlspecialchars($member->phone) ?></p>
+                        
                            
                         </div>
                     </div>
-                    
-                    <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Nilan Madushan" class="member-img">
-                        <div class="member-name">Nilan Madushan</div>
-                        <div class="member-role">Agricultural Officer</div>
-                        <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> 077 251 1562</p>
-                            
-                        </div>
-                    </div>
-                    
-                    <div class="team-member">
-                        <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Kamal Perera" class="member-img">
-                        <div class="member-name">Kamal Perera</div>
-                        <div class="member-role">Admin Support</div>
-                        <div class="member-contact">
-                            <p><i class="fas fa-phone"></i> 077 251 6394</p>
-                            
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
+
                 </div>
             </div>
             
             
             <div class="emergency-contact">
                 <h3>Emergency Contact</h3>
-                <div class="emergency-number">077 123 45678</div>
-                <p class="emergency-text">Available 24/7 for urgent agricultural issues requiring immediate assistance</p>
+                <div class="emergency-number">
+                    <?= htmlspecialchars($data['emergencyNumber']->phone ?? 'Not set') ?>
+                </div>
+                <p class="emergency-text">
+                    Available 24/7 for urgent agricultural issues requiring immediate assistance
+                </p>
         </div>
     </section>
 </main>
 
-    <script>
-
-        
-        // Simulate loading of team member images with fallback
-        document.querySelectorAll('.member-img').forEach(img => {
-            img.onerror = function() {
-                this.src = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22100%22%20height%3D%22100%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%234CAF50%22%20%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-size%3D%2236%22%20fill%3D%22white%22%3E%3Ctspan%20x%3D%2250%25%22%20dy%3D%22.35em%22%3E%3C%2Ftspan%3E%3C%2Ftext%3E%3C%2Fsvg%3E";
-            };
-        });
-    </script>
+<script src="<?php echo URLROOT; ?>/js/help.js?v=<?= time(); ?>"></script>
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
