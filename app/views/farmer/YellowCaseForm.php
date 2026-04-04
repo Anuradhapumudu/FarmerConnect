@@ -83,25 +83,53 @@ document.addEventListener('DOMContentLoaded', function () {
     input.addEventListener('change', function () {
         preview.innerHTML = '';
 
-        Array.from(this.files).forEach(file => {
+        if (this.files && this.files.length > 0) {
+            preview.classList.add('has-files');
+            
+            Array.from(this.files).forEach(file => {
+                const div = document.createElement('div');
+                div.className = 'uploaded-file';
+                div.textContent = "📌 " + file.name + " (" + Math.round(file.size/1024) + " KB)";
+                preview.appendChild(div);
 
-            const div = document.createElement('div');
-            div.textContent = file.name + " (" + Math.round(file.size/1024) + " KB)";
-            preview.appendChild(div);
-
-            if (file.type.startsWith('image/')) {
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.style.width = '80px';
-                img.style.margin = '5px';
-                preview.appendChild(img);
-            }
-        });
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.style.width = '80px';
+                    img.style.margin = '5px';
+                    img.style.borderRadius = '4px';
+                    preview.appendChild(img);
+                }
+            });
+        } else {
+            preview.classList.remove('has-files');
+        }
     });
 
     // Click upload area
     uploadArea.addEventListener('click', () => {
         input.click();
+    });
+
+    // Drag and Drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.border = '2px solid #edc200'; // highlight effect
+    });
+
+    uploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadArea.style.border = ''; // remove highlight
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.border = '';
+        
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        }
     });
 
 });

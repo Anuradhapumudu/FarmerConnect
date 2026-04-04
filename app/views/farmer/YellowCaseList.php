@@ -41,7 +41,7 @@
                         </span>
                     </td>
                     <td class="btn-cell">
-                        <button class="btn view-btn">View</button>
+                        <a href="<?php echo URLROOT; ?>/YellowCaseForm/show/<?php echo $case->case_id; ?>" class="btn view-btn" style="text-decoration:none;">View</a>
                         <button class="btn reply-btn">View Reply</button>
                     </td>
                 </tr>
@@ -70,7 +70,7 @@
                     <p><strong>Submitted On:</strong> <?php echo $case->submitted_date; ?></p>
                 </div>
                 <div class="case-card-actions">
-                    <a href="<?php echo URLROOT; ?>/YellowCaseForm/view/<?php echo $case->case_id; ?>" class="btn view-btn">View</a>
+                    <a href="<?php echo URLROOT; ?>/YellowCaseForm/show/<?php echo $case->case_id; ?>" class="btn view-btn">View</a>
                     <button class="btn reply-btn">View Reply</button>
                 </div>
             </div>

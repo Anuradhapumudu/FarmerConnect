@@ -1,10 +1,10 @@
-<?php require_once APPROOT . '/views/inc/officerheader.php'; ?>
+<?php require_once APPROOT . '/views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/YellowCaseForm.css?v=<?= time(); ?>">
 
 <div class="yellowcase-card">
     <div class="yellowcase-header">
         <h1>Yellow Case Report (View Only)</h1>
-        <p class="yellowcase-subtitle">This is a submitted yellow case record regarding a cultivational issue.</p>
+        <p class="yellowcase-subtitle">This is your submitted yellow case record regarding a cultivational issue.</p>
     </div>
     
     <div class="case-id-display">
@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <button class="btn-reply" onclick="window.location.href='<?php echo URLROOT; ?>/officer/YellowCaseReplyForm'">Reply</button>
+        <button class="btn-reply" onclick="window.location.href='<?php echo URLROOT; ?>/YellowCaseList'">Back to List</button>
     </div>
 </div>
 

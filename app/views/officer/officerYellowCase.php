@@ -54,126 +54,52 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>YC-001</td>
-          <td>02/25/00083/002/P/0006</td>
-          <td>197940306V</td>
-          <td>K.R. Aberathna</td>
-          <td>2025-10-18</td>
-          <td><span class="status pending">Pending</span></td>
-          <td>
-            <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-            <a href="#" class="btn-reply">Timeline</a>
-          </td>
-        </tr>
-        <tr>
-          <td>YC-002</td>
-          <td>02/25/00083/002/P/0010</td>
-          <td>200043211V</td>
-          <td>S. Gunasekara</td>
-          <td>2025-10-15</td>
-          <td><span class="status replied">Replied</span></td>
-          <td>
-            <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-            <a href="#" class="btn-reply">Timeline</a>
-          </td>
-        </tr>
-        <tr>
-          <td>YC-003</td>
-          <td>02/25/00083/002/P/0016</td>
-          <td>196740336V</td>
-          <td>R.A. Abesinghe</td>
-          <td>2025-10-14</td>
-          <td><span class="status pending">Pending</span></td>
-          <td>
-            <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-            <a href="#" class="btn-reply">Timeline</a>
-          </td>
-        </tr>
-        <tr>
-          <td>YC-004</td>
-          <td>02/25/00083/002/P/0034</td>
-          <td>198345606V</td>
-          <td>R.A. Somarathne</td>
-          <td>2025-10-12</td>
-          <td><span class="status replied">Replied</span></td>
-          <td>
-            <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-            <a href="#" class="btn-reply">Timeline</a>
-          </td>
-        </tr>
+        <?php if (!empty($data['cases'])): ?>
+            <?php foreach ($data['cases'] as $case): ?>
+            <tr>
+              <td><?php echo $case->case_id; ?></td>
+              <td><?php echo htmlspecialchars($case->plr_number); ?></td>
+              <td><?php echo htmlspecialchars($case->farmer_nic); ?></td>
+              <td><?php echo htmlspecialchars($case->first_name . ' ' . $case->last_name); ?></td>
+              <td><?php echo $case->observation_date; ?></td>
+              <td><span class="status <?php echo strtolower($case->status); ?>"><?php echo ucfirst($case->status); ?></span></td>
+              <td>
+                <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview/show/<?php echo $case->case_id; ?>" class="btn-view">View</a>
+                <a href="#" class="btn-reply">Timeline</a>
+              </td>
+            </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="7">No Yellow Cases Found</td>
+            </tr>
+        <?php endif; ?>
       </tbody>
     </table>
 
     <!-- ✅ Mobile Cards View -->
     <div class="case-cards">
-      <!-- YC-001 -->
-      <div class="case-card">
-        <div class="case-card-header">
-          <h4>YC-001 — 02/25/00083/002/P/0006</h4>
-          <span class="status pending">Pending</span>
-        </div>
-        <div class="case-card-body">
-          <p><strong>Farmer NIC:</strong> 197940306V</p>
-          <p><strong>Name:</strong> K.R. Aberathna</p>
-          <p><strong>Date:</strong> 2025-10-18</p>
-        </div>
-        <div class="case-card-actions">
-          <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-          <a href="#" class="btn-reply">Timeline</a>
-        </div>
-      </div>
-
-      <!-- YC-002 -->
-      <div class="case-card">
-        <div class="case-card-header">
-          <h4>YC-002 — 02/25/00083/002/P/0010</h4>
-          <span class="status replied">Replied</span>
-        </div>
-        <div class="case-card-body">
-          <p><strong>Farmer NIC:</strong> 200043211V</p>
-          <p><strong>Name:</strong> S. Gunasekara</p>
-          <p><strong>Date:</strong> 2025-10-15</p>
-        </div>
-        <div class="case-card-actions">
-          <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-          <a href="#" class="btn-reply">Timeline</a>
-        </div>
-      </div>
-
-      <!-- ✅ YC-003 -->
-      <div class="case-card">
-        <div class="case-card-header">
-          <h4>YC-003 — 02/25/00083/002/P/0016</h4>
-          <span class="status pending">Pending</span>
-        </div>
-        <div class="case-card-body">
-          <p><strong>Farmer NIC:</strong> 196740336V</p>
-          <p><strong>Name:</strong> R.A. Abesinghe</p>
-          <p><strong>Date:</strong> 2025-10-14</p>
-        </div>
-        <div class="case-card-actions">
-          <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-          <a href="#" class="btn-reply">Timeline</a>
-        </div>
-      </div>
-
-      <!-- ✅ YC-004 -->
-      <div class="case-card">
-        <div class="case-card-header">
-          <h4>YC-004 — 02/25/00083/002/P/0034</h4>
-          <span class="status replied">Replied</span>
-        </div>
-        <div class="case-card-body">
-          <p><strong>Farmer NIC:</strong> 198345606V</p>
-          <p><strong>Name:</strong> R.A. Somarathne</p>
-          <p><strong>Date:</strong> 2025-10-12</p>
-        </div>
-        <div class="case-card-actions">
-          <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview" class="btn-view">View</a>
-          <a href="#" class="btn-reply">Timeline</a>
-        </div>
-      </div>
+      <?php if (!empty($data['cases'])): ?>
+          <?php foreach ($data['cases'] as $case): ?>
+          <div class="case-card">
+            <div class="case-card-header">
+              <h4><?php echo $case->case_id; ?> — <?php echo htmlspecialchars($case->plr_number); ?></h4>
+              <span class="status <?php echo strtolower($case->status); ?>"><?php echo ucfirst($case->status); ?></span>
+            </div>
+            <div class="case-card-body">
+              <p><strong>Farmer NIC:</strong> <?php echo htmlspecialchars($case->farmer_nic); ?></p>
+              <p><strong>Name:</strong> <?php echo htmlspecialchars($case->first_name . ' ' . $case->last_name); ?></p>
+              <p><strong>Date:</strong> <?php echo $case->observation_date; ?></p>
+            </div>
+            <div class="case-card-actions">
+              <a href="<?php echo URLROOT; ?>/officer/Yellowcaseview/show/<?php echo $case->case_id; ?>" class="btn-view">View</a>
+              <a href="#" class="btn-reply">Timeline</a>
+            </div>
+          </div>
+          <?php endforeach; ?>
+      <?php else: ?>
+          <p>No Yellow Cases Found</p>
+      <?php endif; ?>
     </div>
   </div>
 </main>

@@ -392,7 +392,7 @@
       checkStageCompletion(task);
 
       if (statusClass === 'problem') {
-          window.location.href = "<?php echo URLROOT; ?>/YellowCaseList";
+          window.location.href = "<?php echo URLROOT; ?>/YellowCaseForm";
       }
   }
 
