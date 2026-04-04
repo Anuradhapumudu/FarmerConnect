@@ -28,7 +28,7 @@ body {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 800px;
+  width: 70%;
   height: 3px;
   background-color: #c8e6c9;
   border-radius: 2px;
@@ -55,10 +55,17 @@ body {
 .search-row:last-child {
   margin-bottom: 0;
 }
-
+.search-select {
+  width: 100%;
+  max-width: 100%;
+}
+/*.search-group {
+  width: 100%;
+  overflow: hidden;
+}*/
 .search-group {
   flex: 1;
-  min-width: 200px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -147,7 +154,7 @@ body {
   border-bottom: 2px solid #e5e7eb;
 }
 .pinned-section .section-title {
-  color: #dc2626;
+  color: #9d0808;
 }
 
 .latest-section .section-title {
@@ -415,6 +422,7 @@ body {
   .main-content {
     margin-top: 0px !important;
   }
+  
   .announcements-heading {
     font-size: 30px !important;
   }
@@ -442,6 +450,7 @@ body {
     gap: 4px;
     font-size: 11px;
   }
+  
   .announcement-actions .edit-btn, .announcement-actions .delete-btn {
         padding: 4px 8px; 
         font-size: 0.8rem; 

@@ -32,9 +32,9 @@
             <label for="search-date" class="search-label"></label>
             <select id="search-date" class="search-select" name='date'>
               <option value="">Select Date Range</option>
-              <option value="today" <?php echo isset($_GET['date']) && $_GET['date'] == 'today' ? 'selected' : ''; ?>>📅 Today</option>
-              <option value="week" <?php echo isset($_GET['date']) && $_GET['date'] == 'week' ? 'selected' : ''; ?>>📊 This Week</option>
-              <option value="month" <?php echo isset($_GET['date']) && $_GET['date'] == 'month' ? 'selected' : ''; ?>>🗓️ This Month</option>
+              <option value="today" <?php echo isset($_GET['date']) && $_GET['date'] == 'today' ? 'selected' : ''; ?>>Today</option>
+              <option value="week" <?php echo isset($_GET['date']) && $_GET['date'] == 'week' ? 'selected' : ''; ?>>This Week</option>
+              <option value="month" <?php echo isset($_GET['date']) && $_GET['date'] == 'month' ? 'selected' : ''; ?>>This Month</option>
             </select>
           </div>
           <div class="search-group">
