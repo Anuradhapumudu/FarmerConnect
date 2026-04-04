@@ -29,7 +29,7 @@
   <div class="stage-section">
     <h3>Stage-01</h3>
     <div class="task-row">
-
+              
       <!-- TASK 1 -->
       <?php
       $status = $data['progress'][1] ?? 'default';
@@ -50,7 +50,15 @@
       <!-- TASK 2 -->
     <?php
     $status = $data['progress'][2] ?? 'default';
-    $locked = (($data['progress'][1] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][1] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][2]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][2] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="2">
         <div class="label">Water Supply</div>
@@ -68,7 +76,15 @@
       <!-- TASK 3 -->
     <?php
     $status = $data['progress'][3] ?? 'default';
-    $locked = (($data['progress'][2] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][2] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][3]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][3] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="3">
         <div class="label">Prepare Land</div>
@@ -86,7 +102,15 @@
       <!-- TASK 4 -->
     <?php
     $status = $data['progress'][4] ?? 'default';
-    $locked = (($data['progress'][3] ?? '') === 'done') ? '' : 'locked';
+        $prevDone = (($data['progress'][3] ?? '') === 'done');
+
+        $unlockDate = isset($data['estimatedDates'][4]) 
+            ? date('Y-m-d', strtotime($data['estimatedDates'][4] . ' -2 days'))
+            : null;
+
+        $today = date('Y-m-d');
+
+        $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="4">
         <div class="label">Ready the Field II</div>
@@ -104,7 +128,15 @@
       <!-- TASK 5 -->
     <?php
     $status = $data['progress'][5] ?? 'default';
-    $locked = (($data['progress'][4] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][4] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][5]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][5] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="5">
         <div class="label">Prepare Land II</div>
@@ -139,7 +171,15 @@
     <!-- TASK 1 -->
     <?php
     $status = $data['progress'][6] ?? 'default';
-    $locked = (($data['progress'][5] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][5] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][6]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][6] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="6">
       <div class="label">Sowing</div>
@@ -157,7 +197,15 @@
     <!-- TASK 2 -->
     <?php
     $status = $data['progress'][7] ?? 'default';
-    $locked = (($data['progress'][6] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][6] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][7]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][7] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="7">
       <div class="label">Fertilization I</div>
@@ -175,7 +223,15 @@
     <!-- TASK 3 -->
     <?php
     $status = $data['progress'][8] ?? 'default';
-    $locked = (($data['progress'][7] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][7] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][8]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][8] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="8">
       <div class="label">Fertilization II</div>
@@ -193,7 +249,15 @@
     <!-- TASK 4 -->
     <?php
     $status = $data['progress'][9] ?? 'default';
-    $locked = (($data['progress'][8] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][8] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][9]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][9] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="9">
       <div class="label">Fertilization III</div>
@@ -211,7 +275,15 @@
     <!-- TASK 5 -->
     <?php
     $status = $data['progress'][10] ?? 'default';
-    $locked = (($data['progress'][9] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][9] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][10]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][10] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="10">
       <div class="label">Fertilization IV</div>
@@ -244,7 +316,15 @@
     <!-- TASK 1 -->
     <?php
     $status = $data['progress'][11] ?? 'default';
-    $locked = (($data['progress'][10] ?? '') === 'done') ? '' : 'locked';
+    $prevDone = (($data['progress'][10] ?? '') === 'done');
+
+    $unlockDate = isset($data['estimatedDates'][11]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][11] . ' -2 days'))
+        : null;
+
+    $today = date('Y-m-d');
+
+    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="11">
       <div class="label">Harvesting</div>
@@ -306,7 +386,7 @@
       });
 
       if (statusClass === 'done') {
-          unlockNextTask(task);
+         // unlockNextTask(task);
       }
 
       checkStageCompletion(task);
