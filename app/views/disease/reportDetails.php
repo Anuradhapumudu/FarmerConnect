@@ -188,88 +188,90 @@ $severityClass = strtolower(trim($report->severity ?? 'low'));
     </div>
 
     <!-- ═══ Officer Responses ═══ -->
-    <div class="rd-responses">
-        <div class="rd-section-title">
-            <i class="fas fa-clipboard-check"></i> Previous Feedback
-        </div>
-
-        <?php if (empty($data['officer_responses'])): ?>
-            <div class="rd-empty-responses">
-                <p>No feedback provided yet.</p>
-                <span class="rd-pending-pill">
-                    <span class="dot"></span> Pending Review
-                </span>
+    <?php if (!empty($data['officer_responses']) || (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer')): ?>
+        <div class="rd-responses">
+            <div class="rd-section-title">
+                <i class="fas fa-clipboard-check"></i> Previous Feedback
             </div>
-        <?php else: ?>
-            <div class="rd-timeline">
-                <?php foreach ($data['officer_responses'] as $response): ?>
-                    <div class="rd-timeline-item">
-                        <div class="rd-timeline-dot"></div>
-                        <div class="rd-timeline-card">
-                            <div class="rd-resp-header">
-                                <span class="rd-officer-name">
-                                    <?php
-                                    $officerName = (isset($response->first_name) && isset($response->last_name))
-                                        ? htmlspecialchars($response->first_name . ' ' . $response->last_name)
-                                        : 'Agricultural Officer';
-                                    echo $officerName;
-                                    ?>
-                                    <span class="rd-officer-id">(<?php echo htmlspecialchars($response->officer_id); ?>)</span>
-                                </span>
-                                <span class="rd-resp-date">
-                                    <?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?>
-                                    <?php if (isset($response->is_edited) && $response->is_edited == '1'): ?>
-                                        <span class="rd-resp-edited">(edited)</span>
+
+            <?php if (empty($data['officer_responses'])): ?>
+                <div class="rd-empty-responses">
+                    <p>No feedback provided yet.</p>
+                    <span class="rd-pending-pill">
+                        <span class="dot"></span> Pending Review
+                    </span>
+                </div>
+            <?php else: ?>
+                <div class="rd-timeline">
+                    <?php foreach ($data['officer_responses'] as $response): ?>
+                        <div class="rd-timeline-item">
+                            <div class="rd-timeline-dot"></div>
+                            <div class="rd-timeline-card">
+                                <div class="rd-resp-header">
+                                    <span class="rd-officer-name">
+                                        <?php
+                                        $officerName = (isset($response->first_name) && isset($response->last_name))
+                                            ? htmlspecialchars($response->first_name . ' ' . $response->last_name)
+                                            : 'Agricultural Officer';
+                                        echo $officerName;
+                                        ?>
+                                        <span class="rd-officer-id">(<?php echo htmlspecialchars($response->officer_id); ?>)</span>
+                                    </span>
+                                    <span class="rd-resp-date">
+                                        <?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?>
+                                        <?php if (isset($response->is_edited) && $response->is_edited == '1'): ?>
+                                            <span class="rd-resp-edited">(edited)</span>
+                                        <?php endif; ?>
+                                    </span>
+                                    <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'officer' && $_SESSION['user_id'] === $response->officer_id): ?>
+                                        <div class="rd-resp-actions">
+                                            <button class="rd-action-icon edit" title="Edit"
+                                                onclick="openEditModal(<?php echo htmlspecialchars(json_encode($response)); ?>)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button class="rd-action-icon delete" title="Delete"
+                                                onclick="openDeleteRecModal(<?php echo $response->id; ?>)">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
                                     <?php endif; ?>
-                                </span>
-                                <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'officer' && $_SESSION['user_id'] === $response->officer_id): ?>
-                                    <div class="rd-resp-actions">
-                                        <button class="rd-action-icon edit" title="Edit"
-                                            onclick="openEditModal(<?php echo htmlspecialchars(json_encode($response)); ?>)">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button class="rd-action-icon delete" title="Delete"
-                                            onclick="openDeleteRecModal(<?php echo $response->id; ?>)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
+                                </div>
+                                <div class="rd-resp-body">
+                                    <?php echo nl2br(htmlspecialchars($response->response_message)); ?>
+                                </div>
+
+                                <?php if (!empty($response->response_media)): ?>
+                                    <div class="rd-resp-media">
+                                        <?php
+                                        $respFiles = explode(',', $response->response_media);
+                                        foreach ($respFiles as $rFile):
+                                            $rFile = trim($rFile);
+                                            if (empty($rFile))
+                                                continue;
+                                            $rFileUrl = URLROOT . '/disease/viewResponseMedia/' . $response->id . '/' . urlencode($rFile);
+                                            $ext = strtolower(pathinfo($rFile, PATHINFO_EXTENSION));
+                                            $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                            ?>
+                                            <div class="rd-resp-media-item"
+                                                onclick="openLightbox('<?php echo $rFileUrl; ?>', '<?php echo $isImage ? 'image' : 'video'; ?>')">
+                                                <?php if ($isImage): ?>
+                                                    <img src="<?php echo $rFileUrl; ?>" alt="Response media" loading="lazy">
+                                                <?php else: ?>
+                                                    <div class="video-placeholder">
+                                                        <i class="fas fa-play"></i>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
-                            <div class="rd-resp-body">
-                                <?php echo nl2br(htmlspecialchars($response->response_message)); ?>
-                            </div>
-
-                            <?php if (!empty($response->response_media)): ?>
-                                <div class="rd-resp-media">
-                                    <?php
-                                    $respFiles = explode(',', $response->response_media);
-                                    foreach ($respFiles as $rFile):
-                                        $rFile = trim($rFile);
-                                        if (empty($rFile))
-                                            continue;
-                                        $rFileUrl = URLROOT . '/disease/viewResponseMedia/' . $response->id . '/' . urlencode($rFile);
-                                        $ext = strtolower(pathinfo($rFile, PATHINFO_EXTENSION));
-                                        $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
-                                        ?>
-                                        <div class="rd-resp-media-item"
-                                            onclick="openLightbox('<?php echo $rFileUrl; ?>', '<?php echo $isImage ? 'image' : 'video'; ?>')">
-                                            <?php if ($isImage): ?>
-                                                <img src="<?php echo $rFileUrl; ?>" alt="Response media" loading="lazy">
-                                            <?php else: ?>
-                                                <div class="video-placeholder">
-                                                    <i class="fas fa-play"></i>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php endif; ?>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
     <!-- ═══ Officer Recommendations Logic ═══ -->
     <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'officer'): ?>
