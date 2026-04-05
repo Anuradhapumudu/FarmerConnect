@@ -12,19 +12,17 @@
     <div class="header">
       <h1> My Orders</h1>
       <p>Monitor and manage all your product orders in one place</p>
-      
-
     </div>
     
     <!-- Filter Section -->
     <div class="farmer-filter-container">
       <div class="filter-group">
-        <label for="search"><i class="fas fa-search"></i> Search Orders</label>
+        
         <input type="text" id="search" class="search-input" placeholder="Search by order ID, product, or customer...">
       </div>
       
       <div class="filter-group">
-        <label for="statusFilter"><i class="fas fa-filter"></i> Filter by Status</label>
+       
         <select id="statusFilter" class="filter-select">
           <option value="all">All Statuses</option>
           <option value="order_placed">Order Placed</option>
@@ -36,7 +34,7 @@
       </div>
       
       <button class="btn-filter" id="applyFilters">
-        <i class="fas fa-sync-alt"></i> Apply Filters
+         Apply Filters
       </button>
     </div>
     

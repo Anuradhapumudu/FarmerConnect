@@ -5,7 +5,10 @@
 <main class="main-content" id="mainContent">
 
   <div class="my_product">
-    <div class="heading">Manage Products</div>
+    <div class="header">
+      <h1>Manage Products<h1>
+    <p>Create, edit, and manage your product listings in one place</p>
+    </div>
 
     <div class="add_products">
       <a href="<?php echo URLROOT; ?>/Marketplace/addProduct" class="btn btn-add">
@@ -38,13 +41,13 @@
         for ($i = 1; $i <= 5; $i++): 
     ?>
         <span class="<?= ($i <= $rating) ? 'star filled' : 'star'; ?>">★</span>
-    <?php endfor; ?>
-</div>
+            <?php endfor; ?>
+        </div>
 
-<p>
-    <?= $product->avg_rating ?> / 5 
-    (<?= $product->total_ratings ?> reviews)
-</p>
+        <p>
+            <?= $product->avg_rating ?> / 5 
+            (<?= $product->total_ratings ?> reviews)
+        </p>
 
   <div>
     <span class="price">Rs <?php echo htmlspecialchars($product->price_per_unit); ?></span>

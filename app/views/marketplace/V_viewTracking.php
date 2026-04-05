@@ -211,9 +211,7 @@
                 </button>
                 
                 <?php if($normalizedStatus !== 'order_picked' && $normalizedStatus !== 'order_cancelled'): ?>
-                    <a href="tel:<?= htmlspecialchars($order->seller_telNo) ?>" class="btn-print">
-                        <i class="fas fa-phone"></i> Contact Seller
-                    </a>
+
                 <?php endif; ?>
             </div>
         </div>

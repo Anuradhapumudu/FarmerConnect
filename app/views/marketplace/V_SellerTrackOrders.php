@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <main class="main-content" id="mainContent">
-  <div class="track-order-container">
+  <div class="sellertrack-order-container">
     <div class="header">
       <h1>Seller Order Management</h1>
       <p>Track and update your customer orders</p>
@@ -11,12 +11,10 @@
     
     <div class="farmer-filter-container">
       <div class="filter-group">
-        <label for="search"><i class="fas fa-search"></i> Search Orders</label>
         <input type="text" id="search" class="search-input" placeholder="Search by order ID, product, or customer...">
       </div>
 
       <div class="filter-group">
-        <label for="statusFilter"><i class="fas fa-filter"></i> Filter by Status</label>
         <select id="statusFilter" class="filter-select">
           <option value="all">All Statuses</option>
           <option value="order_placed">Order Placed</option>
@@ -28,7 +26,7 @@
       </div>
       
       <button class="btn-filter" id="applyFilters">
-        <i class="fas fa-sync-alt"></i> Apply Filters
+         Apply Filters
       </button>
     </div>
     

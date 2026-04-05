@@ -4,6 +4,28 @@
   margin: 0 auto;
 }
 
+.header h1 {
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+  color: #2e7d32;
+  width: 100%;
+  text-align: center !important;
+  margin-top: 25px;
+  text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.08);
+  position: relative;
+  padding-bottom: 20px;
+  border-bottom: none;
+}
+
+.header p {
+  font-size: 1rem;
+  color: #4b6e34;
+  margin-top: -5px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 500;
+}
+
 /* Filter Container */
 .filter-container {
   max-width: 1200px;   /* unified with cards */
@@ -286,6 +308,7 @@
   color: #666;
 }
 
+
 /* =========================
    Mobile Responsive Design
 ========================= */
@@ -453,3 +476,69 @@
   }
 }
 
+/* Small Tablet */
+@media (max-width: 900px) {
+  
+  .header h1 {
+    font-size: 2.5rem !important;
+  }
+  
+  
+  .header p {
+    font-size: 0.95rem;
+    margin: 10px 20px -20px 20px;
+  }
+
+}
+
+/* Large Mobile */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2.2rem !important;
+    padding-bottom: 15px;
+  }
+  
+
+}
+
+/* Medium Mobile */
+@media (max-width: 700px) {
+
+  .header h1 {
+    font-size: 2rem !important;
+     margin-top: 15px;
+  }
+  
+  
+ .header p {
+    font-size: 0.9rem;
+    margin: 10px 15px -15px 15px;
+    line-height: 1.6;
+  }
+
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.8rem !important;
+    padding-bottom: 12px;
+  }
+  
+  
+
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .header h1 {
+    font-size: 1.6rem !important;
+  }
+  
+  
+ .header p {
+    font-size: 0.85rem;
+    margin: 8px 10px -10px 10px;
+  }
+  
+}
