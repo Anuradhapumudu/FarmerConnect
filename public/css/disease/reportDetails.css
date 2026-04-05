@@ -188,16 +188,24 @@
     gap: 6px;
 }
 
-/* Status pill */
+/* Status pill Group */
+.rd-status-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
 .rd-status {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     font-size: 0.85rem;
     font-weight: 700;
-    padding: 8px 18px;
-    border-radius: 24px;
+    padding: 10px 20px;
+    border-radius: 28px;
     letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .rd-status .dot {
@@ -387,15 +395,15 @@
 
 /* Section title */
 .rd-section-title {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 800;
     color: #2e7d32;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid rgba(46, 125, 50, 0.1);
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(46, 125, 50, 0.15);
 }
 
 /* Info grid */
@@ -727,6 +735,296 @@
     font-weight: 700;
     margin-bottom: 8px;
 }
+
+/* ══════════════════════════════
+   OFFICER SPECIFIC ACTIONS
+   ══════════════════════════════ */
+
+/* Status Dropdown Styling */
+.rd-status-form {
+    width: 100%;
+}
+
+.rd-status-select {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(46, 125, 50, 0.2);
+    font-size: 0.82rem;
+    font-family: inherit;
+    font-weight: 600;
+    color: #2e7d32;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    appearance: none; /* Hide default arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232e7d32'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 36px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.rd-status-select:hover {
+    border-color: #2e7d32;
+    background-color: #f1f8e9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.rd-status-select:focus {
+    outline: none;
+    border-color: #2e7d32;
+    box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.15);
+}
+
+/* Dynamic colors for the interactive select based on status class */
+.rd-status-select.pending {
+    background-color: #fff8e1;
+    color: #f57c00;
+    border-color: rgba(245, 124, 0, 0.3);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f57c00'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+}
+
+.rd-status-select.under_review {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-color: rgba(25, 118, 210, 0.3);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231976d2'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+}
+
+.rd-status-select.resolved {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-color: rgba(46, 125, 50, 0.3);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232e7d32'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+}
+
+.rd-status-select.rejected {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border-color: rgba(211, 47, 47, 0.3);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d32f2f'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+}
+
+/* Prompt Card Styling */
+.rd-pending-prompt {
+    text-align: center;
+}
+
+.rd-prompt-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px dashed rgba(46, 125, 50, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.rd-prompt-card p {
+    color: #555;
+    font-size: 1.05rem;
+    max-width: 500px;
+    line-height: 1.5;
+}
+
+.rd-prompt-card strong {
+    color: #1b5e20;
+}
+
+/* Recommendation Form Section */
+.rd-recommendation-form-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 24px;
+    border: 2px solid rgba(46, 125, 50, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.rd-recommendation-form-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #2e7d32, #81c784);
+}
+
+.rd-form-group {
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rd-form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #1b5e20;
+    text-transform: none;
+    letter-spacing: 0.2px;
+}
+
+.rd-textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #e0e0e0;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: all 0.3s ease;
+    background: #fff;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.rd-textarea:focus {
+    outline: none;
+    border-color: #2e7d32;
+    box-shadow: 0 0 0 5px rgba(46, 125, 50, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Custom File Upload Styling */
+.rd-file-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rd-file-upload input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.rd-file-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: #fff;
+    color: #2e7d32;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid #2e7d32;
+    transition: all 0.3s ease;
+    width: max-content;
+}
+
+.rd-file-label:hover {
+    background: #2e7d32;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.25);
+    transform: translateY(-2px);
+}
+
+.rd-file-list {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.rd-file-item {
+    font-size: 0.85rem;
+    background: #f1f8e9;
+    padding: 10px 16px;
+    border-radius: 10px;
+    color: #2e7d32;
+    border: 1px solid rgba(46, 125, 50, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: rdSlideIn 0.3s ease;
+}
+
+@keyframes rdSlideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Submit Button Styling */
+.rd-btn-submit {
+    background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    color: #fff;
+    width: 100%;
+    justify-content: center;
+    padding: 18px;
+    font-size: 1.1rem;
+    border-radius: 16px;
+    margin-top: 10px;
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+}
+
+.rd-btn-submit:hover {
+    background: linear-gradient(135deg, #1b5e20, #0a3d0a);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(46, 125, 50, 0.4);
+}
+
+/* Empty State Styling */
+.rd-empty-responses {
+    text-align: center;
+    padding: 60px 40px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    border: 1px dashed #ddd;
+}
+
+.rd-empty-responses p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Response Actions Styling */
+.rd-resp-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.rd-action-icon {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    font-size: 0.9rem;
+}
+
+.rd-action-icon:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.rd-action-icon.edit:hover { color: #1e88e5; }
+.rd-action-icon.delete:hover { color: #e53935; }
 
 .rd-modal-card p {
     color: #555;

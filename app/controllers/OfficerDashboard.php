@@ -65,8 +65,10 @@ class OfficerDashboard extends Controller
                 exit();
             }
 
+            $officer_responses = $this->model('M_disease')->getOfficerResponses($reportCode);
             $data = [
                 'report' => $report,
+                'officer_responses' => $officer_responses,
                 'singleReport' => true,
                 'message' => 'Report details for ' . $reportCode
             ];
@@ -375,57 +377,6 @@ class OfficerDashboard extends Controller
     }
 
     // Display officer response media files
-    public function viewResponseMedia($responseId = '', $filename = '')
-    {
-        if (empty($responseId) || empty($filename)) {
-            http_response_code(404);
-            echo "Response ID and filename required";
-            return;
-        }
-
-        try {
-            // Verify that this file belongs to this response
-            $response = $this->model('M_disease')->getOfficerResponseById($responseId);
-
-            $validResponse = false;
-            if ($response && !empty($response->response_media)) {
-                $responseFiles = explode(',', $response->response_media);
-                $responseFiles = array_map('trim', $responseFiles);
-
-                if (in_array($filename, $responseFiles)) {
-                    $validResponse = true;
-                }
-            }
-
-            if ($validResponse) {
-                // Build file path
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
-                $filePath = $uploadDir . $filename;
-
-                if (file_exists($filePath)) {
-                    $fileInfo = pathinfo($filePath);
-                    $mimeType = $this->getMimeType($fileInfo['extension']);
-
-                    header('Content-Type: ' . $mimeType);
-                    header('Content-Length: ' . filesize($filePath));
-                    header('Content-Disposition: inline; filename="' . basename($filePath) . '"');
-
-                    readfile($filePath);
-                    exit();
-                } else {
-                    http_response_code(404);
-                    echo "File not found on server: " . $filename;
-                }
-            } else {
-                http_response_code(403);
-                echo "File not associated with this response";
-            }
-        } catch (Exception $e) {
-            error_log("Error viewing response media: " . $e->getMessage());
-            http_response_code(500);
-            echo "Error loading file: " . $e->getMessage();
-        }
-    }
 
     // Helper method to get MIME type from file extension
     private function getMimeType($extension)
