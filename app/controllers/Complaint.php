@@ -222,7 +222,7 @@ class Complaint extends Controller
         // Attach officer responses to each complaint
         foreach ($data['reports'] as &$report) {
             $report->officer_responses = $this->model('M_complaint')
-                ->getOfficerResponses($report->complaint_id);
+                ->getOfficerResponses($report->complaint_id, $this->isAdmin());
         }
 
         $this->view('complaint/myComplaints', $data);
@@ -242,7 +242,7 @@ class Complaint extends Controller
 
         $this->view('complaint/viewComplaint', [
             'report' => $complaint,
-            'officer_responses' => $this->model('M_complaint')->getOfficerResponses($complaintId),
+            'officer_responses' => $this->model('M_complaint')->getOfficerResponses($complaintId, $this->isAdmin()),
             'singleReport' => true,
             'message' => "Complaint details for {$complaintId}",
         ]);
