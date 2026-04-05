@@ -141,24 +141,6 @@ body {
   color: #888;
 }
 
-@media (max-width: 900px) {
-  .results-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .results-list {
-    grid-template-columns: 1fr;
-  }
-  .search-form {
-    flex-direction: column;
-  }
-  .search-button {
-    width: 100%;
-  }
-}
-
 .feature-inner {
   position: absolute;
   top: 0;
@@ -315,6 +297,23 @@ body {
 .feature-bottom .btn:hover {
   background-color: #388e3c;
   transform: scale(1.05);
+}
+@media (max-width: 900px) {
+  .results-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .results-list {
+    grid-template-columns: 1fr;
+  }
+  .search-form {
+    flex-direction: column;
+  }
+  .search-button {
+    width: 100%;
+  }
 }
 
 @media (max-width: 900px) {

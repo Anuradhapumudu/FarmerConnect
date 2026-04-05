@@ -55,11 +55,13 @@
               <div class="announcement-list" id="searchResults">
                   <?php foreach ($data['searchResults'] as $announcement): ?>
                       <div class="announcement-card">
+                        <div class="announcement-header">
                           <h3 class="announcement-title">
                             <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                               <?php echo htmlspecialchars($announcement->title); ?>
                             </a>
                           </h3>
+                        </div>
                           <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
                           <!-- Date -->
                           <div class="announcement-bottom">
@@ -90,11 +92,13 @@
           <div class="announcement-list" id="pinnedAnnouncements">
               <?php foreach ($data['pinnedAnnouncements'] as $announcement): ?>
                   <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
-                      <h3 class="announcement-title">
+                  <div class="announcement-header">  
+                    <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
+                    </div>
                       <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
                       <!-- Date-->
                       <div class="announcement-bottom">
@@ -116,12 +120,14 @@
             <?php if (!empty($data['latestAnnouncements'])): ?>
                 <?php foreach ($data['latestAnnouncements'] as $announcement): ?>
                     <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
+                      <div class="announcement-header">
                         <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
-                        <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
+                      </div>
+                      <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
 
                         <!-- Date -->
                         <div class="announcement-bottom">
@@ -145,11 +151,13 @@
             <?php if (!empty($data['previousAnnouncements'])): ?>
                 <?php foreach ($data['previousAnnouncements'] as $announcement): ?>
                     <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
+                      <div class="announcement-header">
                         <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
+                      </div>
                         <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
 
                         <!-- Date -->
