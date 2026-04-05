@@ -747,7 +747,8 @@ class Disease extends Controller
             'mp4' => 'video/mp4',
             'avi' => 'video/x-msvideo',
             'mov' => 'video/quicktime',
-            'wmv' => 'video/x-ms-wmv'
+            'wmv' => 'video/x-ms-wmv',
+            'pdf' => 'application/pdf'
         ];
         return isset($mimeTypes[$extension]) ? $mimeTypes[$extension] : 'application/octet-stream';
     }
@@ -780,8 +781,8 @@ class Disease extends Controller
                 $filePath = $uploadDir . $filename;
 
                 if (file_exists($filePath)) {
-                    $fileInfo = pathinfo($filePath);
-                    $mimeType = $this->getMimeType($fileInfo['extension']);
+                    $fileExtension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                    $mimeType = $this->getMimeType($fileExtension);
 
                     header('Content-Type: ' . $mimeType);
                     header('Content-Length: ' . filesize($filePath));
