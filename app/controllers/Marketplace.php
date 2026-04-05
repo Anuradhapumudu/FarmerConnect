@@ -74,7 +74,27 @@ class Marketplace extends Controller {
     }
 
 
+////////////////////////////////////////////
+//manage products
+//////////////////////////////////////////
 
+
+
+        // View Products by Category
+    public function viewProduct($categorySlug = null) {
+        $categoryMap = [
+            'fertilizer' => 'Fertilizer',
+            'paddy-seeds' => 'Seeds',
+            'agrochemicals' => 'Agrochemicals',
+            'equipments' => 'Equipments',
+            'machinery' => 'Rent Machinery',
+            'others' => 'Others'
+        ];
+
+        $category = $categoryMap[strtolower($categorySlug ?? '')] ?? null;
+        $products = $category ? $this->marketplaceModel->getProductsByCategory($category) : [];
+        $this->view('marketplace/V_viewProduct', ['category' => $category, 'products' => $products]);
+    }
 
 
 private function generatePayHereHash($order_id, $amount, $currency = "LKR") {
@@ -510,21 +530,7 @@ public function editProduct($id) {
         }
     }
 
-    // View Products by Category
-    public function viewProduct($categorySlug = null) {
-        $categoryMap = [
-            'fertilizer' => 'Fertilizer',
-            'paddy-seeds' => 'Seeds',
-            'agrochemicals' => 'Agrochemicals',
-            'equipments' => 'Equipments',
-            'machinery' => 'Rent Machinery',
-            'others' => 'Others'
-        ];
 
-        $category = $categoryMap[strtolower($categorySlug ?? '')] ?? null;
-        $products = $category ? $this->marketplaceModel->getProductsByCategory($category) : [];
-        $this->view('marketplace/V_viewProduct', ['category' => $category, 'products' => $products]);
-    }
 
     // Payment
     public function payment() {
