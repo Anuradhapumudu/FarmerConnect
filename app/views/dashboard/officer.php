@@ -51,7 +51,7 @@
 
     </a>
 
-    <a href="<?php echo URLROOT; ?>/complaint/officerComplaints" class="feature">
+    <a href="<?php echo URLROOT; ?>/complaint/myComplaints" class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>
       <h3>Complain Reports</h3>
       <p>View Complaint Reports and Reply to them.</p>
