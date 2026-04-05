@@ -174,7 +174,7 @@ body {
 .announcement-card {
   background: #ffffff;
   border-radius: 12px;
-  padding: 15px 18px;
+  padding: 15px 18px 0px 18px;
   height: 100%;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   display: flex;
@@ -271,15 +271,29 @@ body {
 .announcement-bottom {
   display: flex;
   justify-content: space-between;
+  background-color: #f3f4f6;
+  margin-left: -18px;
+  margin-right: -18px;
+  padding: 10px 18px;
   align-items: center;
+  border-top: 1px solid #e5e7eb;
   font-size: 14px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   margin-top: auto;
 }
-.announcement-actions {
+.attachment-label {
+  font-size: 13px;
+  color: #555;      
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  margin-bottom: 3px; 
 }
-
+.attachment-note i {
+  color: #777;  
+}
 .no-results {
   background: #fff3f3;
   border: 1px solid #f5c2c2;

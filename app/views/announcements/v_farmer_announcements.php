@@ -63,7 +63,11 @@
                           </h3>
                         </div>
                           <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
-                          <!-- Date -->
+                          <?php if (!empty($announcement->attachment_path)): ?>
+                            <div class="attachment-label">
+                              Note : <i class="fas fa-paperclip"></i> Attachment available
+                            </div>
+                          <?php endif; ?>
                           <div class="announcement-bottom">
                             <div class="announcement-date-container">
                               <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
@@ -100,7 +104,11 @@
                         </h3>
                     </div>
                       <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
-                      <!-- Date-->
+                      <?php if (!empty($announcement->attachment_path)): ?>
+                        <div class="attachment-label">
+                          Note : <i class="fas fa-paperclip"></i> Attachment available
+                        </div>
+                      <?php endif; ?>
                       <div class="announcement-bottom">
                         <div class="announcement-date-container">
                           <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
@@ -128,8 +136,12 @@
                         </h3>
                       </div>
                       <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
+                      <?php if (!empty($announcement->attachment_path)): ?>
+                          <div class="attachment-label">
+                            Note : <i class="fas fa-paperclip"></i> Attachment available
+                          </div>
+                        <?php endif; ?>
 
-                        <!-- Date -->
                         <div class="announcement-bottom">
                           <div class="announcement-date-container">
                             <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
@@ -160,7 +172,11 @@
                       </div>
                         <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
 
-                        <!-- Date -->
+                        <?php if (!empty($announcement->attachment_path)): ?>
+                          <div class="attachment-label">
+                            Note : <i class="fas fa-paperclip"></i> Attachment available
+                          </div>
+                        <?php endif; ?>
                         <div class="announcement-bottom">
                           <div class="announcement-date-container">
                             <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
