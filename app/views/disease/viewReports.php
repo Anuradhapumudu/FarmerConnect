@@ -15,6 +15,7 @@ $resolvedCount = 0;
 if (!empty($data['reports'])) {
     foreach ($data['reports'] as $r) {
         $st = strtolower(trim($r->status ?? ''));
+        $st = str_replace('_', ' ', $st);
         if ($st === 'pending') $pendingCount++;
         elseif (in_array($st, ['under review', 'reviewing', 'in progress'])) $reviewCount++;
         elseif (in_array($st, ['resolved', 'responded', 'closed'])) $resolvedCount++;
@@ -123,11 +124,13 @@ if (!empty($data['reports'])) {
             <?php foreach ($data['reports'] as $report):
                 $isDeleted = isset($report->is_deleted) && $report->is_deleted == 1;
                 $statusRaw = $isDeleted ? 'deleted' : strtolower(trim($report->status ?? 'pending'));
+                $statusRaw = str_replace('_', ' ', $statusRaw);
                 $statusClass = 'pending';
                 if ($isDeleted) $statusClass = 'deleted';
                 elseif (in_array($statusRaw, ['under review', 'reviewing', 'in progress'])) $statusClass = 'under-review';
                 elseif ($statusRaw === 'responded') $statusClass = 'responded';
                 elseif (in_array($statusRaw, ['resolved', 'closed'])) $statusClass = 'resolved';
+                elseif ($statusRaw === 'rejected') $statusClass = 'rejected';
 
                 $severityClass = strtolower(trim($report->severity ?? 'low'));
                 $responseCount = isset($report->officer_responses) ? count($report->officer_responses) : 0;

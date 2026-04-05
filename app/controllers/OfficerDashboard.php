@@ -1,22 +1,26 @@
 <?php
-class OfficerDashboard extends Controller {
+class OfficerDashboard extends Controller
+{
 
 
-    public function __construct() {
+    public function __construct()
+    {
         if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'officer') {
             header('Location: ' . URLROOT . '/users/login');
             exit();
         }
     }
 
-    public function index() {
+    public function index()
+    {
         $this->view('dashboard/officer');
     }
 
     // View all submitted disease reports for officers
-    
-    public function viewDiseaseReports(){
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+    public function viewDiseaseReports()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Handle search form submission
             $farmerNIC = isset($_POST['farmerNIC']) ? trim($_POST['farmerNIC']) : '';
             $plrNumber = isset($_POST['plrNumber']) ? trim($_POST['plrNumber']) : '';
@@ -45,11 +49,12 @@ class OfficerDashboard extends Controller {
             ];
         }
 
-        $this->view('officer/officerViewDReports', $data);
+        $this->view('disease/viewReports', $data);
     }
 
     // View all submitted reports in table format or single report details
-    public function viewReport($reportCode = '') {
+    public function viewReport($reportCode = '')
+    {
         if (!empty($reportCode)) {
             // Show specific report details
             $report = $this->model('M_disease')->getReportByCode($reportCode);
@@ -75,11 +80,12 @@ class OfficerDashboard extends Controller {
             ];
         }
 
-        $this->view('officer/officerReportDetail', $data);
+        $this->view('disease/reportDetails', $data);
     }
 
     // Update report status (for officers)
-    public function updateReportStatus() {
+    public function updateReportStatus()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
             $status = isset($_POST['status']) ? trim($_POST['status']) : '';
@@ -121,7 +127,8 @@ class OfficerDashboard extends Controller {
     }
 
     // Submit officer recommendation/response
-    public function submitRecommendation() {
+    public function submitRecommendation()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $reportCode = isset($_POST['reportCode']) ? trim($_POST['reportCode']) : '';
             $message = isset($_POST['message']) ? trim($_POST['message']) : '';
@@ -135,9 +142,9 @@ class OfficerDashboard extends Controller {
             // Verify report status
             $report = $this->model('M_disease')->getReportByCode($reportCode);
             if (!$report || $report->status !== 'under_review') {
-                 $_SESSION['error_message'] = 'Recommendations can only be submitted when the report is Under Review';
-                 header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
-                 exit();
+                $_SESSION['error_message'] = 'Recommendations can only be submitted when the report is Under Review';
+                header('Location: ' . URLROOT . '/officerDashboard/viewReport/' . $reportCode);
+                exit();
             }
 
             // Get officer ID from session (assuming it's stored there)
@@ -235,7 +242,8 @@ class OfficerDashboard extends Controller {
     }
 
     // Delete recommendation
-    public function deleteRecommendation($id = '') {
+    public function deleteRecommendation($id = '')
+    {
         if (empty($id)) {
             $_SESSION['error_message'] = 'Invalid recommendation ID';
             header('Location: ' . URLROOT . '/officerDashboard/viewDiseaseReports');
@@ -244,7 +252,7 @@ class OfficerDashboard extends Controller {
 
         // Get recommendation to verify ownership
         $recommendation = $this->model('M_disease')->getOfficerResponseById($id);
-        
+
         if (!$recommendation) {
             $_SESSION['error_message'] = 'Recommendation not found';
             header('Location: ' . URLROOT . '/officerDashboard/viewDiseaseReports');
@@ -271,7 +279,8 @@ class OfficerDashboard extends Controller {
     }
 
     // Update recommendation (handle form submission)
-    public function updateRecommendation() {
+    public function updateRecommendation()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $responseId = isset($_POST['responseId']) ? trim($_POST['responseId']) : '';
             $message = isset($_POST['message']) ? trim($_POST['message']) : '';
@@ -300,27 +309,27 @@ class OfficerDashboard extends Controller {
             // Let's adopt a simpler approach: if files are uploaded, ADD them to existing. 
             // If "remove" logic is needed, it takes more UI work. 
             // Let's implement ADD logic same as submitRecommendation.
-            
+
             $newUploadedFiles = [];
             if (!empty($_FILES['media']['name'][0])) {
                 // ... (Reuse upload logic from submitRecommendation) ...
                 // Duplicate code alert: In a real app, refactor `handleFileUpload` to a private helper or trait.
                 // I'll assume for this task strict limits, I'll inline a simplified version for reliability.
-                
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
+
+                $uploadDir = APPROOT . '/../public/uploads/officer_responses/';
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'application/pdf'];
-                
+
                 foreach ($_FILES['media']['name'] as $key => $filename) {
-                     if ($_FILES['media']['error'][$key] === UPLOAD_ERR_OK) {
+                    if ($_FILES['media']['error'][$key] === UPLOAD_ERR_OK) {
                         $tmpName = $_FILES['media']['tmp_name'][$key];
                         $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                         $baseName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($filename, PATHINFO_FILENAME));
                         $uniqueFilename = $reportCode . '_officer_upd_' . $currentOfficerId . '_' . $baseName . '_' . time() . '_' . $key . '.' . $fileExt;
-                        
-                        if(move_uploaded_file($tmpName, $uploadDir . $uniqueFilename)) {
+
+                        if (move_uploaded_file($tmpName, $uploadDir . $uniqueFilename)) {
                             $newUploadedFiles[] = $uniqueFilename;
                         }
-                     }
+                    }
                 }
             }
 
@@ -331,25 +340,25 @@ class OfficerDashboard extends Controller {
                 $allMedia = array_unique(array_filter(array_map('trim', $allMedia)));
                 $mediaString = implode(',', $allMedia);
             } else {
-                 // No new files, keep existing (pass null to model to skip update, or pass existing)
-                 // Model logic: if passed null, it ignores. So $mediaString = null is correct if we want to retain existing 
-                 // BUT wait, model says: if ($media !== null) $sql .= ", response_media = :media";
-                 // usage here implies we only update if we have NEW files? 
-                 // If the user wants to DELETE files, this simple method won't work.
-                 // Given the prompt "update buttons", usually implies text update. 
-                 // I will pass null so media isn't touched unless new files are added.
-                 $mediaString = null;
-                 
-                 if (!empty($newUploadedFiles)) {
-                      // We have new files, we must construct the FULL list to save, 
-                      // or the model should handle appending (model doesn't handle appending).
-                      // The model REPLACES the column. So valid $mediaString MUST include old files + new files.
-                      
-                      // Redo logic:
-                      $existingMedia = !empty($recommendation->response_media) ? explode(',', $recommendation->response_media) : [];
-                      $allMedia = array_merge($existingMedia, $newUploadedFiles);
-                      $mediaString = implode(',', array_unique(array_filter(array_map('trim', $allMedia))));
-                 }
+                // No new files, keep existing (pass null to model to skip update, or pass existing)
+                // Model logic: if passed null, it ignores. So $mediaString = null is correct if we want to retain existing 
+                // BUT wait, model says: if ($media !== null) $sql .= ", response_media = :media";
+                // usage here implies we only update if we have NEW files? 
+                // If the user wants to DELETE files, this simple method won't work.
+                // Given the prompt "update buttons", usually implies text update. 
+                // I will pass null so media isn't touched unless new files are added.
+                $mediaString = null;
+
+                if (!empty($newUploadedFiles)) {
+                    // We have new files, we must construct the FULL list to save, 
+                    // or the model should handle appending (model doesn't handle appending).
+                    // The model REPLACES the column. So valid $mediaString MUST include old files + new files.
+
+                    // Redo logic:
+                    $existingMedia = !empty($recommendation->response_media) ? explode(',', $recommendation->response_media) : [];
+                    $allMedia = array_merge($existingMedia, $newUploadedFiles);
+                    $mediaString = implode(',', array_unique(array_filter(array_map('trim', $allMedia))));
+                }
             }
 
             $result = $this->model('M_disease')->updateOfficerResponse($responseId, $message, $mediaString);
@@ -366,7 +375,8 @@ class OfficerDashboard extends Controller {
     }
 
     // Display officer response media files
-    public function viewResponseMedia($responseId = '', $filename = '') {
+    public function viewResponseMedia($responseId = '', $filename = '')
+    {
         if (empty($responseId) || empty($filename)) {
             http_response_code(404);
             echo "Response ID and filename required";
@@ -418,7 +428,8 @@ class OfficerDashboard extends Controller {
     }
 
     // Helper method to get MIME type from file extension
-    private function getMimeType($extension) {
+    private function getMimeType($extension)
+    {
         $mimeTypes = [
             'jpg' => 'image/jpeg',
             'jpeg' => 'image/jpeg',

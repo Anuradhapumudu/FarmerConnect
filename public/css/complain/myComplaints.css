@@ -366,6 +366,7 @@
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -377,6 +378,7 @@
     margin-bottom: 12px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -481,6 +483,16 @@
 .mc-card-status.resolved .dot {
     background: #43a047;
     animation: none;
+}
+
+.mc-card-status.rejected {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
+.mc-card-status.rejected .dot {
+    background: #e53935;
 }
 
 .mc-card-responses {
