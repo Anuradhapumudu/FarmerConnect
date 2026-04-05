@@ -59,16 +59,31 @@
               <div class="announcement-list" id="searchResults">
                   <?php foreach ($data['searchResults'] as $announcement): ?>
                       <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
-                        <div class="pin-icon">
-                            <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
-                                <?php echo $announcement->is_pinned ? '<i class="fas fa-thumbtack"></i> Unpin' : '<i class="fas fa-thumbtack"></i> Pin'; ?>
-                            </a>
+                      
+                      <div class="category-options">
+                          <i class="fas fa-ellipsis-v menu-dots" onclick="toggleOptions(this)"></i>
+                          <div class="options-menu">
+                              <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>" class="option-item">
+                                  <i class="fas fa-thumbtack"></i> <?php echo $announcement->is_pinned ? 'Unpin' : 'Pin'; ?>
+                              </a>
+                              <a href="<?php echo URLROOT; ?>/Announcements/edit/<?php echo $announcement->announcement_id; ?>" class="option-item">
+                                  <i class="fas fa-edit"></i> Edit
+                              </a>
+                              <a href="<?php echo URLROOT; ?>/Announcements/delete/<?php echo $announcement->announcement_id; ?>" 
+                                class="option-item" 
+                                onclick="return confirm('Are you sure you want to delete this announcement?');">
+                                  <i class="fas fa-trash-alt"></i> Delete
+                              </a>
+                          </div>
                         </div>
+
+                        <div class="announcement-header">
                           <h3 class="announcement-title">
                             <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                               <?php echo htmlspecialchars($announcement->title); ?>
                             </a>
                           </h3>
+                        </div>
                           <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
                           <!-- Date, Edit and Delete buttons -->
                           <div class="announcement-bottom">
@@ -76,12 +91,6 @@
                               <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
                               <span class="announcement-posted-by"><i class="fa-solid fa-user"></i> <?php echo htmlspecialchars($announcement->posted_by); ?></span>
                             </div>
-                              <div class="announcement-actions">
-                                  <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/edit/<?php echo $announcement->announcement_id; ?>'"><i class="fas fa-edit"></i> Edit</button>
-                                  <form method="POST" action="<?php echo URLROOT; ?>/Announcements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
-                                      <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i> Delete</button>
-                                  </form>
-                              </div>
                           </div>
                         </div>
                   <?php endforeach; ?>                
@@ -105,29 +114,37 @@
           <div class="announcement-list" id="pinnedAnnouncements">
               <?php foreach ($data['pinnedAnnouncements'] as $announcement): ?>
                   <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
-                    <div class="pin-icon">
-                          <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
-                              <i class="fas fa-thumbtack"></i> Unpin
-                          </a>
-                      </div>
+                    
+                  <div class="category-options">
+                          <i class="fas fa-ellipsis-v menu-dots" onclick="toggleOptions(this)"></i>
+                          <div class="options-menu">
+                              <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>" class="option-item">
+                                  <i class="fas fa-thumbtack"></i> <?php echo $announcement->is_pinned ? 'Unpin' : 'Pin'; ?>
+                              </a>
+                              <a href="<?php echo URLROOT; ?>/Announcements/edit/<?php echo $announcement->announcement_id; ?>" class="option-item">
+                                  <i class="fas fa-edit"></i> Edit
+                              </a>
+                              <a href="<?php echo URLROOT; ?>/Announcements/delete/<?php echo $announcement->announcement_id; ?>" 
+                                class="option-item" 
+                                onclick="return confirm('Are you sure you want to delete this announcement?');">
+                                  <i class="fas fa-trash-alt"></i> Delete
+                              </a>
+                          </div>
+                        </div>
+
+                      <div class="announcement-header">
                       <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
+                      </div>
                       <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
-                      <!-- Date, Edit and Delete buttons -->
                       <div class="announcement-bottom">
                         <div class="announcement-date-container">
                           <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
                           <span class="announcement-posted-by"><i class="fa-solid fa-user"></i> <?php echo htmlspecialchars($announcement->posted_by); ?></span>
                         </div>
-                          <div class="announcement-actions">
-                              <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/edit/<?php echo $announcement->announcement_id; ?>'"><i class="fas fa-edit"></i> Edit</button>
-                              <form method="POST" action="<?php echo URLROOT; ?>/Announcements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
-                                  <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i> Delete</button>
-                              </form>
-                          </div>
                       </div>
                   </div>
               <?php endforeach; ?>
@@ -143,31 +160,38 @@
             <?php if (!empty($data['latestAnnouncements'])): ?>
                 <?php foreach ($data['latestAnnouncements'] as $announcement): ?>
                     <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
-                      <div class="pin-icon">
-                          <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
-                              <?php echo $announcement->is_pinned ? '<i class="fas fa-thumbtack"></i> Unpin' : '<i class="fas fa-thumbtack"></i> Pin'; ?>
-                          </a>
-                      </div>
+                      
+                    <div class="category-options">
+                          <i class="fas fa-ellipsis-v menu-dots" onclick="toggleOptions(this)"></i>
+                          <div class="options-menu">
+                              <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>" class="option-item">
+                                  <i class="fas fa-thumbtack"></i> <?php echo $announcement->is_pinned ? 'Unpin' : 'Pin'; ?>
+                              </a>
+                              <a href="<?php echo URLROOT; ?>/Announcements/edit/<?php echo $announcement->announcement_id; ?>" class="option-item">
+                                  <i class="fas fa-edit"></i> Edit
+                              </a>
+                              <a href="<?php echo URLROOT; ?>/Announcements/delete/<?php echo $announcement->announcement_id; ?>" 
+                                class="option-item" 
+                                onclick="return confirm('Are you sure you want to delete this announcement?');">
+                                  <i class="fas fa-trash-alt"></i> Delete
+                              </a>
+                          </div>
+                        </div>
 
+                        <div class="announcement-header">
                         <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
+                        </div>
                         <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
 
-                        <!-- Date, Edit and Delete buttons -->
                         <div class="announcement-bottom">
                           <div class="announcement-date-container">
                             <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
                             <span class="announcement-posted-by"><i class="fa-solid fa-user"></i> <?php echo htmlspecialchars($announcement->posted_by); ?></span>
                           </div>
-                            <div class="announcement-actions">
-                                <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/edit/<?php echo $announcement->announcement_id; ?>'"><i class="fas fa-edit"></i> Edit</button>
-                                <form method="POST" action="<?php echo URLROOT; ?>/Announcements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
-                                    <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i> Delete</button>
-                                </form>
-                            </div>
                         </div>
                     </div>
 
@@ -186,32 +210,37 @@
                 <?php foreach ($data['previousAnnouncements'] as $announcement): ?>
                     <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
 
-                    <!-- icon for pin the announcement -->
-                      <div class="pin-icon">
-                          <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>">
-                              <?php echo $announcement->is_pinned ? '<i class="fas fa-thumbtack"></i> Unpin' : '<i class="fas fa-thumbtack"></i> Pin'; ?>
-                          </a>
-                      </div>
+                    <div class="category-options">
+                          <i class="fas fa-ellipsis-v menu-dots" onclick="toggleOptions(this)"></i>
+                          <div class="options-menu">
+                              <a href="<?php echo URLROOT; ?>/Announcements/togglePin/<?php echo $announcement->announcement_id; ?>" class="option-item">
+                                  <i class="fas fa-thumbtack"></i> <?php echo $announcement->is_pinned ? 'Unpin' : 'Pin'; ?>
+                              </a>
+                              <a href="<?php echo URLROOT; ?>/Announcements/edit/<?php echo $announcement->announcement_id; ?>" class="option-item">
+                                  <i class="fas fa-edit"></i> Edit
+                              </a>
+                              <a href="<?php echo URLROOT; ?>/Announcements/delete/<?php echo $announcement->announcement_id; ?>" 
+                                class="option-item" 
+                                onclick="return confirm('Are you sure you want to delete this announcement?');">
+                                  <i class="fas fa-trash-alt"></i> Delete
+                              </a>
+                          </div>
+                        </div>
 
+                      <div class="announcement-header">
                         <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
+                      </div>
                         <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
 
-                        <!-- Date, Edit and Delete buttons -->
                         <div class="announcement-bottom">
                           <div class="announcement-date-container">
                             <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
                             <span class="announcement-posted-by"><i class="fa-solid fa-user"></i> <?php echo htmlspecialchars($announcement->posted_by); ?></span>
                           </div>
-                            <div class="announcement-actions">
-                                <button class="edit-btn" onclick="window.location.href='<?php echo URLROOT; ?>/Announcements/edit/<?php echo $announcement->announcement_id; ?>'"><i class="fas fa-edit"></i> Edit</button>
-                                <form method="POST" action="<?php echo URLROOT; ?>/Announcements/delete/<?php echo $announcement->announcement_id; ?>" onsubmit="return confirm('Are you sure you want to delete the announcement ?');">
-                                    <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i> Delete</button>
-                                </form>
-                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
