@@ -154,7 +154,7 @@ class OfficerDashboard extends Controller
 
             // Handle media file uploads
             $uploadedFiles = [];
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
+            $uploadDir = dirname(APPROOT) . '/public/uploads/officer_responses/';
 
             // Create upload directory if it doesn't exist
             if (!is_dir($uploadDir)) {
