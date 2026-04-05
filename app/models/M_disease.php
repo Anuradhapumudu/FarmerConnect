@@ -272,17 +272,23 @@ class M_disease
     /**
      * Returns all officer responses for a given report code, newest first.
      */
-    public function getOfficerResponses(string $reportCode): array
+    public function getOfficerResponses(string $reportCode, bool $includeDeleted = false): array
     {
         try {
-            $this->db->query("
+            $sql = "
                 SELECT   dor.*, o.first_name, o.last_name
                 FROM     disease_officer_responses dor
                 LEFT JOIN officers o ON dor.officer_id = o.officer_id
                 WHERE    dor.report_code = :report_code
-                  AND    dor.is_deleted  = 0
-                ORDER BY dor.created_at DESC
-            ");
+            ";
+            
+            if (!$includeDeleted) {
+                $sql .= " AND dor.is_deleted = 0";
+            }
+            
+            $sql .= " ORDER BY dor.created_at DESC";
+
+            $this->db->query($sql);
             $this->db->bind(':report_code', $reportCode);
             return $this->db->resultSet();
 

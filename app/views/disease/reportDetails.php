@@ -226,8 +226,9 @@ $canEditReport = $isReportOwner && strtolower($report->status) === 'pending' && 
                                     : 'Agricultural Officer';
                                 $canEditResponse = $isOfficer && $userId === $response->officer_id;
                                 $respIsEdited = isset($response->is_edited) && $response->is_edited == '1';
+                                $respIsDeleted = isset($response->is_deleted) && $response->is_deleted == '1';
                                 ?>
-                                    <div class="rd-timeline-item">
+                                    <div class="rd-timeline-item <?php echo $respIsDeleted ? 'rd-resp-deleted-wrap' : ''; ?>" <?php echo $respIsDeleted ? 'style="opacity:0.7"' : ''; ?>>
                                         <div class="rd-timeline-dot"></div>
                                         <div class="rd-timeline-card">
 
@@ -239,12 +240,14 @@ $canEditReport = $isReportOwner && strtolower($report->status) === 'pending' && 
 
                                                 <span class="rd-resp-date">
                                                     <?php echo date('M d, Y h:i A', strtotime($response->created_at)); ?>
-                                                    <?php if ($respIsEdited): ?>
+                                                    <?php if ($respIsDeleted): ?>
+                                                            <span class="rd-badge rd-badge-deleted" style="margin-left: 8px;"><i class="fas fa-trash"></i> Deleted</span>
+                                                    <?php elseif ($respIsEdited): ?>
                                                             <span class="rd-resp-edited">(edited)</span>
                                                     <?php endif; ?>
                                                 </span>
 
-                                                <?php if ($canEditResponse): ?>
+                                                <?php if ($canEditResponse && !$respIsDeleted): ?>
                                                         <div class="rd-resp-actions">
                                                             <button class="rd-action-icon edit" title="Edit"
                                                                     onclick="openEditModal(<?php echo htmlspecialchars(json_encode($response)); ?>)">

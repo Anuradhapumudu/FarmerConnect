@@ -221,7 +221,7 @@ class Disease extends Controller
 
         foreach ($data['reports'] as &$report) {
             $report->officer_responses = $this->model('M_disease')
-                ->getOfficerResponses($report->report_code);
+                ->getOfficerResponses($report->report_code, $this->isAdmin());
         }
 
         $this->view('disease/viewReports', $data);
@@ -241,7 +241,7 @@ class Disease extends Controller
 
         $this->view('disease/reportDetails', [
             'report' => $report,
-            'officer_responses' => $this->model('M_disease')->getOfficerResponses($reportCode),
+            'officer_responses' => $this->model('M_disease')->getOfficerResponses($reportCode, $this->isAdmin()),
             'singleReport' => true,
             'message' => "Report details for {$reportCode}",
         ]);
