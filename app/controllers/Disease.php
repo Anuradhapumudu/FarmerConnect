@@ -483,7 +483,7 @@ class Disease extends Controller
                 }
 
                 // Build file path
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
+                $uploadDir = APPROOT . '/../public/uploads/disease_reports/';
                 $filePath = $uploadDir . $filename;
 
                 if (file_exists($filePath)) {
@@ -531,7 +531,7 @@ class Disease extends Controller
             // For simplicity and to ensure it works, we just check if file exists.
 
             // Build file path
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
+            $uploadDir = APPROOT . '/../public/uploads/officer_responses/';
             $filePath = $uploadDir . $filename;
 
             if (file_exists($filePath)) {
@@ -665,7 +665,7 @@ class Disease extends Controller
      */
     private function handleFileUpload($existingMedia = '', $filesToRemove = [], $reportCodePrefix = 'NEW')
     {
-        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/disease_reports/';
+        $uploadDir = APPROOT . '/../public/uploads/disease_reports/';
         $finalMediaList = [];
 
         // Ensure upload directory exists

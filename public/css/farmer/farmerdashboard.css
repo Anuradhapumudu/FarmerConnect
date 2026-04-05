@@ -5,14 +5,19 @@
   padding: 0;
 }
 
+body {
+    background-image: url("../../img/Dashboardbackground.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #f4f4f4;
+}
+
 main {
     min-height: 100vh;
     padding: 20px;
     text-align: center;
-    background-image: url("../../img/Dashboardbackground.jpg");
-    background-size: cover;                  /* cover full box */
-    background-position: center;
-    background-repeat: no-repeat;
     position: relative;
 } 
 

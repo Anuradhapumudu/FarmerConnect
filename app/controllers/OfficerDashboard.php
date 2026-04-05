@@ -145,7 +145,7 @@ class OfficerDashboard extends Controller {
 
             // Handle media file uploads
             $uploadedFiles = [];
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
+            $uploadDir = APPROOT . '/../public/uploads/officer_responses/';
 
             // Create upload directory if it doesn't exist
             if (!is_dir($uploadDir)) {
@@ -307,7 +307,7 @@ class OfficerDashboard extends Controller {
                 // Duplicate code alert: In a real app, refactor `handleFileUpload` to a private helper or trait.
                 // I'll assume for this task strict limits, I'll inline a simplified version for reliability.
                 
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
+                $uploadDir = APPROOT . '/../public/uploads/officer_responses/';
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'application/pdf'];
                 
                 foreach ($_FILES['media']['name'] as $key => $filename) {
@@ -389,7 +389,7 @@ class OfficerDashboard extends Controller {
 
             if ($validResponse) {
                 // Build file path
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/FarmerConnect/public/uploads/officer_responses/';
+                $uploadDir = APPROOT . '/../public/uploads/officer_responses/';
                 $filePath = $uploadDir . $filename;
 
                 if (file_exists($filePath)) {
