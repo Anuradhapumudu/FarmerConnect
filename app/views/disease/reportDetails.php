@@ -149,11 +149,11 @@ $severityClass = strtolower(trim($report->severity ?? 'low'));
     </div>
 
     <!-- ═══ Media Gallery ═══ -->
-    <div class="rd-media">
-        <div class="rd-section-title">
-            <i class="fas fa-images"></i> Media Attachments
-        </div>
-        <?php if (!empty($report->media)): ?>
+    <?php if (!empty($report->media)): ?>
+        <div class="rd-media">
+            <div class="rd-section-title">
+                <i class="fas fa-images"></i> Media Attachments
+            </div>
             <div class="rd-media-grid">
                 <?php
                 $mediaFiles = explode(',', $report->media);
@@ -171,21 +171,17 @@ $severityClass = strtolower(trim($report->severity ?? 'low'));
                         <?php if ($isImage): ?>
                             <img src="<?php echo $fileUrl; ?>" alt="Evidence" loading="lazy">
                         <?php elseif ($isVideo): ?>
-                            <video src="<?php echo $fileUrl; ?>" preload="metadata"></video>
-                            <div class="rd-play-overlay"><i class="fas fa-play"></i></div>
+                            <div class="rd-video-placeholder">
+                                <i class="fas fa-play"></i>
+                            </div>
                         <?php else: ?>
                             <div class="rd-play-overlay">📄 <?php echo strtoupper($ext); ?></div>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
-        <?php else: ?>
-            <div class="rd-no-media">
-                <i class="fas fa-image"></i>
-                <p>No media attached to this report.</p>
-            </div>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 
     <!-- ═══ Officer Responses ═══ -->
     <?php if (!empty($data['officer_responses']) || (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'farmer')): ?>
