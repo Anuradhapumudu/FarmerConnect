@@ -28,7 +28,7 @@ body {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 800px;
+  width: 70%;
   height: 3px;
   background-color: #c8e6c9;
   border-radius: 2px;
@@ -55,10 +55,17 @@ body {
 .search-row:last-child {
   margin-bottom: 0;
 }
-
+.search-select {
+  width: 100%;
+  max-width: 100%;
+}
+/*.search-group {
+  width: 100%;
+  overflow: hidden;
+}*/
 .search-group {
   flex: 1;
-  min-width: 200px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -147,15 +154,15 @@ body {
   border-bottom: 2px solid #e5e7eb;
 }
 .pinned-section .section-title {
-  color: #dc2626;
+  color: black;
 }
 
 .latest-section .section-title {
-  color: #2e7d32;
+  color: black;
 }
 
 .previous-section .section-title {
-  color: #48218b;
+  color: black;
 }
 .announcement-list {
   display: grid;
@@ -167,7 +174,7 @@ body {
 .announcement-card {
   background: #ffffff;
   border-radius: 12px;
-  padding: 15px 18px;
+  padding: 15px 18px 0px 18px;
   height: 100%;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   display: flex;
@@ -202,14 +209,20 @@ body {
 .announcement-title a:hover {
   text-decoration: underline;     
 }
+.announcement-header {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 5px;
+}
 .announcement-date-container {
     display: flex;
-    flex-direction: column;
-    align-items: start;
+    flex-direction: row;          
+    justify-content: space-between;
+    align-items: center;           
     font-size: 11px;
-    gap: 4px;
     color: #777;
-    line-height: 1;
+    width: 100%;                  
+    gap: 10px;                     
 }
 .announcement-date .announcement-posted-by{
   font-size: 12px;
@@ -254,54 +267,32 @@ body {
   transform: scale(1.05);
   box-shadow: 0 12px 35px rgba(186, 186, 186, 0.4);
 }
-.pin-icon {
-  text-align: right;
-  font-size: 14px;
-}
-.pin-icon a:hover{
-  color: #d32f2f;
-}
-.pin-icon a {
-  color: #444;
-  text-decoration: none;
-  font-weight: 600;
-}
+
 .announcement-bottom {
   display: flex;
   justify-content: space-between;
+  background-color: #f3f4f6;
+  margin-left: -18px;
+  margin-right: -18px;
+  padding: 10px 18px;
   align-items: center;
+  border-top: 1px solid #e5e7eb;
   font-size: 14px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   margin-top: auto;
 }
-.announcement-actions {
+.attachment-label {
+  font-size: 13px;
+  color: #555;      
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  margin-bottom: 3px; 
 }
-.edit-btn,
-.delete-btn {
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 11px;
-  transition: all 0.2s ease;
-}
-.edit-btn {
-  background: #1976d2;
-  color: #fff;
-}
-
-.edit-btn:hover {
-  background: #0f4ea0;
-}
-
-.delete-btn {
-  background: #d32f2f;
-  color: #fff;
-}
-
-.delete-btn:hover {
-  background: #9a1f1f;
+.attachment-note i {
+  color: #777;  
 }
 .no-results {
   background: #fff3f3;
@@ -340,6 +331,73 @@ body {
   scroll-margin-top: 100px;
 }
 
+.category-options {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.menu-dots {
+  cursor: pointer;
+  color: #333;
+  background: rgba(0,0,0,0.05);
+  padding: 12px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.menu-dots:hover {
+  background: rgba(0,0,0,0.1);
+  transform: scale(1.1);
+}
+
+.options-menu {
+  display: none;
+  position: absolute;
+  top: 35px; 
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 50;
+  min-width: 140px;
+  overflow: hidden;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.option-item:hover {
+  background-color: #f4f4f4;
+}
+
+.options-menu .fas.fa-thumbtack {
+  color: #d81717; 
+}
+.options-menu .fas.fa-edit {
+  color: #1c4f9c; 
+}
+.options-menu .fas.fa-trash-alt {
+  color: #d32f2f; 
+}
+.option-item i {
+  min-width: 16px;
+  text-align: center;
+}
 
 @media (max-width: 1024px) {
   .announcement-list {
@@ -415,6 +473,7 @@ body {
   .main-content {
     margin-top: 0px !important;
   }
+  
   .announcements-heading {
     font-size: 30px !important;
   }
@@ -442,6 +501,7 @@ body {
     gap: 4px;
     font-size: 11px;
   }
+  
   .announcement-actions .edit-btn, .announcement-actions .delete-btn {
         padding: 4px 8px; 
         font-size: 0.8rem; 

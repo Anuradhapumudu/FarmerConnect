@@ -566,11 +566,9 @@ class Disease extends Controller
 
             $this->streamFile($this->getUploadDir() . $filename);
 
-        } catch (Exception $e) {
-            error_log("Error in viewMedia: " . $e->getMessage());
-            $this->sendHttpError(500, 'Error loading file');
-        }
-    }
+                // Build file path
+                $uploadDir = APPROOT . '/../public/uploads/disease_reports/';
+                $filePath = $uploadDir . $filename;
 
     /** Streams a media file attached to an officer response. */
     public function viewResponseMedia(string $responseId = '', string $filename = ''): void
@@ -643,8 +641,9 @@ class Disease extends Controller
             $data['message'] = 'Showing all reports (' . count($reports) . ' total)';
         }
 
-        $data['reports'] = $reports;
-    }
+            // Build file path
+            $uploadDir = APPROOT . '/../public/uploads/officer_responses/';
+            $filePath = $uploadDir . $filename;
 
     // ─── Private: Form Helpers ────────────────────────────────────────────────
 
@@ -782,14 +781,16 @@ class Disease extends Controller
      * @param  string[] $removeMedia   Filenames to delete from disk
      * @return array{media_string: string}|array{error: string}
      */
-    private function processFileUpload(
-        string $uploadDir,
-        string $prefix = 'NEW',
-        string $existingMedia = '',
-        array $removeMedia = []
-    ): array {
-        if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
-            return ['error' => 'Failed to create the upload directory'];
+    private function handleFileUpload($existingMedia = '', $filesToRemove = [], $reportCodePrefix = 'NEW')
+    {
+        $uploadDir = APPROOT . '/../public/uploads/disease_reports/';
+        $finalMediaList = [];
+
+        // Ensure upload directory exists
+        if (!is_dir($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                return ['error' => 'Failed to create upload directory.'];
+            }
         }
 
         $finalFiles = $this->filterExistingMedia($existingMedia, $removeMedia, $uploadDir);
