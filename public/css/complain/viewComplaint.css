@@ -431,7 +431,7 @@
     font-weight: 600;
     color: #1a1a2e;
     margin: 0;
-    wovc-break: break-word;
+    word-break: break-word;
 }
 
 /* Description box */
@@ -811,51 +811,54 @@
 }
 
 /* Prompt Card Styling */
-.vc-pending-prompt {
-    text-align: center;
-}
-
-.vc-prompt-card {
+.vc-officer-action-card {
     background: #fff;
-    padding: 30px;
+    padding: 36px;
     border-radius: 16px;
-    border: 1px dashed rgba(46, 125, 50, 0.3);
+    border: 1px solid rgba(46, 125, 50, 0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    text-align: center;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
-.vc-prompt-card p {
+.vc-officer-action-card p {
     color: #555;
     font-size: 1.05rem;
     max-width: 500px;
     line-height: 1.5;
+    margin: 0;
 }
 
-.vc-prompt-card strong {
-    color: #1b5e20;
+.vc-officer-action-card strong {
+    color: #2e7d32;
+    font-weight: 700;
 }
 
 /* Recommendation Form Section */
-.vc-recommendation-form-section {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 40px;
-    margin-bottom: 24px;
-    border: 2px solid rgba(46, 125, 50, 0.2);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-    position: relative;
-    overflow: hidden;
+.vc-resp-form-wrapper {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    margin-top: 24px;
+    border: 1px solid rgba(46, 125, 50, 0.12);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
-.vc-recommendation-form-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 6px;
-    background: linear-gradient(90deg, #2e7d32, #81c784);
+.vc-form-subtitle {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2e7d32;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
+
+
 
 .vc-form-group {
     margin-bottom: 28px;
@@ -989,7 +992,7 @@
     padding: 60px 40px;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 20px;
-    border: 1px dashed #ddd;
+    border: 1px solid rgba(46, 125, 50, 0.1);
 }
 
 .vc-empty-responses p {

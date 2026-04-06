@@ -196,15 +196,22 @@ class M_complaint
     }
 
     // Get officer responses for a complaint
-    public function getOfficerResponses($complaint_id)
+    public function getOfficerResponses($complaint_id, $includeDeleted = false)
     {
         try {
-            $this->db->query("SELECT cor.*, o.first_name, o.last_name 
-                              FROM complaint_officer_responses cor 
-                              LEFT JOIN officers o ON cor.officer_id = o.officer_id 
-                              LEFT JOIN complaints c ON cor.complaint_id = c.complaint_id
-                              WHERE cor.complaint_id = :complaint_id AND cor.is_deleted = 0
-                              ORDER BY cor.created_at DESC");
+            $sql = "SELECT cor.*, o.first_name, o.last_name 
+                    FROM complaint_officer_responses cor 
+                    LEFT JOIN officers o ON cor.officer_id = o.officer_id 
+                    LEFT JOIN complaints c ON cor.complaint_id = c.complaint_id
+                    WHERE cor.complaint_id = :complaint_id";
+            
+            if (!$includeDeleted) {
+                $sql .= " AND cor.is_deleted = 0";
+            }
+            
+            $sql .= " ORDER BY cor.created_at DESC";
+
+            $this->db->query($sql);
             $this->db->bind(':complaint_id', $complaint_id);
             return $this->db->resultSet();
         } catch (Exception $e) {
