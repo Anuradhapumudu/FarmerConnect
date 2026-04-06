@@ -16,41 +16,63 @@ class FarmerTimeline extends Controller
             'progress' => []
         ];
 
-        if (isset($_SESSION['selected_plr'])) {
+        if (!empty($_SESSION['selected_plr'])) {
 
             $plr = $_SESSION['selected_plr'];
-
             $data['selected_plr'] = $plr;
 
             $seed = $model->getSeedVariety($plr);
-            $duration = $this->getSeedDuration($seed->Paddy_seed_variety);
             
-    
-            $timeline = $model->getTimelineByDuration($duration);
+            if ($seed && isset($seed->Paddy_seed_variety)) {
+                $duration = $this->getSeedDuration($seed->Paddy_seed_variety);
+                
+                $timeline = [];
+                try {
+                    $timeline = $model->getTimelineByDuration($duration);
+                } catch (Exception $e) {
+                    // Fallback if table doesn't exist
+                    for ($i = 1; $i <= 11; $i++) {
+                        $timeline[] = (object)['step_order' => $i, 'gap_days' => 7];
+                    }
+                }
 
-            $estimatedDates = [];
-            $startDate = $model->getStartDate($_SESSION['nic'], $plr);
+                $estimatedDates = [];
+                
+                $startDate = null;
+                try {
+                    $startDate = $model->getStartDate($_SESSION['nic'], $plr);
+                } catch (Exception $e) {}
 
+                if (!$startDate) {
+                    // before step 1 is done
+                    $startDate = date('Y-m-d');
+                }
 
-            if (!$startDate) {
-                // before step 1 is done
-                $startDate = date('Y-m-d');
+                foreach ($timeline as $step) {
+                    $startDate = date('Y-m-d', strtotime("+{$step->gap_days} days", strtotime($startDate)));
+                    $estimatedDates[$step->step_order] = $startDate;
+                }
+
+                $saved = [];
+                try {
+                    $saved = $model->getSavedProgress($_SESSION['nic'], $plr);
+                } catch (Exception $e) {}
+                
+                $progress = [];
+
+                if ($saved) {
+                    foreach ($saved as $row) {
+                        $progress[$row->step_order] = $row->status;
+                    }
+                }
+
+                $data['estimatedDates'] = $estimatedDates;
+                $data['progress'] = $progress;
+            } else {
+                // Revert selection if no seed found to avoid crash
+                unset($_SESSION['selected_plr']);
+                $data['selected_plr'] = null;
             }
-
-            foreach ($timeline as $step) {
-                $startDate = date('Y-m-d', strtotime("+{$step->gap_days} days", strtotime($startDate)));
-                $estimatedDates[$step->step_order] = $startDate;
-            }
-
-            $saved = $model->getSavedProgress($_SESSION['nic'], $plr);
-            $progress = [];
-
-            foreach ($saved as $row) {
-                $progress[$row->step_order] = $row->status;
-            }
-
-            $data['estimatedDates'] = $estimatedDates;
-            $data['progress'] = $progress;
         }
 
         $this->view('farmer/FarmerTimeline', $data);

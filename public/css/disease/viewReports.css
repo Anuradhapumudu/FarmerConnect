@@ -371,6 +371,7 @@
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -382,6 +383,7 @@
     margin-bottom: 12px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -486,14 +488,24 @@
     animation: none;
 }
 
-.mr-card-status.deleted {
+.mr-card-status.rejected {
     background: linear-gradient(135deg, #ffebee, #ffcdd2);
     color: #c62828;
     border: 1px solid #ef9a9a;
 }
 
-.mr-card-status.deleted .dot {
+.mr-card-status.rejected .dot {
     background: #e53935;
+}
+
+.mr-card-status.deleted {
+    background: linear-gradient(135deg, #eceff1, #cfd8dc);
+    color: #455a64;
+    border: 1px solid #b0bec5;
+}
+
+.mr-card-status.deleted .dot {
+    background: #607d8b;
     animation: none;
 }
 

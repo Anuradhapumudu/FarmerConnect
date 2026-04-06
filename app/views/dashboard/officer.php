@@ -35,7 +35,7 @@
       <p>Get accurate fertilizer recommendations based on crop and soil.</p>
     </a>
 
-    <a href="<?php echo URLROOT; ?>/officerDashboard/viewDiseaseReports" class="feature">
+    <a href="<?php echo URLROOT; ?>/disease/viewReports" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
       <p>Review and manage submitted disease reports from farmers.</p>
@@ -51,7 +51,7 @@
 
     </a>
 
-    <a href="<?php echo URLROOT; ?>/complain/officerComplaints" class="feature">
+    <a href="<?php echo URLROOT; ?>/complaint/myComplaints" class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>
       <h3>Complain Reports</h3>
       <p>View Complaint Reports and Reply to them.</p>

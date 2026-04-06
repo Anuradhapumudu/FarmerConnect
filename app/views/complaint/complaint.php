@@ -131,7 +131,7 @@
                         foreach ($existingFiles as $index => $filename):
                             $filename = trim($filename);
                             if (empty($filename)) continue;
-                            $fileUrl = URLROOT . '/disease/viewMedia/' . $data['reportCode'] . '/' . urlencode($filename);
+                            $fileUrl = URLROOT . '/complaint/viewMedia/' . $data['reportCode'] . '/' . urlencode($filename);
                             $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                             $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']);
                             $isVideo = in_array($fileExtension, ['mp4', 'avi', 'mov', 'wmv']);
@@ -242,7 +242,7 @@
         const codeSpan = document.getElementById('delReportCode');
         
         codeSpan.textContent = reportCode;
-        deleteLink.href = "<?php echo URLROOT; ?>/disease/deleteReport/" + reportCode;
+        deleteLink.href = "<?php echo URLROOT; ?>/complaint/deleteReport/" + reportCode;
         
         modal.style.display = "block";
     }
