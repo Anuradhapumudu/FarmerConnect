@@ -39,7 +39,10 @@ function renderMediaItem(string $fileUrl, string $file): string
         <?php if ($isImage): ?>
             <img src="<?php echo $fileUrl; ?>" alt="Attachment" loading="lazy">
         <?php elseif ($isVideo): ?>
-            <div class="vc-video-placeholder"><i class="fas fa-play"></i></div>
+            <video preload="metadata" muted playsinline>
+                <source src="<?php echo $fileUrl; ?>" type="video/<?php echo $ext === 'mov' ? 'quicktime' : ($ext === 'avi' ? 'x-msvideo' : $ext); ?>">
+            </video>
+            <div class="vc-play-overlay"><i class="fas fa-play"></i></div>
         <?php else: ?>
             <div class="vc-play-overlay">📄 <?php echo strtoupper($ext); ?></div>
         <?php endif; ?>
@@ -198,8 +201,9 @@ $isUnderReview = ($statusRaw === 'under_review' || $statusRaw === 'under review'
             <div class="vc-section-title"><i class="fas fa-images"></i> Media Attachments</div>
             <div class="vc-media-grid">
                 <?php foreach (array_filter(array_map('trim', explode(',', $report->media))) as $file):
-                    $fileUrl = URLROOT . '/complaint/viewMedia/' . $report->complaint_id . '/' . urlencode($file);
-                    echo renderMediaItem($fileUrl, $file);
+                    $filename = basename(trim($file));
+                    $fileUrl = URLROOT . '/complaint/viewMedia/' . $report->complaint_id . '/' . urlencode($filename);
+                    echo renderMediaItem($fileUrl, $filename);
                 endforeach; ?>
             </div>
         </div>
@@ -257,8 +261,9 @@ $isUnderReview = ($statusRaw === 'under_review' || $statusRaw === 'under review'
                             <?php if (!empty($response->response_media)): ?>
                                 <div class="vc-resp-media">
                                     <?php foreach (array_filter(array_map('trim', explode(',', $response->response_media))) as $rFile):
-                                        $rFileUrl = URLROOT . '/complaint/viewResponseMedia/' . $response->id . '/' . urlencode($rFile);
-                                        echo renderMediaItem($rFileUrl, $rFile);
+                                        $responseFilename = basename(trim($rFile));
+                                        $rFileUrl = URLROOT . '/complaint/viewResponseMedia/' . $response->id . '/' . urlencode($responseFilename);
+                                        echo renderMediaItem($rFileUrl, $responseFilename);
                                     endforeach; ?>
                                 </div>
                             <?php endif; ?>

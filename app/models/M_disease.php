@@ -79,16 +79,16 @@ class M_disease
                      :title, :description, :media, :severity, :affectedArea, :status, NOW())
             ");
 
-            $this->db->bind(':report_code', $reportCode);
-            $this->db->bind(':farmerNIC', $data['farmerNIC']);
-            $this->db->bind(':plrNumber', $data['plrNumber']);
-            $this->db->bind(':observationDate', $data['observationDate']);
-            $this->db->bind(':title', $data['title']);
-            $this->db->bind(':description', $data['description']);
-            $this->db->bind(':media', $data['media']);
-            $this->db->bind(':severity', $data['severity']);
-            $this->db->bind(':affectedArea', $data['affectedArea']);
-            $this->db->bind(':status', $data['status'] ?? 'pending');
+            $this->db->bind(':report_code',      $reportCode);
+            $this->db->bind(':farmerNIC',         $data['farmerNIC']);
+            $this->db->bind(':plrNumber',         $data['plrNumber']);
+            $this->db->bind(':observationDate',   $data['observationDate']);
+            $this->db->bind(':title',             $data['title']);
+            $this->db->bind(':description',       $data['description']);
+            $this->db->bind(':media',             $data['media']);
+            $this->db->bind(':severity',          $data['severity']);
+            $this->db->bind(':affectedArea',      $data['affectedArea']);
+            $this->db->bind(':status',            $data['status'] ?? 'pending');
 
             return $this->db->execute() ? $reportCode : ['error' => 'Database execution failed.'];
 
@@ -106,9 +106,9 @@ class M_disease
     {
         try {
             $sql = self::REPORT_SELECT
-                . " WHERE dr.farmerNIC = :farmerNIC"
-                . ($includeDeleted ? '' : $this->notDeleted())
-                . " GROUP BY dr.report_code ORDER BY dr.created_at DESC";
+                 . " WHERE dr.farmerNIC = :farmerNIC"
+                 . ($includeDeleted ? '' : $this->notDeleted())
+                 . " GROUP BY dr.report_code ORDER BY dr.created_at DESC";
 
             $this->db->query($sql);
             $this->db->bind(':farmerNIC', $farmerNIC);
@@ -127,8 +127,8 @@ class M_disease
         try {
             $sql = "SELECT * FROM disease_reports
                     WHERE plrNumber = :plrNumber"
-                . ($includeDeleted ? '' : $this->notDeleted(''))
-                . " ORDER BY created_at DESC";
+                 . ($includeDeleted ? '' : $this->notDeleted(''))
+                 . " ORDER BY created_at DESC";
 
             $this->db->query($sql);
             $this->db->bind(':plrNumber', $plrNumber);
@@ -146,8 +146,8 @@ class M_disease
     {
         try {
             $sql = self::REPORT_SELECT
-                . " WHERE dr.report_code = :report_code"
-                . ($includeDeleted ? '' : $this->notDeleted());
+                 . " WHERE dr.report_code = :report_code"
+                 . ($includeDeleted ? '' : $this->notDeleted());
 
             $this->db->query($sql);
             $this->db->bind(':report_code', $reportCode);
@@ -166,8 +166,8 @@ class M_disease
     {
         try {
             $sql = self::REPORT_SELECT
-                . ($includeDeleted ? ' WHERE 1=1' : ' WHERE dr.is_deleted = 0')
-                . " GROUP BY dr.report_code ORDER BY dr.created_at DESC";
+                 . ($includeDeleted ? ' WHERE 1=1' : ' WHERE dr.is_deleted = 0')
+                 . " GROUP BY dr.report_code ORDER BY dr.created_at DESC";
 
             if ($limit !== null) {
                 $sql .= " LIMIT :limit";
@@ -197,35 +197,35 @@ class M_disease
      * All parameters are optional — omitting all returns no extra filtering.
      */
     public function searchReports(
-        string $farmerNIC = '',
-        string $plrNumber = '',
-        string $reportCode = '',
-        bool $includeDeleted = false
+        string $farmerNIC     = '',
+        string $plrNumber     = '',
+        string $reportCode    = '',
+        bool   $includeDeleted = false
     ): array {
         try {
             $conditions = $includeDeleted ? [] : ['dr.is_deleted = 0'];
-            $params = [];
+            $params     = [];
 
             if (!empty($farmerNIC)) {
-                $conditions[] = 'dr.farmerNIC = :farmerNIC';
+                $conditions[]         = 'dr.farmerNIC = :farmerNIC';
                 $params[':farmerNIC'] = $farmerNIC;
             }
 
             if (!empty($plrNumber)) {
-                $conditions[] = 'dr.plrNumber = :plrNumber';
-                $params[':plrNumber'] = $plrNumber;
+                $conditions[]          = 'dr.plrNumber = :plrNumber';
+                $params[':plrNumber']  = $plrNumber;
             }
 
             if (!empty($reportCode)) {
-                $conditions[] = 'dr.report_code LIKE :reportCode';
-                $params[':reportCode'] = '%' . $reportCode . '%';
+                $conditions[]           = 'dr.report_code LIKE :reportCode';
+                $params[':reportCode']  = '%' . $reportCode . '%';
             }
 
             $where = $conditions ? ' WHERE ' . implode(' AND ', $conditions) : '';
 
             $sql = self::REPORT_SELECT
-                . $where
-                . " GROUP BY dr.report_code ORDER BY dr.created_at DESC";
+                 . $where
+                 . " GROUP BY dr.report_code ORDER BY dr.created_at DESC";
 
             $this->db->query($sql);
             foreach ($params as $key => $value) {
@@ -272,23 +272,17 @@ class M_disease
     /**
      * Returns all officer responses for a given report code, newest first.
      */
-    public function getOfficerResponses(string $reportCode, bool $includeDeleted = false): array
+    public function getOfficerResponses(string $reportCode): array
     {
         try {
-            $sql = "
+            $this->db->query("
                 SELECT   dor.*, o.first_name, o.last_name
                 FROM     disease_officer_responses dor
                 LEFT JOIN officers o ON dor.officer_id = o.officer_id
                 WHERE    dor.report_code = :report_code
-            ";
-            
-            if (!$includeDeleted) {
-                $sql .= " AND dor.is_deleted = 0";
-            }
-            
-            $sql .= " ORDER BY dor.created_at DESC";
-
-            $this->db->query($sql);
+                  AND    dor.is_deleted  = 0
+                ORDER BY dor.created_at DESC
+            ");
             $this->db->bind(':report_code', $reportCode);
             return $this->db->resultSet();
 
@@ -335,15 +329,15 @@ class M_disease
                 WHERE report_code   = :report_code
             ");
 
-            $this->db->bind(':report_code', $data['report_code']);
-            $this->db->bind(':farmerNIC', $data['farmerNIC']);
-            $this->db->bind(':plrNumber', $data['plrNumber']);
-            $this->db->bind(':observationDate', $data['observationDate']);
-            $this->db->bind(':title', $data['title']);
-            $this->db->bind(':description', $data['description']);
-            $this->db->bind(':media', $data['media']);
-            $this->db->bind(':severity', $data['severity']);
-            $this->db->bind(':affectedArea', $data['affectedArea']);
+            $this->db->bind(':report_code',      $data['report_code']);
+            $this->db->bind(':farmerNIC',         $data['farmerNIC']);
+            $this->db->bind(':plrNumber',         $data['plrNumber']);
+            $this->db->bind(':observationDate',   $data['observationDate']);
+            $this->db->bind(':title',             $data['title']);
+            $this->db->bind(':description',       $data['description']);
+            $this->db->bind(':media',             $data['media']);
+            $this->db->bind(':severity',          $data['severity']);
+            $this->db->bind(':affectedArea',      $data['affectedArea']);
 
             return $this->db->execute();
 
@@ -364,8 +358,8 @@ class M_disease
 
             $this->db->query("UPDATE disease_reports SET {$setClause} WHERE report_code = :report_code");
 
-            $this->db->bind(':status', $status);
-            $this->db->bind(':report_code', $reportCode);
+            $this->db->bind(':status',       $status);
+            $this->db->bind(':report_code',  $reportCode);
 
             if ($officerId) {
                 $this->db->bind(':officer_id', $officerId);
@@ -396,7 +390,7 @@ class M_disease
                 WHERE  id = :id
             ");
 
-            $this->db->bind(':id', $id);
+            $this->db->bind(':id',      $id);
             $this->db->bind(':message', $message);
 
             if ($media !== null) {
@@ -448,9 +442,9 @@ class M_disease
      * Inserts a new officer recommendation/response for a report.
      */
     public function submitOfficerResponse(
-        string $reportCode,
-        string $officerId,
-        string $message,
+        string  $reportCode,
+        string  $officerId,
+        string  $message,
         ?string $media = null
     ): bool {
         try {
@@ -462,9 +456,9 @@ class M_disease
             ");
 
             $this->db->bind(':report_code', $reportCode);
-            $this->db->bind(':officer_id', $officerId);
-            $this->db->bind(':message', $message);
-            $this->db->bind(':media', $media);
+            $this->db->bind(':officer_id',  $officerId);
+            $this->db->bind(':message',     $message);
+            $this->db->bind(':media',       $media);
 
             return $this->db->execute();
 

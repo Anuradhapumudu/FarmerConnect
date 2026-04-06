@@ -51,10 +51,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #1565c0, #1e88e5);
+    background: linear-gradient(135deg, #2e7d32, #43a047);
     color: white;
     font-size: 1.2rem;
-    box-shadow: 0 4px 14px rgba(21, 101, 192, 0.25);
+    box-shadow: 0 4px 14px rgba(46, 125, 50, 0.25);
 }
 
 .mr-title {
@@ -76,7 +76,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 20px;
-    background: linear-gradient(135deg, #1565c0, #1e88e5);
+    background: linear-gradient(135deg, #2e7d32, #43a047);
     color: white;
     border-radius: 12px;
     font-family: 'Inter', sans-serif;
@@ -86,12 +86,12 @@
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 14px rgba(21, 101, 192, 0.25);
+    box-shadow: 0 4px 14px rgba(46, 125, 50, 0.25);
 }
 
 .mr-new-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(21, 101, 192, 0.35);
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
     color: white;
     text-decoration: none;
 }
@@ -143,13 +143,13 @@
 
 .mr-search-input:focus,
 .mr-search-select:focus {
-    border-color: #1e88e5;
-    box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+    border-color: #43a047;
+    box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.1);
 }
 
 .mr-search-btn {
     padding: 9px 18px;
-    background: #1565c0;
+    background: #2e7d32;
     color: white;
     border: none;
     border-radius: 10px;
@@ -162,7 +162,7 @@
 }
 
 .mr-search-btn:hover {
-    background: #0d47a1;
+    background: #1b5e20;
 }
 
 .mr-clear-btn {
@@ -238,7 +238,7 @@
 }
 
 .mr-stat-card.total .mr-stat-num {
-    color: #1565c0;
+    color: #2e7d32;
 }
 
 .mr-stat-card.pending .mr-stat-num {
@@ -269,9 +269,9 @@
 }
 
 .mr-message.info {
-    background: #e3f2fd;
-    color: #1565c0;
-    border: 1px solid #bbdefb;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
 }
 
 .mr-message.search {
@@ -307,7 +307,7 @@
 .mr-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-    border-color: #90caf9;
+    border-color: #a5d6a7;
     text-decoration: none;
     color: inherit;
 }
@@ -328,8 +328,8 @@
     font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
     font-size: 0.82rem;
     font-weight: 700;
-    color: #1565c0;
-    background: #e3f2fd;
+    color: #2e7d32;
+    background: #e8f5e9;
     padding: 4px 10px;
     border-radius: 8px;
     letter-spacing: 1px;
@@ -458,13 +458,13 @@
 }
 
 .mr-card-status.under-review {
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-    color: #1565c0;
-    border: 1px solid #90caf9;
+    background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+    color: #00695c;
+    border: 1px solid #80cbc4;
 }
 
 .mr-card-status.under-review .dot {
-    background: #1e88e5;
+    background: #00897b;
 }
 
 .mr-card-status.responded {
@@ -559,7 +559,7 @@
 }
 
 .mr-card-responses i {
-    color: #1e88e5;
+    color: #43a047;
 }
 
 /* Empty state */
@@ -577,12 +577,12 @@
     height: 80px;
     margin: 0 auto 20px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-    color: #42a5f5;
+    color: #4caf50;
 }
 
 .mr-empty h3 {
@@ -664,7 +664,7 @@
 .mr-modal-code {
     font-family: 'SF Mono', monospace;
     font-weight: 700;
-    color: #1565c0;
+    color: #2e7d32;
 }
 
 .mr-modal-btns {

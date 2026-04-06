@@ -11,33 +11,27 @@ class Disease extends Controller
     // ─── Constants ────────────────────────────────────────────────────────────
 
     private const ALLOWED_MIME_TYPES = [
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-        'video/mp4',
-        'video/avi',
-        'video/x-msvideo',
-        'video/quicktime',
-        'video/x-ms-wmv',
+        'image/jpeg', 'image/png', 'image/gif',
+        'video/mp4', 'video/avi', 'video/x-msvideo', 'video/quicktime', 'video/x-ms-wmv',
         'application/pdf',
     ];
 
     private const MIME_TYPE_MAP = [
-        'jpg' => 'image/jpeg',
+        'jpg'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
-        'png' => 'image/png',
-        'gif' => 'image/gif',
-        'mp4' => 'video/mp4',
-        'avi' => 'video/x-msvideo',
-        'mov' => 'video/quicktime',
-        'wmv' => 'video/x-ms-wmv',
-        'pdf' => 'application/pdf',
+        'png'  => 'image/png',
+        'gif'  => 'image/gif',
+        'mp4'  => 'video/mp4',
+        'avi'  => 'video/x-msvideo',
+        'mov'  => 'video/quicktime',
+        'wmv'  => 'video/x-ms-wmv',
+        'pdf'  => 'application/pdf',
     ];
 
-    private const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
-    private const MAX_FILE_SIZE_LABEL = '100 MB';
-    private const MAX_FILENAME_LENGTH = 30;
-    private const UPLOAD_DIR_REPORTS = '/public/uploads/disease_reports/';
+    private const MAX_FILE_SIZE        = 100 * 1024 * 1024; // 100 MB
+    private const MAX_FILE_SIZE_LABEL  = '100 MB';
+    private const MAX_FILENAME_LENGTH  = 30;
+    private const UPLOAD_DIR_REPORTS   = '/public/uploads/disease_reports/';
     private const UPLOAD_DIR_RESPONSES = '/public/uploads/officer_responses/';
 
     private const VALID_STATUSES = ['pending', 'under_review', 'resolved', 'rejected'];
@@ -187,24 +181,24 @@ class Disease extends Controller
     {
         $this->requireLogin();
 
-        $farmerNIC = $this->getFarmerNIC();
+        $farmerNIC   = $this->getFarmerNIC();
         $paddyFields = $farmerNIC
             ? $this->model('M_disease')->getPaddyFieldsByFarmer($farmerNIC)
             : [];
 
         $this->view('disease/disease', [
-            'farmerNIC' => $farmerNIC,
-            'paddyFields' => $paddyFields,
-            'plrNumber' => '',
-            'paddySize' => '',
+            'farmerNIC'       => $farmerNIC,
+            'paddyFields'     => $paddyFields,
+            'plrNumber'       => '',
+            'paddySize'       => '',
             'observationDate' => '',
-            'todayDate' => '',
-            'title' => '',
-            'description' => '',
-            'severity' => '',
-            'affectedArea' => '',
-            'terms' => '',
-            'errors' => [],
+            'todayDate'       => '',
+            'title'           => '',
+            'description'     => '',
+            'severity'        => '',
+            'affectedArea'    => '',
+            'terms'           => '',
+            'errors'          => [],
         ]);
     }
 
@@ -221,7 +215,7 @@ class Disease extends Controller
 
         foreach ($data['reports'] as &$report) {
             $report->officer_responses = $this->model('M_disease')
-                ->getOfficerResponses($report->report_code, $this->isAdmin());
+                ->getOfficerResponses($report->report_code);
         }
 
         $this->view('disease/viewReports', $data);
@@ -240,10 +234,10 @@ class Disease extends Controller
         $this->assertFarmerOwnership($report);
 
         $this->view('disease/reportDetails', [
-            'report' => $report,
-            'officer_responses' => $this->model('M_disease')->getOfficerResponses($reportCode, $this->isAdmin()),
-            'singleReport' => true,
-            'message' => "Report details for {$reportCode}",
+            'report'            => $report,
+            'officer_responses' => $this->model('M_disease')->getOfficerResponses($reportCode),
+            'singleReport'      => true,
+            'message'           => "Report details for {$reportCode}",
         ]);
     }
 
@@ -260,20 +254,20 @@ class Disease extends Controller
         $this->assertFarmerOwnership($report);
 
         $this->view('disease/disease', [
-            'reportCode' => $report->report_code,
-            'farmerNIC' => $report->farmerNIC,
-            'paddyFields' => $this->model('M_disease')->getPaddyFieldsByFarmer($report->farmerNIC),
-            'plrNumber' => $report->pirNumber ?? $report->plrNumber ?? '',
-            'paddySize' => $report->paddySize ?? '',
+            'reportCode'      => $report->report_code,
+            'farmerNIC'       => $report->farmerNIC,
+            'paddyFields'     => $this->model('M_disease')->getPaddyFieldsByFarmer($report->farmerNIC),
+            'plrNumber'       => $report->pirNumber ?? $report->plrNumber ?? '',
+            'paddySize'       => $report->paddySize ?? '',
             'observationDate' => $report->observationDate,
-            'title' => $report->title,
-            'description' => $report->description,
-            'severity' => $report->severity,
-            'affectedArea' => $report->affectedArea,
-            'existingMedia' => $report->media,
-            'terms' => 'on',
-            'errors' => [],
-            'isEdit' => true,
+            'title'           => $report->title,
+            'description'     => $report->description,
+            'severity'        => $report->severity,
+            'affectedArea'    => $report->affectedArea,
+            'existingMedia'   => $report->media,
+            'terms'           => 'on',
+            'errors'          => [],
+            'isEdit'          => true,
         ]);
     }
 
@@ -285,7 +279,7 @@ class Disease extends Controller
             return;
         }
 
-        $data = $this->collectPostData() + ['status' => 'pending', 'errors' => []];
+        $data           = $this->collectPostData() + ['status' => 'pending', 'errors' => []];
         $data['errors'] = $this->validateReportData($data)['errors'];
 
         if (!empty($data['errors'])) {
@@ -295,7 +289,7 @@ class Disease extends Controller
 
         $uploadResult = $this->processFileUpload(
             uploadDir: $this->getUploadDir(),
-            prefix: 'NEW'
+            prefix:    'NEW'
         );
 
         if (isset($uploadResult['error'])) {
@@ -305,7 +299,7 @@ class Disease extends Controller
         }
 
         $data['media'] = $uploadResult['media_string'];
-        $reportCode = $this->model('M_disease')->submitDReport($data);
+        $reportCode    = $this->model('M_disease')->submitDReport($data);
 
         if ($reportCode && !is_array($reportCode)) {
             $this->view('disease/success', ['report_id' => $reportCode]);
@@ -323,11 +317,11 @@ class Disease extends Controller
 
         try {
             $data = $this->collectPostData() + [
-                'report_code' => trim($_POST['reportCode'] ?? ''),
+                'report_code'   => trim($_POST['reportCode']    ?? ''),
                 'existingMedia' => trim($_POST['existingMedia'] ?? ''),
-                'removeMedia' => $_POST['removeMedia'] ?? [],
-                'errors' => [],
-                'isEdit' => true,
+                'removeMedia'   => $_POST['removeMedia']        ?? [],
+                'errors'        => [],
+                'isEdit'        => true,
             ];
 
             $this->getReportOrFail($data['report_code']);
@@ -339,10 +333,10 @@ class Disease extends Controller
             }
 
             $uploadResult = $this->processFileUpload(
-                uploadDir: $this->getUploadDir(),
-                prefix: $data['report_code'],
+                uploadDir:     $this->getUploadDir(),
+                prefix:        $data['report_code'],
                 existingMedia: $data['existingMedia'],
-                removeMedia: $data['removeMedia']
+                removeMedia:   $data['removeMedia']
             );
 
             if (isset($uploadResult['error'])) {
@@ -416,7 +410,7 @@ class Disease extends Controller
         $this->requirePost();
 
         $reportCode = trim($_POST['reportCode'] ?? '');
-        $status = trim($_POST['status'] ?? '');
+        $status     = trim($_POST['status']     ?? '');
 
         if (empty($reportCode) || empty($status)) {
             $this->flash('error', 'Report code and status are required');
@@ -443,7 +437,7 @@ class Disease extends Controller
         $this->requirePost();
 
         $reportCode = trim($_POST['reportCode'] ?? '');
-        $message = trim($_POST['message'] ?? '');
+        $message    = trim($_POST['message']    ?? '');
 
         if (empty($reportCode) || empty($message)) {
             $this->flash('error', 'Report code and recommendation message are required');
@@ -456,10 +450,10 @@ class Disease extends Controller
             $this->redirect("/disease/viewReport/{$reportCode}");
         }
 
-        $officerId = $this->getSessionUserId();
+        $officerId    = $this->getSessionUserId();
         $uploadResult = $this->processFileUpload(
             uploadDir: $this->getUploadDir(self::UPLOAD_DIR_RESPONSES),
-            prefix: "{$reportCode}_officer_{$officerId}"
+            prefix:    "{$reportCode}_officer_{$officerId}"
         );
 
         if (isset($uploadResult['error'])) {
@@ -485,7 +479,7 @@ class Disease extends Controller
 
         $responseId = trim($_POST['responseId'] ?? '');
         $reportCode = trim($_POST['reportCode'] ?? '');
-        $message = trim($_POST['message'] ?? '');
+        $message    = trim($_POST['message']    ?? '');
 
         if (empty($responseId) || empty($message)) {
             $this->flash('error', 'Message is required');
@@ -495,10 +489,10 @@ class Disease extends Controller
         $response = $this->getResponseOrFail($responseId, $reportCode);
         $this->assertOfficerOwnership($response, $reportCode);
 
-        $officerId = $this->getSessionUserId();
+        $officerId    = $this->getSessionUserId();
         $uploadResult = $this->processFileUpload(
-            uploadDir: $this->getUploadDir(self::UPLOAD_DIR_RESPONSES),
-            prefix: "{$reportCode}_officer_{$officerId}",
+            uploadDir:     $this->getUploadDir(self::UPLOAD_DIR_RESPONSES),
+            prefix:        "{$reportCode}_officer_{$officerId}",
             existingMedia: $response->response_media ?? ''
         );
 
@@ -566,9 +560,11 @@ class Disease extends Controller
 
             $this->streamFile($this->getUploadDir() . $filename);
 
-                // Build file path
-                $uploadDir = APPROOT . '/../public/uploads/disease_reports/';
-                $filePath = $uploadDir . $filename;
+        } catch (Exception $e) {
+            error_log("Error in viewMedia: " . $e->getMessage());
+            $this->sendHttpError(500, 'Error loading file');
+        }
+    }
 
     /** Streams a media file attached to an officer response. */
     public function viewResponseMedia(string $responseId = '', string $filename = ''): void
@@ -598,22 +594,22 @@ class Disease extends Controller
 
     private function loadFarmerReports(array &$data): void
     {
-        $nic = $this->getFarmerNIC();
-        $plrNumber = trim($_GET['plrNumber'] ?? '');
+        $nic        = $this->getFarmerNIC();
+        $plrNumber  = trim($_GET['plrNumber']  ?? '');
         $reportCode = trim($_GET['reportCode'] ?? '');
         $hasFilters = isset($_GET['reportCode']) || isset($_GET['plrNumber']);
 
-        $data['farmerNIC'] = $nic;
+        $data['farmerNIC']   = $nic;
         $data['paddyFields'] = $this->model('M_disease')->getPaddyFieldsByFarmer($nic);
 
         if ($hasFilters && (!empty($plrNumber) || !empty($reportCode))) {
-            $reports = $this->model('M_disease')->searchReports($nic, $plrNumber, $reportCode);
-            $data['plrNumber'] = $plrNumber;
+            $reports            = $this->model('M_disease')->searchReports($nic, $plrNumber, $reportCode);
+            $data['plrNumber']  = $plrNumber;
             $data['reportCode'] = $reportCode;
-            $data['searched'] = true;
-            $data['message'] = count($reports) . ' of your report(s) found';
+            $data['searched']   = true;
+            $data['message']    = count($reports) . ' of your report(s) found';
         } else {
-            $reports = $this->model('M_disease')->getReportsByFarmerNIC($nic);
+            $reports         = $this->model('M_disease')->getReportsByFarmerNIC($nic);
             $data['message'] = 'Showing your reports (' . count($reports) . ' total)';
         }
 
@@ -623,42 +619,41 @@ class Disease extends Controller
     private function loadAdminOfficerReports(array &$data): void
     {
         $includeDeleted = $this->isAdmin();
-        $farmerNIC = trim($_GET['farmerNIC'] ?? '');
-        $plrNumber = trim($_GET['plrNumber'] ?? '');
-        $reportCode = trim($_GET['reportCode'] ?? '');
-        $hasFilters = isset($_GET['reportCode']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC']);
+        $farmerNIC      = trim($_GET['farmerNIC']  ?? '');
+        $plrNumber      = trim($_GET['plrNumber']  ?? '');
+        $reportCode     = trim($_GET['reportCode'] ?? '');
+        $hasFilters     = isset($_GET['reportCode']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC']);
 
         if ($hasFilters && (!empty($farmerNIC) || !empty($plrNumber) || !empty($reportCode))) {
-            $reports = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode, $includeDeleted);
-            $data['farmerNIC'] = $farmerNIC;
-            $data['plrNumber'] = $plrNumber;
+            $reports            = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode, $includeDeleted);
+            $data['farmerNIC']  = $farmerNIC;
+            $data['plrNumber']  = $plrNumber;
             $data['reportCode'] = $reportCode;
-            $data['searched'] = true;
-            $data['message'] = count($reports) . ' report(s) found';
+            $data['searched']   = true;
+            $data['message']    = count($reports) . ' report(s) found';
         } else {
-            $reports = $this->model('M_disease')->getAllReports(null, null, $includeDeleted);
+            $reports           = $this->model('M_disease')->getAllReports(null, null, $includeDeleted);
             $data['farmerNIC'] = '';
-            $data['message'] = 'Showing all reports (' . count($reports) . ' total)';
+            $data['message']   = 'Showing all reports (' . count($reports) . ' total)';
         }
 
-            // Build file path
-            $uploadDir = APPROOT . '/../public/uploads/officer_responses/';
-            $filePath = $uploadDir . $filename;
+        $data['reports'] = $reports;
+    }
 
     // ─── Private: Form Helpers ────────────────────────────────────────────────
 
     private function collectPostData(): array
     {
         return [
-            'farmerNIC' => trim($_POST['farmerNIC'] ?? ''),
-            'plrNumber' => trim($_POST['plrNumber'] ?? ''),
-            'paddySize' => trim($_POST['paddySize'] ?? ''),
+            'farmerNIC'       => trim($_POST['farmerNIC']       ?? ''),
+            'plrNumber'       => trim($_POST['plrNumber']       ?? ''),
+            'paddySize'       => trim($_POST['paddySize']       ?? ''),
             'observationDate' => trim($_POST['observationDate'] ?? ''),
-            'title' => trim($_POST['title'] ?? ''),
-            'description' => trim($_POST['description'] ?? ''),
-            'severity' => trim($_POST['severity'] ?? ''),
-            'affectedArea' => trim($_POST['affectedArea'] ?? ''),
-            'terms' => $_POST['terms'] ?? '',
+            'title'           => trim($_POST['title']           ?? ''),
+            'description'     => trim($_POST['description']     ?? ''),
+            'severity'        => trim($_POST['severity']        ?? ''),
+            'affectedArea'    => trim($_POST['affectedArea']    ?? ''),
+            'terms'           => $_POST['terms'] ?? '',
         ];
     }
 
@@ -781,16 +776,14 @@ class Disease extends Controller
      * @param  string[] $removeMedia   Filenames to delete from disk
      * @return array{media_string: string}|array{error: string}
      */
-    private function handleFileUpload($existingMedia = '', $filesToRemove = [], $reportCodePrefix = 'NEW')
-    {
-        $uploadDir = APPROOT . '/../public/uploads/disease_reports/';
-        $finalMediaList = [];
-
-        // Ensure upload directory exists
-        if (!is_dir($uploadDir)) {
-            if (!mkdir($uploadDir, 0755, true)) {
-                return ['error' => 'Failed to create upload directory.'];
-            }
+    private function processFileUpload(
+        string $uploadDir,
+        string $prefix        = 'NEW',
+        string $existingMedia = '',
+        array  $removeMedia   = []
+    ): array {
+        if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
+            return ['error' => 'Failed to create the upload directory'];
         }
 
         $finalFiles = $this->filterExistingMedia($existingMedia, $removeMedia, $uploadDir);
@@ -803,7 +796,7 @@ class Disease extends Controller
                     continue;
                 }
 
-                $tmpPath = $_FILES['media']['tmp_name'][$index];
+                $tmpPath  = $_FILES['media']['tmp_name'][$index];
                 $mimeType = $finfo->file($tmpPath);
                 $fileSize = $_FILES['media']['size'][$index];
 
@@ -816,7 +809,7 @@ class Disease extends Controller
                 }
 
                 $newFilename = $this->buildUniqueFilename($prefix, $originalName, $index);
-                $targetPath = $uploadDir . $newFilename;
+                $targetPath  = $uploadDir . $newFilename;
 
                 if (!move_uploaded_file($tmpPath, $targetPath)) {
                     return ['error' => "Failed to upload file: {$originalName}"];
@@ -860,7 +853,7 @@ class Disease extends Controller
     /** Builds a sanitised, collision-resistant filename. */
     private function buildUniqueFilename(string $prefix, string $originalName, int $index): string
     {
-        $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        $ext      = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
         $baseName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
         $baseName = substr($baseName, 0, self::MAX_FILENAME_LENGTH);
 
@@ -887,7 +880,7 @@ class Disease extends Controller
             return;
         }
 
-        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        $ext      = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
         $mimeType = self::MIME_TYPE_MAP[$ext] ?? 'application/octet-stream';
 
         while (ob_get_level()) {
