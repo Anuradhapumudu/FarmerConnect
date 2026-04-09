@@ -99,6 +99,21 @@ class TimeLineModel
         return $this->db->resultSet();
     }
 
+    public function getNICByPLR($plr)
+    {
+        $this->db->query("
+            SELECT NIC_FK 
+            FROM paddy 
+            WHERE PLR = :plr
+        ");
+
+        $this->db->bind(':plr', $plr);
+
+        $row = $this->db->single();
+
+        return $row ? $row->NIC_FK : null;
+    }
+
 
 }
 

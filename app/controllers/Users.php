@@ -525,6 +525,7 @@
                 case 'officer':
                     $_SESSION['officer_id'] = $user->officer_id;
                     $_SESSION['user_id'] = $user->officer_id;
+                    $_SESSION['govi_jana_sewa_division'] = $officer->govi_jana_sewa_division;
                     header('Location: ' . URLROOT . '/OfficerDashboard');
                     break;
                 case 'seller':

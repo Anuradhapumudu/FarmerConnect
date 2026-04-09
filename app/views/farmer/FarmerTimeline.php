@@ -33,8 +33,17 @@
       <!-- TASK 1 -->
       <?php
       $status = $data['progress'][1] ?? 'default';
+
+      $today = date('Y-m-d');
+
+      $nextUnlockDate = isset($data['estimatedDates'][2]) 
+          ? date('Y-m-d', strtotime($data['estimatedDates'][2] . ' -2 days'))
+          : null;
+
+      // Step 1 becomes readonly when step 2 unlocks
+      //$readonly = ($status === 'done') ? 'readonly' : '';
       ?>
-      <div class="task <?php echo $status; ?>" data-step="1">
+      <div class="task <?php echo $status . ' ' . $readonly; ?>" data-step="1">
         <div class="label">Ready the Field I</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/landpreparation1.jpg" alt="Ready the Field I">
@@ -59,8 +68,15 @@
     $today = date('Y-m-d');
 
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+
+    // NEW: readonly when step 3 unlocks
+    $nextUnlockDate = isset($data['estimatedDates'][3]) 
+        ? date('Y-m-d', strtotime($data['estimatedDates'][3] . ' -2 days'))
+        : null;
+
+    $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="2">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="2">
         <div class="label">Water Supply</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/watersupply.jpg" alt="Water Supply">
@@ -85,8 +101,14 @@
     $today = date('Y-m-d');
 
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+
+    $nextUnlockDate = isset($data['estimatedDates'][4]) 
+    ? date('Y-m-d', strtotime($data['estimatedDates'][4] . ' -2 days'))
+    : null;
+
+    $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="3">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="3">
         <div class="label">Prepare Land</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/readyfield2.webp" alt="Prepare Land">
@@ -111,8 +133,14 @@
         $today = date('Y-m-d');
 
         $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
-    ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="4">
+
+          $nextUnlockDate = isset($data['estimatedDates'][5]) 
+          ? date('Y-m-d', strtotime($data['estimatedDates'][5] . ' -2 days'))
+          : null;
+
+      $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
+      ?>
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="4">
         <div class="label">Ready the Field II</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/landpreparetion2.jpg" alt="Ready the Field II">
@@ -137,8 +165,14 @@
     $today = date('Y-m-d');
 
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+
+    $nextUnlockDate = isset($data['estimatedDates'][6]) 
+    ? date('Y-m-d', strtotime($data['estimatedDates'][6] . ' -2 days'))
+    : null;
+
+    $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="5">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="5">
         <div class="label">Prepare Land II</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/readyfield1.jpg" alt="Prepare Land II">
@@ -180,8 +214,14 @@
     $today = date('Y-m-d');
 
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+
+    $nextUnlockDate = isset($data['estimatedDates'][7]) 
+    ? date('Y-m-d', strtotime($data['estimatedDates'][7] . ' -2 days'))
+    : null;
+
+    $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="6">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="6">
       <div class="label">Sowing</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/sowing.webp" alt="Sowing">
@@ -206,8 +246,14 @@
     $today = date('Y-m-d');
 
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+
+    $nextUnlockDate = isset($data['estimatedDates'][8]) 
+    ? date('Y-m-d', strtotime($data['estimatedDates'][8] . ' -2 days'))
+    : null;
+
+    $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="7">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="7">
       <div class="label">Fertilization I</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization1.jpg" alt="Fertilization I">
@@ -232,8 +278,14 @@
     $today = date('Y-m-d');
 
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+
+    $nextUnlockDate = isset($data['estimatedDates'][9]) 
+    ? date('Y-m-d', strtotime($data['estimatedDates'][9] . ' -2 days'))
+    : null;
+
+    $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="8">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="8">
       <div class="label">Fertilization II</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization2.jpeg" alt="Fertilization II">
@@ -258,8 +310,14 @@
     $today = date('Y-m-d');
 
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+
+    $nextUnlockDate = isset($data['estimatedDates'][10]) 
+    ? date('Y-m-d', strtotime($data['estimatedDates'][10] . ' -2 days'))
+    : null;
+
+    $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="9">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="9">
       <div class="label">Fertilization III</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization3.jpg" alt="Fertilization III">
@@ -284,8 +342,14 @@
     $today = date('Y-m-d');
 
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+
+    $nextUnlockDate = isset($data['estimatedDates'][11]) 
+    ? date('Y-m-d', strtotime($data['estimatedDates'][11] . ' -2 days'))
+    : null;
+
+    $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="10">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="10">
       <div class="label">Fertilization IV</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/harvesting.webp" alt="Harvesting">
@@ -349,52 +413,54 @@
 
 <!-- JavaScript -->
 <script>
-  function toggleStatusMenu(circleEl) {
-    if (circleEl.closest('.task').classList.contains('locked')) {
+function toggleStatusMenu(circleEl) {
+  const task = circleEl.closest('.task');
+
+  // ❌ block if locked OR readonly
+  if (task.classList.contains('locked') || task.classList.contains('readonly')) {
     return;
-    }
-
-    const task = circleEl.closest('.task');
-    const menu = task.querySelector('.status-selector');
-
-    // Close all other open menus
-    document.querySelectorAll('.status-selector').forEach(m => {
-      if (m !== menu) m.style.display = 'none';
-    });
-
-    // Toggle the current one
-    menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
   }
 
-  function setStatus(buttonEl, statusClass) {
-      const task = buttonEl.closest('.task');
-      const stepOrder = task.dataset.step;
-      const plr = document.getElementById('plrSelect').value;
+  const menu = task.querySelector('.status-selector');
 
-      task.classList.remove('done','problem','pending','default');
-      task.classList.add(statusClass);
-      task.querySelector('.status-selector').style.display = 'none';
+  document.querySelectorAll('.status-selector').forEach(m => {
+    if (m !== menu) m.style.display = 'none';
+  });
 
-      fetch("<?php echo URLROOT; ?>/FarmerTimeline/saveStep", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-              plr: plr,
-              step_order: stepOrder,
-              status: statusClass
-          })
-      });
+  menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+}
 
-      if (statusClass === 'done') {
-         // unlockNextTask(task);
-      }
+function setStatus(buttonEl, statusClass) {
+  const task = buttonEl.closest('.task');
 
-      checkStageCompletion(task);
-
-      if (statusClass === 'problem') {
-          window.location.href = "<?php echo URLROOT; ?>/YellowCaseList";
-      }
+  // ❌ block editing if readonly
+  if (task.classList.contains('readonly')) {
+    return;
   }
+
+  const stepOrder = task.dataset.step;
+  const plr = document.getElementById('plrSelect').value;
+
+  task.classList.remove('done','problem','pending','default');
+  task.classList.add(statusClass);
+  task.querySelector('.status-selector').style.display = 'none';
+
+  fetch("<?php echo URLROOT; ?>/FarmerTimeline/saveStep", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+          plr: plr,
+          step_order: stepOrder,
+          status: statusClass
+      })
+  });
+
+  checkStageCompletion(task);
+
+  if (statusClass === 'problem') {
+      window.location.href = "<?php echo URLROOT; ?>/YellowCaseList";
+  }
+}
 
   function unlockNextTask(currentTask) {
   // Find all tasks in order

@@ -42,90 +42,77 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody id="farmerTable">
-          <tr>
-            <td>02/25/00083/002/P/0003</td>
-            <td>992334567V</td>
-            <td>Kamal Perera</td>
-            <td><span class="status-badge status-active">Active</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
-            </td>
-          </tr>
-          <tr>
-            <td>02/25/00083/002/P/0004</td>
-            <td>993456789V</td>
-            <td>Nimal Silva</td>
-            <td><span class="status-badge status-inactive">Inactive</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
-            </td>
-          </tr>
-          <tr>
-            <td>02/25/00083/002/P/0005</td>
-            <td>994123456V</td>
-            <td>Sanduni Fernando</td>
-            <td><span class="status-badge status-active">Active</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
-            </td>
-          </tr>
-          <tr>
-            <td>02/25/00083/002/P/0006</td>
-            <td>995678912V</td>
-            <td>Sunil Jayasuriya</td>
-            <td><span class="status-badge status-active">Active</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
-            </td>
-          </tr>
-          <tr>
-            <td>02/25/00083/002/P/0007</td>
-            <td>996789123V</td>
-            <td>Anusha Rajapaksa</td>
-            <td><span class="status-badge status-inactive">Inactive</span></td>
-            <td>
-              <button class="action-btn view-btn"><i class="fas fa-route"></i> View Timeline</button>
-              <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile Details</button>
-            </td>
-          </tr>
-        </tbody>
+          <tbody id="farmerTable">
+          <?php if (!empty($data['farmers'])): ?>
+              <?php foreach ($data['farmers'] as $farmer): ?>
+              <tr>
+                  <td><?php echo $farmer->PLR; ?></td>
+                  <td><?php echo $farmer->NIC_FK; ?></td>
+                  <td><?php echo $farmer->full_name; ?></td>
+                  <td><span class="status-badge status-active">Active</span></td>
+                  <td>
+
+<form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/show" method="POST">
+    <input type="hidden" name="plr" value="<?php echo $farmer->PLR; ?>">
+    <button type="submit" class="action-btn view-btn">
+        View Timeline
+    </button>
+</form>
+
+                      <button class="action-btn edit-btn">Profile Details</button>
+                  </td>
+              </tr>
+              <?php endforeach; ?>
+          <?php else: ?>
+              <tr>
+                  <td colspan="5">No Farmers Found</td>
+              </tr>
+          <?php endif; ?>
+          </tbody>
       </table>
             <!-- ✅ Mobile View -->
       <div class="farmer-cards">
-        <div class="farmer-card">
-          <div class="farmer-card-header">
-            <h4>02/25/00083/002/P/0003</h4>
-            <span class="status-badge status-active">Active</span>
-          </div>
-          <div class="farmer-card-body">
-            <p><strong>NIC:</strong> 992334567V</p>
-            <p><strong>Name:</strong> Kamal Perera</p>
-          </div>
-          <div class="farmer-card-actions">
-            <button class="action-btn view-btn"><i class="fas fa-route"></i> Timeline</button>
-            <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile</button>
-          </div>
-        </div>
 
-        <div class="farmer-card">
-          <div class="farmer-card-header">
-            <h4>02/25/00083/002/P/0004</h4>
-            <span class="status-badge status-inactive">Inactive</span>
+      <?php if (!empty($data['farmers'])): ?>
+          <?php foreach ($data['farmers'] as $farmer): ?>
+          
+          <div class="farmer-card">
+              <div class="farmer-card-header">
+                  <h4><?php echo $farmer->PLR; ?></h4>
+                  <span class="status-badge status-active">Active</span>
+              </div>
+
+              <div class="farmer-card-body">
+                  <p><strong>NIC:</strong> <?php echo $farmer->NIC_FK; ?></p>
+                  <p><strong>Name:</strong> 
+                      <?php echo $farmer->full_name; ?>
+                  </p>
+              </div>
+
+              <div class="farmer-card-actions">
+
+<form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/show" method="POST">
+    <input type="hidden" name="plr" value="<?php echo $farmer->PLR; ?>">
+    <button type="submit" class="action-btn view-btn">
+        View Timeline
+    </button>
+</form>
+
+
+                  <button class="action-btn edit-btn">
+                      <i class="fas fa-id-card"></i> Profile
+                  </button>
+              </div>
           </div>
-          <div class="farmer-card-body">
-            <p><strong>NIC:</strong> 993456789V</p>
-            <p><strong>Name:</strong> Nimal Silva</p>
-          </div>
-          <div class="farmer-card-actions">
-            <button class="action-btn view-btn"><i class="fas fa-route"></i> Timeline</button>
-            <button class="action-btn edit-btn"><i class="fas fa-id-card"></i> Profile</button>
-          </div>
-        </div>
+
+          <?php endforeach; ?>
+      <?php else: ?>
+
+    <p style="text-align:center;">No Farmers Found</p>
+
+<?php endif; ?>
+
+</div>
 
         <!-- You can repeat for the rest of the farmers -->
       </div>

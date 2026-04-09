@@ -404,5 +404,11 @@
   text-align: center;
   margin-top: 20px;
   }
+
+    .task.readonly {
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
