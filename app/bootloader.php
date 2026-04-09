@@ -10,5 +10,5 @@
     require_once 'libraries/Core1.php';
     require_once 'libraries/Controller1.php';
     require_once 'libraries/Database.php';
-   // require_once 'libraries/Auth.php';
+   require_once 'libraries/Auth.php';
 ?>
