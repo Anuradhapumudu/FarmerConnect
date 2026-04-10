@@ -165,21 +165,61 @@ $isUnderReview = ($statusRaw === 'under_review' || $statusRaw === 'under review'
         </div>
     </div>
 
-    <!-- ═══ Report Details ═══ -->
+    <!-- ═══ Farmer Information ═══ -->
+    <div class="vc-details">
+        <div class="vc-section-title"><i class="fas fa-user"></i> Farmer Information</div>
+        <div class="vc-info-grid">
+            <?php
+            $farmerFields = [
+                'Farmer Name' => htmlspecialchars($report->farmer_name ?? 'N/A'),
+                'Farmer NIC' => htmlspecialchars($report->farmerNIC),
+                'Phone Number' => htmlspecialchars($report->farmer_phone ?? 'N/A'),
+                'Address' => htmlspecialchars($report->farmer_address ?? 'N/A'),
+            ];
+            foreach ($farmerFields as $label => $value): ?>
+                <div class="vc-info-item">
+                    <label><?php echo $label; ?></label>
+                    <p><?php echo $value; ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- ═══ Paddy Field Details ═══ -->
+    <div class="vc-details">
+        <div class="vc-section-title"><i class="fas fa-seedling"></i> Paddy Field Details</div>
+        <div class="vc-info-grid">
+            <?php
+            $paddyFields = [
+                'PLR Number' => htmlspecialchars($report->plrNumber),
+                'Paddy Size' => htmlspecialchars($report->paddySize ?? 'N/A') . ' Acres',
+                'Seed Variety' => htmlspecialchars($report->paddySeedVariety ?? 'N/A'),
+                'Province' => htmlspecialchars($report->paddyProvince ?? 'N/A'),
+                'District' => htmlspecialchars($report->paddyDistrict ?? 'N/A'),
+                'GN Division' => htmlspecialchars($report->paddyGN ?? 'N/A'),
+                'Agrarian Division' => htmlspecialchars($report->paddyAgrarian ?? 'N/A'),
+                'Yaya' => htmlspecialchars($report->paddyYaya ?? 'N/A'),
+            ];
+            foreach ($paddyFields as $label => $value): ?>
+                <div class="vc-info-item">
+                    <label><?php echo $label; ?></label>
+                    <p><?php echo $value; ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- ═══ Complaint Details ═══ -->
     <div class="vc-details">
         <div class="vc-section-title"><i class="fas fa-info-circle"></i> Complaint Details</div>
 
         <div class="vc-info-grid">
             <?php
-            $infoFields = [
-                'Farmer Name' => htmlspecialchars($report->farmer_name ?? 'N/A'),
-                'Farmer NIC' => htmlspecialchars($report->farmerNIC),
-                'PLR Number' => htmlspecialchars($report->plrNumber),
-                'Paddy Size' => htmlspecialchars($report->paddySize ?? 'N/A') . ' Acres',
+            $reportFields = [
                 'Affected Area' => htmlspecialchars($report->affectedArea) . ' Acres',
                 'Observation Date' => date('F d, Y', strtotime($report->observationDate)),
             ];
-            foreach ($infoFields as $label => $value): ?>
+            foreach ($reportFields as $label => $value): ?>
                 <div class="vc-info-item">
                     <label><?php echo $label; ?></label>
                     <p><?php echo $value; ?></p>

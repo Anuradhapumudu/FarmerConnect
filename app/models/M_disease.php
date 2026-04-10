@@ -19,7 +19,15 @@ class M_disease
     private const REPORT_SELECT = "
         SELECT   dr.*,
                  f.full_name   AS farmer_name,
+                 f.phone_no    AS farmer_phone,
+                 f.address     AS farmer_address,
                  p.Paddy_Size  AS paddySize,
+                 p.Paddy_Seed_Variety AS paddySeedVariety,
+                 p.Province    AS paddyProvince,
+                 p.District    AS paddyDistrict,
+                 p.Govi_Jana_Sewa_Division AS paddyAgrarian,
+                 p.Grama_Niladhari_Division AS paddyGN,
+                 p.Yaya        AS paddyYaya,
                  o.first_name  AS officer_first_name,
                  o.last_name   AS officer_last_name,
                  o.officer_id  AS updater_id
