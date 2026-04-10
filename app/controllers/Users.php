@@ -516,6 +516,19 @@
         public function createUserSession($user, $formType) {
             session_start();
             $_SESSION['user_type'] = $formType;
+
+            $firstName = '';
+            if (isset($user->first_name) && trim((string) $user->first_name) !== '') {
+                $firstName = trim((string) $user->first_name);
+            } elseif (isset($user->full_name) && trim((string) $user->full_name) !== '') {
+                $firstName = strtok(trim((string) $user->full_name), ' ');
+                $_SESSION['full_name'] = trim((string) $user->full_name);
+            }
+
+            if ($firstName !== '') {
+                $_SESSION['first_name'] = $firstName;
+            }
+
             switch ($formType) {
                 case 'farmer':
                     $_SESSION['nic'] = $user->nic;

@@ -166,12 +166,12 @@
                 $query .= " AND category = :category";
             }
             if(!empty($date)) {
-                if($date == 'today') $query .= " AND DATE(created_at) = CURDATE()";
-                if($date == 'week') $query .= " AND YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1)";
-                if($date == 'month') $query .= " AND MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE())";
+                if($date == 'today') $query .= " AND DATE(a.created_at) = CURDATE()";
+                if($date == 'week') $query .= " AND YEARWEEK(a.created_at, 1) = YEARWEEK(CURDATE(), 1)";
+                if($date == 'month') $query .= " AND MONTH(a.created_at) = MONTH(CURDATE()) AND YEAR(a.created_at) = YEAR(CURDATE())";
             }
 
-            $query .= " ORDER BY created_at DESC";
+            $query .= " ORDER BY a.created_at DESC";
 
             $this->db->query($query);
 

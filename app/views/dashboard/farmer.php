@@ -20,25 +20,25 @@
       <i class="fa-solid fa-clock fa-2x"></i>
       <h3>Timeline</h3>
       <p>Track planting, harvesting, and seasonal activities efficiently.</p>
-</a>
+    </a>
 
     <a href="<?php echo URLROOT; ?>/FertilizerCalculator" class="feature">
       <i class="fa-solid fa-calculator fa-2x"></i>
       <h3>Fertilizer Calculator</h3>
       <p>Get accurate fertilizer recommendations based on crop and soil.</p>
-</a>
+    </a>
 
     <a href="<?php echo URLROOT; ?>/Disease/viewReports" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
       <p>Stay informed about pest and crop disease outbreaks in your area.</p>
-</a>
+    </a>
 
     <a href="<?php echo URLROOT; ?>/Knowledgecenter" class="feature">
       <i class="fa-solid fa-book-open fa-2x"></i>
       <h3>Knowledge Center</h3>
       <p>Access guides, tutorials, and expert advice on agriculture.</p>
-</a>
+    </a>
 
     <a href="<?php echo URLROOT; ?>/Marketplace/farmer" class="feature">
       <i class="fa-solid fa-store fa-2x"></i>
@@ -46,7 +46,7 @@
       <p>Buy and sell produce, equipment, and services with ease.</p>
     </a>
 
-    <a href="<?php echo URLROOT; ?>/complain/farmerComplaints" class="feature">
+    <a href="<?php echo URLROOT; ?>/Complaint/myComplaints" class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>
       <h3>Complain</h3>
       <p>Report issues directly to the relevant agricultural authorities.</p>
@@ -57,22 +57,22 @@
 
 <!-- Optional JS for smooth scrolling -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  function wrapLetters(elId) {
-    const el = document.getElementById(elId);
-    if (!el) return;
-    el.innerHTML = el.textContent.split('').map(char => {
-      if (char === ' ') return '&nbsp;';
-      return `<span class="letter">${char}</span>`;
-    }).join('');
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    function wrapLetters(elId) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.innerHTML = el.textContent.split('').map(char => {
+        if (char === ' ') return '&nbsp;';
+        return `<span class="letter">${char}</span>`;
+      }).join('');
+    }
 
-  wrapLetters('heroTitle');
-  wrapLetters('heroDesc');
+    wrapLetters('heroTitle');
+    wrapLetters('heroDesc');
 
-  // Animate each letter individually
-  document.querySelectorAll('.letter').forEach((letter, i) => {
-    letter.style.animation = `slideUpIn 0.6s forwards ${i * 0.05}s`;
+    // Animate each letter individually
+    document.querySelectorAll('.letter').forEach((letter, i) => {
+      letter.style.animation = `slideUpIn 0.6s forwards ${i * 0.05}s`;
+    });
   });
-});
 </script>

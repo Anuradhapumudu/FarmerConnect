@@ -1,0 +1,21 @@
+CREATE TABLE `yellow_cases` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `case_id` varchar(30) NOT NULL,
+  `farmer_nic` varchar(20) NOT NULL,
+  `plr_number` varchar(60) NOT NULL,
+  `observation_date` date NOT NULL,
+  `submitted_date` date NOT NULL,
+  `case_title` varchar(255) NOT NULL,
+  `case_description` text NOT NULL,
+  `media` text DEFAULT NULL,
+  `status` enum('pending','under_review','resolved','rejected') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `is_deleted` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_case_id` (`case_id`),
+  KEY `idx_yc_farmer_nic` (`farmer_nic`),
+  KEY `idx_yc_observation_date` (`observation_date`),
+  KEY `idx_yc_status` (`status`),
+  KEY `idx_yc_submitted_date` (`submitted_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

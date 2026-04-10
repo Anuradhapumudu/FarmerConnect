@@ -14,7 +14,7 @@
 <!-- Features -->
 <section id="features">
   <h2>Features</h2>
- 
+
   <div class="features_block">
 
     <a href="<?php echo URLROOT; ?>/officer/officertimeline" class="feature">
@@ -35,7 +35,7 @@
       <p>Get accurate fertilizer recommendations based on crop and soil.</p>
     </a>
 
-    <a href="<?php echo URLROOT; ?>/officerDashboard/viewDiseaseReports" class="feature">
+    <a href="<?php echo URLROOT; ?>/disease/viewReports" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
       <p>Review and manage submitted disease reports from farmers.</p>
@@ -48,17 +48,17 @@
       <i class="fa-solid fa-book-open fa-2x"></i>
       <h3>Knowledge Center</h3>
       <p>Make articles to Knowledge center.</p>
-   
+
     </a>
 
-        <a href="<?php echo URLROOT; ?>/complain/officerComplaints" class="feature">
+    <a href="<?php echo URLROOT; ?>/complaint/myComplaints" class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>
       <h3>Complain Reports</h3>
       <p>View Complaint Reports and Reply to them.</p>
-</a>
+    </a>
 
 
- 
+
 
   </div>
 </section>

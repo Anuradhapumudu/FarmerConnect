@@ -9,48 +9,58 @@
     
     <div class="case-id-display">
         <label>Case ID:</label>
-        <span id="caseIdDisplay">YC-2025-00452</span>
+        <span id="caseIdDisplay"><?php echo $data['case']->case_id ?? 'Unknown'; ?></span>
     </div>
 
     <div class="yellowcase-form readonly-view">
 
         <div class="form-group">
             <label>Farmer NIC Number</label>
-            <p class="readonly-field">197940306V</p>
+            <p class="readonly-field"><?php echo htmlspecialchars($data['case']->farmer_nic ?? ''); ?></p>
         </div>
 
         <div class="form-group">
             <label>PLR Number</label>
-            <p class="readonly-field">02/25/00083/002/P/0006</p>
+            <p class="readonly-field"><?php echo htmlspecialchars($data['case']->plr_number ?? ''); ?></p>
         </div>
 
         <div class="form-row">
             <div class="form-col">
                 <label>Observation Date</label>
-                <p class="readonly-field">2025-10-17</p>
+                <p class="readonly-field"><?php echo $data['case']->observation_date ?? ''; ?></p>
             </div>
             <div class="form-col">
-                <label>Today's Date</label>
-                <p class="readonly-field">2025-10-19</p>
+                <label>Submitted Date</label>
+                <p class="readonly-field"><?php echo $data['case']->submitted_date ?? ''; ?></p>
             </div>
         </div>
 
         <div class="form-group">
             <label>Case Title</label>
-            <p class="readonly-field">Low Water Supply to Cultivation Area</p>
+            <p class="readonly-field"><?php echo htmlspecialchars($data['case']->case_title ?? ''); ?></p>
         </div>
 
         <div class="form-group">
             <label>Detailed Description</label>
-            <p class="readonly-field">For the past two weeks, the irrigation canal supplying water to our paddy field area has had a very low water flow. Due to this, we are unable to maintain the required water level for cultivation. Nearby farmers are also facing the same issue, and the water is insufficient even during scheduled release times. We request officers to inspect the canal system and restore proper water supply before the crops get damaged.
-            </p>
+            <p class="readonly-field"><?php echo nl2br(htmlspecialchars($data['case']->case_description ?? '')); ?></p>
         </div>
 
         <div class="form-group">
             <label>Uploaded Media</label>
-            <div class="uploaded-files">
-                <p>📌 canal_waterflow.jpg</p>
-                <p>📌 field_condition.jpg</p>
+            <div class="uploaded-files has-files">
+                <?php 
+                if (!empty($data['case']->media)) {
+                    $mediaFiles = json_decode($data['case']->media, true);
+                    if (is_array($mediaFiles)) {
+                        foreach ($mediaFiles as $file) {
+                            $fileUrl = URLROOT . '/uploads/yellow_cases/' . htmlspecialchars($file);
+                            echo "<p>📌 <a href='{$fileUrl}' target='_blank'>" . htmlspecialchars($file) . "</a></p>";
+                        }
+                    }
+                } else {
+                    echo "<p>No media uploaded.</p>";
+                }
+                ?>
             </div>
         </div>
 

@@ -73,7 +73,9 @@ composer.lock
 /vendor/
 
 # Local configuration
+app/config/config.php
 config/local.php
+webhook.log
 
 # App uploads (keep folder, ignore contents)
 public/uploads/*

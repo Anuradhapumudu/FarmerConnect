@@ -41,6 +41,15 @@ class YellowCaseModel {
         return $this->db->resultSet();
     }
 
+    public function getAllCases()
+    {
+        $this->db->query("SELECT y.*, f.first_name, f.last_name 
+                          FROM yellow_cases y 
+                          LEFT JOIN farmers f ON y.farmer_nic = f.nic 
+                          ORDER BY y.created_at DESC");
+        return $this->db->resultSet();
+    }
+
     public function getByCaseId($caseId)
     {
         $this->db->query("SELECT * FROM yellow_cases WHERE case_id = :case_id");
