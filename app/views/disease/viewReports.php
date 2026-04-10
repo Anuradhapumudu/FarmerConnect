@@ -209,22 +209,6 @@ if (!empty($data['reports'])) {
 
 </div>
 
-<!-- Delete Modal -->
-<div class="mr-modal-overlay" id="deleteOverlay">
-    <div class="mr-modal">
-        <div class="mr-modal-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-        </div>
-        <h3>Delete Report?</h3>
-        <p>Are you sure you want to delete <span class="mr-modal-code" id="modalReportCode"></span>?</p>
-        <p class="warn">This action cannot be undone.</p>
-        <div class="mr-modal-btns">
-            <button class="mr-modal-btn cancel" onclick="closeDeleteModal()">Cancel</button>
-            <a class="mr-modal-btn confirm" id="modalDeleteLink" href="#">Yes, Delete</a>
-        </div>
-    </div>
-</div>
-
 <script>window.URLROOT = "<?php echo URLROOT; ?>";</script>
 <script src="<?php echo URLROOT; ?>/js/disease/viewReports.js"></script>
 

@@ -12,10 +12,10 @@ function getStatusClass(string $raw): string
 {
     $status = strtolower(trim($raw));
     $map = [
-        'under review' => 'under_review',
-        'under_review' => 'under_review',
-        'reviewing' => 'under_review',
-        'in progress' => 'under_review',
+        'under review' => 'under-review',
+        'under_review' => 'under-review',
+        'reviewing' => 'under-review',
+        'in progress' => 'under-review',
         'responded' => 'responded',
         'resolved' => 'resolved',
         'closed' => 'closed',

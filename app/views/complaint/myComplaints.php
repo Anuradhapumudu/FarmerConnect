@@ -109,10 +109,12 @@ if (!empty($data['reports'])) {
     <?php if (!empty($data['reports'])): ?>
         <div class="mc-grid">
             <?php foreach ($data['reports'] as $report):
-                $statusRaw = strtolower(trim($report->status ?? 'pending'));
+                $isDeleted = isset($report->is_deleted) && $report->is_deleted == 1;
+                $statusRaw = $isDeleted ? 'deleted' : strtolower(trim($report->status ?? 'pending'));
                 $statusRaw = str_replace('_', ' ', $statusRaw);
                 $statusClass = 'pending';
-                if (in_array($statusRaw, ['under review', 'reviewing', 'in progress'])) $statusClass = 'under-review';
+                if ($isDeleted) $statusClass = 'deleted';
+                elseif (in_array($statusRaw, ['under review', 'reviewing', 'in progress'])) $statusClass = 'under-review';
                 elseif ($statusRaw === 'responded') $statusClass = 'responded';
                 elseif (in_array($statusRaw, ['resolved', 'closed'])) $statusClass = 'resolved';
                 elseif ($statusRaw === 'rejected') $statusClass = 'rejected';
@@ -120,7 +122,7 @@ if (!empty($data['reports'])) {
                 $severityClass = strtolower(trim($report->severity ?? 'low'));
                 $responseCount = isset($report->officer_responses) ? count($report->officer_responses) : 0;
             ?>
-                <a href="<?php echo URLROOT; ?>/complaint/viewComplaint/<?php echo htmlspecialchars($report->complaint_id); ?>" class="mc-card">
+                <a href="<?php echo URLROOT; ?>/complaint/viewComplaint/<?php echo htmlspecialchars($report->complaint_id); ?>" class="mc-card <?php echo $isDeleted ? 'deleted' : ''; ?>">
                     <div class="mc-card-top">
                         <span class="mc-card-id"><?php echo htmlspecialchars($report->complaint_id); ?></span>
                         <span class="mc-card-severity <?php echo $severityClass; ?>">
@@ -148,7 +150,7 @@ if (!empty($data['reports'])) {
                     <div class="mc-card-footer">
                         <span class="mc-card-status <?php echo $statusClass; ?>">
                             <span class="dot"></span>
-                            <?php echo htmlspecialchars(ucwords($report->status ?? 'Pending')); ?>
+                            <?php echo $isDeleted ? 'Deleted' : htmlspecialchars(ucwords($report->status ?? 'Pending')); ?>
                         </span>
                         <?php if ($responseCount > 0): ?>
                             <span class="mc-card-responses">
