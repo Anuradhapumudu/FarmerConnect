@@ -1,20 +1,14 @@
 <?php
 class OfficerDashboard extends Controller
 {
-
-
     public function __construct()
     {
-        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'officer') {
-            header('Location: ' . URLROOT . '/users/login');
-            exit();
-        }
+        Auth::checkRole('officer');
     }
 
     public function index()
     {
         $this->view('dashboard/officer');
     }
-
 }
 ?>
