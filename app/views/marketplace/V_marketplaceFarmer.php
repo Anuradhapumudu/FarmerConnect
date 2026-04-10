@@ -1,7 +1,8 @@
-<?php require_once APPROOT . '/views/inc/header.php'; ?>
-<!-- Marketplace-specific CSS -->
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/marketplace.css?v=<?= time(); ?>">
+
+<?php require_once APPROOT . '/views/inc/header.php'; ?>
+
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/marketplaceDashboard.css?v=<?= time(); ?>">
 
 
 <main class="main-content" id="mainContent">
@@ -20,7 +21,7 @@
         <a href="<?php echo URLROOT; ?>/Marketplace/trackOrdersFarmer">
           <button>
             <i class="fa fa-shopping-cart"></i> My Orders
-          </button>
+          </button>  
         </a>
       </div>
     </div>

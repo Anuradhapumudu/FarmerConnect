@@ -1,214 +1,252 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace/farmertrackorders.css?v=<?= time(); ?>">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/new.css?v=<?= time(); ?>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+   
 
 <main class="main-content" id="mainContent">
-  <div class="containers">
+  
+  <div class="track-orders-container">
+    
+    <!-- Header Section -->
     <div class="header">
-      <h1>My Orders</h1>
+      <h1> My Orders</h1>
+      <p>Monitor and manage all your product orders in one place</p>
     </div>
     
-    <div class="filter-container">
-      <div style="position: relative; flex: 1;">
-        <input type="text" class="search-input" placeholder="Search orders by ID, product, or date...">
+    <!-- Filter Section -->
+    <div class="farmer-filter-container">
+      <div class="filter-group">
+        
+        <input type="text" id="search" class="search-input" placeholder="Search by order ID, product, or customer...">
       </div>
-      <select class="filter-select">
-        <option value="all">All Statuses</option>
-        <option value="order_placed">Order Placed</option>
-        <option value="order_confirmed">Confirmed</option>
-        <option value="ready_to_pickup">Ready for Pickup</option>
-        <option value="order_picked">Picked Up</option>
-        <option value="order_cancelled">Cancelled</option>
-      </select>
+      
+      <div class="filter-group">
+       
+        <select id="statusFilter" class="filter-select">
+          <option value="all">All Statuses</option>
+          <option value="order_placed">Order Placed</option>
+          <option value="order_confirmed">Confirmed</option>
+          <option value="ready_to_pickup">Ready for Pickup</option>
+          <option value="order_picked">Picked Up</option>
+          <option value="order_cancelled">Cancelled</option>
+        </select>
+      </div>
+      
+      <button class="btn-filter" id="applyFilters">
+         Apply Filters
+      </button>
     </div>
     
-    <div class="orders-container">
-       <?php if(!empty($data['orders'])): ?>
+    <!-- Orders Grid -->
+    <div class="orders-grid" id="ordersGrid">
+      <?php if(!empty($data['orders'])): ?>
         <?php foreach($data['orders'] as $order): 
           $orderId = strtolower($order->order_id);
           $statusClass = '';
           $statusText = '';
+          $progressPercent = 0;
           
           // Normalize the status
           $normalizedStatus = strtolower(trim($order->order_status));
           
+          // Determine status, progress, and class
           switch($normalizedStatus) {
               case 'order_placed': 
                 $statusClass = 'status-placed'; 
                 $statusText = 'Order Placed';
+                $progressPercent = 25;
                 break;
               case 'order_confirmed': 
                 $statusClass = 'status-confirmed'; 
                 $statusText = 'Order Confirmed';
-                break;
-              case 'order_prepared': 
-                $statusClass = 'status-prepared'; 
-                $statusText = 'Order Prepared';
+                $progressPercent = 50;
                 break;
               case 'ready_to_pickup': 
               case 'ready_for_pickup':
                 $statusClass = 'status-ready'; 
                 $statusText = 'Ready For Pickup';
+                $progressPercent = 75;
                 break;
               case 'order_picked': 
               case 'picked_up':
               case 'picked':
                 $statusClass = 'status-picked'; 
                 $statusText = 'Picked Up';
+                $progressPercent = 100;
                 break;
               case 'order_cancelled': 
               case 'cancelled': 
                 $statusClass = 'status-cancelled'; 
                 $statusText = 'Cancelled';
+                $progressPercent = 0;
                 break;
               default:
                   // If status contains "pick", assume it's picked up
                   if (strpos($normalizedStatus, 'pick') !== false) {
                       $statusClass = 'status-picked'; 
                       $statusText = 'Picked Up';
+                      $progressPercent = 100;
                   } else {
                       $statusText = ucwords(str_replace('_', ' ', $order->order_status));
                       $statusClass = 'status-unknown';
+                      $progressPercent = 25;
                   }
           }
         ?>
-      <div class="order-card">
-        <div class="order-main-content">
-          <div class="order-image">
-            <img src="<?= URLROOT . '/uploads/' . htmlspecialchars($order->image_url) ?>" alt="<?= htmlspecialchars($order->item_name) ?>">
+        
+        <div class="farmer-order-card" data-order-id="<?= htmlspecialchars($order->order_id) ?>" 
+             data-status="<?= $normalizedStatus ?>"
+             data-date="<?= date('Y-m-d', strtotime($order->order_create_date)) ?>">
+          
+          <div class="order-card-header">
+            <div>
+              <div class="order-id">#<?= htmlspecialchars($order->order_id) ?></div>
+              <div class="order-date">
+                <i class="far fa-calendar"></i> 
+                <?= date('M d, Y', strtotime($order->order_create_date)) ?>
+              </div>
+            </div>
+            <div class="order-status <?= $statusClass ?>"><?= $statusText ?></div>
           </div>
           
-          <div class="order-content-wrapper">
-            <div class="order-header">
-              <div>
-                <div class="order-id">#<?= htmlspecialchars($order->order_id) ?></div>
-                <div class="order-date"><?= date('M d, Y', strtotime($order->order_create_date)) ?></div>
+          <div class="order-content">
+            <!-- Product Information -->
+            <div class="product-section">
+              <div class="product-image">
+                <img src="<?= URLROOT . '/uploads/' . htmlspecialchars($order->image_url) ?>" 
+                     alt="<?= htmlspecialchars($order->item_name) ?>">
               </div>
-              <div class="order-status <?= $statusClass ?>"><?= $statusText ?></div>
-            </div>
-        
-            <div class="order-content"> 
               <div class="product-info">
-                <div class="product-details">
-                  <h3><?= htmlspecialchars(ucfirst(strtolower($order->item_name))) ?></h3>
-                  <p><strong>Quantity:</strong> <?= htmlspecialchars($order->quantity) ?></p>
-                  <div class="price">LKR <?= number_format($order->total_price, 2) ?></div>
-                  <p><strong>Payment Method:</strong> <?= htmlspecialchars(ucfirst(strtolower(str_replace('_', ' ', $order->payment_method)))) ?></p>
+                <h3><?= htmlspecialchars(ucfirst(strtolower($order->item_name))) ?></h3>
+                <p><strong>Quantity:</strong> <?= htmlspecialchars($order->quantity) ?></p>
+                <div class="product-price">
+                  LKR <?= number_format($order->total_price, 2) ?>
                 </div>
-                <div class="divider-vertical"></div>
-                <div class="seller-details">
-                  <h3>Seller Info</h3>
+                <p><small><i class="fas fa-money-bill-wave"></i> 
+                  <?= htmlspecialchars(ucfirst(strtolower(str_replace('_', ' ', $order->payment_method)))) ?>
+                </small></p>
+              </div>
+            </div>
+            
+            <!-- Customer Information -->
+            <div class="customer-info">
+              <h4><i class="fas fa-user"></i> Seller Details</h4>
+              <div class="customer-details">
                   <p><strong>Name:</strong> <?= htmlspecialchars($order->seller_first . ' ' . $order->seller_last) ?></p>
                   <p><strong>Location:</strong> <?= htmlspecialchars($order->seller_address) ?></p>
                   <p><strong>Contact:</strong> <?= htmlspecialchars($order->seller_telNo) ?></p>
-                </div>
-              </div>
-            
-              <hr class="divider"> 
-              <div class="action-buttons">
-                <button class="btn btn-primary" onclick="toggleOrderDetails('<?= $orderId ?>')">
-                  <i class="fas fa-eye"></i> View Tracking Details
-                </button>
               </div>
             </div>
+            
+            <!-- Progress Bar -->
+            <?php if($normalizedStatus !== 'order_cancelled'): ?>
+            <div class="progress-section">
+              <div class="progress-header">
+                <h4>Order Progress</h4>
+                <span class="progress-percent"><?= $progressPercent ?>%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: <?= $progressPercent ?>%"></div>
+              </div>
+              
+              <div class="progress-steps">
+                <div class="progress-step <?= $progressPercent >= 25 ? 'active' : '' ?>">
+                  <div class="step-dot <?= $progressPercent >= 25 ? 'completed' : '' ?>"></div>
+                  <div class="step-label <?= $progressPercent >= 25 ? 'active' : '' ?>">Placed</div>
+                </div>
+                <div class="progress-step <?= $progressPercent >= 50 ? 'active' : '' ?>">
+                  <div class="step-dot <?= $progressPercent >= 50 ? 'completed' : '' ?>"></div>
+                  <div class="step-label <?= $progressPercent >= 50 ? 'active' : '' ?>">Confirmed</div>
+                </div>
+                <div class="progress-step <?= $progressPercent >= 75 ? 'active' : '' ?>">
+                  <div class="step-dot <?= $progressPercent >= 75 ? 'completed' : '' ?>"></div>
+                  <div class="step-label <?= $progressPercent >= 75 ? 'active' : '' ?>">Ready</div>
+                </div>
+                <div class="progress-step <?= $progressPercent >= 100 ? 'active' : '' ?>">
+                  <div class="step-dot <?= $progressPercent >= 100 ? 'completed' : '' ?>"></div>
+                  <div class="step-label <?= $progressPercent >= 100 ? 'active' : '' ?>">Picked Up</div>
+                </div>
+              </div>
+            </div>
+            <?php endif; ?>
+            
+            <!-- Action Buttons -->
+            <div class="order-actions">
+              
+                <a href="<?= URLROOT ?>/Marketplace/viewOrderTracking/<?= $order->order_id ?>" class="btn btn-primary">
+                    <i class="fas fa-map-marked-alt"></i> View Tracking Details
+                </a>
+              
+            </div>
+
+            <!-- Rating Section -->
+            <?php if ($normalizedStatus === 'order_picked'): ?>
+              <div class="rating-section">
+                <?php if (empty($data['ratedOrders'][$order->order_id])): ?>
+                  <form method="POST" action="<?= URLROOT ?>/Marketplace/submitRating" class="rating-form">
+                    <input type="hidden" name="order_id" value="<?= $order->order_id ?>">
+                    <label><strong>Rate this product:</strong></label>
+                    <div class="stars">
+                      <?php for ($i = 5; $i >= 1; $i--): ?>
+                        <input type="radio" name="rating" value="<?= $i ?>" id="star<?= $i ?>-<?= $orderId ?>" required>
+                        <label for="star<?= $i ?>-<?= $orderId ?>">★</label>
+                      <?php endfor; ?>
+                    </div>
+                    <button type="submit" class="btn-success">Submit Rating</button>
+                  </form>
+                <?php else: ?>
+                  <p class="rated-text">⭐ You have already rated this order</p>
+                <?php endif; ?>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
         
-        <div class="order-details-container" id="details-<?= $orderId ?>">
-          <!-- You can also fetch real tracking info here if stored -->
-          <div class="tracking-content">
-
-<?php
-$history = $data['history'][$order->order_id] ?? [];
-$currentStatus = strtolower($order->order_status);
-?>
-
-<div class="tracking-timeline">
-  <h3 class="timeline-title">Order Progress</h3>
-  <div class="timeline">
-
-    <!--Always show order placed -->
-    <div class="timeline-step completed">
-      <div class="timeline-content">
-        <div class="timeline-date"><?= date('M d, Y - h:i A', strtotime($order->order_create_date)) ?></div>
-        <div class="timeline-text">Order Placed</div>
-      </div>
-    </div>
-
-    <!-- Loop through order_history -->
-    <?php foreach ($history as $log):
-      $status = strtolower($log->new_status);
-
-      $stepClass = "completed";
-      if ($status === $currentStatus) {
-        $stepClass = "active";
-      }
-    ?>
-      <div class="timeline-step <?= $stepClass ?>">
-        <div class="timeline-content">
-          <div class="timeline-date"><?= date('M d, Y - h:i A', strtotime($log->changed_at)) ?></div>
-          <div class="timeline-text"><?= ucwords(str_replace('_', ' ', $log->new_status)) ?></div>
-        </div>
-      </div>
-    <?php endforeach; ?>
-
-  </div>
-</div>
-
-          </div>
-        </div>
-      </div>
         <?php endforeach; ?>
       <?php else: ?>
-        <p>No orders found.</p>
+        <div class="empty-state">
+          <i class="fas fa-box-open"></i>
+          <h3>No Orders Found</h3>
+          <p>You haven't received any orders yet. When customers purchase your products, they will appear here.</p>
+          <button class="btn-refresh" onclick="window.location.reload()">
+            <i class="fas fa-redo"></i> Refresh
+          </button>
+        </div>
       <?php endif; ?>
     </div>
   </div>
 </main>
 
 <script>
-  function toggleOrderDetails(orderId) {
-    const detailsSection = document.getElementById(`details-${orderId}`);
-    const isExpanding = !detailsSection.classList.contains('expanded');
+document.getElementById('applyFilters').addEventListener('click', function() {
+    const searchTerm = document.getElementById('search').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
     
-    document.querySelectorAll('.order-details-container.expanded').forEach(d => d.classList.remove('expanded'));
-    
-    detailsSection.classList.toggle('expanded');
-    
-    if (isExpanding) {
-      detailsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }
+    const orders = document.querySelectorAll('.farmer-order-card');
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.querySelector('.search-input');
-    const filterSelect = document.querySelector('.filter-select');
-    const orderCards = document.querySelectorAll('.order-card');
+    orders.forEach(order => {
+        const orderId = order.dataset.orderId.toLowerCase();
+        const status = order.dataset.status.toLowerCase();
 
-    searchInput.addEventListener('input', () => {
-      const term = searchInput.value.toLowerCase();
-      orderCards.forEach(card => {
-        const orderId = card.querySelector('.order-id').textContent.toLowerCase();
-        const productName = card.querySelector('.product-details h3').textContent.toLowerCase();
-        const show = orderId.includes(term) || productName.includes(term);
-        card.style.display = show ? 'block' : 'none';
-        const detailsId = card.querySelector('.order-id').textContent.replace('#','').toLowerCase();
-        const details = document.getElementById(`details-${detailsId}`);
-        if (details) details.classList.remove('expanded');
-      });
+        // Check search match (order ID, product name)
+        const productName = order.querySelector('.product-info h3').textContent.toLowerCase();
+        const matchesSearch = orderId.includes(searchTerm) || productName.includes(searchTerm);
+
+        // Check status match
+        const matchesStatus = statusFilter === 'all' || status === statusFilter;
+
+        // Show or hide order card
+        if (matchesSearch && matchesStatus) {
+            order.style.display = 'block';
+        } else {
+            order.style.display = 'none';
+        }
     });
-
-    filterSelect.addEventListener('change', () => {
-      const filter = filterSelect.value;
-      orderCards.forEach(card => {
-        const status = card.querySelector('.order-status').textContent.toLowerCase();
-        const show = filter === 'all' || status.includes(filter);
-        card.style.display = show ? 'block' : 'none';
-        const detailsId = card.querySelector('.order-id').textContent.replace('#','').toLowerCase();
-        const details = document.getElementById(`details-${detailsId}`);
-        if (details) details.classList.remove('expanded');
-      });
-    });
-  });
+});
 </script>
 
-<?php require_once APPROOT . '/views/inc/footer.php'; ?>
+
+
+
+  

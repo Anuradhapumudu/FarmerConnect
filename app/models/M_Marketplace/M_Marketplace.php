@@ -73,26 +73,39 @@ public function getProductById($item_id) {
 
 
     // Get products by seller for 
-    public function getProductsBySeller($seller_id) {
-        $this->db->query("SELECT * FROM products WHERE seller_id = :seller_id");
-        $this->db->bind(':seller_id', $seller_id);
-        return $this->db->resultSet();
-    }
+public function getProductsBySeller($seller_id) {
+    $this->db->query("
+        SELECT 
+            p.*,
+            ROUND(AVG(r.rating), 1) AS avg_rating,
+            COUNT(r.rating) AS total_ratings
+        FROM products p
+        LEFT JOIN orders o ON p.item_id = o.item_id
+        LEFT JOIN ratings r ON o.order_id = r.order_id
+        WHERE p.seller_id = :seller_id
+        GROUP BY p.item_id
+    ");
+
+    $this->db->bind(':seller_id', $seller_id);
+    return $this->db->resultSet();
+}
        public function getProductsByCategory($category) {
     $this->db->query("
         SELECT 
             p.*, 
-            p.unit_type,
-            p.province,
-            p.region,
             CONCAT(s.first_name, ' ', s.last_name) AS seller_name, 
             s.company_name,
             s.phone_no AS seller_telNo,
             s.email,
-            s.address AS seller_address
+            s.address AS seller_address,
+            ROUND(AVG(r.rating), 1) AS avg_rating,
+            COUNT(r.rating) AS total_ratings
         FROM products p
         JOIN sellers s ON p.seller_id = s.seller_id
+        LEFT JOIN orders o ON p.item_id = o.item_id
+        LEFT JOIN ratings r ON o.order_id = r.order_id
         WHERE p.category = :category
+        GROUP BY p.item_id , seller_name,seller_telNo,s.email,seller_address,s.company_name
     ");
 
     $this->db->bind(':category', $category);
@@ -250,10 +263,12 @@ public function getOrdersBySeller($seller_id) {
             p.item_name,
             p.image_url,
             f.full_name AS buyer_full,
-            f.phone_no  AS buyer_telNo
+            f.phone_no  AS buyer_telNo,
+            r.rating
         FROM orders o
         JOIN products p ON o.item_id = p.item_id
-        JOIN farmers f ON o.buyer_id = f.nic            
+        JOIN farmers f ON o.buyer_id = f.nic 
+        LEFT JOIN ratings r ON o.order_id = r.order_id           
         WHERE p.seller_id = :seller_id
         ORDER BY o.order_create_date DESC
     ");
@@ -263,10 +278,25 @@ public function getOrdersBySeller($seller_id) {
 
 // Get order by ID (already exists for some uses)
 public function getOrderById($order_id) {
-    $this->db->query("SELECT * FROM orders WHERE order_id = :order_id");
+    $this->db->query("
+        SELECT 
+            o.*,
+            p.item_name,
+            p.image_url,
+            s.first_name AS seller_first,
+            s.last_name AS seller_last,
+            s.address AS seller_address,
+            s.phone_no AS seller_telNo
+        FROM orders o
+        JOIN products p ON o.item_id = p.item_id
+        JOIN sellers s ON o.seller_id = s.seller_id
+        WHERE o.order_id = :order_id
+    ");
+
     $this->db->bind(':order_id', $order_id);
     return $this->db->single();
 }
+
 
 // Update order status
 public function updateOrderStatus($order_id, $new_status) {
@@ -296,5 +326,70 @@ public function getOrderStatusHistory($order_id) {
     return $this->db->resultSet();
 }
 
+    // Check if order already rated 
+public function isOrderRated($order_id){
+        $this->db->query("SELECT rating_id FROM ratings WHERE order_id = :order_id");
+        $this->db->bind(':order_id', $order_id);
+        return $this->db->single();
+    }
+
+
+public function addRating($order_id, $rating){
+    $this->db->query("
+        INSERT INTO ratings (order_id, rating, created_at)
+        VALUES (:order_id, :rating, NOW())
+    ");
+
+    $this->db->bind(':order_id', (int)$order_id);
+    $this->db->bind(':rating', (int)$rating);
+    return $this->db->execute();
+
 }
+
+
+
+public function getRaitingForEachOrder($order_id){
+    $this->db->query("SELECT * FROM ratings WHERE order_id = :order_id ");
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->single();   // one rating per order
+}
+
+public function totalRevenue() {
+
+    $this->db->query("
+        SELECT SUM(o.total_price) AS revenue
+        FROM orders o
+        JOIN order_status_history s ON o.order_id = s.order_id
+        WHERE s.new_status = 'order_picked'
+    ");
+
+    return $this->db->single();
+}
+
+
+public function activeProduct() {
+
+    $this->db->query("
+        SELECT COUNT(*) AS active_products
+        FROM products
+        WHERE status = 'Instock'
+    ");
+
+    return $this->db->single();
+}
+
+public function totalOrders() {
+
+    $this->db->query("
+        SELECT COUNT(*) AS total_orders
+        FROM orders
+    ");
+
+    return $this->db->single();
+}
+
+}
+
+
+
 ?>

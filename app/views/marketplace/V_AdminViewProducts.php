@@ -3,7 +3,7 @@
 
 <main class="main-content" id="mainContent">
   <div class="containers">
-    <div class="header text-center">
+    <div class="header">
       <h1>Product Management</h1>
     </div>
 
