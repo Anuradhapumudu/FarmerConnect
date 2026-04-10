@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/styles.css">
+  <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/sidebar.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/marketplace.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/translate.css">
   <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/minimalheader-modern.css">
@@ -80,6 +81,9 @@ if ($initials === '') {
   <header id="mainHeader">
     <div class="header-container">
       <div class="logo-container notranslate">
+        <label for="sidebar-toggle" class="sidebar-toggle-label" aria-label="Toggle sidebar">
+          <i class="fas fa-bars"></i>
+        </label>
         <a href="<?php echo URLROOT; ?>" class="logo">
           <div class="logo-icon">
             <img src="<?php echo URLROOT; ?>/img/logo.png" alt="FarmerConnect.lk Logo" width="42" height="42">
