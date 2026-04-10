@@ -77,8 +77,11 @@ public function show()
     $saved = $this->model->getSavedProgress($nic, $plr);
 
     $progress = [];
+    $updatedDates = [];
+
     foreach ($saved as $row) {
         $progress[$row->step_order] = $row->status;
+        $updatedDates[$row->step_order] = $row->updated_date;
     }
 
     // 9. Send to view (READ-ONLY MODE)
@@ -86,6 +89,7 @@ public function show()
         'plr' => $plr,
         'estimatedDates' => $estimatedDates,
         'progress' => $progress,
+        'updatedDates' => $updatedDates,
         'readonly' => true
     ];
 

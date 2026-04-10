@@ -88,7 +88,7 @@ class TimeLineModel
     public function getSavedProgress($nic, $plr)
     {
         $this->db->query("
-            SELECT step_order, status
+            SELECT step_order, status , updated_date
             FROM farmer_timeline_progress
             WHERE farmer_nic = :nic AND plr = :plr
         ");

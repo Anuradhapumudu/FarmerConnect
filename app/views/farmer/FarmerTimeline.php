@@ -41,14 +41,17 @@
           : null;
 
       // Step 1 becomes readonly when step 2 unlocks
-      //$readonly = ($status === 'done') ? 'readonly' : '';
+      $readonly = ($status === 'done') ? 'readonly' : '';
       ?>
       <div class="task <?php echo $status . ' ' . $readonly; ?>" data-step="1">
         <div class="label">Ready the Field I</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/landpreparation1.jpg" alt="Ready the Field I">
         </div>
-        <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][1] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][1] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][1] ?? '--'; ?></span>
+      </div>
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')"> Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
@@ -81,7 +84,10 @@
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/watersupply.jpg" alt="Water Supply">
         </div>
-        <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][2] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][2] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][2] ?? '--'; ?></span>
+      </div>
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')"> Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
@@ -113,7 +119,10 @@
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/readyfield2.webp" alt="Prepare Land">
         </div>
-        <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][3] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][3] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][3] ?? '--'; ?></span>
+      </div>
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')">Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
@@ -145,7 +154,10 @@
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/landpreparetion2.jpg" alt="Ready the Field II">
         </div>
-        <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][4] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][4] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][4] ?? '--'; ?></span>
+      </div>
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')"> Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
@@ -177,7 +189,10 @@
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/readyfield1.jpg" alt="Prepare Land II">
         </div>
-        <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][5] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][5] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][5] ?? '--'; ?></span>
+      </div>
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')"> Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
@@ -226,7 +241,10 @@
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/sowing.webp" alt="Sowing">
       </div>
-      <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][6] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][6] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][6] ?? '--'; ?></span>
+      </div>
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
@@ -258,7 +276,10 @@
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization1.jpg" alt="Fertilization I">
       </div>
-      <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][7] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][7] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][7] ?? '--'; ?></span>
+      </div>
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
@@ -290,7 +311,10 @@
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization2.jpeg" alt="Fertilization II">
       </div>
-      <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][8] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][8] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][8] ?? '--'; ?></span>
+      </div>
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
@@ -322,7 +346,10 @@
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization3.jpg" alt="Fertilization III">
       </div>
-      <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][9] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][9] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][9] ?? '--'; ?></span>
+      </div>
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
@@ -354,7 +381,10 @@
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/harvesting.webp" alt="Harvesting">
       </div>
-      <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][10] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][10] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][10] ?? '--'; ?></span>
+      </div>
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
@@ -395,7 +425,10 @@
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/harvesting.webp" alt="Harvesting">
       </div>
-      <div class="info">Estimated date<br><span><?php echo $data['estimatedDates'][11] ?? '--'; ?></span></div>
+        <div class="info">
+          Estimated date<br><span><?php echo $data['estimatedDates'][11] ?? '--'; ?></span><br><br>
+          Updated date<br><span><?php echo $data['updatedDates'][11] ?? '--'; ?></span>
+      </div>
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>

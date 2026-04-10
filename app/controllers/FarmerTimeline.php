@@ -59,15 +59,18 @@ class FarmerTimeline extends Controller
                 } catch (Exception $e) {}
                 
                 $progress = [];
+                $updatedDates = [];
 
                 if ($saved) {
                     foreach ($saved as $row) {
                         $progress[$row->step_order] = $row->status;
+                        $updatedDates[$row->step_order] = $row->updated_date;
                     }
                 }
 
                 $data['estimatedDates'] = $estimatedDates;
                 $data['progress'] = $progress;
+                $data['updatedDates'] = $updatedDates;
             } else {
                 // Revert selection if no seed found to avoid crash
                 unset($_SESSION['selected_plr']);
