@@ -129,6 +129,10 @@
             $row = $this->db->single();
 
             if ($row) {
+                // Check user status
+                if (isset($row->status) && strtolower($row->status) === 'inactive') {
+                    return 'INACTIVE';
+                }
                 // Verify password
                 $hashed_password = $row->$passwordColumn;
                 if (password_verify($password, $hashed_password)) {

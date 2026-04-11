@@ -438,6 +438,11 @@
                         $data['username'] = $data['nic'];
                         if (empty($data['farmer_nic_error']) && empty($data['password_error'])) {
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
+                            if ($loggedUser === 'INACTIVE') { // inactive user
+                                $data['farmer_nic_error'] = 'Your account is currently inactive. Please contact admin.';
+                                $this->view('users/v_login', $data);
+                                return;
+                            }
                             if ($loggedUser) {
                                 // Create session,
                                 $this->createUserSession($loggedUser, $formType);
@@ -455,6 +460,11 @@
                         $data['username'] = $data['officer_id'];
                         if (empty($data['officer_id_error']) && empty($data['password_error'])) {
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
+                            if ($loggedUser === 'INACTIVE') { // inactive user
+                                $data['officer_id_error'] = 'Your account is currently inactive. Please contact admin.';
+                                $this->view('users/v_login', $data);
+                                return;
+                            }
                             if ($loggedUser) {
                                 // Create session,
                                 $this->createUserSession($loggedUser, $formType);
