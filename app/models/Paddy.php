@@ -81,8 +81,56 @@ class Paddy {
 
     // Delete single paddy row by PLR
     public function deletePaddyByPLR($plr) {
+
+        // 1. Get full row
+        $this->db->query("SELECT * FROM paddy WHERE PLR = :plr");
+        $this->db->bind(':plr', $plr);
+        $row = $this->db->single();
+
+        if (!$row) return false;
+
+        // 2. Insert FULL row into deleted_plr
+        $this->db->query("
+            INSERT INTO deleted_plr (
+                PLR, NIC_FK, OfficerID, Paddy_Seed_Variety, Paddy_Size,
+                Province, District, Govi_Jana_Sewa_Division,
+                Grama_Niladhari_Division, Yaya, CreatedDate,
+                deleted_by, deleted_by_id
+            ) VALUES (
+                :PLR, :NIC, :OfficerID, :Seed, :Size,
+                :Province, :District, :Division,
+                :GN, :Yaya, :CreatedDate,
+                :deleted_by, :deleted_by_id
+            )
+        ");
+
+        $this->db->bind(':PLR', $row->PLR);
+        $this->db->bind(':NIC', $row->NIC_FK);
+        $this->db->bind(':OfficerID', $row->OfficerID);
+        $this->db->bind(':Seed', $row->Paddy_Seed_Variety);
+        $this->db->bind(':Size', $row->Paddy_Size);
+        $this->db->bind(':Province', $row->Province);
+        $this->db->bind(':District', $row->District);
+        $this->db->bind(':Division', $row->Govi_Jana_Sewa_Division);
+        $this->db->bind(':GN', $row->Grama_Niladhari_Division);
+        $this->db->bind(':Yaya', $row->Yaya);
+        $this->db->bind(':CreatedDate', $row->CreatedDate);
+
+        // 👇 who deleted
+        if (isset($_SESSION['officer_id'])) {
+            $this->db->bind(':deleted_by', 'officer');
+            $this->db->bind(':deleted_by_id', $_SESSION['officer_id']);
+        } else {
+            $this->db->bind(':deleted_by', 'farmer');
+            $this->db->bind(':deleted_by_id', $_SESSION['nic']);
+        }
+
+        $this->db->execute();
+
+        // 3. Delete original (CASCADE will handle others)
         $this->db->query("DELETE FROM paddy WHERE PLR = :plr");
         $this->db->bind(':plr', $plr);
+
         return $this->db->execute();
     }
 

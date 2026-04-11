@@ -45,7 +45,19 @@ class plrReqList extends Controller {
     // ✅ Approve request
     public function approve($id)
     {
-        $this->model->approveRequest($id);
+        $result = $this->model->approveRequest($id);
+
+        if ($result['status'] == 'exists') {
+
+            $_SESSION['error'] = "PLR already exists!<br>
+            NIC: {$result['nic']}<br>
+            Name: {$result['name']}";
+
+            header("Location: " . URLROOT . "/officer/plrReqList/show/$id");
+            exit();
+        }
+
+        $_SESSION['success'] = "Request approved successfully!";
 
         header("Location: " . URLROOT . "/officer/plrReqList");
         exit();

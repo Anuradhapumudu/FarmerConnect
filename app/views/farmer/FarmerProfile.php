@@ -109,14 +109,29 @@
         <h2>Paddy Details</h2>
     </div>
 
-        <?php if(isset($_SESSION['message'])): ?>
-    <div class="alert-success">
-        <?php 
-            echo $_SESSION['message']; 
-            unset($_SESSION['message']);
-        ?>
-    </div>
-    <?php endif; ?>
+                <?php if(isset($_SESSION['message'])): ?>
+                    <div class="alert-box success">
+                        <div class="alert-icon">✔</div>
+                        <div class="alert-content">
+                            <?php 
+                                echo $_SESSION['message']; 
+                                unset($_SESSION['message']);
+                            ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if(isset($_SESSION['error'])): ?>
+                    <div class="alert-box error">
+                        <div class="alert-icon">⚠</div>
+                        <div class="alert-content">
+                            <?php 
+                                echo $_SESSION['error']; 
+                                unset($_SESSION['error']);
+                            ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
     <div class="plr-selector">
         <div>
@@ -142,7 +157,9 @@
             <form id="paddyForm" method="POST" action="<?php echo URLROOT; ?>/farmerprofile/savePaddy">
                 <input type="hidden" name="NIC" value="<?php echo $data['farmer']->nic ?? ''; ?>">
 
+
                 <div class="form-group">
+
                     <label for="PLR">PLR Number</label>
                     <input type="text" id="PLR" name="PLR" value="<?php echo $_POST['PLR'] ?? ''; ?>">
                     <?php if(!empty($data['errors']['PLR'])): ?>

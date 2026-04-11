@@ -228,7 +228,38 @@ class FarmerProfile extends Controller
                     return;
                 }
 
-                
+                // 🔍 CHECK SAME FARMER + SAME PLR
+                $this->db = new Database();
+
+                $this->db->query("
+                    SELECT status 
+                    FROM paddy_requests 
+                    WHERE PLR = :plr AND NIC_FK = :nic
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                ");
+
+                $this->db->bind(':plr', $data['PLR']);
+                $this->db->bind(':nic', $data['NIC']);
+
+                $existing = $this->db->single();
+
+                if ($existing) {
+
+                    if ($existing->status == 'pending') {
+                        $_SESSION['message'] = "You already have a pending request for this PLR.";
+                        header('Location: ' . URLROOT . '/farmerprofile/index');
+                        exit;
+                    }
+
+                    if ($existing->status == 'approved') {
+                        $_SESSION['message'] = "This PLR is already approved under your name.";
+                        header('Location: ' . URLROOT . '/farmerprofile/index');
+                        exit;
+                    }
+
+                    // ✅ if rejected → allow
+                }
                 //  Step 3: Save only if valid
                 
                 $this->paddyModel->savePaddyRequest($data);
