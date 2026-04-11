@@ -4,7 +4,7 @@
 
 <main class="main-content">
 
-<div class="form-container">
+<div class="form-container <?php echo $data['request']->status; ?>">
 
     <h2>PLR Request Details</h2>
 
@@ -65,14 +65,35 @@
     <!-- ACTION BUTTONS -->
     <div class="action-buttons">
 
-        <a href="<?php echo URLROOT; ?>/officer/plrReqList/approve/<?php echo $data['request']->id; ?>" class="btn approve">
-            Approve
-        </a>
+    <?php if ($data['request']->status == 'approved'): ?>
 
-        <a href="<?php echo URLROOT; ?>/officer/plrReqList/reject/<?php echo $data['request']->id; ?>" class="btn reject">
+        <a href="<?php echo URLROOT; ?>/officer/plrReqList/reject/<?php echo $data['request']->id; ?>" 
+        class="btn reject"
+        onclick="return confirm('Reject this request?')">
             Reject
         </a>
 
+    <?php elseif ($data['request']->status == 'rejected'): ?>
+
+        <a href="<?php echo URLROOT; ?>/officer/plrReqList/approve/<?php echo $data['request']->id; ?>" 
+        class="btn approve"
+        onclick="return confirm('Approve this request?')">
+            Approve
+        </a>
+
+    <?php else: ?> <!-- pending -->
+
+        <a href="<?php echo URLROOT; ?>/officer/plrReqList/approve/<?php echo $data['request']->id; ?>" 
+        class="btn approve">
+            Approve
+        </a>
+
+        <a href="<?php echo URLROOT; ?>/officer/plrReqList/reject/<?php echo $data['request']->id; ?>" 
+        class="btn reject">
+            Reject
+        </a>
+
+    <?php endif; ?>
 
     </div>
 

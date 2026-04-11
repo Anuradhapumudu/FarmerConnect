@@ -95,19 +95,10 @@
                         </td>
 
                         <td>
-                            <!-- 🔁 Toggle buttons -->
-                            <?php if ($req->status == 'approved'): ?>
-                                <a href="<?php echo URLROOT; ?>/officer/plrReqList/reject/<?php echo $req->id; ?>" class="btn reject">
-                                    Reject
-                                </a>
-                            <?php else: ?>
-                                <a href="<?php echo URLROOT; ?>/officer/plrReqList/approve/<?php echo $req->id; ?>" class="btn approve">
-                                    Approve
-                                </a>
-                            <?php endif; ?>
+
 
                             <a href="<?php echo URLROOT; ?>/officer/plrReqList/show/<?php echo $req->id; ?>" class="btn view">
-                                View
+                                View Request
                             </a>
                         </td>
                     </tr>
