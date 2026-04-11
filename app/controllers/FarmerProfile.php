@@ -52,12 +52,15 @@ class FarmerProfile extends Controller
         ];
     }
 
+    $requests = $this->paddyModel->getRequestsByNIC($farmerNIC);
+
     // Get all paddy rows for this farmer
     $paddyList = $this->paddyModel->getPaddyByNIC($farmerNIC);
 
     $data = [
         'farmer' => $farmer,
-        'paddyFields' => $paddyList
+        'paddyFields' => $paddyList,
+        'requests' => $requests
     ];
 
     $this->view('farmer/FarmerProfile', $data);
@@ -228,7 +231,9 @@ class FarmerProfile extends Controller
                 
                 //  Step 3: Save only if valid
                 
-                $this->paddyModel->savePaddy($data);
+                $this->paddyModel->savePaddyRequest($data);
+
+                $_SESSION['message'] = "Paddy registration sent for approval!";
 
                 header('Location: ' . URLROOT . '/farmerprofile/index');
                 exit;

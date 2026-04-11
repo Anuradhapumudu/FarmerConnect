@@ -23,10 +23,10 @@
       <p>View assinged farmers timelines.</p>
     </a>
 
-    <a href="<?php echo URLROOT; ?>/officer/officerYellowCase" class="feature">
+    <a href="<?php echo URLROOT; ?>/officer/plrReqList" class="feature">
       <i class="fa-solid fa-calculator fa-2x"></i>
-      <h3>Yellow Case Reports</h3>
-      <p>View Yellow case Reports and Reply to them.</p>
+      <h3>PLR Requests</h3>
+      <p>View PLR Requests and approve or reject them.</p>
     </a>
 
     <a href="<?php echo URLROOT; ?>/officer/CalculatorOfficer" class="feature">

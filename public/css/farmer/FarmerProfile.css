@@ -204,6 +204,15 @@ form {
   background: #d32f2f; /* Darker red on hover */
 }
 
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
 .plr-selector {
   display: flex;
   align-items: center;
@@ -268,6 +277,40 @@ form {
 
 .add-btn:hover {
   background: #0277bd;
+}
+
+.request-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.request-table th,
+.request-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status.approved {
+    background-color: #d4edda;
+    color: #388e3c;
+}
+
+.status.rejected {
+    background-color: #f8d7da;
+    color: #dc3545;
 }
 
     /* Logout button styles */
@@ -442,4 +485,6 @@ form {
   .form-group select {
     padding: 12px;
   }
+
+  
 }

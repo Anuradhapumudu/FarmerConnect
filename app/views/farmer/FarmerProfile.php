@@ -109,6 +109,15 @@
         <h2>Paddy Details</h2>
     </div>
 
+        <?php if(isset($_SESSION['message'])): ?>
+    <div class="alert-success">
+        <?php 
+            echo $_SESSION['message']; 
+            unset($_SESSION['message']);
+        ?>
+    </div>
+    <?php endif; ?>
+
     <div class="plr-selector">
         <div>
             <label for="plrSelect">Select Existing PLR:</label>
@@ -202,6 +211,47 @@
                     <button type="submit" class="btn save-btn">Save Changes</button>
                 </div>
             </form>
+
+        <h3>My Paddy Registration Requests</h3>
+
+        <table class="request-table">
+            <thead>
+                <tr>
+                    <th>PLR</th>
+                    <th>Seed Variety</th>
+                    <th>Size</th>
+                    <th>Requested Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php if (!empty($data['requests'])): ?>
+                    <?php foreach ($data['requests'] as $req): ?>
+                        <tr>
+                            <td><?php echo $req->PLR; ?></td>
+                            <td><?php echo $req->Paddy_Seed_Variety; ?></td>
+                            <td><?php echo $req->Paddy_Size; ?></td>
+
+                            <td>
+                                <?php echo date('Y-m-d', strtotime($req->created_at)); ?>
+                            </td>
+
+                            <td>
+                                <span class="status <?php echo $req->status; ?>">
+                                    <?php echo ucfirst($req->status); ?>
+                                </span>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4">No Requests Found</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+
         </div>
     </div>
 </main>
