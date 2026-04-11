@@ -499,13 +499,13 @@
 }
 
 .mr-card-status.deleted {
-    background: linear-gradient(135deg, #eceff1, #cfd8dc);
-    color: #455a64;
-    border: 1px solid #b0bec5;
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    color: #c62828;
+    border: 1px solid #ef9a9a;
 }
 
 .mr-card-status.deleted .dot {
-    background: #607d8b;
+    background: #e53935;
     animation: none;
 }
 

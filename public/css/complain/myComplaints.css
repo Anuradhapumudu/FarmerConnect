@@ -495,6 +495,22 @@
     background: #e53935;
 }
 
+.mc-card.deleted {
+    opacity: 0.6;
+    border-color: #ffcdd2;
+}
+
+.mc-card-status.deleted {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
+.mc-card-status.deleted .dot {
+    background: #e53935;
+    animation: none;
+}
+
 .mc-card-responses {
     display: flex;
     align-items: center;

@@ -12,10 +12,10 @@ function getStatusClass(string $raw): string
 {
     $status = strtolower(trim($raw));
     $map = [
-        'under review' => 'under_review',
-        'under_review' => 'under_review',
-        'reviewing' => 'under_review',
-        'in progress' => 'under_review',
+        'under review' => 'under-review',
+        'under_review' => 'under-review',
+        'reviewing' => 'under-review',
+        'in progress' => 'under-review',
         'responded' => 'responded',
         'resolved' => 'resolved',
         'closed' => 'closed',
@@ -165,21 +165,61 @@ $canEditReport = $isReportOwner && strtolower($report->status) === 'pending' && 
         </div>
     </div>
 
+    <!-- ═══ Farmer Information ═══ -->
+    <div class="rd-details">
+        <div class="rd-section-title"><i class="fas fa-user"></i> Farmer Information</div>
+        <div class="rd-info-grid">
+            <?php
+            $farmerFields = [
+                'Farmer Name' => htmlspecialchars($report->farmer_name ?? 'N/A'),
+                'Farmer NIC' => htmlspecialchars($report->farmerNIC),
+                'Phone Number' => htmlspecialchars($report->farmer_phone ?? 'N/A'),
+                'Address' => htmlspecialchars($report->farmer_address ?? 'N/A'),
+            ];
+            foreach ($farmerFields as $label => $value): ?>
+                    <div class="rd-info-item">
+                        <label><?php echo $label; ?></label>
+                        <p><?php echo $value; ?></p>
+                    </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- ═══ Paddy Field Details ═══ -->
+    <div class="rd-details">
+        <div class="rd-section-title"><i class="fas fa-seedling"></i> Paddy Field Details</div>
+        <div class="rd-info-grid">
+            <?php
+            $paddyFields = [
+                'PLR Number' => htmlspecialchars($report->plrNumber),
+                'Paddy Size' => htmlspecialchars($report->paddySize ?? 'N/A') . ' Acres',
+                'Seed Variety' => htmlspecialchars($report->paddySeedVariety ?? 'N/A'),
+                'Province' => htmlspecialchars($report->paddyProvince ?? 'N/A'),
+                'District' => htmlspecialchars($report->paddyDistrict ?? 'N/A'),
+                'GN Division' => htmlspecialchars($report->paddyGN ?? 'N/A'),
+                'Agrarian Division' => htmlspecialchars($report->paddyAgrarian ?? 'N/A'),
+                'Yaya' => htmlspecialchars($report->paddyYaya ?? 'N/A'),
+            ];
+            foreach ($paddyFields as $label => $value): ?>
+                    <div class="rd-info-item">
+                        <label><?php echo $label; ?></label>
+                        <p><?php echo $value; ?></p>
+                    </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
     <!-- ═══ Report Details ═══ -->
     <div class="rd-details">
         <div class="rd-section-title"><i class="fas fa-info-circle"></i> Report Details</div>
 
         <div class="rd-info-grid">
             <?php
-            $infoFields = [
-                'Farmer Name' => htmlspecialchars($report->farmer_name ?? 'N/A'),
-                'Farmer NIC' => htmlspecialchars($report->farmerNIC),
-                'PLR Number' => htmlspecialchars($report->plrNumber),
-                'Paddy Size' => htmlspecialchars($report->paddySize ?? 'N/A') . ' Acres',
+            $reportFields = [
                 'Affected Area' => htmlspecialchars($report->affectedArea) . ' Acres',
                 'Observation Date' => date('F d, Y', strtotime($report->observationDate)),
             ];
-            foreach ($infoFields as $label => $value): ?>
+            foreach ($reportFields as $label => $value): ?>
                     <div class="rd-info-item">
                         <label><?php echo $label; ?></label>
                         <p><?php echo $value; ?></p>
