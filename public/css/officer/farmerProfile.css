@@ -1,0 +1,307 @@
+/* ==============================
+   Container
+============================== */
+.containers {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ==============================
+   Header
+============================== */
+.admin-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    gap: 15px;
+}
+
+.admin-header h1 {
+    color: #2e7d32;
+    margin-bottom: 5px;
+}
+
+.admin-header p {
+    color: #558b2f;
+}
+
+/* Back Button */
+.back-btn {
+    background: #2e7d32;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: #1b5e20;
+}
+
+/* ==============================
+   Layout
+============================== */
+.content-wrapper {
+    display: block;
+}
+
+/* ==============================
+   Profile Card
+============================== */
+.profile-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.1);
+    padding: 25px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #e8f5e9;
+    margin-bottom: 15px;
+}
+
+.farmer-name {
+    color: #2e7d32;
+    margin-bottom: 5px;
+}
+
+.farmer-nic {
+    color: #558b2f;
+    margin-bottom: 15px;
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.status-active {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Details */
+.profile-details {
+    text-align: left;
+    margin-top: 15px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e8f5e9;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.detail-value {
+    color: #2c3e50;
+}
+
+/* ==============================
+   Paddy Section (Enhanced)
+============================== */
+.paddy-details {
+   /* background: linear-gradient(135deg, #f1f8e9, #ffffff);*/
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 15px 40px rgba(46, 125, 50, 0.12);
+    padding: 30px;
+    border: 1px solid #e8f5e9;
+}
+
+/* Title */
+.section-title {
+    color: #1b5e20;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 700;
+    border-bottom: 2px solid #c8e6c9;
+    padding-bottom: 10px;
+}
+
+/* Dropdown */
+.paddy-details select {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #c8e6c9;
+    background: #ffffff;
+    font-weight: 500;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.paddy-details select:focus {
+    outline: none;
+    border-color: #66bb6a;
+    box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.2);
+}
+
+/* Grid */
+.paddy-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+/* ==============================
+   Premium Card Design
+============================== */
+.paddy-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 22px;
+    border: 1px solid #e0f2f1;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s ease;
+}
+
+/* Top Accent Line 
+.paddy-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    width: 100%;
+    background: linear-gradient(90deg, #43a047, #66bb6a);
+}*/
+
+/* Hover Effect 
+.paddy-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 18px 45px rgba(46, 125, 50, 0.2);
+}*/
+
+/* Title */
+.paddy-card h3 {
+    font-size: 18px;
+    color: #2e7d32;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+/* Detail Rows */
+.paddy-detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e0e0e0;
+    font-size: 14px;
+}
+
+.paddy-detail-item:last-child {
+    border-bottom: none;
+}
+
+/* Labels */
+.detail-label {
+    color: #6d6d6d;
+    font-weight: 600;
+}
+
+/* Values */
+.detail-value {
+    color: #263238;
+    font-weight: 500;
+}
+
+/* ==============================
+   Delete Button (Improved)
+============================== 
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #e53935, #c62828);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s
+    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #c62828, #b71c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(229, 57, 53, 0.4);
+} */
+
+/* ==============================
+   Delete Button (Simple Clean)
+============================== */
+.action-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.delete-btn {
+    background: #f44336;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+    background: #d32f2f;
+}
+
+/* ==============================
+   Responsive
+============================== */
+@media (max-width: 768px) {
+
+    .profile-card {
+        padding: 20px;
+    }
+
+    .paddy-details {
+        padding: 20px;
+    }
+
+    .paddy-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

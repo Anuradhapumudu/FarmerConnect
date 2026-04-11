@@ -14,7 +14,7 @@
       <div class="card"><h2 id="totalCount">234</h2><p>Total Farmers</p></div>
       <div class="card"><h2 id="activeCount">223</h2><p>Active</p></div>
       <div class="card"><h2 id="inactiveCount">11</h2><p>Inactive</p></div>
-    </div>
+    </div>  
 
     <!-- Search + Filter -->
     <div class="search-box">
@@ -52,14 +52,20 @@
                   <td><span class="status-badge status-active">Active</span></td>
                   <td>
 
-<form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/show" method="POST">
-    <input type="hidden" name="plr" value="<?php echo $farmer->PLR; ?>">
-    <button type="submit" class="action-btn view-btn">
-        View Timeline
-    </button>
-</form>
+                  <form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/show" method="POST">
+                      <input type="hidden" name="plr" value="<?php echo $farmer->PLR; ?>">
+                      <button type="submit" class="action-btn view-btn">
+                          View Timeline
+                      </button>
+                  </form>
 
-                      <button class="action-btn edit-btn">Profile Details</button>
+                  <form action="<?php echo URLROOT; ?>/officer/FarmerProfile/show" method="POST">
+                    <input type="hidden" name="nic" value="<?php echo $farmer->NIC_FK; ?>">
+                    <button type="submit" class="action-btn edit-btn">
+                        Profile Details
+                    </button>
+                 </form>
+
                   </td>
               </tr>
               <?php endforeach; ?>
@@ -119,13 +125,6 @@
 
     </div>
 
-    <!-- Pagination -->
-    <div class="pagination">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn">Next</button>
-    </div>
   </div>
 
 </main>
