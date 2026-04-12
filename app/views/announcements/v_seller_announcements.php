@@ -32,9 +32,9 @@
             <label for="search-date" class="search-label"></label>
             <select id="search-date" class="search-select" name='date'>
               <option value="">Select Date Range</option>
-              <option value="today" <?php echo isset($_GET['date']) && $_GET['date'] == 'today' ? 'selected' : ''; ?>>📅 Today</option>
-              <option value="week" <?php echo isset($_GET['date']) && $_GET['date'] == 'week' ? 'selected' : ''; ?>>📊 This Week</option>
-              <option value="month" <?php echo isset($_GET['date']) && $_GET['date'] == 'month' ? 'selected' : ''; ?>>🗓️ This Month</option>
+              <option value="today" <?php echo isset($_GET['date']) && $_GET['date'] == 'today' ? 'selected' : ''; ?>>Today</option>
+              <option value="week" <?php echo isset($_GET['date']) && $_GET['date'] == 'week' ? 'selected' : ''; ?>>This Week</option>
+              <option value="month" <?php echo isset($_GET['date']) && $_GET['date'] == 'month' ? 'selected' : ''; ?>>This Month</option>
             </select>
           </div>
           <div class="search-group">
@@ -55,13 +55,19 @@
               <div class="announcement-list" id="searchResults">
                   <?php foreach ($data['searchResults'] as $announcement): ?>
                       <div class="announcement-card">
+                        <div class="announcement-header">
                           <h3 class="announcement-title">
                             <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                               <?php echo htmlspecialchars($announcement->title); ?>
                             </a>
                           </h3>
+                        </div>
                           <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
-                          <!-- Date -->
+                          <?php if (!empty($announcement->attachment_path)): ?>
+                            <div class="attachment-label">
+                              Note : <i class="fas fa-paperclip"></i> Attachment available
+                            </div>
+                          <?php endif; ?>
                           <div class="announcement-bottom">
                             <div class="announcement-date-container">
                               <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
@@ -90,13 +96,19 @@
           <div class="announcement-list" id="pinnedAnnouncements">
               <?php foreach ($data['pinnedAnnouncements'] as $announcement): ?>
                   <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
+                    <div class="announcement-header">
                       <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
+                    </div>
                       <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
-                      <!-- Date-->
+                      <?php if (!empty($announcement->attachment_path)): ?>
+                          <div class="attachment-label">
+                            Note : <i class="fas fa-paperclip"></i> Attachment available
+                          </div>
+                        <?php endif; ?>
                       <div class="announcement-bottom">
                         <div class="announcement-date-container">
                           <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
@@ -117,14 +129,21 @@
             <?php if (!empty($data['latestAnnouncements'])): ?>
                 <?php foreach ($data['latestAnnouncements'] as $announcement): ?>
                     <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
-                        <h3 class="announcement-title">
-                          <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
-                            <?php echo htmlspecialchars($announcement->title); ?>
-                          </a>
-                        </h3>
+                      <div class="announcement-header">
+                        <div class="announcement-header">
+                            <h3 class="announcement-title">
+                                <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
+                                    <?php echo htmlspecialchars($announcement->title); ?>
+                                </a>
+                            </h3>
+                        </div>
                         <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
 
-                        <!-- Date -->
+                        <?php if (!empty($announcement->attachment_path)): ?>
+                          <div class="attachment-label">
+                            Note : <i class="fas fa-paperclip"></i> Attachment available
+                          </div>
+                        <?php endif; ?>
                         <div class="announcement-bottom">
                           <div class="announcement-date-container">
                             <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>
@@ -146,14 +165,20 @@
             <?php if (!empty($data['previousAnnouncements'])): ?>
                 <?php foreach ($data['previousAnnouncements'] as $announcement): ?>
                     <div class="announcement-card" id="announcement-<?php echo $announcement->announcement_id; ?>">
+                      <div class="announcement-header">
                         <h3 class="announcement-title">
                           <a href="<?php echo URLROOT; ?>/Announcements/details/<?php echo $announcement->announcement_id; ?>">
                             <?php echo htmlspecialchars($announcement->title); ?>
                           </a>
                         </h3>
+                      </div>
                         <p class="announcement-content"><?php echo htmlspecialchars($announcement->content); ?></p>
 
-                        <!-- Date -->
+                        <?php if (!empty($announcement->attachment_path)): ?>
+                          <div class="attachment-label">
+                            Note : <i class="fas fa-paperclip"></i> Attachment available
+                          </div>
+                        <?php endif; ?>
                         <div class="announcement-bottom">
                           <div class="announcement-date-container">
                             <span class="announcement-date"><?php echo date('d-m-Y', strtotime($announcement->created_at)); ?></span>

@@ -69,8 +69,6 @@
       <option value="Kegalle" data-province="Sabaragamuwa">Kegalle</option>
     </select>
 
-    <button onclick="applyFilter()">Filter</button>
-    <button onclick="resetFilter()">Reset</button>
   </div>
 
   <!-- Products Section -->

@@ -14,7 +14,6 @@
       <div class="card"><h2 id="totalCount">0</h2><p>Total Farmers</p></div>
       <div class="card"><h2 id="activeCount">0</h2><p>Active</p></div>
       <div class="card"><h2 id="inactiveCount">0</h2><p>Inactive</p></div>
-      <div class="card"><h2 id="pendingCount">0</h2><p>Pending</p></div>
     </div>
 
     <!-- Search + Filter -->

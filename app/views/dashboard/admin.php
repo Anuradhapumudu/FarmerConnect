@@ -13,41 +13,41 @@
 
 
 <!-- User Roles -->
-  <section>
-    <h2>Who We Serve</h2>
-    <div class="user_Information">
+<section>
+  <h2>Who We Serve</h2>
+  <div class="user_Information">
 
-      <a href="<?php echo URLROOT; ?>/Admin/UserList/farmerlist" class="actor-link">
-        <div class="actor">
-          <i class="fa-solid fa-tractor fa-2x"></i>
-          <h3>Farmers</h3>
-          <p>Grow better with expert advice and resources.</p>
-        </div>
-      </a>
+    <a href="<?php echo URLROOT; ?>/Admin/UserList/farmerlist" class="actor-link">
+      <div class="actor">
+        <i class="fa-solid fa-tractor fa-2x"></i>
+        <h3>Farmers</h3>
+        <p>Grow better with expert advice and resources.</p>
+      </div>
+    </a>
 
-      <a href="<?php echo URLROOT; ?>/Admin/UserList/officerlist" class="actor-link">
+    <a href="<?php echo URLROOT; ?>/Admin/UserList/officerlist" class="actor-link">
       <div class="actor">
         <i class="fa-solid fa-seedling fa-2x"></i>
         <h3>Agri Officers</h3>
         <p>Guide farmers with reliable tools and updates.</p>
       </div>
-      </a>
+    </a>
 
-      <a href="<?php echo URLROOT; ?>/Admin/UserList/sellerlist" class="actor-link">
+    <a href="<?php echo URLROOT; ?>/Admin/UserList/sellerlist" class="actor-link">
       <div class="actor">
         <i class="fa-solid fa-store fa-2x"></i>
         <h3>Seller Agents</h3>
         <p>Expand your market and connect with farmers.</p>
       </div>
-      </a>
-    </div>
-  </section>
+    </a>
+  </div>
+</section>
 
-  
+
 <!-- Features -->
 <section id="features">
   <h2>Features</h2>
- 
+
   <div class="features_block">
 
 
@@ -58,7 +58,7 @@
       <p>Get accurate fertilizer recommendations based on crop and soil.</p>
     </a>
 
-   <a href="<?php echo URLROOT; ?>/disease/viewReports" class="feature">
+    <a href="<?php echo URLROOT; ?>/disease/viewReports" class="feature">
       <i class="fa-solid fa-virus fa-2x"></i>
       <h3>Disease Reports</h3>
       <p>Stay informed about pest and crop disease outbreaks in your area.</p>
@@ -75,16 +75,16 @@
       <i class="fa-solid fa-store fa-2x"></i>
       <h3>Marketplace</h3>
       <p>Buy and sell produce, equipment, and services with ease.</p>
-   
+
     </a>
 
-    <a href="<?php echo URLROOT; ?>/complain/admincomplaints" class="feature">
+    <a href="<?php echo URLROOT; ?>/Complaint/myComplaints" class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>
       <h3>Complain</h3>
       <p>Report issues directly to the relevant agricultural authorities.</p>
     </a>
 
- 
+
 
   </div>
 </section>

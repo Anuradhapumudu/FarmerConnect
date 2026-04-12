@@ -7,42 +7,30 @@ body {
     background: linear-gradient(135deg, rgb(235, 234, 234), rgb(242, 243, 242));
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     min-height: 100vh;
-    height: auto;
-    overflow-y: auto;
-    padding: 0px 0px;
+    display: flex;
+    background: linear-gradient(to right, #f4f5e8, #f1f3dd);
+}
+main {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
 }
 .container {
     display: flex;             
-    flex-direction: row;
     overflow: hidden;
-    margin: 0 auto;
+    max-width: 960px;
+    min-height: 600px;
     width: 100%;
-    background: #fff;
+    background: #fdfaf5;
     padding: 0px 0px;
+    border-radius: 16px;
     box-shadow: 0 0 15px rgba(7, 7, 7, 0.1);
-    min-height: 100vh;
-}
-.image-section {
-    flex: 0.5;
-}
-.desktop-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-}
-.mobile-img {
-    display: none;
-}
-.form-section {
-    flex: 0.5;
-    padding: 20px 30px;
-    margin-top: 30px;
-}
-.form-box {
-    display: none;
-    animation: fadeIn 0.3s ease-in;
+    box-shadow: 0 8px 32px rgba(30, 58, 47, 0.12);;
 }
 @keyframes fadeIn {
     from {
@@ -54,54 +42,120 @@ body {
         transform: translateY(0);
     }
 }
+.image-section {
+    flex: 0.5;
+}
+
+.desktop-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+.mobile-img {
+    display: none;
+}
+.form-section {
+    flex: 0.5;
+    padding: 52px 44px;
+    margin-top: 30px;
+}
+.form-box {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
 .form-box.active {
     display: block;
 }
-.signin {
-    color: #1a1a1a;
-    text-align: center;
-    margin: 10px 0px 30px 0px;
-}
+
 .signin h1 {
-    font-size: 32px;
-    font-weight: 600;
-    color: #2e7d32;
-    letter-spacing: -0.5px;
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #1e3a2f;
+    margin-bottom: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.02px;
+}
+.signin h1::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: linear-gradient(to right, #2e7d32, #81c784);
+  border-radius: 8px;
+  margin-top: 10px;
+}
+.btn-group {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #e5dccd;
+    padding: 5px;               
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+.btn-group button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    padding: 8px 10px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #565756;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    border-radius: 8px;
+}
+.btn-group button.active {
+    background-color: #f9f6f1;
+    font-family: 'DM Sans', sans-serif;
+    color: #1e3a2f;
+    font-weight: bold;
+    border-radius: 4px;
+    transform: translateY(-1px);
+}
+
+.btn-group button:hover {
+    color: #4CAF50;
+    transform: translateY(-1px);
 }
 .input-group {
-    margin: 20px 60px;
+    margin-bottom: 12px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
 }
 .input-field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
 }
 .input-field label {
     font-size: 16px;
     font-weight: 500;
-    color: #333;
+    color: #505050;
     letter-spacing: 0.2px;
 }
 .input-field input {
     width: 100%;
     padding: 12px;
     border: 1px solid #e0e0e0;
-    border-radius: 10px;
+    border-radius: 8px;
     outline: none;
     margin: 5px 0px;
-    background-color: #fdfdfd;
+    background-color: #f5f0e8;
     transition: all 0.3s ease;
 }
 .input-field input:focus {
     border-color: rgb(27, 54, 23);
-    background-color: #fff;
+    background-color: #fcfafa;
     box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
 }
 .input-field label span.required {
-    color: red;
+    color: rgb(199, 10, 10);
     margin-left: 2px;
     font-weight: bold;
 }
@@ -109,7 +163,7 @@ body {
     color: #9e9e9e;
 }
 .login {
-    margin: auto 60px;
+    margin-bottom: 0;
 }
 .login button{
     width: 100%;
@@ -117,8 +171,9 @@ body {
     padding: 12px 22px;
     margin: 20px 0px;
     border: none;
+    font-family: 'DM Sans', sans-serif;
     border-radius: 8px;
-    background: #2e7d32;
+    background-image: linear-gradient(45deg, #276b2b, #1e3a2f);
     color: #fff;
     font-size: 16px;
     font-weight: 600;
@@ -139,61 +194,47 @@ body {
     transform: translateX(5px);
 }
 .horizontal-line {
-    margin: 30px 20px 20px 20px;
+    margin: 24px 0 16px;
+    border: none;
+    height: 0.3px;
+    background-color: #e6e6e6;
 }
 .lostpassword{
-    margin: 10px 60px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    color: #565756;
     text-align: right;
 }
+.lostpassword a {
+    color: #565756;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
 .lostpassword a:hover {
-    color: #101857;
+    color: #1e3a2f;
     text-decoration: underline;
 }
 .new-account {
     text-align: center;
     margin-bottom: 20px;
 }
-.btn-group {
-    margin: 15px 60px;
-    display: flex;
-    justify-content: space-between;
-    background-color: #f9f9f9;
-    padding: 5px;               
-    border-radius: 12px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
-}
-.btn-group button {
-    flex: 1;
-    background: transparent;
-    border: none;
-    padding: 15px 15px;
+.new-account a {
+    color: #1e3a2f;
+    text-decoration: none;
     font-weight: 500;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-    border-radius: 8px;
+    transition: all 0.3s ease;
 }
-.btn-group button.active {
-    background-color: #2e7d32;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 4px;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-    transform: translateY(-1px);
-    outline: 2px solid #2e7d32;
-    outline-offset: 2px;
-    transform: translateY(-1px);
+.new-account a:hover {
+    color: #2e7d32;
+    text-decoration: underline;
 }
-.btn-group button.active:hover {
-    color: #fff;
-}
-.btn-group button:hover {
-    color: #4CAF50;
-    transform: translateY(-1px);
-}
+
 .form-invalid {
-    color: #e53935;
+    color: #cb3330;
     font-size: 13px;
     margin-top: 4px;
     font-weight: 400;
@@ -201,24 +242,33 @@ body {
 }
 
 @media (max-width: 1024px) {
+
+    body {
+        display: block; 
+        min-height: auto;
+    }
+
+    main {
+        min-height: auto;
+        padding: 26px;
+        display: block;
+    }
+
     .container {
         flex-direction: column;
+        min-height: auto; 
+        height: auto;
     }
+
     .image-section {
         width: 100%;
         order: -1;
         margin-bottom: 20px;
         flex: 0 0 auto;
     }
-    .input-field label {
-        font-size: 18px;
-    }
-    .input-field input {
-        padding: 12px;
-        font-size: 16px;
-    }
+
     .desktop-img {
-        display: none; 
+        display: none;
     }
 
     .mobile-img {
@@ -230,8 +280,10 @@ body {
 
     .form-section {
         width: 100%;
-        padding: 0 15px;
+        padding: 20px;
+        margin-top: 0;
     }
+
     .btn-group {
         gap: 8px;
     }
@@ -240,92 +292,48 @@ body {
         font-size: 18px;
         padding: 12px;
     }
-    .lostpassword {
-        font-size: 18px;
-    }
+
+    .lostpassword,
     .new-account {
         font-size: 18px;
     }
+
     .login button {
         font-size: 18px;
         padding: 12px;
     }
 }
 @media (max-width: 480px) {
+
     body {
-        padding: 0px;
-        height: auto;
-        align-items: flex-start; 
+        display: flex;
+        flex-direction: column; 
+        align-items: stretch;   
+        min-height: 100vh;      
+        margin: 0;
     }
-    .form-section {
-        margin-top: 10px;
+
+    main {
+        flex: 1;                
+        min-height: 100vh;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; 
     }
+
     .container {
-    flex-direction: column;
-    align-items: center;
-    }
-    .image-section {
+        flex: 1;               
         width: 100%;
-        order: -1;
-        margin-bottom: 20px;
-        flex: 0 0 auto;
+        min-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
     }
 
-    .desktop-img {
-        display: none; 
-    }
-
-    .mobile-img {
-        display: block;
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
-    .input-group {
-        margin: auto 30px;
-    }
     .form-section {
-        width: 100%;
-        padding: 0 15px;
-    }
-    .btn-group {
-        flex-direction: row;
-        gap: 10px;
-        margin: 20px 30px;
-        justify-content: center;
-        width: auto;
-    }
-
-    .btn-group button {
-        width: 100%;
-        padding: 10px;
-        font-size: 15px;
-        border-radius: 6px;
-        
-    }
-
-    .signin h1 {
-        font-size: 25px;
-    }
-
-    .input-field input {
-        padding: 10px;
-        font-size: 14px;
-    }
-    .login {
-        margin: auto 30px;
-    }
-    .login button {
-        width: 100%;
-        margin: 15px 0 5px 0;
-        padding: 12px;
-        font-size: 15px;
-        border-radius: 6px;
-    }
-    .lostpassword {
-        font-size: 15px;
-    }
-    .new-account {
-        font-size: 15px;
+        flex: 1; 
+        margin-top: 0;
     }
 }

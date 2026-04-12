@@ -185,13 +185,13 @@
                                 <?php endfor; ?>
                             </div>
                             
-                            <div style="margin-top: 15px;">
+                         <!--    <div style="margin-top: 15px;">
                                 <textarea name="review" placeholder="Optional: Write a review..." 
                                           style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; resize: vertical; min-height: 80px;"></textarea>
-                            </div>
+                            </div> -->
                             
                             <button type="submit" class="btn-submit" style="margin-top: 15px;">
-                                <i class="fas fa-paper-plane"></i> Submit Rating
+                                Submit Rating
                             </button>
                         </form>
                     <?php else: ?>

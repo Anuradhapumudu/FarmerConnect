@@ -109,6 +109,30 @@
         <h2>Paddy Details</h2>
     </div>
 
+                <?php if(isset($_SESSION['message'])): ?>
+                    <div class="alert-box success">
+                        <div class="alert-icon">✔</div>
+                        <div class="alert-content">
+                            <?php 
+                                echo $_SESSION['message']; 
+                                unset($_SESSION['message']);
+                            ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if(isset($_SESSION['error'])): ?>
+                    <div class="alert-box error">
+                        <div class="alert-icon">⚠</div>
+                        <div class="alert-content">
+                            <?php 
+                                echo $_SESSION['error']; 
+                                unset($_SESSION['error']);
+                            ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
     <div class="plr-selector">
         <div>
             <label for="plrSelect">Select Existing PLR:</label>
@@ -133,7 +157,9 @@
             <form id="paddyForm" method="POST" action="<?php echo URLROOT; ?>/farmerprofile/savePaddy">
                 <input type="hidden" name="NIC" value="<?php echo $data['farmer']->nic ?? ''; ?>">
 
+
                 <div class="form-group">
+
                     <label for="PLR">PLR Number</label>
                     <input type="text" id="PLR" name="PLR" value="<?php echo $_POST['PLR'] ?? ''; ?>">
                     <?php if(!empty($data['errors']['PLR'])): ?>
@@ -145,10 +171,19 @@
                     <label for="Paddy_Seed_Variety">Paddy Seed Variety</label>
                       <select id="Paddy_Seed_Variety" name="Paddy_Seed_Variety" required>
                             <option value="" disabled selected>-- Select Seed Variety --</option>
-                            <option value="B-352">B-352</option>
-                            <option value="BW-367">BW-367</option>
-                            <option value="BW-375">BW-375</option>
-                            <option value="BG-300">BG-300</option>
+                            <option value="BG-250">BG-250 (2.5 months)</option>
+                            <option value="BG-300">BG-300 (3.0 months)</option>
+                            <option value="AT-307">AT-307 (3.0 months)</option>
+                            <option value="AT-308">AT-308 (3.0 months)</option>
+                            <option value="BG-352">BG-352 (3.5 months)</option>
+                            <option value="BG-357">BG-357 (3.5 months)</option>
+                            <option value="BG-359">BG-359 (3.5 months)</option>
+                            <option value="BG-360">BG-360 (3.5 months)</option>
+                            <option value="BW-367">BW-367 (3.5 months)</option>
+                            <option value="BW-375">BW-375 (3.5 months)</option>
+                            <option value="BG-403">BG-403 (4.0 months)</option>
+                            <option value="BG-406">BG-406 (4.0 months)</option>
+                            <option value="BG-405">BG-405 (4.5 months)</option>
                       </select>
                 </div>
 
@@ -199,11 +234,77 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn delete-btn" onclick="deletePaddy()">Delete</button>
-                    <button type="submit" class="btn save-btn">Save Changes</button>
+                    <button type="submit" class="btn save-btn">Send Request</button>
                 </div>
             </form>
         </div>
     </div>
+        
+            
+
+<!-- ================= REQUEST SECTION ================= -->
+    <div class="page-title">
+        <h2>Paddy Registration Requests</h2>
+    </div>
+
+
+<div class="profile-card request-section">
+
+    
+
+    <table class="request-table">
+        <thead>
+            <tr>
+                <th>PLR</th>
+                <th>Seed Variety</th>
+                <th>Size</th>
+                <th>Requested Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php if (!empty($data['requests'])): ?>
+                <?php foreach ($data['requests'] as $req): ?>
+                    <tr>
+                        <td><?php echo $req->PLR; ?></td>
+                        <td><?php echo $req->Paddy_Seed_Variety; ?></td>
+                        <td><?php echo $req->Paddy_Size; ?></td>
+                        <td><?php echo date('Y-m-d', strtotime($req->created_at)); ?></td>
+                        <td>
+                            <span class="status <?php echo $req->status; ?>">
+                                <?php echo ucfirst($req->status); ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="5">No Requests Found</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <!-- MOBILE CARDS -->
+    <div class="request-cards">
+        <?php foreach ($data['requests'] as $req): ?>
+            <div class="request-card">
+                <div class="card-row"><span>PLR</span><strong><?php echo $req->PLR; ?></strong></div>
+                <div class="card-row"><span>Seed</span><strong><?php echo $req->Paddy_Seed_Variety; ?></strong></div>
+                <div class="card-row"><span>Size</span><strong><?php echo $req->Paddy_Size; ?></strong></div>
+                <div class="card-row"><span>Date</span><strong><?php echo date('Y-m-d', strtotime($req->created_at)); ?></strong></div>
+                <div class="card-row">
+                    <span>Status</span>
+                    <span class="status <?php echo $req->status; ?>">
+                        <?php echo ucfirst($req->status); ?>
+                    </span>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+</div>
 </main>
 
 <script>

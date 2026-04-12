@@ -170,9 +170,11 @@
                         <!-- Action Buttons -->
             <div class="order-actions">
               
-                  <button type="button" class="btn btn-secondary update-status-btn" data-order="<?= $orderId ?>" data-status="<?= $normalizedStatus ?>">
+
+
+              <a href="<?= URLROOT ?>/Marketplace/updateSellerOrderStatus/<?= $order->order_id ?>" class="btn btn-primary">
                     <i class="fas fa-edit"></i> Update
-                  </button>
+              </a>
               
             </div>
 

@@ -31,9 +31,9 @@
                         'phone_no' => trim($_POST['phone_no']),
                         'password' => trim($_POST['password']),
                         'confirm_password' => trim($_POST['confirm_password']),
+                        'email' => trim($_POST['email']),
                         'officer_id' => '',
                         'brn' => '',
-                        'email' => '',
                         'address' => '',
                         'company_name' => '',
 
@@ -78,6 +78,15 @@
                             $data['phone_no_error'] = 'Phone number is already taken';
                         }
                     }
+                    if (empty($data['email'])) {
+                        $data['email_error'] = 'Please enter your email';
+                    } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                        $data['email_error'] = 'Please enter a valid email address';
+                    } else {
+                        if ($this->userModel->findUserByEmail($data['email'], 'farmers')) {
+                            $data['email_error'] = 'Email is already taken';
+                        }
+                    }
                     if (empty($data['password'])) {
                         $data['password_error'] = 'Please enter a password';
                     } elseif (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#]{6,}$/", $data['password'])) {
@@ -97,8 +106,8 @@
                         'officer_id' => trim($_POST['officer_id']),
                         'password' => trim($_POST['password']),
                         'confirm_password' => trim($_POST['confirm_password']),
+                        'phone_no' => trim($_POST['phone_no']),
                         'brn' => '',
-                        'phone_no' => '',
                         'address' => '',
                         'company_name' => '',
 
@@ -151,6 +160,11 @@
                         } elseif ($this->userModel->isOfficerAlreadyRegistered($data['officer_id'])) {
                             $data['officer_id_error'] = 'Officer ID is already registered';
                         }
+                    }
+                    if (empty($data['phone_no'])) {
+                        $data['phone_no_error'] = 'Please enter your phone number';
+                    } elseif (!preg_match('/^[0-9]{10}$/', $data['phone_no'])) {
+                        $data['phone_no_error'] = 'Phone number must be 10 digits';
                     }
                     if (empty($data['password'])) {
                         $data['password_error'] = 'Please enter a password';
@@ -265,41 +279,56 @@
                     if ($this->userModel->register($data)) {
                         if ($data['form_type'] !== 'seller') {
                             echo "
-                                <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif; font-size: 20px; color: green;'>
-                                    Registration successful! 🎉 <br>
-                                    Redirecting to login page in 5 seconds...
+                                <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif;'>
+                                    <h2 style='color: green;'>Registration Successful! 🎉</h2>
+                                    <p>You can now login to your account.</p>
+
+                                    <a href='" . URLROOT . "/users/login' 
+                                    style='
+                                        display: inline-block;
+                                        margin-top: 20px;
+                                        padding: 10px 20px;
+                                        background-color: #28a745;
+                                        color: white;
+                                        text-decoration: none;
+                                        border-radius: 5px;
+                                        font-size: 16px;
+                                    '>
+                                    Go to Login
+                                    </a>
                                 </div>
-                                <script>
-                                    setTimeout(function(){
-                                        window.location.href = '" . URLROOT . "/users/login';
-                                    }, 5000);
-                                </script>
                             ";
                             exit;
                         } else {
                             echo "
-                                <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif; font-size: 20px; color: green;'>
-                                    Request sent! <br>
-                                    You will be notified when accepted...
+                                <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif;'>
+                                    <div style='font-size: 20px; color: green; margin-bottom: 20px;'>
+                                        Request sent! <br>
+                                        You will be notified when accepted...
+                                    </div>
+
+                                    <a href='" . URLROOT . "/users/login' 
+                                    style='display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; 
+                                    text-decoration: none; border-radius: 5px; font-size: 16px;'>
+                                        Go to Login
+                                    </a>
                                 </div>
-                                <script>
-                                    setTimeout(function(){
-                                        window.location.href = '" . URLROOT . "/users/login';
-                                    }, 5000);
-                                </script>
                             ";
                         }
                     } else {
                         echo "
-                            <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif; font-size: 20px; color: green;'>
-                                Something went wrong! <br>
-                                Please try again...
+                            <div style='text-align: center; margin-top: 50px; font-family: Arial, sans-serif;'>
+                                <div style='font-size: 20px; color: red; margin-bottom: 20px;'>
+                                    Something went wrong! <br>
+                                    Please try again...
+                                </div>
+
+                                <a href='" . URLROOT . "/users/register' 
+                                style='display: inline-block; padding: 10px 20px; background-color: #dc3545; color: white; 
+                                text-decoration: none; border-radius: 5px; font-size: 16px;'>
+                                    Back to Register
+                                </a>
                             </div>
-                            <script>
-                                setTimeout(function(){
-                                    window.location.href = '" . URLROOT . "/users/register';
-                                }, 5000);
-                            </script>
                         ";
                     }
                 } else {
@@ -438,6 +467,11 @@
                         $data['username'] = $data['nic'];
                         if (empty($data['farmer_nic_error']) && empty($data['password_error'])) {
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
+                            if ($loggedUser === 'INACTIVE') { // inactive user
+                                $data['farmer_nic_error'] = 'Your account is currently inactive. Please contact admin.';
+                                $this->view('users/v_login', $data);
+                                return;
+                            }
                             if ($loggedUser) {
                                 // Create session,
                                 $this->createUserSession($loggedUser, $formType);
@@ -455,6 +489,11 @@
                         $data['username'] = $data['officer_id'];
                         if (empty($data['officer_id_error']) && empty($data['password_error'])) {
                             $loggedUser = $this->userModel->login($formType ,$data['username'], $data['password']);
+                            if ($loggedUser === 'INACTIVE') { // inactive user
+                                $data['officer_id_error'] = 'Your account is currently inactive. Please contact admin.';
+                                $this->view('users/v_login', $data);
+                                return;
+                            }
                             if ($loggedUser) {
                                 // Create session,
                                 $this->createUserSession($loggedUser, $formType);
@@ -516,6 +555,19 @@
         public function createUserSession($user, $formType) {
             session_start();
             $_SESSION['user_type'] = $formType;
+
+            $firstName = '';
+            if (isset($user->first_name) && trim((string) $user->first_name) !== '') {
+                $firstName = trim((string) $user->first_name);
+            } elseif (isset($user->full_name) && trim((string) $user->full_name) !== '') {
+                $firstName = strtok(trim((string) $user->full_name), ' ');
+                $_SESSION['full_name'] = trim((string) $user->full_name);
+            }
+
+            if ($firstName !== '') {
+                $_SESSION['first_name'] = $firstName;
+            }
+
             switch ($formType) {
                 case 'farmer':
                     $_SESSION['nic'] = $user->nic;
@@ -525,6 +577,7 @@
                 case 'officer':
                     $_SESSION['officer_id'] = $user->officer_id;
                     $_SESSION['user_id'] = $user->officer_id;
+                    $_SESSION['govi_jana_sewa_division'] = $user->govi_jana_sewa_division;
                     header('Location: ' . URLROOT . '/OfficerDashboard');
                     break;
                 case 'seller':

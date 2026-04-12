@@ -23,6 +23,36 @@ class TimeLineModel
         return $this->db->single();
     }
 
+    public function saveStartDate($nic, $plr)
+    {
+        $this->db->query("
+            INSERT INTO farmer_timeline (farmer_nic, plr, start_date)
+            VALUES (:nic, :plr, CURDATE())
+            ON DUPLICATE KEY UPDATE start_date = start_date
+        ");
+
+        $this->db->bind(':nic', $nic);
+        $this->db->bind(':plr', $plr);
+
+        return $this->db->execute();
+    }
+
+    public function getStartDate($nic, $plr)
+    {
+        $this->db->query("
+            SELECT start_date 
+            FROM farmer_timeline 
+            WHERE farmer_nic = :nic AND plr = :plr
+        ");
+
+        $this->db->bind(':nic', $nic);
+        $this->db->bind(':plr', $plr);
+
+        $row = $this->db->single();
+
+        return $row ? $row->start_date : null;
+    }
+
     public function getTimelineByDuration($duration)
     {
         $this->db->query("
@@ -32,7 +62,7 @@ class TimeLineModel
                         ORDER BY step_order
                         ");
 
-        $this->db->bind(':duration',$duration);
+        $this->db->bind(':duration',(float)$duration);
         return $this->db->resultSet();
     }
 
@@ -58,7 +88,7 @@ class TimeLineModel
     public function getSavedProgress($nic, $plr)
     {
         $this->db->query("
-            SELECT step_order, status
+            SELECT step_order, status , updated_date
             FROM farmer_timeline_progress
             WHERE farmer_nic = :nic AND plr = :plr
         ");
@@ -67,6 +97,21 @@ class TimeLineModel
         $this->db->bind(':plr', $plr);
 
         return $this->db->resultSet();
+    }
+
+    public function getNICByPLR($plr)
+    {
+        $this->db->query("
+            SELECT NIC_FK 
+            FROM paddy 
+            WHERE PLR = :plr
+        ");
+
+        $this->db->bind(':plr', $plr);
+
+        $row = $this->db->single();
+
+        return $row ? $row->NIC_FK : null;
     }
 
 

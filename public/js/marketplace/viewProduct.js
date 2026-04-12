@@ -1,28 +1,48 @@
-function applyFilter() {
-  const search = document.getElementById("searchInput").value.toLowerCase().trim();
-  const minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
-  const maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
-  const province = document.getElementById("provinceFilter").value.toLowerCase();
-  const region = document.getElementById("regionFilter").value.toLowerCase();
+const searchInput = document.getElementById("searchInput");
+const minInput = document.getElementById("minPrice");
+const maxInput = document.getElementById("maxPrice");
+const provinceFilter = document.getElementById("provinceFilter");
+const regionFilter = document.getElementById("regionFilter");
 
-  const products = document.querySelectorAll(".product-card");
+const products = document.querySelectorAll(".order-card.product-card");
 
-  products.forEach(product => {
-    const name = product.dataset.name;
-    const price = parseFloat(product.dataset.price);
-    const productProvince = product.dataset.province;
-    const productRegion = product.dataset.region;
+// Event listeners
+searchInput.addEventListener("keyup", filterProducts);
+provinceFilter.addEventListener("change", filterProducts);
+regionFilter.addEventListener("change", filterProducts);
+minInput.addEventListener("input", filterProducts);
+maxInput.addEventListener("input", filterProducts);
 
-    let visible = true;
+function filterProducts() {
 
-    if (search && !name.includes(search)) visible = false;
-    if (price < minPrice || price > maxPrice) visible = false;
-    if (province && productProvince !== province) visible = false;
-    if (region && productRegion !== region) visible = false;
+  let searchValue = searchInput.value.toLowerCase().trim();
+  let minPrice = parseFloat(minInput.value) || 0;
+  let maxPrice = parseFloat(maxInput.value) || Infinity;
+  let province = provinceFilter.value.toLowerCase();
+  let region = regionFilter.value.toLowerCase();
 
-    product.style.display = visible ? "flex" : "none";
+  products.forEach(function(product){
+
+    let name = product.getAttribute("data-name").toLowerCase();
+    let price = parseFloat(product.getAttribute("data-price"));
+    let productProvince = product.getAttribute("data-province").toLowerCase();
+    let productRegion = product.getAttribute("data-region").toLowerCase();
+
+    let matchSearch = name.includes(searchValue);
+    let matchProvince = province === "" || productProvince === province;
+    let matchRegion = region === "" || productRegion === region;
+    let matchPrice = price >= minPrice && price <= maxPrice;
+
+    if (matchSearch && matchProvince && matchRegion && matchPrice) {
+        product.style.display = "block"; // or "flex" if your CSS uses flex
+    } else {
+        product.style.display = "none";
+    }
+
   });
 }
+
+
 
 function updateRegions() {
   const province = document.getElementById("provinceFilter").value;
@@ -37,14 +57,3 @@ function updateRegions() {
   regionSelect.value = "";
 }
 
-function resetFilter() {
-  document.getElementById("searchInput").value = "";
-  document.getElementById("minPrice").value = "";
-  document.getElementById("maxPrice").value = "";
-  document.getElementById("provinceFilter").value = "";
-  document.getElementById("regionFilter").value = "";
-
-  document.querySelectorAll(".product-card").forEach(product => {
-    product.style.display = "flex";
-  });
-}

@@ -2,129 +2,148 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/disease/diseaseDashboard.css?v=<?= time(); ?>">
 <script src="<?php echo URLROOT; ?>/js/disease/diseaseDashboard.js?v=<?= time(); ?>" defer></script>
 
+<?php
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Returns the Bootstrap badge class for a given severity level. */
+function severityBadgeClass(string $severity): string
+{
+    return match (strtolower($severity)) {
+        'high' => 'badge-danger',
+        'medium' => 'badge-warning',
+        'low' => 'badge-success',
+        default => 'badge-secondary',
+    };
+}
+
+/** Truncates a string and appends '…' if it exceeds $max characters. */
+function truncate(string $text, int $max = 40): string
+{
+    return mb_strlen($text) > $max ? mb_substr($text, 0, $max) . '…' : $text;
+}
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+// Stat cards are driven by this array — add/remove/reorder in one place.
+$statCards = [
+    [
+        'label' => 'Total Reports',
+        'value' => $data['totalReports'],
+        'color' => 'primary',
+        'icon' => 'fa-file-medical',
+        'detailUrl' => null,
+    ],
+    [
+        'label' => 'High Severity',
+        'value' => $data['highSeverity'],
+        'color' => 'danger',
+        'icon' => 'fa-exclamation-triangle',
+        'detailUrl' => URLROOT . '/disease/getBySeverity/high',
+    ],
+    [
+        'label' => 'Medium Severity',
+        'value' => $data['mediumSeverity'],
+        'color' => 'warning',
+        'icon' => 'fa-exclamation-circle',
+        'detailUrl' => URLROOT . '/disease/getBySeverity/medium',
+    ],
+    [
+        'label' => 'Low Severity',
+        'value' => $data['lowSeverity'],
+        'color' => 'success',
+        'icon' => 'fa-info-circle',
+        'detailUrl' => URLROOT . '/disease/getBySeverity/low',
+    ],
+];
+
+// Quick-action buttons driven by an array — same idea.
+$quickActions = [
+    [
+        'label' => 'Submit New Report',
+        'icon' => 'fa-plus-circle',
+        'color' => 'success',
+        'href' => URLROOT . '/disease',
+        'onclick' => null,
+    ],
+    [
+        'label' => 'High Priority Reports',
+        'icon' => 'fa-exclamation-triangle',
+        'color' => 'danger',
+        'href' => URLROOT . '/disease/getBySeverity/high',
+        'onclick' => null,
+    ],
+    [
+        'label' => 'Search Reports',
+        'icon' => 'fa-search',
+        'color' => 'info',
+        'href' => URLROOT . '/disease/viewReports',
+        'onclick' => null,
+    ],
+    [
+        'label' => 'Reports by Date',
+        'icon' => 'fa-calendar-alt',
+        'color' => 'secondary',
+        'href' => null,
+        'onclick' => 'showDateRangeModal()',
+    ],
+];
+?>
+
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>
-                    <i class="fas fa-chart-line text-primary"></i>
-                    Disease Reports Dashboard
-                </h2>
-                <div>
-                    <a href="<?php echo URLROOT; ?>/disease" class="btn btn-success">
-                        <i class="fas fa-plus"></i> New Report
-                    </a>
-                    <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-primary">
-                        <i class="fas fa-list"></i> View All Reports
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Statistics Cards -->
+    <!-- ═══ Page Header ═══ -->
     <div class="row mb-4">
-        <!-- Total Reports -->
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-primary text-white shadow h-100">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                Total Reports
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold">
-                                <?php echo number_format($data['totalReports']); ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-file-medical fa-2x"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- High Severity -->
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-danger text-white shadow h-100">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                High Severity
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold">
-                                <?php echo number_format($data['highSeverity']); ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-exclamation-triangle fa-2x"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent">
-                    <a href="<?php echo URLROOT; ?>/disease/getBySeverity/high" class="text-white small">
-                        View Details <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Medium Severity -->
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-warning text-white shadow h-100">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                Medium Severity
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold">
-                                <?php echo number_format($data['mediumSeverity']); ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-exclamation-circle fa-2x"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent">
-                    <a href="<?php echo URLROOT; ?>/disease/getBySeverity/medium" class="text-white small">
-                        View Details <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Low Severity -->
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-success text-white shadow h-100">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                Low Severity
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold">
-                                <?php echo number_format($data['lowSeverity']); ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-info-circle fa-2x"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent">
-                    <a href="<?php echo URLROOT; ?>/disease/getBySeverity/low" class="text-white small">
-                        View Details <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h2>
+                <i class="fas fa-chart-line text-primary"></i>
+                Disease Reports Dashboard
+            </h2>
+            <div>
+                <a href="<?php echo URLROOT; ?>/disease" class="btn btn-success">
+                    <i class="fas fa-plus"></i> New Report
+                </a>
+                <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-primary">
+                    <i class="fas fa-list"></i> View All Reports
+                </a>
             </div>
         </div>
     </div>
 
+    <!-- ═══ Statistics Cards ═══ -->
+    <div class="row mb-4">
+        <?php foreach ($statCards as $card): ?>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card bg-<?php echo $card['color']; ?> text-white shadow h-100">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                    <?php echo $card['label']; ?>
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">
+                                    <?php echo number_format($card['value']); ?>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas <?php echo $card['icon']; ?> fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <?php if ($card['detailUrl']): ?>
+                        <div class="card-footer bg-transparent">
+                            <a href="<?php echo $card['detailUrl']; ?>" class="text-white small">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <!-- ═══ Charts + Recent Reports ═══ -->
     <div class="row">
+
         <!-- Severity Distribution Chart -->
         <div class="col-lg-6 mb-4">
             <div class="card shadow">
@@ -136,33 +155,25 @@
                 </div>
                 <div class="card-body">
                     <canvas id="severityChart" height="300"></canvas>
-                    
-                    <!-- Legend -->
+
+                    <!-- Custom legend -->
                     <div class="row mt-3">
-                        <div class="col-4 text-center">
-                            <span class="badge badge-danger p-2">
-                                <i class="fas fa-circle"></i> High
-                            </span>
-                            <div class="mt-1">
-                                <strong><?php echo $data['highSeverity']; ?></strong>
+                        <?php
+                        $legendItems = [
+                            ['label' => 'High', 'class' => 'badge-danger', 'value' => $data['highSeverity']],
+                            ['label' => 'Medium', 'class' => 'badge-warning', 'value' => $data['mediumSeverity']],
+                            ['label' => 'Low', 'class' => 'badge-success', 'value' => $data['lowSeverity']],
+                        ];
+                        foreach ($legendItems as $item): ?>
+                            <div class="col-4 text-center">
+                                <span class="badge <?php echo $item['class']; ?> p-2">
+                                    <i class="fas fa-circle"></i> <?php echo $item['label']; ?>
+                                </span>
+                                <div class="mt-1">
+                                    <strong><?php echo number_format($item['value']); ?></strong>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4 text-center">
-                            <span class="badge badge-warning p-2">
-                                <i class="fas fa-circle"></i> Medium
-                            </span>
-                            <div class="mt-1">
-                                <strong><?php echo $data['mediumSeverity']; ?></strong>
-                            </div>
-                        </div>
-                        <div class="col-4 text-center">
-                            <span class="badge badge-success p-2">
-                                <i class="fas fa-circle"></i> Low
-                            </span>
-                            <div class="mt-1">
-                                <strong><?php echo $data['lowSeverity']; ?></strong>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -184,12 +195,11 @@
                     <?php if (!empty($data['recentReports'])): ?>
                         <div class="list-group list-group-flush">
                             <?php foreach ($data['recentReports'] as $report): ?>
-                                <a href="<?php echo URLROOT; ?>/disease/viewReport/<?php echo $report->reportId; ?>" 
-                                   class="list-group-item list-group-item-action">
+                                <a href="<?php echo URLROOT; ?>/disease/viewReport/<?php echo $report->reportId; ?>"
+                                    class="list-group-item list-group-item-action">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h6 class="mb-1">
-                                            <?php echo htmlspecialchars(substr($report->title, 0, 40)); ?>
-                                            <?php if (strlen($report->title) > 40): ?>...<?php endif; ?>
+                                            <?php echo htmlspecialchars(truncate($report->title)); ?>
                                         </h6>
                                         <small class="text-muted">
                                             <?php echo date('M d', strtotime($report->created_at)); ?>
@@ -197,23 +207,9 @@
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-muted">
-                                            <code><?php echo $report->reportId; ?></code>
+                                            <code><?php echo htmlspecialchars($report->reportId); ?></code>
                                         </small>
-                                        <?php
-                                        $severityClass = '';
-                                        switch ($report->severity) {
-                                            case 'high':
-                                                $severityClass = 'badge-danger';
-                                                break;
-                                            case 'medium':
-                                                $severityClass = 'badge-warning';
-                                                break;
-                                            case 'low':
-                                                $severityClass = 'badge-success';
-                                                break;
-                                        }
-                                        ?>
-                                        <span class="badge <?php echo $severityClass; ?> badge-sm">
+                                        <span class="badge <?php echo severityBadgeClass($report->severity); ?> badge-sm">
                                             <?php echo ucfirst($report->severity); ?>
                                         </span>
                                     </div>
@@ -233,9 +229,10 @@
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- Quick Actions -->
+    <!-- ═══ Quick Actions ═══ -->
     <div class="row">
         <div class="col-12">
             <div class="card shadow">
@@ -247,39 +244,34 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <a href="<?php echo URLROOT; ?>/disease" class="btn btn-success btn-lg btn-block">
-                                <i class="fas fa-plus-circle"></i><br>
-                                <small>Submit New Report</small>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <a href="<?php echo URLROOT; ?>/disease/getBySeverity/high" class="btn btn-danger btn-lg btn-block">
-                                <i class="fas fa-exclamation-triangle"></i><br>
-                                <small>High Priority Reports</small>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <a href="<?php echo URLROOT; ?>/disease/viewReports" class="btn btn-info btn-lg btn-block">
-                                <i class="fas fa-search"></i><br>
-                                <small>Search Reports</small>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <button class="btn btn-secondary btn-lg btn-block" onclick="showDateRangeModal()">
-                                <i class="fas fa-calendar-alt"></i><br>
-                                <small>Reports by Date</small>
-                            </button>
-                        </div>
+                        <?php foreach ($quickActions as $action): ?>
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <?php if ($action['href']): ?>
+                                    <a href="<?php echo $action['href']; ?>"
+                                        class="btn btn-<?php echo $action['color']; ?> btn-lg btn-block">
+                                        <i class="fas <?php echo $action['icon']; ?>"></i><br>
+                                        <small><?php echo $action['label']; ?></small>
+                                    </a>
+                                <?php else: ?>
+                                    <button class="btn btn-<?php echo $action['color']; ?> btn-lg btn-block"
+                                        onclick="<?php echo htmlspecialchars($action['onclick']); ?>">
+                                        <i class="fas <?php echo $action['icon']; ?>"></i><br>
+                                        <small><?php echo $action['label']; ?></small>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
-<!-- Date Range Modal -->
-<div class="modal fade" id="dateRangeModal" tabindex="-1" role="dialog" aria-labelledby="dateRangeModalLabel" aria-hidden="true">
+<!-- ═══ Date Range Modal ═══ -->
+<div class="modal fade" id="dateRangeModal" tabindex="-1" role="dialog" aria-labelledby="dateRangeModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -307,51 +299,50 @@
         </div>
     </div>
 </div>
+
+<!-- ═══ JavaScript ═══ -->
 <script>
-// Severity Distribution Pie Chart
-const ctx = document.getElementById('severityChart').getContext('2d');
-const severityChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ['High', 'Medium', 'Low'],
-        datasets: [{
-            data: [
-                <?php echo $data['highSeverity']; ?>,
-                <?php echo $data['mediumSeverity']; ?>,
-                <?php echo $data['lowSeverity']; ?>
-            ],
-            backgroundColor: [
-                '#dc3545', // Red for high
-                '#ffc107', // Yellow for medium
-                '#28a745'  // Green for low
-            ],
-            borderWidth: 2,
-            borderColor: '#fff'
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false // We have custom legend below
-            }
+    // Chart data injected safely via json_encode — no raw PHP echoes inside JS
+    const chartData = {
+        high: <?php echo json_encode((int) $data['highSeverity']); ?>,
+        medium: <?php echo json_encode((int) $data['mediumSeverity']); ?>,
+        low: <?php echo json_encode((int) $data['lowSeverity']); ?>
+    };
+
+    // Severity Distribution Doughnut Chart
+    new Chart(document.getElementById('severityChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['High', 'Medium', 'Low'],
+            datasets: [{
+                data: [chartData.high, chartData.medium, chartData.low],
+                backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
+                borderWidth: 2,
+                borderColor: '#fff',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } } // Custom legend rendered in PHP above
         }
+    });
+
+    // Open date-range modal (Bootstrap 4)
+    function showDateRangeModal() {
+        $('#dateRangeModal').modal('show');
     }
-});
 
-function showDateRangeModal() {
-    $('#dateRangeModal').modal('show');
-}
+    // Pre-fill date inputs to the last 30 days
+    document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date();
+        const thirtyDaysAgo = new Date(today - 30 * 24 * 60 * 60 * 1000);
 
-// Set default date range (last 30 days)
-document.addEventListener('DOMContentLoaded', function() {
-    const today = new Date();
-    const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
-    
-    document.getElementById('endDate').value = today.toISOString().split('T')[0];
-    document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
-});
+        const fmt = d => d.toISOString().split('T')[0];
+
+        document.getElementById('endDate').value = fmt(today);
+        document.getElementById('startDate').value = fmt(thirtyDaysAgo);
+    });
 </script>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>

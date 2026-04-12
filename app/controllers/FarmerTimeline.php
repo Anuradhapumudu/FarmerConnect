@@ -16,32 +16,66 @@ class FarmerTimeline extends Controller
             'progress' => []
         ];
 
-        if (isset($_SESSION['selected_plr'])) {
+        if (!empty($_SESSION['selected_plr'])) {
 
             $plr = $_SESSION['selected_plr'];
             $data['selected_plr'] = $plr;
 
             $seed = $model->getSeedVariety($plr);
-            $duration = $this->getSeedDuration($seed->Paddy_seed_variety);
-            $timeline = $model->getTimelineByDuration($duration);
+            
+            if ($seed && isset($seed->Paddy_seed_variety)) {
+                $duration = $this->getSeedDuration($seed->Paddy_seed_variety);
+                
+                $timeline = [];
+                try {
+                    $timeline = $model->getTimelineByDuration($duration);
+                } catch (Exception $e) {
+                    // Fallback if table doesn't exist
+                    for ($i = 1; $i <= 11; $i++) {
+                        $timeline[] = (object)['step_order' => $i, 'gap_days' => 7];
+                    }
+                }
 
-            $estimatedDates = [];
-            $startDate = date('Y-m-d');
+                $estimatedDates = [];
+                
+                $startDate = null;
+                try {
+                    $startDate = $model->getStartDate($_SESSION['nic'], $plr);
+                } catch (Exception $e) {}
 
-            foreach ($timeline as $step) {
-                $startDate = date('Y-m-d', strtotime("+{$step->gap_days} days", strtotime($startDate)));
-                $estimatedDates[$step->step_order] = $startDate;
+                if (!$startDate) {
+                    // before step 1 is done
+                    $startDate = date('Y-m-d');
+                }
+
+                foreach ($timeline as $step) {
+                    $startDate = date('Y-m-d', strtotime("+{$step->gap_days} days", strtotime($startDate)));
+                    $estimatedDates[$step->step_order] = $startDate;
+                }
+
+                $saved = [];
+                try {
+                    $saved = $model->getSavedProgress($_SESSION['nic'], $plr);
+                } catch (Exception $e) {}
+                
+                $progress = [];
+                $updatedDates = [];
+
+                if ($saved) {
+                    foreach ($saved as $row) {
+                        $progress[$row->step_order] = $row->status;
+                        $updatedDates[$row->step_order] = $row->updated_date;
+                    }
+                }
+
+                $data['estimatedDates'] = $estimatedDates;
+                $data['progress'] = $progress;
+                $data['updatedDates'] = $updatedDates;
+            } else {
+                // Revert selection if no seed found to avoid crash
+                unset($_SESSION['selected_plr']);
+                $data['selected_plr'] = null;
             }
-
-            $saved = $model->getSavedProgress($_SESSION['nic'], $plr);
-            $progress = [];
-
-            foreach ($saved as $row) {
-                $progress[$row->step_order] = $row->status;
-            }
-
-            $data['estimatedDates'] = $estimatedDates;
-            $data['progress'] = $progress;
         }
 
         $this->view('farmer/FarmerTimeline', $data);
@@ -51,10 +85,19 @@ class FarmerTimeline extends Controller
     private function getSeedDuration($seedname)
     {
         $durations = [
-            'B-352'  => 3.0,
+            'BG-250' => 2.5,
+            'BG-300' => 3.0,
+            'AT-307' => 3.0,
+            'AT-308' => 3.0,
+            'BG-352' => 3.5,
+            'BG-357' => 3.5,
+            'BG-359' => 3.5,
+            'BG-360' => 3.5,
             'BW-367' => 3.5,
-            'Bw-375' => 4.0,
-            'BG-300' => 5.0
+            'BW-372' => 3.5,
+            'BG-403' => 4.0,
+            'BG-406' => 4.0,
+            'BG-405' => 4.5
         ];
 
         return $durations[$seedname] ?? null;
@@ -62,40 +105,17 @@ class FarmerTimeline extends Controller
 
     public function getSeed()
     {
-        if(isset($_POST['plr']))
-            {
-                $plr = $_POST['plr'];
-                $_SESSION['selected_plr'] = $plr;
-                $model = $this->model('TimeLineModel');
-                $seed = $model->getSeedVariety($plr);
-                $seedname = $seed->Paddy_seed_variety;
-               // var_dump($seed);
-               // var_dump($seedname);
-                // echo json_encode($seed);
+        if (isset($_POST['plr'])) {
 
-                $duration = $this->getSeedDuration($seedname);
-                //var_dump($duration);
+            // Store selected PLR
+            $_SESSION['selected_plr'] = $_POST['plr'];
 
-                $timeline = $model->getTimelineByDuration($duration);
-                //var_dump($timeline);
-
-               $estimatedDates = [];
-               $startDate = date('Y-m-d'); // or last completion date
-
-               foreach($timeline as $step) {
-                   $startDate = date('Y-m-d', strtotime("+{$step->gap_days} days", strtotime($startDate)));
-                   $estimatedDates[$step->step_order] = $startDate;
-               } 
-
-                $_SESSION['estimatedDates'] = $estimatedDates;
-
-                // Redirect to index page (GET)
-                header("Location: " . URLROOT . "/FarmerTimeline");
-                exit();
-
-
-            }
+            // Redirect (PRG pattern)
+            header("Location: " . URLROOT . "/FarmerTimeline");
+            exit();
+        }
     }
+    
 
     public function saveStep()
     {
@@ -103,12 +123,18 @@ class FarmerTimeline extends Controller
 
             $model = $this->model('TimeLineModel');
 
-            $model->saveStepStatus(
-                $_SESSION['nic'],
-                $_POST['plr'],
-                $_POST['step_order'],
-                $_POST['status']
-            );
+            $nic = $_SESSION['nic'];
+            $plr = $_POST['plr'];
+            $step = $_POST['step_order'];
+            $status = $_POST['status'];
+
+            // Save progress
+            $model->saveStepStatus($nic, $plr, $step, $status);
+
+            // ✅ Save start date ONLY when step 1 is done
+            if ($step == 1 && $status == 'done') {
+                $model->saveStartDate($nic, $plr);
+            }
 
             echo json_encode(['success' => true]);
         }

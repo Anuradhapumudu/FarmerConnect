@@ -1,0 +1,17 @@
+<?php
+    //Database configuration
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'farmerconnect');
+    define('DB_PASS', 'farmerconnect_pass');
+    define('DB_NAME', 'farmerconnect');
+
+    //APPROOT is the root directory of the application
+    define('APPROOT', dirname(dirname(__FILE__)));
+
+    //URL ROOT
+    // When using Cloudflare Flexible SSL, the proxy handles HTTPS, but locally it will route to 80.
+    define('URLROOT', 'https://farmerconnect.indevs.in');
+
+    //WEBSITE name
+    define('SITENAME', 'FarmerConnect.lk');
+?>

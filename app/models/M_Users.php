@@ -23,12 +23,13 @@
                     $full_name = trim($data['first_name'] . ' ' . $data['last_name']);
 
                     $this->db->query("INSERT INTO farmers
-                        (nic, full_name, phone_no, registration_id, password)
-                        VALUES (:nic, :full_name, :phone_no, :registration_id, :password)
+                        (nic, full_name, phone_no, email, registration_id, password)
+                        VALUES (:nic, :full_name, :phone_no, :email, :registration_id, :password)
                     ");
                     $this->db->bind(':nic', $data['nic']);
                     $this->db->bind(':full_name', $full_name);
                     $this->db->bind(':phone_no', $data['phone_no']);
+                    $this->db->bind(':email', $data['email']);
                     $this->db->bind(':registration_id', $registration_id);
                     $this->db->bind(':password', $data['password']);
                     $this->db->execute();
@@ -45,7 +46,7 @@
                     $registration_id = $this->db->lastInsertId();
                     // Update officers table
                     $this->db->query("UPDATE officers
-                        SET first_name = :first_name, last_name = :last_name, email = :email, nic = :nic, phone_no = :phone_no, registration_id = :registration_id, password = :password
+                        SET first_name = :first_name, last_name = :last_name, email = :email, nic = :nic, phone_no = :phone_no, registration_id = :registration_id, status = 'Active', password = :password
                         WHERE officer_id = :officer_id
                     ");
                     $this->db->bind(':first_name', $data['first_name']);
@@ -129,6 +130,10 @@
             $row = $this->db->single();
 
             if ($row) {
+                // Check user status
+                if (isset($row->status) && strtolower($row->status) === 'inactive') {
+                    return 'INACTIVE';
+                }
                 // Verify password
                 $hashed_password = $row->$passwordColumn;
                 if (password_verify($password, $hashed_password)) {
