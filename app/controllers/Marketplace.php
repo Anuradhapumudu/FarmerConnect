@@ -108,10 +108,6 @@ class Marketplace extends Controller {
      Auth::checkRole('seller');
 
         $seller_id = $_SESSION['seller_id'] ?? null;
-        if (!$seller_id) {
-            header("Location: " . URLROOT . "/Users/login");
-            exit;
-        }
         
         $products = $this->marketplaceModel->getProductsBySeller($seller_id);
 

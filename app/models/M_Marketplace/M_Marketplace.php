@@ -188,9 +188,14 @@ public function getAllProducts() {
                s.first_name AS seller_name,
                s.company_name AS seller_company,
                s.address AS seller_address,
-               s.phone_no AS seller_telNo
+               s.phone_no AS seller_telNo,
+               ROUND(AVG(r.rating), 1) AS avg_rating,
+               COUNT(r.rating) AS total_ratings
         FROM products p
         LEFT JOIN sellers s ON p.seller_id = s.seller_id
+        LEFT JOIN orders o ON p.item_id = o.item_id
+        LEFT JOIN ratings r ON o.order_id = r.order_id
+        GROUP BY p.item_id , seller_name,seller_telNo,seller_address,seller_company
     ");
 
     return $this->db->resultSet();

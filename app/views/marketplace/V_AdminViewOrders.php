@@ -22,7 +22,7 @@
           <option value="all">All Statuses</option>
           <option value="order_placed">Order Placed</option>
           <option value="order_confirmed">Confirmed</option>
-          <option value="ready_to_pickup">Ready for Pickup</option>
+          <option value="ready_to_pickup">Ready to Pickup</option>
           <option value="order_picked">Picked Up</option>
           <option value="order_cancelled">Cancelled</option>
         </select>
