@@ -100,3 +100,79 @@
     color: #28a745;
     border-left: 6px solid #28a745;
 }
+
+/* ===============================
+   MOBILE RESPONSIVE (PLR VIEW)
+=============================== */
+
+@media (max-width: 768px) {
+
+    .form-container {
+        padding: 18px;
+        margin: 15px;
+    }
+
+    /* Stack form fields like farmer details */
+    .form-grid {
+        grid-template-columns: 1fr;   /* ✅ single column */
+        gap: 12px;
+    }
+
+    .form-group input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+    }
+
+    /* Buttons stack */
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+        margin-right: 0;
+    }
+
+    /* Title */
+    .form-container h2 {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    /* Alerts full width */
+    .alert {
+        font-size: 13px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .form-container {
+        padding: 14px;
+        margin: 10px;
+    }
+
+    .form-container h2 {
+        font-size: 16px;
+    }
+
+    .btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .form-group input {
+        padding: 9px;
+        font-size: 13px;
+    }
+}

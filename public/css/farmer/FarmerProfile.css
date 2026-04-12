@@ -254,11 +254,7 @@ form {
     border-color: #ffc107;
 }
 
-/* Animation */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-5px);}
-    to {opacity: 1; transform: translateY(0);}
-}
+
 
 .plr-selector {
   display: flex;
@@ -389,10 +385,52 @@ form {
         transform: translateY(-2px);
     }
 
+    
+
     @media (max-width: 600px) {
         .logout-container { justify-content: center; }
         .logout-btn { padding: 8px 10px; font-size: 14px; }
     }
+
+
+/* ===============================
+   REQUEST MOBILE CARDS
+=============================== */
+
+.request-cards {
+    display: none;
+    margin-top: 10px;
+}
+
+.request-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Row style like farmer details */
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.card-row:last-child {
+    border-bottom: none;
+}
+
+.card-row span:first-child {
+    color: #666;
+    font-weight: 500;
+}
+
+.card-row strong {
+    color: #2c3e50;
+}
 
 /* Layout: Farmer Form = 1 column */
 #farmerForm {
@@ -471,12 +509,17 @@ form {
     height: 140px;
   }
 
-  .buttons {
-    flex-direction: row;
-    gap: 10px;
-    width: 100%;
-    justify-content: center;
-  }
+.buttons {
+  flex-direction: column;   /* ✅ stack vertically */
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.buttons .btn {
+  width: 100%;
+  max-width: 220px; /* nice centered width */
+}
 
   .btn {
     width: auto;
@@ -488,13 +531,40 @@ form {
     text-align: center;
   }
 
-  .plr-selector {
+.plr-selector {
     margin-left: 0;
     width: 100%;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;   /* ✅ CENTER EVERYTHING */
     gap: 10px;
-  }
+    text-align: center;
+}
+
+/* Label center */
+.plr-selector label {
+    text-align: center;
+}
+
+/* Select box */
+.plr-selector select {
+    width: 100%;
+    max-width: 300px;   /* keeps it nice and not too wide */
+}
+
+/* Add button */
+.plr-selector .add-btn {
+    width: 100%;
+    max-width: 300px;
+}
+
+    .request-table {
+        display: none;
+    }
+
+    .request-cards {
+        display: block;
+    }
+
 }
 
 @media (max-width: 480px) {
