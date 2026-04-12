@@ -11,12 +11,18 @@ class plrReqList extends Controller {
 
         $division = $_SESSION['govi_jana_sewa_division'];
     
+        $search = $_GET['search'] ?? null;
 
-        //var_dump($officerDivision); // Debugging line
+        if ($search) {
+            $pending = $this->model->searchPending($division, $search);
+            $history = $this->model->searchHistory($division, $search);
+        } else {
+            $pending = $this->model->getPendingRequests($division);
+            $history = $this->model->getHistoryRequests($division);
+        }
+            //var_dump($officerDivision); // Debugging line
        // var_dump($officerID);
         //exit(); // Stop execution after dumping
-        $pending = $this->model->getPendingRequests($division);
-        $history = $this->model->getHistoryRequests($division);
 
         $data = [
             'pending' => $pending,

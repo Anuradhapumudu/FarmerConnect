@@ -37,6 +37,45 @@ class plrReqModel {
     return $this->db->resultSet();
 }
 
+//  SEARCH PENDING
+public function searchPending($division, $search) {
+
+    $this->db->query("
+        SELECT pr.*, f.full_name
+        FROM paddy_requests pr
+        JOIN farmers f ON pr.NIC_FK = f.nic
+        WHERE pr.Govi_Jana_Sewa_Division = :division
+        AND pr.status = 'pending'
+        AND (pr.PLR LIKE :search OR pr.NIC_FK LIKE :search)
+        ORDER BY pr.created_at DESC
+    ");
+
+    $this->db->bind(':division', $division);
+    $this->db->bind(':search', '%' . $search . '%');
+
+    return $this->db->resultSet();
+}
+
+
+//  SEARCH HISTORY
+public function searchHistory($division, $search) {
+
+    $this->db->query("
+        SELECT pr.*, f.full_name
+        FROM paddy_requests pr
+        JOIN farmers f ON pr.NIC_FK = f.nic
+        WHERE pr.Govi_Jana_Sewa_Division = :division
+        AND pr.status != 'pending'
+        AND (pr.PLR LIKE :search OR pr.NIC_FK LIKE :search)
+        ORDER BY pr.created_at DESC
+    ");
+
+    $this->db->bind(':division', $division);
+    $this->db->bind(':search', '%' . $search . '%');
+
+    return $this->db->resultSet();
+}
+
     // Get single request
     public function getRequestById($id) {
         $this->db->query("

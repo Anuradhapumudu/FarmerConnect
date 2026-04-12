@@ -100,10 +100,19 @@ public function show()
     private function getSeedDuration($seedname)
     {
         $durations = [
-            'B-352'  => 3.0,
+            'BG-250' => 2.5,
+            'BG-300' => 3.0,
+            'AT-307' => 3.0,
+            'AT-308' => 3.0,
+            'BG-352' => 3.5,
+            'BG-357' => 3.5,
+            'BG-359' => 3.5,
+            'BG-360' => 3.5,
             'BW-367' => 3.5,
-            'Bw-375' => 4.0,
-            'BG-300' => 5.0
+            'BW-372' => 3.5,
+            'BG-403' => 4.0,
+            'BG-406' => 4.0,
+            'BG-405' => 4.5
         ];
 
         return $durations[$seedname] ?? null;

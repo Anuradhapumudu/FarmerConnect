@@ -171,10 +171,19 @@
                     <label for="Paddy_Seed_Variety">Paddy Seed Variety</label>
                       <select id="Paddy_Seed_Variety" name="Paddy_Seed_Variety" required>
                             <option value="" disabled selected>-- Select Seed Variety --</option>
-                            <option value="B-352">B-352</option>
-                            <option value="BW-367">BW-367</option>
-                            <option value="BW-375">BW-375</option>
-                            <option value="BG-300">BG-300</option>
+                            <option value="BG-250">BG-250 (2.5 months)</option>
+                            <option value="BG-300">BG-300 (3.0 months)</option>
+                            <option value="AT-307">AT-307 (3.0 months)</option>
+                            <option value="AT-308">AT-308 (3.0 months)</option>
+                            <option value="BG-352">BG-352 (3.5 months)</option>
+                            <option value="BG-357">BG-357 (3.5 months)</option>
+                            <option value="BG-359">BG-359 (3.5 months)</option>
+                            <option value="BG-360">BG-360 (3.5 months)</option>
+                            <option value="BW-367">BW-367 (3.5 months)</option>
+                            <option value="BW-375">BW-375 (3.5 months)</option>
+                            <option value="BG-403">BG-403 (4.0 months)</option>
+                            <option value="BG-406">BG-406 (4.0 months)</option>
+                            <option value="BG-405">BG-405 (4.5 months)</option>
                       </select>
                 </div>
 
@@ -225,7 +234,7 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn delete-btn" onclick="deletePaddy()">Delete</button>
-                    <button type="submit" class="btn save-btn">Save Changes</button>
+                    <button type="submit" class="btn save-btn">Send Request</button>
                 </div>
             </form>
 

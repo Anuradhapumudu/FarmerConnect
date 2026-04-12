@@ -97,17 +97,20 @@
 
               <div class="farmer-card-actions">
 
-<form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/show" method="POST">
-    <input type="hidden" name="plr" value="<?php echo $farmer->PLR; ?>">
-    <button type="submit" class="action-btn view-btn">
-        View Timeline
-    </button>
-</form>
+                <form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/show" method="POST">
+                    <input type="hidden" name="plr" value="<?php echo $farmer->PLR; ?>">
+                    <button type="submit" class="action-btn view-btn">
+                        View Timeline
+                    </button>
+                </form>
 
+                  <form action="<?php echo URLROOT; ?>/officer/FarmerProfile/show" method="POST">
+                    <input type="hidden" name="nic" value="<?php echo $farmer->NIC_FK; ?>">
+                    <button type="submit" class="action-btn edit-btn">
+                        Profile Details
+                    </button>
+                 </form>
 
-                  <button class="action-btn edit-btn">
-                      <i class="fas fa-id-card"></i> Profile
-                  </button>
               </div>
           </div>
 
