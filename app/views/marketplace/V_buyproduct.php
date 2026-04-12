@@ -1,4 +1,5 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
+<script src="https://www.payhere.lk/lib/payhere.js"></script>
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/buyproduct.css?v=<?= time(); ?>">
 
@@ -43,7 +44,7 @@ $address      = htmlspecialchars($product->seller_address ?? '');
         </div>
 
         <!-- Buy Form -->
-        <form method="post" class="buy-form" id="buyForm">
+        <form method="post" class="buy-form" id="buyForm" onsubmit="return handleBuy(event)">
             <input type="hidden" name="item_id" value="<?= $itemId ?>">
 
             <label>
@@ -77,7 +78,67 @@ function updateTotal() {
     let price = <?= $price ?>;
     document.getElementById("total").innerText = (qty * price).toFixed(2);
 }
+
+function handleBuy(event) {
+    let method = document.querySelector('input[name="payment_method"]:checked').value;
+
+    if (method === "online") {
+        // allow form submit → controller will prepare PayHere
+        return true;
+    }
+
+    // cash → normal submit
+    return true;
+}
+
 </script>
+
+<?php if (isset($data['payhere'])): ?>
+
+<script>
+
+var payment = {
+    sandbox: true,
+    merchant_id: "<?= PAYHERE_MERCHANT_ID ?>",
+
+    return_url: "<?= URLROOT ?>/Marketplace/paymentSuccessOnline",
+    cancel_url: "<?= URLROOT ?>/Marketplace/paymentCancel",
+    notify_url: "https://YOUR-NGROK-URL/FarmerConnect/Marketplace/paymentNotification",
+
+    order_id: "<?= $data['payhere']['order_id'] ?>",
+    items: "<?= $itemName ?>",
+    amount: "<?= $data['payhere']['amount'] ?>",
+    currency: "LKR",
+    hash: "<?= $data['payhere']['hash'] ?>",
+
+    first_name: "Farmer",
+    last_name: "User",
+    email: "farmer@example.com",
+    phone: "0771234567",
+    address: "Sri Lanka",
+    city: "<?= $region ?>",
+    country: "Sri Lanka"
+};
+
+payhere.onCompleted = function(orderId) {
+    window.location.href = "<?= URLROOT ?>/Marketplace/paymentSuccessOnline";
+};
+
+payhere.onDismissed = function() {
+    alert("Payment cancelled");
+};
+
+payhere.onError = function(error) {
+    alert("PayHere error: " + error);
+};
+
+// AUTO START PAYMENT
+payhere.startPayment(payment);
+
+</script>
+
+<?php endif; ?>
+
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/marketplace.css?v=<?= time(); ?>">
 

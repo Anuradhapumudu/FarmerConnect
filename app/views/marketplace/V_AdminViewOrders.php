@@ -4,7 +4,7 @@
 <main class="main-content" id="mainContent">
 
   <div class="containers">
-    <div class="admin-header">
+    <div class="header">
       <h1>Admin Dashboard</h1>
       <p>Manage orders and products in the marketplace</p>
     </div>
@@ -44,7 +44,7 @@
                 <th>Customer</th>
                 <th>Product</th>
                 <th>Seller</th>
-                <th>Date</th>
+                <th>Order Date</th>
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -120,7 +120,7 @@
   </div>
 
   <!-- Order Detail Modal -->
-  <div class="modal" id="order-detail-modal" style="display:none;">
+  <div class="modal" id="order-detail-modal" >
     <div class="modal-content">
       <div class="modal-header">
         <h2 class="modal-title">Order Details: #<span id="modal-order-id"></span></h2>

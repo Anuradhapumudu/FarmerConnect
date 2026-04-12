@@ -4,6 +4,11 @@
 <div id="mainContent">
   <div class="containers">
 
+  <div class="header">
+      <h1>View Products</h1>
+      <p>Browse all available products in one place</p>
+</div>
+
   <!-- Filter -->
   <div class="filter-container">
     <input type="text" id="searchInput" placeholder="Search product...">
@@ -73,7 +78,7 @@
     <?php 
         $price = floatval($row->price_per_unit);
         $region = htmlspecialchars($row->region);
-        $itemName = htmlspecialchars($row->item_name);
+        $itemName = htmlspecialchars(ucfirst(strtolower($row->item_name)));
         $sellerName = htmlspecialchars($row->seller_name);
         $imageUrl = URLROOT . '/uploads/' . htmlspecialchars($row->image_url);
         $available = intval($row->available_quantity);
@@ -83,6 +88,8 @@
         $unit_type = htmlspecialchars($row->unit_type ?? '');
         $province  = htmlspecialchars($row->province ?? '');
         $address   = htmlspecialchars($row->seller_address ?? '');
+        $rating = round($row->avg_rating ?? 0, 1);
+        $total_rating = $row->total_ratings ?? 0;
     ?>
 
     <div class="order-card product-card" 
@@ -111,10 +118,22 @@
 
         <!-- Product Info -->
         <div class="order-content-wrapper">
-          <div class="order-header">
-            <div class="order-id"><?= $itemName ?></div>
+            <div class="order-header">
+              <!-- Product Name left -->
+              <div class="order-id"><?= $itemName ?></div>
+              <!-- Rating right -->
+              <div class="rating-box">
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                  <span class="<?= ($i <= $rating) ? 'star filled' : 'star'; ?>">★</span>
+                <?php endfor; ?>
+                <small> <?= number_format($rating, 1) ?>/5 </small>
+                <small>(<?= $total_rating ?> reviews)</small>
+              </div>
 
-          </div>
+
+
+            </div>
+
 
           <div class="order-content">
             <div class="product-info">
@@ -154,56 +173,4 @@
 </div>
 </div>
 
-<!-- JS Filter Script -->
-<script>
-function applyFilter() {
-  const search = document.getElementById("searchInput").value.toLowerCase().trim();
-  const minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
-  const maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
-  const province = document.getElementById("provinceFilter").value.toLowerCase();
-  const region = document.getElementById("regionFilter").value.toLowerCase();
-
-  const products = document.querySelectorAll(".product-card");
-
-  products.forEach(product => {
-    const name = product.dataset.name;
-    const price = parseFloat(product.dataset.price);
-    const productProvince = product.dataset.province;
-    const productRegion = product.dataset.region;
-
-    let visible = true;
-
-    if (search && !name.includes(search)) visible = false;
-    if (price < minPrice || price > maxPrice) visible = false;
-    if (province && productProvince !== province) visible = false;
-    if (region && productRegion !== region) visible = false;
-
-    product.style.display = visible ? "flex" : "none";
-  });
-}
-
-function updateRegions() {
-  const province = document.getElementById("provinceFilter").value;
-  const regionSelect = document.getElementById("regionFilter");
-  const options = regionSelect.querySelectorAll("option");
-
-  options.forEach(opt => {
-    if (!opt.value) return; // Keep "All Regions"
-    opt.style.display = (!province || opt.dataset.province === province) ? "block" : "none";
-  });
-
-  regionSelect.value = "";
-}
-
-function resetFilter() {
-  document.getElementById("searchInput").value = "";
-  document.getElementById("minPrice").value = "";
-  document.getElementById("maxPrice").value = "";
-  document.getElementById("provinceFilter").value = "";
-  document.getElementById("regionFilter").value = "";
-
-  document.querySelectorAll(".product-card").forEach(product => {
-    product.style.display = "flex";
-  });
-}
-</script>
+<script src="<?php echo URLROOT; ?>/js/marketplace/viewProduct.js?v=<?= time(); ?>"></script>

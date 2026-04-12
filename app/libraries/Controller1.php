@@ -20,7 +20,7 @@ class Controller {
         if(file_exists('../app/views/'.$view.'.php')) {
 
         // Make data variables available in view
-            extract($data);
+            extract((array)$data);   //meka natuwath wada
             require_once '../app/views/'.$view.'.php';
         } else {
             require_once '../app/views/404.php';
