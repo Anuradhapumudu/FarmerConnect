@@ -11,23 +11,53 @@
 
     <!-- Stats cards -->
     <div class="stats">
-      <div class="card"><h2 id="totalCount">234</h2><p>Total Farmers</p></div>
-      <div class="card"><h2 id="activeCount">223</h2><p>Active</p></div>
-      <div class="card"><h2 id="inactiveCount">11</h2><p>Inactive</p></div>
+      <div class="card"><h2><?php echo $data['total']; ?></h2><p>Total Farmers</p></div>
+      <div class="card"><h2 id="activeCount"><?php echo $data['active']; ?></h2><p>Active</p></div>
+      <div class="card"><h2 id="inactiveCount"><?php echo $data['inactive']; ?></h2><p>Inactive</p></div>
     </div>  
 
     <!-- Search + Filter -->
-    <div class="search-box">
-      <div style="position: relative; flex: 1;">
+<form method="GET" action="<?php echo URLROOT; ?>/officer/OfficerTimeline">
+
+<div class="search-box">
+
+    <!--  Search Input -->
+    <div style="position: relative; flex: 1;">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" class="search-input" placeholder="Search farmers by PLR number or NIC ...">
-      </div>
-      <select class="filter-select">
-        <option value="all">All Status</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-      </select>
+
+        <input 
+            type="text" 
+            name="search"
+            value="<?php echo $data['search'] ?? ''; ?>"
+            class="search-input" 
+            placeholder="Search by PLR or NIC..."
+        >
+
+                <!--  Search Button -->
+    <button type="submit" class="search-btn">
+        Search
+    </button>
+    
     </div>
+
+
+
+    <!--  Filter (Auto submit) -->
+    <select 
+        name="status" 
+        class="filter-select"
+        onchange="this.form.submit()"
+    >
+        <option value="all" <?php if($data['status']=='all') echo 'selected'; ?>>All</option>
+        <option value="active" <?php if($data['status']=='active') echo 'selected'; ?>>Active</option>
+        <option value="inactive" <?php if($data['status']=='inactive') echo 'selected'; ?>>Inactive</option>
+    </select>
+
+
+
+</div>
+
+</form>
 
     <!-- Farmers Table -->
     <div class="farmer-table-wrapper">
@@ -49,7 +79,7 @@
                   <td><?php echo $farmer->PLR; ?></td>
                   <td><?php echo $farmer->NIC_FK; ?></td>
                   <td><?php echo $farmer->full_name; ?></td>
-                  <td><span class="status-badge status-active">Active</span></td>
+                  <td><span class="status-badge status-<?php echo strtolower($farmer->status); ?>"><?php echo $farmer->status; ?></span></td>
                   <td>
 
                   <form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/show" method="POST">

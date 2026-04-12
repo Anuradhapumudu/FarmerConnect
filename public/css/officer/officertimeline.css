@@ -96,6 +96,22 @@
   color: #2e7d32;
   z-index: 1;
 }
+
+.search-btn {
+    background: #388e3c; /* slightly softer green */
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.search-btn:hover {
+    background: #2e7d32;
+}
+
 .filter-select {
   padding: 12px;
   border: 2px solid #c8e6c9;
@@ -322,9 +338,36 @@ td form,
 
 /* ✅ Smaller Mobile Adjustments */
 @media (max-width: 768px) {
-  .search-box { flex-direction: column; align-items: stretch; }
-  .stats { grid-template-columns: repeat(2, 1fr); }
+
+  .search-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    font-size: 15px;
+  }
+
+  .filter-select {
+    width: 100%;
+    font-size: 15px;
+  }
+
+  .search-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .search-icon {
+    margin-top: 13px;
+  }
 }
+
 @media (max-width: 500px) {
   .stats { grid-template-columns: 1fr; }
 }

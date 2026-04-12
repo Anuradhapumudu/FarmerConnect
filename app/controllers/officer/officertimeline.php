@@ -14,11 +14,30 @@ class OfficerTimeline extends Controller {
         // 1. Get officer division
         $division = $this->model->getOfficerDivision($officerId);
 
+            //  GET SEARCH + FILTER
+        $search = $_GET['search'] ?? null;
+        $status = $_GET['status'] ?? 'all';
+
         // 2. Get farmers in that division
-        $farmers = $this->model->getFarmersByDivision($division);
+        $farmers = $this->model->getFarmersByDivision($division, $search, $status);
+
+            //  COUNTS
+            $total = count($farmers);
+            $active = 0;
+            $inactive = 0;
+
+        foreach ($farmers as $f) {
+                    if ($f->status == 'Active') $active++;
+                    else $inactive++;
+       }
 
         $data = [
-            'farmers' => $farmers
+            'farmers' => $farmers,
+            'total' => $total,
+            'active' => $active,
+            'inactive' => $inactive,
+            'search' => $search,
+            'status' => $status
         ];
 
         $this->view('officer/officertimeline', $data);

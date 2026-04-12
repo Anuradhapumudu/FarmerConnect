@@ -23,15 +23,36 @@ class OfficerTimelineModel {
     }
 
     // Get farmers (PLR list) in that division
-    public function getFarmersByDivision($division) {
-        $this->db->query("
-            SELECT p.PLR, p.NIC_FK, f.full_name
+    public function getFarmersByDivision($division, $search = null, $status = null)
+    {
+        $query = "
+            SELECT p.PLR, p.NIC_FK, f.full_name, f.status
             FROM paddy p
             JOIN farmers f ON p.NIC_FK = f.nic
             WHERE p.Govi_Jana_Sewa_Division = :division
-        ");
+        ";
+
+        //  SEARCH
+        if ($search) {
+            $query .= " AND (p.PLR LIKE :search OR p.NIC_FK LIKE :search)";
+        }
+
+        //  FILTER
+        if ($status && $status != 'all') {
+            $query .= " AND f.status = :status";
+        }
+
+        $this->db->query($query);
 
         $this->db->bind(':division', $division);
+
+        if ($search) {
+            $this->db->bind(':search', '%' . $search . '%');
+        }
+
+        if ($status && $status != 'all') {
+            $this->db->bind(':status', ucfirst($status)); // Active / Inactive
+        }
 
         return $this->db->resultSet();
     }
