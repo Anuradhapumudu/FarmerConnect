@@ -94,6 +94,11 @@
                         <form method="POST" action="<?php echo URLROOT; ?>/users/register">
                             <div class="input-group">
                                 <div class="input-field">
+                                    <label for="officer_id">Officer ID<span class="required">*</span></label>
+                                    <input type="text" name="officer_id" id="officer_id" placeholder="Officer ID" value="<?php echo $data['officer_id']; ?>">
+                                    <span class = "form-invalid"><?php echo ($data['form_type'] == 'officer') ? $data['officer_id_error'] : ''; ?></span>
+                                </div>
+                                <div class="input-field">
                                     <label for="first_name">First Name<span class="required">*</span></label>
                                     <input type="text" name="first_name" id="officer_first_name" placeholder="First Name" value="<?php echo $data['first_name']; ?>">
                                     <span class = "form-invalid"><?php echo ($data['form_type'] == 'officer') ? $data['first_name_error'] : ''; ?></span>
@@ -114,9 +119,9 @@
                                     <span class = "form-invalid"><?php echo ($data['form_type'] == 'officer') ? $data['email_error'] : ''; ?></span>
                                 </div>
                                 <div class="input-field">
-                                    <label for="officer_id">Officer ID<span class="required">*</span></label>
-                                    <input type="text" name="officer_id" id="officer_id" placeholder="Officer ID" value="<?php echo $data['officer_id']; ?>">
-                                    <span class = "form-invalid"><?php echo ($data['form_type'] == 'officer') ? $data['officer_id_error'] : ''; ?></span>
+                                    <label for="phone_no">Phone No<span class="required">*</span></label>
+                                    <input type="text" name="phone_no" id="officer_phone_no" placeholder="Phone Number" value="<?php echo $data['phone_no']; ?>">
+                                    <span class="form-invalid"> <?php echo ($data['form_type'] == 'officer') ? $data['phone_no_error'] : ''; ?> </span>
                                 </div>
                                 <div class="input-field">
                                     <label for="password">Password<span class="required">*</span></label>

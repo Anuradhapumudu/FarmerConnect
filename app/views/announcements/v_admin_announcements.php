@@ -270,3 +270,20 @@
   </div>
 </div>
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>
+<script>
+  function toggleOptions(element) {
+    const options = element.nextElementSibling;
+    const isOpen = options.style.display === 'block';
+    document.querySelectorAll('.options-menu').forEach(menu => {
+      menu.style.display = 'none';
+    });
+    options.style.display = isOpen ? 'none' : 'block';
+  }
+  document.addEventListener('click', function(event) {
+    if (!event.target.classList.contains('menu-dots')) {
+      document.querySelectorAll('.options-menu').forEach(menu => {
+        menu.style.display = 'none';
+      });
+    }
+  });
+</script>

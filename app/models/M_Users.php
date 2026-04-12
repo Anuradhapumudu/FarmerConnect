@@ -45,7 +45,7 @@
                     $registration_id = $this->db->lastInsertId();
                     // Update officers table
                     $this->db->query("UPDATE officers
-                        SET first_name = :first_name, last_name = :last_name, email = :email, nic = :nic, phone_no = :phone_no, registration_id = :registration_id, password = :password
+                        SET first_name = :first_name, last_name = :last_name, email = :email, nic = :nic, phone_no = :phone_no, registration_id = :registration_id, status = 'Active', password = :password
                         WHERE officer_id = :officer_id
                     ");
                     $this->db->bind(':first_name', $data['first_name']);
@@ -129,6 +129,10 @@
             $row = $this->db->single();
 
             if ($row) {
+                // Check user status
+                if (isset($row->status) && strtolower($row->status) === 'inactive') {
+                    return 'INACTIVE';
+                }
                 // Verify password
                 $hashed_password = $row->$passwordColumn;
                 if (password_verify($password, $hashed_password)) {
