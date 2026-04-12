@@ -11,19 +11,27 @@ class FarmerProfile extends Controller {
 
 public function show()
 {
-    $nic = $_POST['nic'] ?? $_SESSION['view_farmer_nic'] ?? null;
+    //  If POST → save to session and REDIRECT
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $_SESSION['view_farmer_nic'] = $_POST['nic'];
+        $_SESSION['selected_plr'] = $_POST['selected_plr'] ?? null;
+
+        header("Location: " . URLROOT . "/officer/FarmerProfile/show");
+        exit();
+    }
+
+    //  Now ONLY GET requests reach here
+    $nic = $_SESSION['view_farmer_nic'] ?? null;
 
     if (!$nic) {
         die("NIC missing");
     }
 
-    $_SESSION['view_farmer_nic'] = $nic;
-
     $farmer = $this->farmerModel->getFarmerByNIC($nic);
     $paddies = $this->paddyModel->getPaddyByNIC($nic);
 
-    // ✅ SELECTED PLR
-    $selectedPLR = $_POST['selected_plr'] ?? ($paddies[0]->PLR ?? null);
+    $selectedPLR = $_SESSION['selected_plr'] ?? ($paddies[0]->PLR ?? null);
 
     $data = [
         'farmer' => $farmer,
@@ -34,7 +42,7 @@ public function show()
     $this->view('officer/farmerProfileView', $data);
 }
 
-    // ✅ DELETE PLR (officer)
+    //  DELETE PLR (officer)
 public function deletePLR()
 {
     $plr = $_POST['plr'];
@@ -43,7 +51,7 @@ public function deletePLR()
 
     $_SESSION['success'] = "PLR deleted successfully by officer";
 
-    // ✅ redirect back to profile (NOT referer)
+    //  redirect back to profile (NOT referer)
     header("Location: " . URLROOT . "/officer/FarmerProfile/show");
     exit();
 }

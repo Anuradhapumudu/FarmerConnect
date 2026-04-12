@@ -12,7 +12,7 @@
             <p>View farmer details and manage paddy lands</p>
         </div>
 
-        <button class="back-btn" onclick="window.history.back()">
+        <button class="back-btn" onclick="window.location.href='<?= URLROOT ?>/officer/OfficerTimeline'">
             <i class="fas fa-arrow-left"></i> Back
         </button>
     </div>
@@ -22,7 +22,13 @@
 
         <!-- ================= FARMER PROFILE ================= -->
         <div class="profile-card">
-            <img src="https://i.pravatar.cc/150" class="profile-img">
+            
+            <img 
+                src="<?= !empty($data['farmer']->profile_image) 
+                    ? URLROOT . $data['farmer']->profile_image 
+                    : URLROOT . '/img/default-user.png' ?>"
+                class="profile-img"
+            >
 
             <h2 class="farmer-name"><?= $data['farmer']->full_name ?></h2>
             <p class="farmer-nic">NIC: <?= $data['farmer']->nic ?></p>

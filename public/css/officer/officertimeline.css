@@ -96,6 +96,22 @@
   color: #2e7d32;
   z-index: 1;
 }
+
+.search-btn {
+    background: #388e3c; /* slightly softer green */
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.search-btn:hover {
+    background: #2e7d32;
+}
+
 .filter-select {
   padding: 12px;
   border: 2px solid #c8e6c9;
@@ -164,39 +180,74 @@ tr:hover {
 .status-pending { background: #cce5ff; color: #004085; }
 
 
-/* ==== Action Buttons (New Professional Look) ==== */
+/* ==============================
+   Action Buttons Container
+============================== */
+td form,
+.farmer-card-actions form {
+    display: inline-block;
+    margin: 2px;
+}
+
+/* ==============================
+   Base Button Style
+============================== */
 .action-btn {
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.3s ease;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 
-/* Timeline Button */
+/* ==============================
+   View Timeline Button
+============================== */
 .view-btn {
-  background:#4caf50;
-  color: #fff;
-}
-.view-btn:hover {
-  background:#388e3c;
-  transform: translateY(-2px);
+    background: #2e7d32;
+    color: #fff;
 }
 
-/* Profile Details Button */
-.edit-btn {
-  background: #ffb300;
-  color: #fff;
+.view-btn:hover {
+    background: #1b5e20;
 }
+
+/* ==============================
+   Profile Button
+============================== */
+.edit-btn {
+    background: #f1f8e9;
+    color: #2e7d32;
+    border: 1px solid #c5e1a5;
+}
+
 .edit-btn:hover {
-  background:#f57c00;
-  transform: translateY(-2px);
+    background: #e6f4d7;
+    color: #1b5e20;
+}
+
+/* ==============================
+   Mobile Fix
+============================== */
+.farmer-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.farmer-card-actions form {
+    flex: 1;
+}
+
+.farmer-card-actions button {
+    width: 100%;
 }
 
 /* Optional Icon Styling */
@@ -287,9 +338,36 @@ tr:hover {
 
 /* ✅ Smaller Mobile Adjustments */
 @media (max-width: 768px) {
-  .search-box { flex-direction: column; align-items: stretch; }
-  .stats { grid-template-columns: repeat(2, 1fr); }
+
+  .search-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    font-size: 15px;
+  }
+
+  .filter-select {
+    width: 100%;
+    font-size: 15px;
+  }
+
+  .search-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .search-icon {
+    margin-top: 13px;
+  }
 }
+
 @media (max-width: 500px) {
   .stats { grid-template-columns: 1fr; }
 }
