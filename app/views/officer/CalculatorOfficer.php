@@ -63,78 +63,72 @@
             <th>Stage 3</th>
           </tr>
         </thead>
-        <tbody>
+        
+              <tbody>
 
-   
-          <tr>
-            <td rowspan = "3" > 2 month </td>
-            <td class = "value">Urea : <?= $data['tableData']['2.0'][1]['urea'];?> kg</td>
-            <td class = "value">Urea : <?= $data['tableData']['2.0'][2]['urea'];?> kg</td>
-            <td class = "value">Urea : <?= $data['tableData']['2.0'][3]['urea'];?> kg</td>
-          </tr>
-          <tr>
-            <td class = "value">Potash : <?= $data['tableData']['2.0'][1]['potash'];?> kg</td>
-            <td class = "value">Potash : <?= $data['tableData']['2.0'][2]['potash'];?> kg</td>
-            <td class = "value">Potash : <?= $data['tableData']['2.0'][3]['potash'];?> kg</td>
-          </tr>
-          <tr>
-            <td class = "value">Super Phospate : <?= $data['tableData']['2.0'][1]['phosphate'];?> kg</td>
-            <td class = "value">Super Phospate : <?= $data['tableData']['2.0'][2]['phosphate'];?> kg</td>
-            <td class = "value">Super Phospate : <?= $data['tableData']['2.0'][3]['phosphate'];?> kg</td>
-          </tr>
+              <?php 
+              $durations = ['2.0' => '2 month', '3.0' => '3 month', '3.5' => '3 1/2 month', '4.0' => '4 month'];
 
-          <tr>
-            <td rowspan = "3" > 3 month </td>
-            <td class = "value">Urea : <?= $data['tableData']['3.0'][1]['urea'];?> kg</td>
-            <td class = "value">Urea : <?= $data['tableData']['3.0'][2]['urea'];?> kg</td>
-            <td class = "value">Urea : <?= $data['tableData']['3.0'][3]['urea'];?> kg</td>
-          </tr>
-          <tr>
-            <td class = "value">Potash : <?= $data['tableData']['3.0'][1]['potash'];?> kg</td>
-            <td class = "value">Potash : <?= $data['tableData']['3.0'][2]['potash'];?> kg</td>
-            <td class = "value">Potash : <?= $data['tableData']['3.0'][3]['potash'];?> kg</td>
-          </tr>
-          <tr>
-            <td class = "value">Super Phospate : <?= $data['tableData']['3.0'][1]['phosphate'];?> kg</td>
-            <td class = "value">Super Phospate : <?= $data['tableData']['3.0'][2]['phosphate'];?> kg</td>
-            <td class = "value">Super Phospate : <?= $data['tableData']['3.0'][3]['phosphate'];?> kg</td>
-          </tr>
+              foreach ($durations as $key => $label): ?>
+                  
+              <tr class="crop-row">
 
-          <tr>
-          <tr>
-            <td rowspan = "3" > 3 1/2 month </td>
-            <td class = "value">Urea : <?= $data['tableData']['3.5'][1]['urea'];?> kg</td>
-            <td class = "value">Urea : <?= $data['tableData']['3.5'][2]['urea'];?> kg</td>
-            <td class = "value">Urea : <?= $data['tableData']['3.5'][3]['urea'];?> kg</td>
-          </tr>
-          <tr>
-            <td class = "value">Potash : <?= $data['tableData']['3.5'][1]['potash'];?> kg</td>
-            <td class = "value">Potash : <?= $data['tableData']['3.5'][2]['potash'];?> kg</td>
-            <td class = "value">Potash : <?= $data['tableData']['3.5'][3]['potash'];?> kg</td>
-          </tr>
-          <tr>
-            <td class = "value">Super Phospate : <?= $data['tableData']['3.5'][1]['phosphate'];?> kg</td>
-            <td class = "value">Super Phospate : <?= $data['tableData']['3.5'][2]['phosphate'];?> kg</td>
-            <td class = "value">Super Phospate : <?= $data['tableData']['3.5'][3]['phosphate'];?> kg</td>
-          </tr>
+                  <!-- Crop Type -->
+                  <td><?php echo $label; ?></td>
 
-          <tr>
-            <td rowspan = "3" > 4 month </td>
-            <td class = "value">Urea : <?= $data['tableData']['4.0'][1]['urea'];?> kg</td>
-            <td class = "value">Urea : <?= $data['tableData']['4.0'][2]['urea'];?> kg</td>
-            <td class = "value">Urea : <?= $data['tableData']['4.0'][3]['urea'];?> kg</td>
-          </tr>
-          <tr>
-            <td class = "value">Potash : <?= $data['tableData']['4.0'][1]['potash'];?> kg</td>
-            <td class = "value">Potash : <?= $data['tableData']['4.0'][2]['potash'];?> kg</td>
-            <td class = "value">Potash : <?= $data['tableData']['4.0'][3]['potash'];?> kg</td>
-          </tr>
-          <tr>
-            <td class = "value">Super Phospate : <?= $data['tableData']['4.0'][1]['phosphate'];?> kg</td>
-            <td class = "value">Super Phospate : <?= $data['tableData']['4.0'][2]['phosphate'];?> kg</td>
-            <td class = "value">Super Phospate : <?= $data['tableData']['4.0'][3]['phosphate'];?> kg</td>
-          </tr>
-    </tbody>
+                  <!-- Stage 1 -->
+                  <td>
+                      <div class="fert-box">
+                          <strong>Urea</strong>
+                          <span><?= $data['tableData'][$key][1]['urea']; ?> kg</span>
+                      </div>
+                      <div class="fert-box">
+                          <strong>Potash</strong>
+                          <span><?= $data['tableData'][$key][1]['potash']; ?> kg</span>
+                      </div>
+                      <div class="fert-box">
+                          <strong>Phosphate</strong>
+                          <span><?= $data['tableData'][$key][1]['phosphate']; ?> kg</span>
+                      </div>
+                  </td>
+
+                  <!-- Stage 2 -->
+                  <td>
+                      <div class="fert-box">
+                          <strong>Urea</strong>
+                          <span><?= $data['tableData'][$key][2]['urea']; ?> kg</span>
+                      </div>
+                      <div class="fert-box">
+                          <strong>Potash</strong>
+                          <span><?= $data['tableData'][$key][2]['potash']; ?> kg</span>
+                      </div>
+                      <div class="fert-box">
+                          <strong>Phosphate</strong>
+                          <span><?= $data['tableData'][$key][2]['phosphate']; ?> kg</span>
+                      </div>
+                  </td>
+
+                  <!-- Stage 3 -->
+                  <td>
+                      <div class="fert-box">
+                          <strong>Urea</strong>
+                          <span><?= $data['tableData'][$key][3]['urea']; ?> kg</span>
+                      </div>
+                      <div class="fert-box">
+                          <strong>Potash</strong>
+                          <span><?= $data['tableData'][$key][3]['potash']; ?> kg</span>
+                      </div>
+                      <div class="fert-box">
+                          <strong>Phosphate</strong>
+                          <span><?= $data['tableData'][$key][3]['phosphate']; ?> kg</span>
+                      </div>
+                  </td>
+
+              </tr>
+
+              <?php endforeach; ?>
+
+              </tbody>
     </table>
 
 </main>

@@ -237,49 +237,74 @@
                     <button type="submit" class="btn save-btn">Send Request</button>
                 </div>
             </form>
-
-        <h3>My Paddy Registration Requests</h3>
-
-        <table class="request-table">
-            <thead>
-                <tr>
-                    <th>PLR</th>
-                    <th>Seed Variety</th>
-                    <th>Size</th>
-                    <th>Requested Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <?php if (!empty($data['requests'])): ?>
-                    <?php foreach ($data['requests'] as $req): ?>
-                        <tr>
-                            <td><?php echo $req->PLR; ?></td>
-                            <td><?php echo $req->Paddy_Seed_Variety; ?></td>
-                            <td><?php echo $req->Paddy_Size; ?></td>
-
-                            <td>
-                                <?php echo date('Y-m-d', strtotime($req->created_at)); ?>
-                            </td>
-
-                            <td>
-                                <span class="status <?php echo $req->status; ?>">
-                                    <?php echo ucfirst($req->status); ?>
-                                </span>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="4">No Requests Found</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-
         </div>
     </div>
+        
+            
+
+<!-- ================= REQUEST SECTION ================= -->
+    <div class="page-title">
+        <h2>Paddy Registration Requests</h2>
+    </div>
+
+
+<div class="profile-card request-section">
+
+    
+
+    <table class="request-table">
+        <thead>
+            <tr>
+                <th>PLR</th>
+                <th>Seed Variety</th>
+                <th>Size</th>
+                <th>Requested Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php if (!empty($data['requests'])): ?>
+                <?php foreach ($data['requests'] as $req): ?>
+                    <tr>
+                        <td><?php echo $req->PLR; ?></td>
+                        <td><?php echo $req->Paddy_Seed_Variety; ?></td>
+                        <td><?php echo $req->Paddy_Size; ?></td>
+                        <td><?php echo date('Y-m-d', strtotime($req->created_at)); ?></td>
+                        <td>
+                            <span class="status <?php echo $req->status; ?>">
+                                <?php echo ucfirst($req->status); ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="5">No Requests Found</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <!-- MOBILE CARDS -->
+    <div class="request-cards">
+        <?php foreach ($data['requests'] as $req): ?>
+            <div class="request-card">
+                <div class="card-row"><span>PLR</span><strong><?php echo $req->PLR; ?></strong></div>
+                <div class="card-row"><span>Seed</span><strong><?php echo $req->Paddy_Seed_Variety; ?></strong></div>
+                <div class="card-row"><span>Size</span><strong><?php echo $req->Paddy_Size; ?></strong></div>
+                <div class="card-row"><span>Date</span><strong><?php echo date('Y-m-d', strtotime($req->created_at)); ?></strong></div>
+                <div class="card-row">
+                    <span>Status</span>
+                    <span class="status <?php echo $req->status; ?>">
+                        <?php echo ucfirst($req->status); ?>
+                    </span>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+</div>
 </main>
 
 <script>

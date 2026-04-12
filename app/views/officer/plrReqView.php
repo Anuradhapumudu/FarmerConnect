@@ -8,7 +8,6 @@
 
     <h2>PLR Request Details</h2>
 
-    <h2>PLR Request Details</h2>
 
         <?php if(isset($_SESSION['error'])): ?>
             <div class="alert error">
