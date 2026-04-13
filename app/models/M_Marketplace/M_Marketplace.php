@@ -286,22 +286,38 @@ public function getOrderById($order_id) {
     $this->db->query("
         SELECT 
             o.*,
-            p.item_name,
+            p.item_id,
+            p.item_name, 
             p.image_url,
+            p.category,
+
+            s.seller_id AS seller_id,
             s.first_name AS seller_first,
             s.last_name AS seller_last,
+            s.phone_no AS seller_telNo,
             s.address AS seller_address,
-            s.phone_no AS seller_telNo
+            s.company_name AS seller_company,
+
+            f.nic AS farmer_nic,
+            f.full_name AS farmer_full,
+            f.phone_no AS farmer_telNo,
+            f.address AS farmer_address,
+
+            h.changed_at AS latest_change
+
         FROM orders o
         JOIN products p ON o.item_id = p.item_id
         JOIN sellers s ON o.seller_id = s.seller_id
+        JOIN farmers f ON o.buyer_id = f.nic 
+        LEFT JOIN order_status_history h ON o.order_id = h.order_id
+
         WHERE o.order_id = :order_id
     ");
 
     $this->db->bind(':order_id', $order_id);
+
     return $this->db->single();
 }
-
 
 // Update order status
 public function updateOrderStatus($order_id, $new_status) {

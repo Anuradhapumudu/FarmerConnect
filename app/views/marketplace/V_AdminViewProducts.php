@@ -5,12 +5,13 @@
   <div class="containers">
     <div class="header">
       <h1>Product Management</h1>
+      <p>View all products listed in the marketplace</p>
     </div>
 
     <!-- Filter -->
     <div class="filter-container center-content">
       <div class="filter-wrapper">
-        <input type="text" id="searchInput" placeholder="Product Name / Seller ID...">
+        <input type="text" id="searchInput" placeholder="Product Name or Seller ID">
         <input type="number" id="minPrice" placeholder="Min Price">
         <input type="number" id="maxPrice" placeholder="Max Price">
 
@@ -18,9 +19,9 @@
           <option value="">All Items</option>
           <option value="Fertilizer">Fertilizer</option>
           <option value="Seeds">Paddy seeds</option>
-          <option value="Tools">Agrochemicals</option>
-          <option value="Tools">Equipments</option>
-          <option value="Tools">Rent Machinery</option>
+          <option value="agrochemicals">Agrochemicals</option>
+          <option value="equipments">Equipments</option>
+          <option value="rent machinery">Rent Machinery</option>
           <option value="Others">Others</option>
         </select>
 
@@ -73,8 +74,7 @@
           <option value="Outstock">Out Stock</option>
         </select>
 
-        <button onclick="applyFilter()">Filter</button>
-        <button onclick="resetFilter()">Reset</button>
+
       </div>
     </div>
 
@@ -83,10 +83,13 @@
       <?php if(!empty($data['products'])): ?>
         <?php foreach($data['products'] as $product): ?>
           <div class="order-card product-container" 
-               data-category="<?php echo htmlspecialchars($product->category); ?>" 
-               data-province="<?php echo htmlspecialchars($product->province); ?>" 
-               data-region="<?php echo htmlspecialchars($product->region); ?>" 
-               data-status="<?php echo htmlspecialchars($product->status); ?>">
+           data-product-name="<?php echo strtolower(htmlspecialchars($product->item_name)); ?>"
+           data-seller-id="<?php echo strtolower(htmlspecialchars($product->seller_id)); ?>"
+          data-price="<?php echo $product->price_per_unit; ?>" 
+          data-category="<?php echo strtolower(htmlspecialchars($product->category)); ?>" 
+          data-province="<?php echo strtolower(htmlspecialchars($product->province)); ?>" 
+          data-region="<?php echo strtolower(htmlspecialchars($product->region)); ?>" 
+          data-status="<?php echo strtolower(htmlspecialchars($product->status)); ?>">
 
                 <?php 
                 $statusClass = '';
@@ -169,92 +172,8 @@
   </div>
 </main>
 
-<script>
-function applyFilter() {
-  const search = document.getElementById("searchInput").value.toLowerCase().trim();
-  const minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
-  const maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
-  const category = document.getElementById("categoryFilter").value.toLowerCase();
-  const province = document.getElementById("provinceFilter").value.toLowerCase();
-  const region = document.getElementById("regionFilter").value.toLowerCase();
-  const status = document.getElementById("statusFilter").value.toLowerCase();
 
-  const products = document.querySelectorAll(".product-container");
 
-  products.forEach(product => {
-    // Get product name (first .order-id)
-    const nameElem = product.querySelector(".order-id:first-child");
-    const name = nameElem ? nameElem.textContent.toLowerCase() : "";
-
-    // ✅ Get Seller ID
-    const sellerIdElem = product.querySelector(".customer-details p strong");
-    let sellerId = "";
-    if (sellerIdElem && sellerIdElem.textContent.toLowerCase().includes("seller id")) {
-      const nextNode = sellerIdElem.nextSibling;
-      if (nextNode) sellerId = nextNode.textContent.trim().toLowerCase();
-    }
-
-    // Get price
-    const priceElem = product.querySelector(".price");
-    const price = priceElem ? parseFloat(priceElem.textContent.replace(/[^0-9.]/g, "")) : 0;
-
-    // Get data attributes
-    const prodCategory = product.getAttribute("data-category").toLowerCase();
-    const prodProvince = product.getAttribute("data-province").toLowerCase();
-    const prodRegion = product.getAttribute("data-region").toLowerCase();
-    const prodStatus = product.getAttribute("data-status").toLowerCase();
-
-    // Check all filters
-    let match = true;
-
-    // ✅ Search by product name OR seller ID
-    if (search && !name.includes(search) && !sellerId.includes(search)) match = false;
-
-    if (price < minPrice || price > maxPrice) match = false;
-    if (category && category !== "" && prodCategory !== category) match = false;
-    if (province && province !== "" && prodProvince !== province) match = false;
-    if (region && region !== "" && prodRegion !== region) match = false;
-    if (status && status !== "" && prodStatus !== status) match = false;
-
-    product.style.display = match ? "flex" : "none";
-  });
-}
-
-function resetFilter() {
-  document.getElementById("searchInput").value = "";
-  document.getElementById("minPrice").value = "";
-  document.getElementById("maxPrice").value = "";
-  document.getElementById("categoryFilter").value = "";
-  document.getElementById("provinceFilter").value = "";
-  document.getElementById("regionFilter").value = "";
-  document.getElementById("statusFilter").value = "";
-
-  document.querySelectorAll(".product-container").forEach(product => {
-    product.style.display = "flex";
-  });
-}
-
-function updateRegions() {
-  const province = document.getElementById("provinceFilter").value;
-  const regionOptions = document.querySelectorAll("#regionFilter option");
-
-  regionOptions.forEach(option => {
-    if (!option.value) {
-      option.style.display = "block"; // "All Regions"
-    } else if (province && option.dataset.province !== province) {
-      option.style.display = "none";
-    } else {
-      option.style.display = "block";
-    }
-  });
-
-  // Reset region if it's not valid anymore
-  const regionFilter = document.getElementById("regionFilter");
-  if (regionFilter.value && regionFilter.selectedOptions[0].style.display === "none") {
-    regionFilter.value = "";
-  }
-}
-</script>
-
+<script src="<?php echo URLROOT; ?>/js/marketplace/adminViewProducts.js?v=<?= time(); ?>"></script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

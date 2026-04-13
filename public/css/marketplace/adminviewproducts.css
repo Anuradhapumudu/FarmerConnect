@@ -2,7 +2,7 @@
   font-size: clamp(1.6rem, 4vw, 2.5rem);
   font-weight: 700;
   color: #2e7d32;
-  margin: 10px 0 20px 0;
+  margin: -50px 0 20px 0;
   text-align: center;
 }
 
@@ -22,21 +22,22 @@
 .filter-container {
   max-width: 1200px;
   margin: 20px auto;
-  padding: 15px;
+  padding: 20px;
   background: #f1f8f4;
-  border: 1px solid #c8e6c9;
+  border: 2px solid #c8e6c9;
   border-radius: 8px;
   display: flex;
-  gap: 10px;
+  gap: 15px;
   flex-wrap: wrap;
   align-items: center;
+  margin-bottom: 40px;
 }
 
 .filter-container input,
 .filter-container select,
 .filter-container button {
-  padding: 8px 2px;
-  border: 1px solid #2e7d32;
+  padding: 8px 10px;
+  border: 2px solid #c8e6c9;
   border-radius: 6px;
   font-size: 14px;
 }

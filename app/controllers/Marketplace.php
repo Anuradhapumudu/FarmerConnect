@@ -712,6 +712,7 @@ Auth::checkRole('farmer');
 
     public function adminViewProducts() {
 
+            Auth::checkAdmin();
         //fetch all products
         $products =$this->marketplaceModel->getAllProducts();
         $this->view('marketplace/V_AdminViewProducts', ['products' => $products]);
@@ -719,11 +720,26 @@ Auth::checkRole('farmer');
 
        public function adminViewOrders() {
 
+          Auth::checkAdmin();
         $order =$this->marketplaceModel->getAllOrders();
         $this->view('marketplace/V_AdminViewOrders', ['orders' => $order]);
     }
     
+        public function adminVieworderDetails($order_id){
 
+           Auth::checkAdmin();
+            $order = $this->marketplaceModel->getOrderById($order_id);
+
+            if (!$order) {
+                die("Order not found");
+            }
+
+            $data = [
+                'order' => $order
+            ];
+
+            $this->view('marketplace/V_AdminVieworderDetails', $data);
+        }
 
 //////////////////////////////////////////////
 ////Raiting Submit
