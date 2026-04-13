@@ -54,73 +54,91 @@
         
         <!-- Header -->
         <div class="tracking-header">
-            <h1><i class="fas fa-map-marked-alt"></i> Order Tracking</h1>
-            <p>Track the progress of your order</p>
+            <h1><i class="fas fa-map-marked-alt"></i> Order Update</h1>
+            <p>Update the progress of your order</p>
             <div class="order-id-display">#<?= htmlspecialchars($order->order_id) ?></div>
         </div>
         
         <!-- Tracking Content -->
         <div class="tracking-content">
             <!-- Order Status Badge -->
-            <div style="padding: 20px 25px 0;">
-                <div class="order-status <?= $statusClass ?>" style="display: inline-block;">
-                    <?= $statusText ?>
-                </div>
-            </div>
+       
+<?php
+$currentStatus = strtolower(trim($order->order_status));
+?>
+
+<!-- STATUS TRACKER -->
+<div class="status-container">
+
+    <!-- Placed -->
+    <div class="status-step <?= ($currentStatus == 'order_placed') ? 'active' : 'completed' ?>">
+        <div class="circle">1</div>
+        <p>Placed</p>
+    </div>
+
+    <!-- Confirmed -->
+    <div class="status-step 
+        <?= ($currentStatus == 'order_confirmed') ? 'active' : 
+        (($currentStatus == 'ready_to_pickup' || $currentStatus == 'order_picked') ? 'completed' : '') ?>">
+        <div class="circle">2</div>
+        <p>Confirmed</p>
+    </div>
+
+    <!-- Ready -->
+    <div class="status-step 
+        <?= ($currentStatus == 'ready_to_pickup') ? 'active' : 
+        (($currentStatus == 'order_picked') ? 'completed' : '') ?>">
+        <div class="circle">3</div>
+        <p>Ready</p>
+    </div>
+
+    <!-- Picked -->
+    <div class="status-step <?= ($currentStatus == 'order_picked') ? 'active' : '' ?>">
+        <div class="circle">4</div>
+        <p>Picked</p>
+    </div>
+
+</div>
+
+<!-- ACTION BUTTONS -->
+<div class="action-buttons" style="margin-top:30px; text-align:center;">
+
+<?php if($currentStatus == 'order_placed'): ?>
+
+    <a href="<?= URLROOT ?>/Marketplace/updateStatus/<?= $order->order_id ?>/order_confirmed" class="btn btn-confirm">Confirm Order</a>
+
+    <a href="<?= URLROOT ?>/Marketplace/updateStatus/<?= $order->order_id ?>/order_cancelled" class="btn btn-cancel">Cancel Order</a>
+
+<?php elseif($currentStatus == 'order_confirmed'): ?>
+
+    <a href="<?= URLROOT ?>/Marketplace/updateStatus/<?= $order->order_id ?>/ready_to_pickup" class="btn btn-ready">Ready to Pickup</a>
+
+<?php elseif($currentStatus == 'ready_to_pickup'): ?>
+
+    <a href="<?= URLROOT ?>/Marketplace/updateStatus/<?= $order->order_id ?>/order_picked" class="btn btn-picked">Picked Up</a>
+
+<?php elseif($currentStatus == 'order_cancelled'): ?>
+
+    <p style="color:red; font-weight:bold;">Cancelled </p>
+
+<?php elseif($currentStatus == 'order_confirmed'): ?>
+
+    <p style="color:red; font-weight:bold;">Order Confirmed </p>
+
+
+<?php elseif($currentStatus == 'ready_to_pickup'): ?>
+
+    <p style="color:red; font-weight:bold;">Ready For Pickup</p>
+
+<?php elseif($currentStatus == 'order_picked'): ?>
+
+    <p style="color:green; font-weight:bold;">Picked Up </p>
+
+<?php endif; ?>
+
+</div>
             
-            <!-- Order Information -->
-            <div class="order-info-section">
-                <h3 style="color: #2e7d32; margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Order Summary</h3>
-                <div class="order-info-grid">
-                    <div class="order-info-item">
-                        <h4>Order Date</h4>
-                        <p><?= date('M d, Y', strtotime($order->order_create_date)) ?></p>
-                    </div>
-                    <div class="order-info-item">
-                        <h4>Total Amount</h4>
-                        <p>LKR <?= number_format($order->total_price, 2) ?></p>
-                    </div>
-                    <div class="order-info-item">
-                        <h4>Payment Method</h4>
-                        <p><?= htmlspecialchars(ucfirst(strtolower(str_replace('_', ' ', $order->payment_method)))) ?></p>
-                    </div>
-                    <div class="order-info-item">
-                        <h4>Quantity</h4>
-                        <p><?= htmlspecialchars($order->quantity) ?></p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Product Details -->
-            <div class="details-section">
-                <div class="product-display">
-                    <h3><i class="fas fa-shopping-bag"></i> Product Details</h3>
-                    <div style="display: flex; gap: 15px; align-items: center;">
-                        <div style="width: 80px; height: 80px; border-radius: 8px; overflow: hidden;">
-                            <img src="<?= URLROOT . '/uploads/' . htmlspecialchars($order->image_url) ?>" 
-                                 alt="<?= htmlspecialchars($order->item_name) ?>" 
-                                 style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: #333;"><?= htmlspecialchars(ucfirst(strtolower($order->item_name))) ?></h4>
-                            <p style="margin: 0; color: #666;">Quantity: <?= htmlspecialchars($order->quantity) ?></p>
-                            <p style="margin: 5px 0 0 0; font-weight: 600; color: #2e7d32;">
-                                LKR <?= number_format($order->total_price, 2) ?>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Seller Details -->
-                <div class="seller-display">
-                    <h3><i class="fas fa-store"></i> Seller Information</h3>
-                    <div>
-                        <p><strong>Name:</strong> <?= htmlspecialchars($order->seller_first . ' ' . $order->seller_last) ?></p>
-                        <p><strong>Location:</strong> <?= htmlspecialchars($order->seller_address) ?></p>
-                        <p><strong>Contact:</strong> <?= htmlspecialchars($order->seller_telNo) ?></p>
-                    </div>
-                </div>
-            </div>
+
             
             <!-- Timeline -->
             <div class="tracking-timeline">
@@ -167,48 +185,13 @@
                 </div>
             </div>
             
-            <!-- Rating Section (only for picked orders) -->
-            <?php if($normalizedStatus === 'order_picked'): ?>
-                <div class="rating-section">
-                    <h3><i class="fas fa-star"></i> Rate Your Purchase</h3>
-                    <?php if(!$rated): ?>
-                        <form method="POST" action="<?= URLROOT ?>/Marketplace/submitRating" class="rating-form">
-                            <input type="hidden" name="order_id" value="<?= $order->order_id ?>">
-                            <input type="hidden" name="product_id" value="<?= $order->product_id ?>">
-                            
-                            <p style="margin-bottom: 15px;">How would you rate this product?</p>
-                            
-                            <div class="stars">
-                                <?php for ($i = 5; $i >= 1; $i--): ?>
-                                    <input type="radio" name="rating" value="<?= $i ?>" id="star<?= $i ?>" required>
-                                    <label for="star<?= $i ?>">★</label>
-                                <?php endfor; ?>
-                            </div>
-                            
-                         <!--    <div style="margin-top: 15px;">
-                                <textarea name="review" placeholder="Optional: Write a review..." 
-                                          style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; resize: vertical; min-height: 80px;"></textarea>
-                            </div> -->
-                            
-                            <button type="submit" class="btn-submit" style="margin-top: 15px;">
-                                Submit Rating
-                            </button>
-                        </form>
-                    <?php else: ?>
-                        <p class="rated-text">⭐ You have already rated this order</p>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
             
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <a href="<?= URLROOT ?>/Marketplace/myOrders" class="btn-back">
-                    <i class="fas fa-arrow-left"></i> Back to My Orders
+                <a href="<?= URLROOT ?>/Marketplace/trackOrdersSeller" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Seller Order Management
                 </a>
                 
-                <button onclick="window.print()" class="btn-print">
-                    <i class="fas fa-print"></i> Print Details
-                </button>
                 
                 <?php if($normalizedStatus !== 'order_picked' && $normalizedStatus !== 'order_cancelled'): ?>
 
@@ -222,8 +205,8 @@
                 <i class="fas fa-exclamation-triangle" style="font-size: 60px; color: #f44336; margin-bottom: 20px;"></i>
                 <h2 style="color: #f44336; margin-bottom: 10px;">Order Not Found</h2>
                 <p style="color: #666; margin-bottom: 20px;">The order you're looking for doesn't exist or you don't have permission to view it.</p>
-                <a href="<?= URLROOT ?>/Marketplace/myOrders" class="btn-back">
-                    <i class="fas fa-arrow-left"></i> Back to My Orders
+                <a href="<?= URLROOT ?>/Marketplace/trackOrdersSeller" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Seller Order Management
                 </a>
             </div>
         <?php endif; ?>

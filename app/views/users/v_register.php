@@ -72,6 +72,11 @@
                                     <span class = "form-invalid"><?php echo ($data['form_type'] == 'farmer') ? $data['phone_no_error'] : ''; ?></span>
                                 </div>
                                 <div class="input-field">
+                                    <label for="email">Email<span class="required">*</span></label>
+                                    <input type="text" name="email" id="farmer_email" placeholder="Email" value="<?php echo $data['email']; ?>">
+                                    <span class="form-invalid"> <?php echo ($data['form_type'] == 'farmer') ? $data['email_error'] : ''; ?> </span>
+                                </div>
+                                <div class="input-field">
                                     <label for="password">Password<span class="required">*</span></label>
                                     <input type="password" name="password" id="farmer_password" placeholder="Password" value="<?php echo $data['password']; ?>">
                                     <span class = "form-invalid"><?php echo ($data['form_type'] == 'farmer') ? $data['password_error'] : ''; ?></span>

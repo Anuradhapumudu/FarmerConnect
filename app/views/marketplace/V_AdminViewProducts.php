@@ -88,22 +88,50 @@
                data-region="<?php echo htmlspecialchars($product->region); ?>" 
                data-status="<?php echo htmlspecialchars($product->status); ?>">
 
+                <?php 
+                $statusClass = '';
+                if ($product->status === 'Instock') {
+                    $statusClass = 'stockstatus-instock';
+                } elseif ($product->status === 'Outstock') {
+                    $statusClass = 'stockstatus-outstock';
+                }
+                ?>
+
+
             <div class="order-main-content">
               <div class="order-image">
-                <img src="<?php echo URLROOT . '/uploads/' . ($product->image_url ?? 'default.jpg');?>" 
-                     alt="<?php echo htmlspecialchars($product->item_name); ?>">
+                <img src="<?php echo URLROOT . '/uploads/' . ($product->image_url);?>" 
+                    alt="<?php echo htmlspecialchars($product->item_name); ?>">
+
+                <span class="stockstatus <?php echo $statusClass; ?>">
+                  <?php echo htmlspecialchars($product->status); ?>
+                </span>
               </div>
               
               <div class="order-content-wrapper">
+              
+
                 <div class="order-header">
-                  <div>
-                    <div class="order-id"><?= htmlspecialchars(ucfirst(strtolower($product->item_name))) ?></div>
-                    <div class="order-id"><?php echo htmlspecialchars($product->item_id); ?></div>
-                  </div>
-                  <div class="order-status <?php echo strtolower($product->status); ?>">
-                    <?php echo htmlspecialchars($product->status); ?>
-                  </div>
+              <!-- Product Name left -->
+              <div class="order-id"><?= htmlspecialchars(ucfirst(strtolower($product->item_name))) ?></div>
+              <div class="order-id"><?php echo htmlspecialchars($product->item_id); ?></div>
+              <!-- Rating right -->
+              <div class="rating-box">
+
+              <?php
+              $rating = round($product->avg_rating ?? 0, 1);
+              $total_rating = $product->total_ratings ?? 0;
+              ?>
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                  <span class="<?= ($i <= $rating) ? 'star filled' : 'star'; ?>">★</span>
+                <?php endfor; ?>
+                <small> <?= number_format($rating, 1) ?>/5 </small>
+                <small>(<?= $total_rating ?> reviews)</small>
+              </div>
+
+
                 </div>
+            
 
                 <div class="order-content">
                   <div class="product-info">

@@ -108,10 +108,6 @@ class Marketplace extends Controller {
      Auth::checkRole('seller');
 
         $seller_id = $_SESSION['seller_id'] ?? null;
-        if (!$seller_id) {
-            header("Location: " . URLROOT . "/Users/login");
-            exit;
-        }
         
         $products = $this->marketplaceModel->getProductsBySeller($seller_id);
 
@@ -637,11 +633,6 @@ Auth::checkRole('farmer');
 
     Auth::checkRole('seller');
         $seller_id = $_SESSION['seller_id'] ?? null;
-        if (!$seller_id) {
-            $_SESSION['error'] = "You must be logged in to view orders.";
-            header("Location: " . URLROOT . "/Users/login");
-            exit;
-        }
 
     
     $orders = $this->marketplaceModel->getOrdersBySeller($seller_id);
@@ -649,37 +640,67 @@ Auth::checkRole('farmer');
     }
 
 
-    public function updateOrderStatus() {
+    public function updateSellerOrderStatus($orderId){
 
     Auth::checkRole('seller');
 
-    $data = json_decode(file_get_contents("php://input"));
 
-    $order_id = $data->order_id ?? '';
-    $new_status = $data->status ?? '';
-    $user_id = $_SESSION['seller_id'] ?? $_SESSION['user_id'] ?? 'system';
-
-    if (!empty($order_id) && !empty($new_status)) {
-        $order = $this->marketplaceModel->getOrderById($order_id);
-        if (!$order) {
-            echo json_encode(['success' => false, 'message' => 'Order not found']);
-            return;
-        }
-
-        $old_status = $order->order_status;
-
-        if ($this->marketplaceModel->updateOrderStatus($order_id, $new_status)) {
-            $this->marketplaceModel->addOrderStatusHistory($order_id, $old_status, $new_status, $user_id);
-            $history = $this->marketplaceModel->getOrderStatusHistory($order_id);
-
-            echo json_encode(['success' => true, 'history' => $history]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to update status']);
-        }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Invalid data']);
+    // Get order details
+    $order = $this->marketplaceModel->getOrderById($orderId);
+    
+    // Get order history
+    $history = $this->marketplaceModel->getOrderHistory($orderId);
+    
+    
+    $data = [
+        'order' => $order,
+        'history' => $history
+       
+    ];
+    
+    $this->view('marketplace/V_SellerViewTracking', $data);
     }
+
+
+
+    public function updateStatus($orderId, $newStatus){
+    Auth::checkRole('seller');
+
+     $seller_id = $_SESSION['seller_id'] ?? null;
+    $order = $this->marketplaceModel->getOrderById($orderId);
+
+    if (!$order) {
+        header("Location: " . URLROOT . '/Marketplace/trackOrdersSeller');
+        return;
+    }
+
+    $currentStatus = strtolower($order->order_status);
+
+    //  Stop if already finished
+    if ($currentStatus == 'order_cancelled' || $currentStatus == 'order_picked') {
+         header("Location: " . URLROOT . '/Marketplace/updateSellerOrderStatus/' . $orderId);
+        return;
+    }
+
+    // VALID FLOW CONTROL
+    $allowed = false;
+
+    if ($currentStatus == 'order_placed' && ($newStatus == 'order_confirmed' || $newStatus == 'order_cancelled')) {
+        $allowed = true;
+    } elseif ($currentStatus == 'order_confirmed' && $newStatus == 'ready_to_pickup') {
+        $allowed = true;
+    } elseif ($currentStatus == 'ready_to_pickup' && $newStatus == 'order_picked') {
+        $allowed = true;
+    }
+
+    if ($allowed) {
+        $this->marketplaceModel->updateOrderStatus($orderId, $newStatus);
+        $this->marketplaceModel->addOrderStatusHistory($orderId, $currentStatus, $newStatus , $seller_id);
+    }
+
+     header("Location: " . URLROOT . '/Marketplace/updateSellerOrderStatus/' . $orderId);
 }
+
 
 
 

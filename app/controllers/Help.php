@@ -3,39 +3,13 @@ class Help extends Controller {
 
     private $helpModel;
 
-        public function __construct() {
+    public function __construct() {
 
-        $this->startSession();
-        $this->checkAuth();
+         Auth::check();
 
-        $this->helpModel = $this->model('M_Help');
+        $this->helpModel = $this->model('M_Help', new Database());
     }
 
-    // Start session if not already started
-    private function startSession() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-    }
-
-    // Check authentication and user type
-    private function checkAuth() {
-
-        if (!isset($_SESSION['user_type'])) {
-            $this->redirect('/users/login');
-        }
-
-        if ($_SESSION['user_type'] === 'admin' && !isset($_SESSION['user_id'])) {
-            $this->redirect('/admin/adminlogin');
-        }
-    }
-
-    // Redirect helper
-    private function redirect($path) {
-        header('Location: ' . URLROOT . $path);
-        exit;
-    }
 
         public function index() {
         switch($_SESSION['user_type']) {
@@ -60,11 +34,8 @@ class Help extends Controller {
     // View page
     public function helpAdmin() {
 
-    //checks again user is admin
-    if ($_SESSION['user_type'] !== 'admin') {
-        $this->redirect('/admin/adminlogin');
-        exit;
-    }
+      Auth::checkAdmin();
+    
         $data = [
             'members' => $this->helpModel->getMembers(),
             'emergencyNumber' => $this->helpModel->getEmergencyContact()
@@ -75,11 +46,8 @@ class Help extends Controller {
 
     
     public function helpOfficer() {
+                 Auth::checkRole('officer');
 
-        if ($_SESSION['user_type'] !== 'officer') {
-        $this->redirect('/users/login');
-        exit;
-    }
          $data = [
              'members' => $this->helpModel->getMembers(),
             'emergencyNumber' => $this->helpModel->getEmergencyContact()
@@ -90,11 +58,7 @@ class Help extends Controller {
 
     
     public function helpSeller() {
-
-            if ($_SESSION['user_type'] !== 'seller') {
-        $this->redirect('/users/login');
-        exit;
-    }
+         Auth::checkRole('seller');
 
         $seller_id = $_SESSION['user_id'];
 
@@ -110,11 +74,7 @@ class Help extends Controller {
     
     public function helpFarmer() {
 
-
-            if ($_SESSION['user_type'] !== 'farmer') {
-        $this->redirect('/users/login');
-        exit;
-    }
+        Auth::checkRole('farmer');
 
           $data = [
              'members' => $this->helpModel->getMembers(),
@@ -127,6 +87,9 @@ class Help extends Controller {
 
     // Add support member
 public function add() {
+
+    Auth::checkAdmin();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -172,6 +135,9 @@ public function add() {
 
     // Remove support member
     public function delete($id) {
+
+        Auth::checkAdmin();
+
         $this->helpModel->removeMember($id);
         header("Location: " . URLROOT . "/help/helpAdmin");
         exit;
@@ -180,6 +146,9 @@ public function add() {
 
     // Update emergency number
     public function updateEmergency() {
+
+        Auth::checkAdmin();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $errors = [];

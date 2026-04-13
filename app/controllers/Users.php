@@ -31,9 +31,9 @@
                         'phone_no' => trim($_POST['phone_no']),
                         'password' => trim($_POST['password']),
                         'confirm_password' => trim($_POST['confirm_password']),
+                        'email' => trim($_POST['email']),
                         'officer_id' => '',
                         'brn' => '',
-                        'email' => '',
                         'address' => '',
                         'company_name' => '',
 
@@ -76,6 +76,15 @@
                     } else {
                         if ($this->userModel->findUserByPhoneNo($data['phone_no'], 'farmers')) {
                             $data['phone_no_error'] = 'Phone number is already taken';
+                        }
+                    }
+                    if (empty($data['email'])) {
+                        $data['email_error'] = 'Please enter your email';
+                    } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                        $data['email_error'] = 'Please enter a valid email address';
+                    } else {
+                        if ($this->userModel->findUserByEmail($data['email'], 'farmers')) {
+                            $data['email_error'] = 'Email is already taken';
                         }
                     }
                     if (empty($data['password'])) {
