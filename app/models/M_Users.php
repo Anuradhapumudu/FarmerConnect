@@ -211,6 +211,33 @@
             return ($this->db->rowCount() > 0);
         }
 
-
+        public function findEmailByUsername($username) {
+            $this->db->query("SELECT email FROM farmers WHERE nic = :username");
+            $this->db->bind(':username', $username);
+            $row = $this->db->single();
+            if ($row) {
+                return ['email' => $row->email, 'type' => 'farmer'];
+            }
+            $this->db->query("SELECT email FROM officers WHERE officer_id = :username");
+            $this->db->bind(':username', $username);
+            $row = $this->db->single();
+            if ($row) {
+                return ['email' => $row->email, 'type' => 'officer'];
+            }
+            $this->db->query("SELECT email FROM sellers WHERE seller_id = :username");
+            $this->db->bind(':username', $username);
+            $row = $this->db->single();
+            if ($row) {
+                return ['email' => $row->email, 'type' => 'seller'];
+            }
+            return false;
+        }    
+        
+        public function updatePassword($table, $column, $username, $password) {
+            $this->db->query("UPDATE $table SET password = :password WHERE $column = :username");
+            $this->db->bind(':password', $password);
+            $this->db->bind(':username', $username);
+            return $this->db->execute();
+        }              
     }
 ?>
