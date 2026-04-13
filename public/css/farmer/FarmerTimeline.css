@@ -265,17 +265,57 @@
 }
 
 
+/* Base button */
 .inform-btn {
-  padding: 12px 22px;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #1976d2, #42a5f5);
-  color: white;
-  cursor: pointer;
-  display: none;     /* hidden initially */
-  transition: all 0.3s ease;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    font-size: 14px;
+    transition: 0.25s ease;
+    cursor: pointer;
+}
+
+/* Default (Inform Officer) */
+.inform-btn:not(:disabled) {
+    background: #2e7d32;
+    color: #fff;
+}
+
+.inform-btn:not(:disabled):hover {
+    background: #1b5e20;
+}
+
+/*  Pending */
+.inform-btn.pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    cursor: not-allowed;
+}
+
+/*  Approved */
+.inform-btn.approved {
+    background: #edd4d5;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    margin-left: 10px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #d92525;
+    color: #f1e4e4;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cancel-btn:hover {
+    background: #f15c5c;
 }
 
 
@@ -289,6 +329,33 @@
 .info span {
   color: #333;
   font-weight: 500;
+}
+
+.stage-action {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.approve-btn {
+    background: #2e7d32;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.approve-btn:hover {
+    background: #1b5e20;
+}
+
+.stage-approved {
+    text-align: center;
+    color: #2e7d32;
+    font-weight: 600;
+    margin-top: 10px;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
@@ -407,8 +474,9 @@
 
     .task.readonly {
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 1;
     cursor: not-allowed;
   }
+  
 }
 

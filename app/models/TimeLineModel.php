@@ -114,6 +114,35 @@ class TimeLineModel
         return $row ? $row->NIC_FK : null;
     }
 
+    public function updateStageRequest($nic, $plr, $column, $value)
+    {
+        $this->db->query("
+            UPDATE farmer_timeline
+            SET $column = :value
+            WHERE farmer_nic = :nic AND plr = :plr
+        ");
+
+        $this->db->bind(':value', $value);
+        $this->db->bind(':nic', $nic);
+        $this->db->bind(':plr', $plr);
+
+        return $this->db->execute();
+    }
+
+    public function getStageRequestStatus($nic, $plr)
+    {
+        $this->db->query("
+            SELECT stage1_request, stage2_request
+            FROM farmer_timeline
+            WHERE farmer_nic = :nic AND plr = :plr
+        ");
+
+        $this->db->bind(':nic', $nic);
+        $this->db->bind(':plr', $plr);
+
+        return $this->db->single();
+    }
+
 
 }
 

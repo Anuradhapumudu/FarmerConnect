@@ -57,6 +57,29 @@
       <?php endfor; ?>
 
     </div>
+
+<?php if ($data['stage1_request'] == 'pending'): ?>
+
+<div class="stage-action">
+    <form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/approveStage" method="POST">
+        <input type="hidden" name="plr" value="<?php echo $data['plr']; ?>">
+        <input type="hidden" name="nic" value="<?php echo $data['nic']; ?>">
+        <input type="hidden" name="stage" value="1">
+
+        <button class="approve-btn">
+            Approve Stage 01
+        </button>
+    </form>
+</div>
+
+<?php elseif ($data['stage1_request'] == 'approved'): ?>
+
+<div class="stage-approved">
+    ✔ Stage 01 Approved
+</div>
+
+<?php endif; ?>
+
   </div>
 
   <!-- ================= STAGE 02 ================= -->
@@ -86,6 +109,29 @@
       <?php endfor; ?>
 
     </div>
+
+    <?php if ($data['stage2_request'] == 'pending'): ?>
+
+<div class="stage-action">
+    <form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/approveStage" method="POST">
+        <input type="hidden" name="plr" value="<?php echo $data['plr']; ?>">
+        <input type="hidden" name="nic" value="<?php echo $data['nic']; ?>">
+        <input type="hidden" name="stage" value="2">
+
+        <button class="approve-btn">
+            Approve Stage 02
+        </button>
+    </form>
+</div>
+
+<?php elseif ($data['stage2_request'] == 'approved'): ?>
+
+<div class="stage-approved">
+    ✔ Stage 02 Approved
+</div>
+
+<?php endif; ?>
+
   </div>
 
   <!-- ================= STAGE 03 ================= -->

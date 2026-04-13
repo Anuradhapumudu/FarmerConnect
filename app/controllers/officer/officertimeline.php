@@ -47,7 +47,9 @@ class OfficerTimeline extends Controller {
 public function show()
 {
     // 1. Get PLR from POST
-    $plr = $_POST['plr'] ?? null;
+    $plr = $_POST['plr'] ?? $_SESSION['officer_plr'] ?? null;;
+
+    $_SESSION['officer_plr'] = $plr;
 
     if (!$plr) {
         die("Invalid request (PLR missing)");
@@ -76,6 +78,9 @@ public function show()
 
     // 5. Get timeline steps
     $timeline = $this->model->getTimelineByDuration($duration);
+
+    //  get stage request status
+    $stageStatus = $this->model->getStageRequestStatus($nic, $plr);
 
     // 6. Get start date
     $startDate = $this->model->getStartDate($nic, $plr);
@@ -109,13 +114,35 @@ public function show()
         'estimatedDates' => $estimatedDates,
         'progress' => $progress,
         'updatedDates' => $updatedDates,
-        'readonly' => true
+        'readonly' => true,
+        'stage1_request' => $stageStatus->stage1_request ?? 'none',
+        'stage2_request' => $stageStatus->stage2_request ?? 'none',
+        'nic' => $nic
     ];
 
     $this->view('officer/OfficerTimelineView', $data);
 }
 
-    // ✅ ADD THIS ALSO (missing)
+    public function approveStage()
+    {
+        $nic = $_POST['nic'];
+        $plr = $_POST['plr'];
+        $stage = $_POST['stage'];
+
+        if ($stage == 1) {
+            $column = 'stage1_request';
+        } else {
+            $column = 'stage2_request';
+        }
+
+        $this->model->updateStageRequest($nic, $plr, $column, 'approved');
+
+        // redirect back to timeline
+        header("Location: " . URLROOT . "/officer/OfficerTimeline/show");
+        exit();
+    }
+
+    //  ADD THIS ALSO (missing)
     private function getSeedDuration($seedname)
     {
         $durations = [

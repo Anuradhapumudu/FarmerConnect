@@ -204,11 +204,64 @@
 
     </div>
 
-      <div class="stage-action">
-          <button class="inform-btn" onclick="informOfficer(this)">
-              Inform Officer
-          </button>
-      </div>
+
+    <?php
+    $stage1Complete = true;
+
+    for ($i = 1; $i <= 5; $i++) {
+        if (($data['progress'][$i] ?? '') !== 'done') {
+            $stage1Complete = false;
+            break;
+        }
+    }
+    ?>
+
+
+        <div class="stage-action">
+
+              <?php 
+              $status1 = $data['stage1_request'] ?? 'none';
+
+              $btnClass = '';
+              if ($status1 == 'pending') $btnClass = 'pending';
+              elseif ($status1 == 'approved') $btnClass = 'approved';
+
+              if ($stage1Complete): ?>
+
+                  <!-- INFORM BUTTON -->
+                  <form action="<?php echo URLROOT; ?>/FarmerTimeline/informStage" method="POST" style="display:inline;">
+                      
+                      <input type="hidden" name="plr" value="<?php echo $data['selected_plr']; ?>">
+                      <input type="hidden" name="stage" value="1">
+
+                      <button type="submit" 
+                              class="inform-btn <?php echo $btnClass; ?>"
+                              <?php echo ($status1 != 'none') ? 'disabled' : ''; ?>>
+
+                          <?php 
+                              if ($status1 == 'pending') echo " Waiting for Officer...";
+                              elseif ($status1 == 'approved') echo "✔ Approved";
+                              else echo "Inform Officer";
+                          ?>
+                      </button>
+                  </form>
+
+                  <!--  CANCEL BUTTON (ONLY WHEN PENDING) -->
+                  <?php if ($status1 == 'pending'): ?>
+                      <form action="<?php echo URLROOT; ?>/FarmerTimeline/cancelWaitingStage" method="POST" style="display:inline;">
+                          
+                          <input type="hidden" name="plr" value="<?php echo $data['selected_plr']; ?>">
+                          <input type="hidden" name="stage" value="1">
+
+                          <button type="submit" class="cancel-btn">
+                              Cancel
+                          </button>
+                      </form>
+                  <?php endif; ?>
+
+              <?php endif; ?>
+
+        </div>
 
   </div>
 
@@ -221,6 +274,7 @@
     <?php
     $status = $data['progress'][6] ?? 'default';
     $prevDone = (($data['progress'][5] ?? '') === 'done');
+    $approved = (($data['stage1_request'] ?? '') === 'approved');
 
     $unlockDate = isset($data['estimatedDates'][6]) 
         ? date('Y-m-d', strtotime($data['estimatedDates'][6] . ' -2 days'))
@@ -228,7 +282,7 @@
 
     $today = date('Y-m-d');
 
-    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+    $locked = ($prevDone && $approved && $today >= $unlockDate) ? '' : 'locked';
 
     $nextUnlockDate = isset($data['estimatedDates'][7]) 
     ? date('Y-m-d', strtotime($data['estimatedDates'][7] . ' -2 days'))
@@ -394,11 +448,62 @@
 
   </div>
 
-  <div class="stage-action">
-          <button class="inform-btn" onclick="informOfficer(this)">
-              Inform Officer
-          </button>
-  </div>
+    <?php
+    $stage2Complete = true;
+
+    for ($i = 6; $i <= 10; $i++) {
+        if (($data['progress'][$i] ?? '') !== 'done') {
+            $stage2Complete = false;
+            break;
+        }
+    }
+    ?>
+
+        <div class="stage-action">
+
+              <?php 
+              $status2 = $data['stage2_request'] ?? 'none';
+
+              $btnClass = '';
+              if ($status2 == 'pending') $btnClass = 'pending';
+              elseif ($status2 == 'approved') $btnClass = 'approved';
+
+              if ($stage2Complete): ?>
+
+                  <!-- INFORM BUTTON -->
+                  <form action="<?php echo URLROOT; ?>/FarmerTimeline/informStage" method="POST" style="display:inline;">
+                      
+                      <input type="hidden" name="plr" value="<?php echo $data['selected_plr']; ?>">
+                      <input type="hidden" name="stage" value="2">
+
+                      <button type="submit" 
+                              class="inform-btn <?php echo $btnClass; ?>"
+                              <?php echo ($status2 != 'none') ? 'disabled' : ''; ?>>
+
+                          <?php 
+                              if ($status2 == 'pending') echo " Waiting for Officer...";
+                              elseif ($status2 == 'approved') echo "✔ Approved";
+                              else echo "Inform Officer";
+                          ?>
+                      </button>
+                  </form>
+
+                  <!--  CANCEL BUTTON (ONLY WHEN PENDING) -->
+                  <?php if ($status2 == 'pending'): ?>
+                      <form action="<?php echo URLROOT; ?>/FarmerTimeline/cancelWaitingStage" method="POST" style="display:inline;">
+                          
+                          <input type="hidden" name="plr" value="<?php echo $data['selected_plr']; ?>">
+                          <input type="hidden" name="stage" value="2">
+
+                          <button type="submit" class="cancel-btn">
+                              Cancel
+                          </button>
+                      </form>
+                  <?php endif; ?>
+
+              <?php endif; ?>
+
+        </div>
  
 </div>
 
@@ -411,6 +516,7 @@
     <?php
     $status = $data['progress'][11] ?? 'default';
     $prevDone = (($data['progress'][10] ?? '') === 'done');
+    $approved = (($data['stage1_request'] ?? '') === 'approved');
 
     $unlockDate = isset($data['estimatedDates'][11]) 
         ? date('Y-m-d', strtotime($data['estimatedDates'][11] . ' -2 days'))
@@ -418,7 +524,7 @@
 
     $today = date('Y-m-d');
 
-    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+    $locked = ($prevDone && $approved && $today >= $unlockDate) ? '' : 'locked';
     ?>
     <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="11">
       <div class="label">Harvesting</div>
@@ -449,7 +555,7 @@
 function toggleStatusMenu(circleEl) {
   const task = circleEl.closest('.task');
 
-  // ❌ block if locked OR readonly
+  //  block if locked OR readonly
   if (task.classList.contains('locked') || task.classList.contains('readonly')) {
     return;
   }
@@ -466,7 +572,7 @@ function toggleStatusMenu(circleEl) {
 function setStatus(buttonEl, statusClass) {
   const task = buttonEl.closest('.task');
 
-  // ❌ block editing if readonly
+  //  block editing if readonly
   if (task.classList.contains('readonly')) {
     return;
   }
@@ -510,7 +616,7 @@ function setStatus(buttonEl, statusClass) {
   }
 }
 
-function checkStageCompletion(taskElement) {
+/*function checkStageCompletion(taskElement) {
   const stageSection = taskElement.closest('.stage-section');
   const tasks = stageSection.querySelectorAll('.task');
 
@@ -524,11 +630,28 @@ function checkStageCompletion(taskElement) {
 
   const button = stageSection.querySelector('.inform-btn');
 
-  if (allDone) {
-    button.style.display = 'inline-block';
-  } else {
-    button.style.display = 'none';
-  }
 }
+
+  function informOfficer(button) {
+
+      const stage = button.dataset.stage;
+      const plr = document.getElementById('plrSelect').value;
+
+      fetch("<?php echo URLROOT; ?>/FarmerTimeline/informStage", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+              plr: plr,
+              stage: stage
+          })
+      })
+      .then(res => res.json())
+      .then(data => {
+          if (data.success) {
+              button.innerText = "Waiting for Officer...";
+              button.disabled = true;
+          }
+      });
+  }*/
 
 </script>
