@@ -38,29 +38,18 @@ class M_Admin {
 
     public function updateSeller($seller_id, $data) {
         $this->db->query("UPDATE sellers SET 
-            first_name = :first_name, 
-            last_name = :last_name, 
-            nic = :nic,
-            email = :email, 
-            phone_no = :phone_no, 
-            address = :address, 
+            email = :email,   
             company_name = :company_name, 
             brn = :brn, 
-            approval_status = :approval_status,
             updated_at = NOW()
             WHERE seller_id = :seller_id
         ");
 
         // Bind parameters
-        $this->db->bind(':first_name', $data['first_name']);
-        $this->db->bind(':last_name', $data['last_name']);
-        $this->db->bind(':nic', $data['nic']);
+
         $this->db->bind(':email', $data['email']);
-        $this->db->bind(':phone_no', $data['phone_no']);
-        $this->db->bind(':address', $data['address']);
         $this->db->bind(':company_name', $data['company_name']);
         $this->db->bind(':brn', $data['brn']);
-        $this->db->bind(':approval_status', $data['approval_status']);
         $this->db->bind(':seller_id', $seller_id);
 
         return $this->db->execute();

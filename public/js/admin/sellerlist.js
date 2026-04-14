@@ -1,3 +1,6 @@
+
+
+
 const searchInput = document.getElementById("searchInput");
 const statusFilter = document.getElementById("statusFilter");
 
