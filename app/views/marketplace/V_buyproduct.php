@@ -132,7 +132,6 @@ payhere.onError = function(error) {
     alert("PayHere error: " + error);
 };
 
-// AUTO START PAYMENT
 payhere.startPayment(payment);
 
 </script>
@@ -140,7 +139,7 @@ payhere.startPayment(payment);
 <?php endif; ?>
 
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/marketplace.css?v=<?= time(); ?>">
+
 
 </main>
 

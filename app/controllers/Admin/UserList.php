@@ -168,6 +168,8 @@ class UserList extends Controller {
 
     //officer list
         public function officerlist() {
+
+        Auth::checkAdmin();
         $data = [
             'officers' => $this->adminModel->getAllOfficers(),
             'counts'  => $this->adminModel->getOfficerCounts()
@@ -176,6 +178,7 @@ class UserList extends Controller {
     }
 
             public function showofficer($id = null) {
+        Auth::checkAdmin();
             // If no ID is provided, redirect back to the farmer list
         if (!$id) {
             header('Location: ' . URLROOT . '/Admin/UserList/officerlist');

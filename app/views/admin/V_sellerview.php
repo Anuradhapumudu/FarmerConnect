@@ -8,7 +8,6 @@
     <div class="admin-header">
       <div>
         <h1>Seller Details</h1>
-        <p>Complete information about the seller and their listed products</p>
       </div>
       <button class="back-btn" onclick="window.location='<?= URLROOT ?>/Admin/UserList/sellerlist'">
         <i class="fas fa-arrow-left"></i> Back to Sellers
@@ -19,8 +18,12 @@
     <div class="content-wrapper">
       <!-- Seller Profile Section -->
        <div class="profile-card">
-    <img src="<?= URLROOT ?>/uploads/sellers/<?= $data['seller']->image ?: 'https://cdn-icons-png.flaticon.com/512/847/847969.png' ?>" 
-         alt="Seller Photo" class="profile-img">
+   <img 
+    src="<?= !empty($data['seller']->image_url) 
+            ? URLROOT . '/' . $data['seller']->image_url 
+            : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' ?>" 
+    alt="seller Photo" 
+    class="profile-img">
     <h2 class="seller-name"><?= $data['seller']->first_name . ' ' . $data['seller']->last_name ?></h2>
     <p class="seller-id">Seller ID: <?= $data['seller']->seller_id ?></p>
     <p class="seller-nic">NIC: <?= $data['seller']->nic ?></p>

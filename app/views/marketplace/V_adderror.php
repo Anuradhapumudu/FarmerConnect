@@ -4,7 +4,7 @@
 
 <div class="error_wrapper">
 <div class="error_card">
-    <div class="error_icon">❌</div>
+    <div class="error_icon"></div>
     <h2>Product Not Added!</h2>
     <p>Please check your inputs and try again!</p>
 

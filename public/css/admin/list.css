@@ -70,6 +70,7 @@
       background: #f9f9f9;
       position: relative;
       transition: border-color 0.3s ease;
+      width:80%;
     }
     .search-input:focus {
       outline: none;
@@ -90,6 +91,7 @@
       background: #f9f9f9;
       cursor: pointer;
       transition: border-color 0.3s ease;
+      width:30%;
     }
     .filter-select:focus {
       outline: none;

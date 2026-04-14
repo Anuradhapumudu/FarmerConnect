@@ -8,7 +8,6 @@
     <div class="admin-header">
       <div>
         <h1>Officer Details</h1>
-        <p>Complete information about the officer </p>
       </div>
       <button class="back-btn" onclick="window.location='<?= URLROOT ?>/Admin/UserList/officerlist'">
         <i class="fas fa-arrow-left"></i> Back to Officers
@@ -19,8 +18,13 @@
     <div class="content-wrapper">
       <!-- Officer Profile Section -->
        <div class="profile-card">
-    <img src="<?= URLROOT ?>/uploads/officer/<?= $data['officer']->image ?: 'https://cdn-icons-png.flaticon.com/512/847/847969.png' ?>" 
-         alt="Officer Photo" class="profile-img">
+<img 
+src="<?= !empty($data['officer']->image_url) 
+        ? URLROOT . '/' . $data['officer']->image_url 
+        : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' ?>" 
+alt="Officer Photo" 
+class="profile-img">
+
     <h2 class="officer-name"><?= $data['officer']->first_name . ' ' . $data['officer']->last_name ?></h2>
     <p class="officer-id">Officer ID: <?= $data['officer']->officer_id ?></p>
     <p class="officer-nic">NIC: <?= $data['officer']->nic ?></p>

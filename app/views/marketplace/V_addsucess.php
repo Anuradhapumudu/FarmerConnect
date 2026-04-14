@@ -22,21 +22,5 @@
     </div>
   </div>
 </main>
-  <script>
-    // Add a subtle animation to the success icon
-    document.addEventListener('DOMContentLoaded', function() {
-      const successIcon = document.querySelector('.sucess_icon');
-      
-      // Animate the checkmark
-      setTimeout(() => {
-        successIcon.style.transform = 'scale(1.1)';
-        successIcon.style.transition = 'transform 0.5s ease';
-      }, 500);
-      
-      setTimeout(() => {
-        successIcon.style.transform = 'scale(1)';
-      }, 1000);
-    });
-  </script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

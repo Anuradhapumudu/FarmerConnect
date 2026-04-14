@@ -20,9 +20,9 @@
     <div class="search-box">
       <div style="position: relative; flex: 1;">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" class="search-input" placeholder="Search farmers by NIC or Name...">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search farmers by NIC or Name...">
       </div>
-      <select class="filter-select">
+      <select id="statusFilter" class="filter-select">
         <option value="all">All Status</option>
         <option value="active">Active</option>
         <option value="inactive">Inactive</option>
@@ -44,8 +44,15 @@
         </thead>
         <tbody id="farmerTable">
 
-         <?php foreach($data['farmers'] as $farmer): ?>
-          <tr>
+      <?php if(!empty($data['farmers'])): ?>
+    <?php foreach($data['farmers'] as $farmer): ?>
+
+      <tr class="userList"
+      data-id="<?php echo strtolower(htmlspecialchars($farmer->nic));?>"
+      data-name="<?php echo strtolower(htmlspecialchars($farmer->full_name));?>"
+      data-status="<?php echo strtolower(htmlspecialchars($farmer->status));?>">
+
+         
             <td data-label="NIC"><?= $farmer->nic ?></td>
             <td data-label="Name"><?= $farmer->full_name  ?></td>
   
@@ -63,6 +70,9 @@
 
           </tr>
         <?php endforeach; ?>
+        <?php else: ?>
+                  <p>No farmers found.</p>
+      <?php endif; ?>
 
         </tbody>
       </table>
@@ -73,5 +83,5 @@
 </main>
 
 
-
+<script src="<?php echo URLROOT; ?>/js/admin/farmerlist.js?v=<?= time(); ?>"></script>
 <?php require APPROOT . '/views/inc/footer.php'; ?>

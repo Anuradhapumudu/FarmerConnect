@@ -91,7 +91,7 @@ class Marketplace extends Controller {
             'paddy-seeds' => 'Seeds',
             'agrochemicals' => 'Agrochemicals',
             'equipments' => 'Equipments',
-            'machinery' => 'Rent Machinery',
+            'machinery' => 'Rental',
             'others' => 'Others'
         ];
 
