@@ -54,7 +54,7 @@
                                 <span class="form-invalid"><?php echo ($data['form_type'] === 'farmer') ? $data['password_error'] : ''; ?></span>
                             </div>
                         </div>
-                        <p  class="lostpassword">Lost Password ? <a href="#">Click Here</a></p>
+                        <p  class="lostpassword">Lost Password ? <a href="<?php echo URLROOT; ?>/users/forgotPassword">Click Here</a></p>
                         <div class="login">
                             <button type="submit">Login<i class="fa-solid fa-angle-right"></i></button>
                         </div>
@@ -75,7 +75,7 @@
                                 <span class="form-invalid"><?php echo ($data['form_type'] === 'officer') ? $data['password_error'] : ''; ?></span>
                             </div>
                         </div>
-                        <p  class="lostpassword">Lost Password ? <a href="#">Click Here</a></p>
+                        <p  class="lostpassword">Lost Password ? <a href="<?php echo URLROOT; ?>/users/forgotPassword">Click Here</a></p>
                         <div class="login">
                             <button type="submit">Login<i class="fa-solid fa-angle-right"></i></button>
                         </div>
@@ -97,7 +97,7 @@
                                 <span class="form-invalid"><?php echo ($data['form_type'] === 'seller') ? $data['password_error'] : ''; ?></span>
                             </div>
                         </div>
-                        <p  class="lostpassword">Lost Password ? <a href="#">Click Here</a></p>
+                        <p  class="lostpassword">Lost Password ? <a href="<?php echo URLROOT; ?>/users/forgotPassword">Click Here</a></p>
                         <div class="login">
                             <button type="submit">Login<i class="fa-solid fa-angle-right"></i></button>
                         </div>
@@ -106,7 +106,6 @@
                 <hr class="horizontal-line">
                     <div class="new-account">
                     <p>Don't have an account ? <a href="<?php echo URLROOT; ?>/users/register">Register Here</a></p>
-
                     <p>Need Help ? <a href="<?php echo URLROOT; ?>/PublicHelp/publicHelp">Help</a></p>
                 </div>
             </div> 
