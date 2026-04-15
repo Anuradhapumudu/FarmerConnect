@@ -138,13 +138,21 @@
                             <span class="detail-value"><?= $paddy->CreatedDate ?></span>
                         </div>
 
-                        <!-- 🔴 DELETE BUTTON (OFFICER PRIVILEGE) -->
+                        <!--  DELETE BUTTON (OFFICER PRIVILEGE) -->
                         <div class="action-buttons">
                             <form action="<?= URLROOT ?>/officer/FarmerProfile/deletePLR" method="POST">
                                 <input type="hidden" name="plr" value="<?= $paddy->PLR ?>">
 
                                 <button type="submit" class="action-btn delete-btn">
                                     <i class="fas fa-trash"></i> Delete PLR
+                                </button>
+                            </form>
+
+                            <form action="<?= URLROOT ?>/officer/FarmerProfile/editPLR" method="POST">
+                                <input type="hidden" name="plr" value="<?= $paddy->PLR ?>">
+
+                                <button type="submit" class="action-btn edit-btn">
+                                    <i class="fas fa-edit"></i> Edit PLR
                                 </button>
                             </form>
                         </div>

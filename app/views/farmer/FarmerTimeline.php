@@ -594,12 +594,29 @@ function setStatus(buttonEl, statusClass) {
       })
   });
 
-  checkStageCompletion(task);
+ // checkStageCompletion(task);
 
-  if (statusClass === 'problem') {
-      window.location.href = "<?php echo URLROOT; ?>/YellowCaseList";
-  }
+if (statusClass === 'problem') {
+    goToProblemPage(plr);
+    return;
 }
+}
+
+  function goToProblemPage(plr) {
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "<?php echo URLROOT; ?>/YellowCaseList";
+
+      const plrInput = document.createElement("input");
+      plrInput.type = "hidden";
+      plrInput.name = "plr";
+      plrInput.value = plr;
+
+      form.appendChild(plrInput);
+  
+      document.body.appendChild(form);
+      form.submit();
+  }
 
   function unlockNextTask(currentTask) {
   // Find all tasks in order
@@ -615,6 +632,7 @@ function setStatus(buttonEl, statusClass) {
     }
   }
 }
+
 
 /*function checkStageCompletion(taskElement) {
   const stageSection = taskElement.closest('.stage-section');
@@ -637,7 +655,7 @@ function setStatus(buttonEl, statusClass) {
       const stage = button.dataset.stage;
       const plr = document.getElementById('plrSelect').value;
 
-      fetch("<?php echo URLROOT; ?>/FarmerTimeline/informStage", {
+      fetch("?php echo URLROOT; ?>/FarmerTimeline/informStage", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: new URLSearchParams({

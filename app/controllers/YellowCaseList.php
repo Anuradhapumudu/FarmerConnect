@@ -1,30 +1,19 @@
 <?php
+
 class YellowCaseList extends Controller {
-    
-    private $yellowCaseModel;
 
-    public function __construct() {
-        $this->yellowCaseModel = $this->model('YellowCaseModel');
-    }
 
-    public function index() {
-       
-        $farmerNIC = $_SESSION['nic'] ?? null; 
-        
-        if (!$farmerNIC) 
-        {
-            die('Session expired. Please login again.');
-        }
+public function index() {
 
-        // Get all yellow cases for this farmer
-        $cases = $this->yellowCaseModel->getByFarmer($farmerNIC);
+    $plr = $_POST['plr'] ?? null;
+    $nic = $_SESSION['farmer_nic'] ?? null;
 
-        // Pass data to view
-        $data = [
-            'cases' => $cases
-        ];
+    $data = [
+        'plr' => $plr,
+        'nic' => $nic
+    ];
 
-        $this->view('farmer/YellowCaseList', $data);
-    }
+    $this->view('farmer/YellowCaseList', $data);
+}
 }
 ?>

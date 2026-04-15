@@ -1,85 +1,55 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/YellowCaseList.css?v=<?= time(); ?>">
 
-<div class="content-card yellowcase-list">
-    <div class="content-header">
-        <h1> My Yellow Cases</h1>
-        <p class="content-subtitle">Track and monitor your submitted yellow case reports</p>
-    </div>
+<div class="yellow-header">
+    <h2>Report a Problem</h2>
+        <p>
+        Are you experiencing any issues in your cultivation? <br>
+        Select the appropriate category below to proceed.
+    </p>
+</div>
 
-    <!-- Create Report Button -->
-    <div class="action-bar">
-        <a href="<?php echo URLROOT; ?>/YellowCaseForm" class="btn create-btn">
-            + Create Yellow Case Report
+<div class="yellow-options">
+
+    <!--  COMPLAINT -->
+    <div class="yellow-card complaint">
+        <h3>General Complaint</h3>
+
+        <p>If you are facing general issues related to your farming process:</p>
+
+        <ul>
+            <li>Water supply problems</li>
+            <li>Fertilizer distribution issues</li>
+            <li>Labor or equipment issues</li>
+            <li>Any delay in cultivation</li>
+        </ul>
+
+        <a href="<?php echo URLROOT; ?>/ComplaintReport?plr=<?php echo $data['plr']; ?>" 
+           class="yellow-btn complaint-btn">
+            Go to Complaint Form
         </a>
     </div>
 
-    <div class="table-wrapper">
-        <table class="yellowcase-table">
-            <thead>
-                <tr>
-                    <th>Case ID</th>
-                    <th>Title</th>
-                    <th>Observation Date</th>
-                    <th>Submitted On</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+    <!--  DISEASE -->
+    <div class="yellow-card disease">
+        <h3>Disease Report</h3>
 
-            <tbody>
-            <?php if (!empty($data['cases'])): ?>
-                <?php foreach ($data['cases'] as $case): ?>
-                <tr>
-                    <td><?php echo $case->case_id; ?></td>
-                    <td><?php echo htmlspecialchars($case->case_title); ?></td>
-                    <td><?php echo $case->observation_date; ?></td>
-                    <td><?php echo $case->submitted_date; ?></td>
-                    <td>
-                        <span class="status <?php echo strtolower($case->status); ?>">
-                            <?php echo $case->status; ?>
-                        </span>
-                    </td>
-                    <td class="btn-cell">
-                        <a href="<?php echo URLROOT; ?>/YellowCaseForm/show/<?php echo $case->case_id; ?>" class="btn view-btn" style="text-decoration:none;">View</a>
-                        <button class="btn reply-btn">View Reply</button>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6">No Yellow Cases Found</td>
-                </tr>
-            <?php endif; ?>
-            </tbody>
+        <p>If your crops show unusual conditions:</p>
 
-        </table>
+        <ul>
+            <li>Leaf discoloration or yellowing</li>
+            <li>Spots, fungus, or infections</li>
+            <li>Wilting or dying plants</li>
+            <li>Unknown damage to crops</li>
+        </ul>
+
+        <a href="<?php echo URLROOT; ?>/DiseaseReport?plr=<?php echo $data['plr']; ?>" 
+           class="yellow-btn disease-btn">
+            Go to Disease Report
+        </a>
     </div>
 
-                <!-- ✅ Mobile Cards View -->
-        <div class="case-cards">
-        <?php if (!empty($data['cases'])): ?>
-            <?php foreach ($data['cases'] as $case): ?>
-            <div class="case-card">
-                <div class="case-card-header">
-                    <h4><?php echo $case->case_id; ?> — <?php echo htmlspecialchars($case->case_title); ?></h4>
-                    <span class="status <?php echo strtolower($case->status); ?>"><?php echo $case->status; ?></span>
-                </div>
-                <div class="case-card-body">
-                    <p><strong>Observation Date:</strong> <?php echo $case->observation_date; ?></p>
-                    <p><strong>Submitted On:</strong> <?php echo $case->submitted_date; ?></p>
-                </div>
-                <div class="case-card-actions">
-                    <a href="<?php echo URLROOT; ?>/YellowCaseForm/show/<?php echo $case->case_id; ?>" class="btn view-btn">View</a>
-                    <button class="btn reply-btn">View Reply</button>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No Yellow Cases Found</p>
-        <?php endif; ?>
-        </div>
-        </div>
+</div>
     
 
 

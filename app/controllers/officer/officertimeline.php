@@ -142,6 +142,25 @@ public function show()
         exit();
     }
 
+        public function cancelApproval()
+    {
+        $nic = $_POST['nic'];
+        $plr = $_POST['plr'];
+        $stage = $_POST['stage'];
+
+        if ($stage == 1) {
+            $column = 'stage1_request';
+        } else {
+            $column = 'stage2_request';
+        }
+
+        $this->model->updateStageRequest($nic, $plr, $column, 'pending');
+
+        // redirect back to timeline
+        header("Location: " . URLROOT . "/officer/OfficerTimeline/show");
+        exit();
+    }
+
     //  ADD THIS ALSO (missing)
     private function getSeedDuration($seedname)
     {

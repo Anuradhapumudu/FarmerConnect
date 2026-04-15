@@ -55,6 +55,57 @@ public function deletePLR()
     header("Location: " . URLROOT . "/officer/FarmerProfile/show");
     exit();
 }
+
+public function editPLR()
+{
+    $plr = $_POST['plr'] ?? null;
+
+    if (!$plr) {
+        die("Invalid request");
+    }
+
+    $paddy = $this->paddyModel->getPaddyByPLR($plr);
+
+    if (!$paddy) {
+        die("Paddy not found");
+    }
+
+    $data = [
+        'paddy' => $paddy
+    ];
+
+    $this->view('officer/editpaddy', $data);
+}
+
+public function updatePLR()
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        die("Invalid request");
+    }
+
+    if (empty($_POST['plr']) || empty($_POST['Paddy_Size'])) {
+        die("Missing required data");
+    }
+
+    $data = [
+        'PLR' => $_POST['plr'],
+        'NIC' => $_POST['nic'],
+        'Paddy_Seed_Variety' => $_POST['Paddy_Seed_Variety'],
+        'Paddy_Size' => $_POST['Paddy_Size'],
+        'Province' => $_POST['Province'],
+        'District' => $_POST['District'],
+        'Govi_Jana_Sewa_Division' => $_POST['Govi_Jana_Sewa_Division'],
+        'Grama_Niladhari_Division' => $_POST['Grama_Niladhari_Division'],
+        'Yaya' => $_POST['Yaya'],
+        'OfficerID' => $_SESSION['officer_id']
+    ];
+
+    $this->paddyModel->updatePaddy($data);
+
+    header("Location: " . URLROOT . "/officer/FarmerProfile/show");
+    exit();
+}
+
 }
 
 ?>
