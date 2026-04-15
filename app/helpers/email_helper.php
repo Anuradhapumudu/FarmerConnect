@@ -75,7 +75,7 @@ function sendRejectEmail($toEmail, $sellerId, $missingFields = []) {
 
         $mail->Body = "
         <div style='font-family: Arial; padding:20px;'>
-            <h2 style='color:orange;'> Account Reject Review</h2>
+            <h2 style='color:red;'> Account Reject Review</h2>
 
             <p>Your seller account is currently <strong>NOT APPROVED</strong>.</p>
 
@@ -145,7 +145,7 @@ function sendWaitingApprovalEmail($toEmail) {
 
             <br>
 
-            <p>Thank you for your patience 🌱</p>
+            <p>Thank you for your patience </p>
             <p><strong>FarmerConnect Team</strong></p>
         </div>
         ";
