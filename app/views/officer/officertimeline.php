@@ -103,7 +103,7 @@
                         </button>
                   </form>
 
-                  <form action="<?php echo URLROOT; ?>/officer/FarmerProfile/show" method="POST">
+                  <form action="<?php echo URLROOT; ?>/officer/FarmerProfile/open" method="POST">
                     <input type="hidden" name="nic" value="<?php echo $farmer->NIC_FK; ?>">
                     <button type="submit" class="action-btn edit-btn">
                         Profile Details

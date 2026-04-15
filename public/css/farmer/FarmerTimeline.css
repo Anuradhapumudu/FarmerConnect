@@ -151,6 +151,24 @@
   background: linear-gradient(135deg, #e53935, #ef5350);
 }
 
+/*  Overdue (auto) */
+
+
+.task.overdue .label {
+    color: #c62828;
+    font-weight: 600;
+}
+
+.task.overdue .info {
+    color: #c62828;
+    font-weight: 600;
+}
+
+.task.overdue .info span {
+    color: #c62828;
+    font-weight: 600;
+}
+
 .task-row {
   display: flex;
   gap: 25px;
@@ -240,8 +258,10 @@
   border-color: #ffc107; /* yellow */
 }
 
-.task.pending .circle {
-  border-color: #f44336; /* red */
+/* Overdue circle border */
+.task.overdue .circle {
+    border-color: #e53935 !important;
+  
 }
 
 /* Locked task style */

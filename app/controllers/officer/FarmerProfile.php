@@ -11,16 +11,7 @@ class FarmerProfile extends Controller {
 
 public function show()
 {
-    //  If POST → save to session and REDIRECT
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-        $_SESSION['view_farmer_nic'] = $_POST['nic'];
-        $_SESSION['selected_plr'] = $_POST['selected_plr'] ?? null;
-
-        header("Location: " . URLROOT . "/officer/FarmerProfile/show");
-        exit();
-    }
-
+    
     //  Now ONLY GET requests reach here
     $nic = $_SESSION['view_farmer_nic'] ?? null;
 
@@ -40,6 +31,18 @@ public function show()
     ];
 
     $this->view('officer/farmerProfileView', $data);
+}
+
+public function open()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $_SESSION['view_farmer_nic'] = $_POST['nic'];
+        $_SESSION['selected_plr'] = $_POST['selected_plr'] ?? null;
+
+        header("Location: " . URLROOT . "/officer/FarmerProfile/show");
+        exit();
+    }
 }
 
     //  DELETE PLR (officer)
@@ -101,6 +104,9 @@ public function updatePLR()
     ];
 
     $this->paddyModel->updatePaddy($data);
+
+    $_SESSION['view_farmer_nic'] = $_POST['nic'];
+    $_SESSION['selected_plr'] = $_POST['plr'];
 
     header("Location: " . URLROOT . "/officer/FarmerProfile/show");
     exit();
