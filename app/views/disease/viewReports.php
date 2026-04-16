@@ -3,8 +3,8 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/disease/viewReports.css">
 
 <?php
-// Determine if farmer view
-$isFarmer = isset($data['farmerNIC']) && !empty($data['farmerNIC']);
+// Determine if farmer view from session role (not search filters)
+$isFarmer = (($_SESSION['user_type'] ?? '') === 'farmer');
 
 // Count statuses
 $totalReports = isset($data['reports']) ? count($data['reports']) : 0;

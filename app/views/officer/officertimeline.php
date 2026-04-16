@@ -51,6 +51,7 @@
         <option value="all" <?php if($data['status']=='all') echo 'selected'; ?>>All</option>
         <option value="active" <?php if($data['status']=='active') echo 'selected'; ?>>Active</option>
         <option value="inactive" <?php if($data['status']=='inactive') echo 'selected'; ?>>Inactive</option>
+        <option value="request" <?php if($data['status']=='request') echo 'selected'; ?>>Requests</option>
     </select>
 
 
@@ -84,12 +85,25 @@
 
                   <form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/show" method="POST">
                       <input type="hidden" name="plr" value="<?php echo $farmer->PLR; ?>">
-                      <button type="submit" class="action-btn view-btn">
-                          View Timeline
-                      </button>
+                        <?php 
+                        $hasRequest = (
+                            ($farmer->stage1_request ?? '') == 'pending' ||
+                            ($farmer->stage2_request ?? '') == 'pending'
+                        );
+                        ?>
+
+                        <button type="submit" class="action-btn view-btn <?php echo $hasRequest ? 'has-request' : ''; ?>">
+                            
+                            View Timeline
+
+                            <?php if ($hasRequest): ?>
+                                <span class="notify-dot"></span>
+                            <?php endif; ?>
+
+                        </button>
                   </form>
 
-                  <form action="<?php echo URLROOT; ?>/officer/FarmerProfile/show" method="POST">
+                  <form action="<?php echo URLROOT; ?>/officer/FarmerProfile/open" method="POST">
                     <input type="hidden" name="nic" value="<?php echo $farmer->NIC_FK; ?>">
                     <button type="submit" class="action-btn edit-btn">
                         Profile Details

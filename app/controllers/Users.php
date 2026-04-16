@@ -1,4 +1,11 @@
 <?php
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
+    require_once APPROOT . '/libraries/PHPMailer/src/Exception.php';
+    require_once APPROOT . '/libraries/PHPMailer/src/PHPMailer.php';
+    require_once APPROOT . '/libraries/PHPMailer/src/SMTP.php';
+
     class Users extends Controller {
         public function __construct() {
             $this->userModel = $this->model('M_Users');
@@ -603,6 +610,195 @@
                 return true;
             }
             return false;
+        }
+
+        public function forgotPassword() {
+            $data = [
+                'step' => 1,
+                'error' => ''
+            ];
+            $this->view('users/v_forgot_password', $data);
+        }
+        private function maskEmail($email) {
+            $parts = explode("@", $email);
+            if (count($parts) != 2) return $email;
+            $name = $parts[0];
+            $domain = $parts[1];
+            $len = strlen($name);
+            if ($len <= 2) {
+                return str_repeat("*", $len) . "@" . $domain;
+            }
+            return $name[0] . str_repeat("*", $len - 2) . $name[$len - 1] . "@" . $domain;
+        }
+        public function findEmailByUsername() {
+            $username = $_POST['username'];
+            $result = $this->userModel->findEmailByUsername($username);
+            if ($result) {
+                $data = [
+                    'step' => 2,
+                    'email' => $result['email'],
+                    'maskedemail' => $this->maskEmail($result['email']),
+                    'username' => $username,
+                    'user_type' => $result['type'],
+                    'error' => ''
+                ];
+            } else {
+                $data = [
+                    'step' => 1,
+                    'error' => 'User not found'
+                ];
+            }
+            $this->view('users/v_forgot_password', $data);
+        }
+
+        public function sendOTP() {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $otp = rand(100000, 999999);
+            $_SESSION['otp'] = $otp;
+            $_SESSION['otp_expiry'] = time() + 300;
+            $_SESSION['email'] = $_POST['email'];
+            $_SESSION['username'] = $_POST['username'];
+            $_SESSION['user_type'] = $_POST['user_type'];
+
+            // Send email using PHPMailer
+            $mail = new PHPMailer(true);
+            try {
+                $mail->isSMTP();
+                $mail->Host       = 'smtp.gmail.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'menujaalwis@gmail.com';    
+                $mail->Password   = 'bxyrxktkmlxhzbua';         
+                $mail->SMTPSecure = 'tls';
+                $mail->Port       = 587;
+
+                // Sender & recipient
+                $mail->setFrom('menujaalwis@gmail.com', 'FarmerConnect');
+                $mail->addAddress($_SESSION['email']);
+                // Content
+                $mail->isHTML(true);
+                $mail->Subject = 'Your OTP Code';
+                $mail->Body    = "
+                    <h3>Password Reset OTP</h3>
+                    <p>Your OTP code is:</p>
+                    <h2>$otp</h2>
+                    <p>This code will expire soon.</p>
+                ";
+                $mail->send();
+                $data = [
+                    'step' => 3,
+                    'email' => $_SESSION['email'],
+                    'error' => ''
+                ];
+
+            } catch (Exception $e) {
+                $data = [
+                    'step' => 2,
+                    'email' => $_SESSION['email'],
+                    'error' => 'Failed to send OTP. Try again.'
+                ];
+            }
+            $this->view('users/v_forgot_password', $data);
+        }
+
+        public function verifyOTP() {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $otpInput = $_POST['otp'];
+            if (time() > $_SESSION['otp_expiry']) {
+                $data = [
+                    'step' => 3,
+                    'email' => $_SESSION['email'],
+                    'error' => 'OTP expired. Please request a new one.'
+                ];
+            } elseif ($otpInput == $_SESSION['otp']) {
+                $data = [
+                    'step' => 4,
+                    'email' => $_SESSION['email'],
+                    'error' => ''
+                ];
+            } else {
+                $data = [
+                    'step' => 3,
+                    'email' => $_SESSION['email'],
+                    'error' => 'Invalid OTP'
+                ];
+            }
+            $this->view('users/v_forgot_password', $data);
+        }
+        public function resetPassword() {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $password = trim($_POST['password']);
+            $confirmPassword = trim($_POST['confirm_password']);
+
+            $error = '';
+            if (empty($password) || empty($confirmPassword)) {
+                $error = 'Please fill all fields';
+            } elseif (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#]{6,}$/", $password)) {
+                $error = 'Password must be at least 6 characters and include letters and numbers';
+            } elseif ($password !== $confirmPassword) {
+                $error = 'Passwords do not match';
+            }
+            if (!empty($error)) {
+                $data = [
+                    'step' => 4,
+                    'error' => $error
+                ];
+                $this->view('users/v_forgot_password', $data);
+                return;
+            }
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $username = $_SESSION['username'];
+            $userType = $_SESSION['user_type'];
+
+            switch ($userType) {
+                case 'farmer':
+                    $table = 'farmers';
+                    $column = 'nic';
+                    break;
+                case 'officer':
+                    $table = 'officers';
+                    $column = 'officer_id';
+                    break;
+                case 'seller':
+                    $table = 'sellers';
+                    $column = 'seller_id';
+                    break;
+                default:
+                    die("Invalid user type");
+            }
+            $this->userModel->updatePassword($table, $column, $username, $hashedPassword);
+            session_destroy();
+            echo "
+                <div style='
+                    text-align: center;
+                    margin-top: 80px;
+                    font-family: Arial, sans-serif;
+                '>
+                    <h2 style='color: green;'>Successful</h2>
+                    <p>Your password has been updated successfully.</p>
+
+                    <a href='" . URLROOT . "/users/login' 
+                    style='
+                        display: inline-block;
+                        margin-top: 20px;
+                        padding: 10px 20px;
+                        background-color: #28a745;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 5px;
+                        font-size: 16px;
+                    '>
+                        Go to Login
+                    </a>
+                </div>
+            ";
+
+            exit;
         }
     }
 ?>

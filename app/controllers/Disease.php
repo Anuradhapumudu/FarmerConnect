@@ -187,6 +187,7 @@ class Disease extends Controller
             : [];
 
         $this->view('disease/disease', [
+            'reportCode'      => '',
             'farmerNIC'       => $farmerNIC,
             'paddyFields'     => $paddyFields,
             'plrNumber'       => '',
@@ -197,6 +198,7 @@ class Disease extends Controller
             'description'     => '',
             'severity'        => '',
             'affectedArea'    => '',
+            'existingMedia'   => '',
             'terms'           => '',
             'errors'          => [],
         ]);
@@ -445,7 +447,7 @@ class Disease extends Controller
         }
 
         $report = $this->getReportOrFail($reportCode);
-        if ($report->status !== 'under_review') {
+        if (strtolower(trim($report->status)) !== 'under_review') {
             $this->flash('error', 'Recommendations can only be submitted when the report is Under Review');
             $this->redirect("/disease/viewReport/{$reportCode}");
         }
@@ -546,9 +548,20 @@ class Disease extends Controller
         }
 
         try {
-            $report = $this->model('M_disease')->getReportByCode($reportCode);
+            $report = $this->model('M_disease')->getReportByCode($reportCode, $this->isAdmin());
 
-            if (!$report || !$this->fileExistsInList($filename, $report->media ?? '')) {
+            if (!$report) {
+                $this->sendHttpError(403, 'File not associated with this report');
+                return;
+            }
+
+            $resolvedPath = $this->resolveMediaPathFromList(
+                requestedFilename: $filename,
+                fileList: $report->media ?? '',
+                defaultDir: $this->getUploadDir()
+            );
+
+            if ($resolvedPath === null) {
                 $this->sendHttpError(403, 'File not associated with this report');
                 return;
             }
@@ -558,7 +571,7 @@ class Disease extends Controller
                 return;
             }
 
-            $this->streamFile($this->getUploadDir() . $filename);
+            $this->streamFile($resolvedPath);
 
         } catch (Exception $e) {
             error_log("Error in viewMedia: " . $e->getMessage());
@@ -577,12 +590,23 @@ class Disease extends Controller
         try {
             $response = $this->model('M_disease')->getOfficerResponseById($responseId);
 
-            if (!$response || !$this->fileExistsInList($filename, $response->response_media ?? '')) {
+            if (!$response) {
                 $this->sendHttpError(403, 'File not associated with this response');
                 return;
             }
 
-            $this->streamFile($this->getUploadDir(self::UPLOAD_DIR_RESPONSES) . $filename);
+            $resolvedPath = $this->resolveMediaPathFromList(
+                requestedFilename: $filename,
+                fileList: $response->response_media ?? '',
+                defaultDir: $this->getUploadDir(self::UPLOAD_DIR_RESPONSES)
+            );
+
+            if ($resolvedPath === null) {
+                $this->sendHttpError(403, 'File not associated with this response');
+                return;
+            }
+
+            $this->streamFile($resolvedPath);
 
         } catch (Exception $e) {
             error_log("Error in viewResponseMedia: " . $e->getMessage());
@@ -663,6 +687,8 @@ class Disease extends Controller
      */
     private function renderFormWithErrors(array &$data): void
     {
+        $data['reportCode'] = $data['reportCode'] ?? ($data['report_code'] ?? '');
+        $data['existingMedia'] = $data['existingMedia'] ?? '';
         $data['paddyFields'] = $this->model('M_disease')
             ->getPaddyFieldsByFarmer($data['farmerNIC']);
         $this->view('disease/disease', $data);
@@ -868,9 +894,43 @@ class Disease extends Controller
 
     // ─── Private: Media Streaming ─────────────────────────────────────────────
 
-    private function fileExistsInList(string $filename, string $fileList): bool
+    private function normalizeFilename(string $filename): string
     {
-        return in_array($filename, array_map('trim', explode(',', $fileList)), true);
+        return trim(rawurldecode($filename));
+    }
+
+    /**
+     * Resolves a file request against stored media values and returns the real path.
+     * Supports both filename-only entries and legacy entries that contain paths.
+     */
+    private function resolveMediaPathFromList(string $requestedFilename, string $fileList, string $defaultDir): ?string
+    {
+        $requested = $this->normalizeFilename($requestedFilename);
+        $requestedBase = basename($requested);
+
+        $entries = array_filter(array_map('trim', explode(',', $fileList)));
+        foreach ($entries as $entry) {
+            $entryDecoded = $this->normalizeFilename($entry);
+            $entryBase = basename($entryDecoded);
+
+            if ($requested !== $entryDecoded && $requestedBase !== $entryBase) {
+                continue;
+            }
+
+            $candidates = [
+                $defaultDir . $entryBase,
+                dirname(APPROOT) . '/' . ltrim($entryDecoded, '/'),
+                dirname(APPROOT) . '/public/' . ltrim($entryDecoded, '/'),
+            ];
+
+            foreach ($candidates as $candidate) {
+                if (file_exists($candidate)) {
+                    return $candidate;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function streamFile(string $filePath): void

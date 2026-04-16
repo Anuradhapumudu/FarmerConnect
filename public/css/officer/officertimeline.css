@@ -190,46 +190,84 @@ td form,
 }
 
 /* ==============================
-   Base Button Style
+   Base Button
 ============================== */
 .action-btn {
     border: none;
-    padding: 8px 14px;
-    border-radius: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.25s ease;
+    transition: all 0.25s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 6px;
+    position: relative;
 }
 
 /* ==============================
-   View Timeline Button
+   View Timeline (Light Blue)
 ============================== */
 .view-btn {
-    background: #2e7d32;
-    color: #fff;
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #bbdefb;
 }
 
 .view-btn:hover {
-    background: #1b5e20;
+    background: #d0e7fb;
+    color: #0d47a1;
 }
 
 /* ==============================
-   Profile Button
+   Profile (Light Yellow)
 ============================== */
 .edit-btn {
-    background: #f1f8e9;
-    color: #2e7d32;
-    border: 1px solid #c5e1a5;
+    background: #fff8e1;
+    color: #f57f17;
+    border: 1px solid #ffe082;
 }
 
 .edit-btn:hover {
-    background: #e6f4d7;
-    color: #1b5e20;
+    background: #ffefc2;
+    color: #e65100;
+}
+
+/* ==============================
+   Notification Dot (Blue)
+============================== */
+.notify-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 8px;
+    height: 8px;
+    background: #2196f3;
+    border-radius: 50%;
+    animation: pulse-blue 1.5s infinite;
+}
+
+/* Blue pulse animation */
+@keyframes pulse-blue {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.6);
+    }
+    70% {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 6px rgba(33, 150, 243, 0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Optional highlight */
+.view-btn.has-request {
+    border: 1px solid #90caf9;
+    box-shadow: 0 0 6px rgba(33, 150, 243, 0.3);
 }
 
 /* ==============================

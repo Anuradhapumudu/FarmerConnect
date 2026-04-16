@@ -36,6 +36,14 @@
 
       $today = date('Y-m-d');
 
+      $estimated = $data['estimatedDates'][1] ?? null;
+
+      $overdue = '';
+
+      if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
       $nextUnlockDate = isset($data['estimatedDates'][2]) 
           ? date('Y-m-d', strtotime($data['estimatedDates'][2] . ' -2 days'))
           : null;
@@ -43,7 +51,7 @@
       // Step 1 becomes readonly when step 2 unlocks
       $readonly = ($status === 'done') ? 'readonly' : '';
       ?>
-      <div class="task <?php echo $status . ' ' . $readonly; ?>" data-step="1">
+      <div class="task <?php echo $status . ' ' . $readonly . ' ' . $overdue; ?>" data-step="1">
         <div class="label">Ready the Field I</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/landpreparation1.jpg" alt="Ready the Field I">
@@ -55,7 +63,7 @@
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')"> Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
-          <button onclick="setStatus(this, 'pending')"> Not Done Yet</button>
+          
         </div>
       </div>
 
@@ -70,6 +78,14 @@
 
     $today = date('Y-m-d');
 
+      $estimated = $data['estimatedDates'][2] ?? null;
+
+      $overdue = '';
+
+      if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
 
     // NEW: readonly when step 3 unlocks
@@ -79,7 +95,7 @@
 
     $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="2">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="2">
         <div class="label">Water Supply</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/watersupply.jpg" alt="Water Supply">
@@ -91,7 +107,7 @@
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')"> Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
-          <button onclick="setStatus(this, 'pending')"> Not Done Yet</button>
+          
         </div>
       </div>
 
@@ -106,6 +122,14 @@
 
     $today = date('Y-m-d');
 
+    $estimated = $data['estimatedDates'][3] ?? null;
+
+      $overdue = '';
+
+      if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
 
     $nextUnlockDate = isset($data['estimatedDates'][4]) 
@@ -114,7 +138,7 @@
 
     $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="3">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="3">
         <div class="label">Prepare Land</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/readyfield2.webp" alt="Prepare Land">
@@ -126,7 +150,6 @@
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')">Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
-          <button onclick="setStatus(this, 'pending')"> Not Done Yet</button>
         </div>
       </div>
 
@@ -141,6 +164,14 @@
 
         $today = date('Y-m-d');
 
+        $estimated = $data['estimatedDates'][4] ?? null;
+
+       $overdue = '';
+
+       if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
         $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
 
           $nextUnlockDate = isset($data['estimatedDates'][5]) 
@@ -149,7 +180,7 @@
 
       $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
       ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="4">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="4">
         <div class="label">Ready the Field II</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/landpreparetion2.jpg" alt="Ready the Field II">
@@ -161,7 +192,6 @@
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')"> Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
-          <button onclick="setStatus(this, 'pending')"> Not Done Yet</button>
         </div>
       </div>
 
@@ -176,6 +206,14 @@
 
     $today = date('Y-m-d');
 
+      $estimated = $data['estimatedDates'][5] ?? null;
+
+       $overdue = '';
+
+       if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
 
     $nextUnlockDate = isset($data['estimatedDates'][6]) 
@@ -184,7 +222,7 @@
 
     $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="5">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="5">
         <div class="label">Prepare Land II</div>
         <div class="circle" onclick="toggleStatusMenu(this)">
           <img src="<?php echo URLROOT; ?>/img/readyfield1.jpg" alt="Prepare Land II">
@@ -196,7 +234,6 @@
         <div class="status-selector">
           <button onclick="setStatus(this, 'done')"> Done</button>
           <button onclick="setStatus(this, 'problem')"> Have Problem</button>
-          <button onclick="setStatus(this, 'pending')"> Not Done Yet</button>
         </div>
       </div>
 
@@ -204,11 +241,64 @@
 
     </div>
 
-      <div class="stage-action">
-          <button class="inform-btn" onclick="informOfficer(this)">
-              Inform Officer
-          </button>
-      </div>
+
+    <?php
+    $stage1Complete = true;
+
+    for ($i = 1; $i <= 5; $i++) {
+        if (($data['progress'][$i] ?? '') !== 'done') {
+            $stage1Complete = false;
+            break;
+        }
+    }
+    ?>
+
+
+        <div class="stage-action">
+
+              <?php 
+              $status1 = $data['stage1_request'] ?? 'none';
+
+              $btnClass = '';
+              if ($status1 == 'pending') $btnClass = 'pending';
+              elseif ($status1 == 'approved') $btnClass = 'approved';
+
+              if ($stage1Complete): ?>
+
+                  <!-- INFORM BUTTON -->
+                  <form action="<?php echo URLROOT; ?>/FarmerTimeline/informStage" method="POST" style="display:inline;">
+                      
+                      <input type="hidden" name="plr" value="<?php echo $data['selected_plr']; ?>">
+                      <input type="hidden" name="stage" value="1">
+
+                      <button type="submit" 
+                              class="inform-btn <?php echo $btnClass; ?>"
+                              <?php echo ($status1 != 'none') ? 'disabled' : ''; ?>>
+
+                          <?php 
+                              if ($status1 == 'pending') echo " Waiting for Officer...";
+                              elseif ($status1 == 'approved') echo "✔ Approved";
+                              else echo "Inform Officer";
+                          ?>
+                      </button>
+                  </form>
+
+                  <!--  CANCEL BUTTON (ONLY WHEN PENDING) -->
+                  <?php if ($status1 == 'pending'): ?>
+                      <form action="<?php echo URLROOT; ?>/FarmerTimeline/cancelWaitingStage" method="POST" style="display:inline;">
+                          
+                          <input type="hidden" name="plr" value="<?php echo $data['selected_plr']; ?>">
+                          <input type="hidden" name="stage" value="1">
+
+                          <button type="submit" class="cancel-btn">
+                              Cancel
+                          </button>
+                      </form>
+                  <?php endif; ?>
+
+              <?php endif; ?>
+
+        </div>
 
   </div>
 
@@ -221,6 +311,7 @@
     <?php
     $status = $data['progress'][6] ?? 'default';
     $prevDone = (($data['progress'][5] ?? '') === 'done');
+    $approved = (($data['stage1_request'] ?? '') === 'approved');
 
     $unlockDate = isset($data['estimatedDates'][6]) 
         ? date('Y-m-d', strtotime($data['estimatedDates'][6] . ' -2 days'))
@@ -228,7 +319,15 @@
 
     $today = date('Y-m-d');
 
-    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+      $estimated = $data['estimatedDates'][6] ?? null;
+
+       $overdue = '';
+
+       if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
+    $locked = ($prevDone && $approved && $today >= $unlockDate) ? '' : 'locked';
 
     $nextUnlockDate = isset($data['estimatedDates'][7]) 
     ? date('Y-m-d', strtotime($data['estimatedDates'][7] . ' -2 days'))
@@ -236,7 +335,7 @@
 
     $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="6">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="6">
       <div class="label">Sowing</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/sowing.webp" alt="Sowing">
@@ -248,7 +347,6 @@
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
-        <button onclick="setStatus(this, 'pending')">Not Done Yet</button>
       </div>
     </div>
 
@@ -263,6 +361,14 @@
 
     $today = date('Y-m-d');
 
+       $estimated = $data['estimatedDates'][7] ?? null;
+
+       $overdue = '';
+
+       if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
 
     $nextUnlockDate = isset($data['estimatedDates'][8]) 
@@ -271,7 +377,7 @@
 
     $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="7">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="7">
       <div class="label">Fertilization I</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization1.jpg" alt="Fertilization I">
@@ -283,7 +389,6 @@
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
-        <button onclick="setStatus(this, 'pending')">Not Done Yet</button>
       </div>
     </div>
 
@@ -298,6 +403,14 @@
 
     $today = date('Y-m-d');
 
+      $estimated = $data['estimatedDates'][8] ?? null;
+
+       $overdue = '';
+
+       if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
 
     $nextUnlockDate = isset($data['estimatedDates'][9]) 
@@ -306,7 +419,7 @@
 
     $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="8">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="8">
       <div class="label">Fertilization II</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization2.jpeg" alt="Fertilization II">
@@ -318,7 +431,6 @@
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
-        <button onclick="setStatus(this, 'pending')">Not Done Yet</button>
       </div>
     </div>
 
@@ -333,6 +445,14 @@
 
     $today = date('Y-m-d');
 
+      $estimated = $data['estimatedDates'][9] ?? null;
+
+       $overdue = '';
+
+       if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
 
     $nextUnlockDate = isset($data['estimatedDates'][10]) 
@@ -341,7 +461,7 @@
 
     $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="9">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="9">
       <div class="label">Fertilization III</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/fertilization3.jpg" alt="Fertilization III">
@@ -353,7 +473,6 @@
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
-        <button onclick="setStatus(this, 'pending')">Not Done Yet</button>
       </div>
     </div>
 
@@ -368,6 +487,14 @@
 
     $today = date('Y-m-d');
 
+      $estimated = $data['estimatedDates'][10] ?? null;
+
+       $overdue = '';
+
+       if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
     $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
 
     $nextUnlockDate = isset($data['estimatedDates'][11]) 
@@ -376,7 +503,7 @@
 
     $readonly = ($nextUnlockDate && $today >= $nextUnlockDate) ? 'readonly' : '';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly; ?>" data-step="10">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $readonly . ' ' . $overdue; ?>" data-step="10">
       <div class="label">Fertilization IV</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/harvesting.webp" alt="Harvesting">
@@ -388,17 +515,67 @@
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
-        <button onclick="setStatus(this, 'pending')">Not Done Yet</button>
       </div>
     </div>
 
   </div>
 
-  <div class="stage-action">
-          <button class="inform-btn" onclick="informOfficer(this)">
-              Inform Officer
-          </button>
-  </div>
+    <?php
+    $stage2Complete = true;
+
+    for ($i = 6; $i <= 10; $i++) {
+        if (($data['progress'][$i] ?? '') !== 'done') {
+            $stage2Complete = false;
+            break;
+        }
+    }
+    ?>
+
+        <div class="stage-action">
+
+              <?php 
+              $status2 = $data['stage2_request'] ?? 'none';
+
+              $btnClass = '';
+              if ($status2 == 'pending') $btnClass = 'pending';
+              elseif ($status2 == 'approved') $btnClass = 'approved';
+
+              if ($stage2Complete): ?>
+
+                  <!-- INFORM BUTTON -->
+                  <form action="<?php echo URLROOT; ?>/FarmerTimeline/informStage" method="POST" style="display:inline;">
+                      
+                      <input type="hidden" name="plr" value="<?php echo $data['selected_plr']; ?>">
+                      <input type="hidden" name="stage" value="2">
+
+                      <button type="submit" 
+                              class="inform-btn <?php echo $btnClass; ?>"
+                              <?php echo ($status2 != 'none') ? 'disabled' : ''; ?>>
+
+                          <?php 
+                              if ($status2 == 'pending') echo " Waiting for Officer...";
+                              elseif ($status2 == 'approved') echo "✔ Approved";
+                              else echo "Inform Officer";
+                          ?>
+                      </button>
+                  </form>
+
+                  <!--  CANCEL BUTTON (ONLY WHEN PENDING) -->
+                  <?php if ($status2 == 'pending'): ?>
+                      <form action="<?php echo URLROOT; ?>/FarmerTimeline/cancelWaitingStage" method="POST" style="display:inline;">
+                          
+                          <input type="hidden" name="plr" value="<?php echo $data['selected_plr']; ?>">
+                          <input type="hidden" name="stage" value="2">
+
+                          <button type="submit" class="cancel-btn">
+                              Cancel
+                          </button>
+                      </form>
+                  <?php endif; ?>
+
+              <?php endif; ?>
+
+        </div>
  
 </div>
 
@@ -411,6 +588,7 @@
     <?php
     $status = $data['progress'][11] ?? 'default';
     $prevDone = (($data['progress'][10] ?? '') === 'done');
+    $approved = (($data['stage2_request'] ?? '') === 'approved');
 
     $unlockDate = isset($data['estimatedDates'][11]) 
         ? date('Y-m-d', strtotime($data['estimatedDates'][11] . ' -2 days'))
@@ -418,9 +596,17 @@
 
     $today = date('Y-m-d');
 
-    $locked = ($prevDone && $today >= $unlockDate) ? '' : 'locked';
+      $estimated = $data['estimatedDates'][11] ?? null;
+
+       $overdue = '';
+
+       if ($status !== 'done' && $status !== 'problem' && $estimated && $today > $estimated) {
+          $overdue = 'overdue';
+      }
+
+    $locked = ($prevDone && $approved && $today >= $unlockDate) ? '' : 'locked';
     ?>
-    <div class="task <?php echo $status . ' ' . $locked; ?>" data-step="11">
+    <div class="task <?php echo $status . ' ' . $locked . ' ' . $overdue; ?>" data-step="11">
       <div class="label">Harvesting</div>
       <div class="circle" onclick="toggleStatusMenu(this)">
         <img src="<?php echo URLROOT; ?>/img/harvesting.webp" alt="Harvesting">
@@ -432,7 +618,6 @@
       <div class="status-selector">
         <button onclick="setStatus(this, 'done')">Done</button>
         <button onclick="setStatus(this, 'problem')">Have Problem</button>
-        <button onclick="setStatus(this, 'pending')">Not Done Yet</button>
       </div>
     </div>
 
@@ -449,7 +634,7 @@
 function toggleStatusMenu(circleEl) {
   const task = circleEl.closest('.task');
 
-  // ❌ block if locked OR readonly
+  //  block if locked OR readonly
   if (task.classList.contains('locked') || task.classList.contains('readonly')) {
     return;
   }
@@ -466,7 +651,7 @@ function toggleStatusMenu(circleEl) {
 function setStatus(buttonEl, statusClass) {
   const task = buttonEl.closest('.task');
 
-  // ❌ block editing if readonly
+  //  block editing if readonly
   if (task.classList.contains('readonly')) {
     return;
   }
@@ -488,12 +673,29 @@ function setStatus(buttonEl, statusClass) {
       })
   });
 
-  checkStageCompletion(task);
+ // checkStageCompletion(task);
 
-  if (statusClass === 'problem') {
-      window.location.href = "<?php echo URLROOT; ?>/YellowCaseList";
-  }
+if (statusClass === 'problem') {
+    goToProblemPage(plr);
+    return;
 }
+}
+
+  function goToProblemPage(plr) {
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "<?php echo URLROOT; ?>/YellowCaseList";
+
+      const plrInput = document.createElement("input");
+      plrInput.type = "hidden";
+      plrInput.name = "plr";
+      plrInput.value = plr;
+
+      form.appendChild(plrInput);
+  
+      document.body.appendChild(form);
+      form.submit();
+  }
 
   function unlockNextTask(currentTask) {
   // Find all tasks in order
@@ -510,7 +712,8 @@ function setStatus(buttonEl, statusClass) {
   }
 }
 
-function checkStageCompletion(taskElement) {
+
+/*function checkStageCompletion(taskElement) {
   const stageSection = taskElement.closest('.stage-section');
   const tasks = stageSection.querySelectorAll('.task');
 
@@ -524,11 +727,28 @@ function checkStageCompletion(taskElement) {
 
   const button = stageSection.querySelector('.inform-btn');
 
-  if (allDone) {
-    button.style.display = 'inline-block';
-  } else {
-    button.style.display = 'none';
-  }
 }
+
+  function informOfficer(button) {
+
+      const stage = button.dataset.stage;
+      const plr = document.getElementById('plrSelect').value;
+
+      fetch("?php echo URLROOT; ?>/FarmerTimeline/informStage", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+              plr: plr,
+              stage: stage
+          })
+      })
+      .then(res => res.json())
+      .then(data => {
+          if (data.success) {
+              button.innerText = "Waiting for Officer...";
+              button.disabled = true;
+          }
+      });
+  }*/
 
 </script>

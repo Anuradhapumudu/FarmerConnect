@@ -17,16 +17,17 @@
           <input type="text" name = "land_area" value = "<?php echo isset($data['land_area']) ? $data['land_area'] : ''; ?>">
           <?php if(!empty($data['errors']['land_area'])):?>
             <p class = "error"><?php echo $data['errors']['land_area'];?></p>
-          <?php endif; ?>
+          <?php endif; ?> 
         </div>
 
         <div class="info">
           <label>Select Crop Type:</label>
           <select id="crop-type" name = "crop_type">
-              <option value="2" <?php echo (isset($data['crop_type']) && $data['crop_type']=='2') ? 'selected' : ''; ?>>2 month</option>
+              <option value="2.5" <?php echo (isset($data['crop_type']) && $data['crop_type']=='2.5') ? 'selected' : ''; ?>>2 1/2 month</option>
               <option value="3" <?php echo (isset($data['crop_type']) && $data['crop_type']=='3') ? 'selected' : ''; ?>>3 month</option>
               <option value="3.5" <?php echo (isset($data['crop_type']) && $data['crop_type']=='3.5') ? 'selected' : ''; ?>>3 1/2 month</option>
               <option value="4" <?php echo (isset($data['crop_type']) && $data['crop_type']=='4') ? 'selected' : ''; ?>>4 month</option>
+              <option value="4.5" <?php echo (isset($data['crop_type']) && $data['crop_type']=='4.5') ? 'selected' : ''; ?>>4 1/2 month</option>
           </select>
         </div>
 

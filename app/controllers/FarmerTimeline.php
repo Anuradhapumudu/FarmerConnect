@@ -76,7 +76,13 @@ class FarmerTimeline extends Controller
                 unset($_SESSION['selected_plr']);
                 $data['selected_plr'] = null;
             }
+
+            $stageStatus = $model->getStageRequestStatus($farmerNIC, $plr);
+
+            $data['stage1_request'] = $stageStatus->stage1_request ?? 'none';
+            $data['stage2_request'] = $stageStatus->stage2_request ?? 'none';
         }
+
 
         $this->view('farmer/FarmerTimeline', $data);
     }
@@ -137,6 +143,54 @@ class FarmerTimeline extends Controller
             }
 
             echo json_encode(['success' => true]);
+        }
+    }
+
+    public function informStage()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $nic = $_SESSION['nic'];
+            $plr = $_POST['plr'];
+            $stage = $_POST['stage'];
+
+            $model = $this->model('TimeLineModel');
+
+            if ($stage == 1) {
+                $column = 'stage1_request';
+            } else {
+                $column = 'stage2_request';
+            }
+
+            $model->updateStageRequest($nic, $plr, $column, 'pending');
+
+            // ✅ redirect back
+            header("Location: " . URLROOT . "/FarmerTimeline");
+            exit();
+        }
+    }
+
+    public function cancelWaitingStage()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $nic = $_SESSION['nic'];
+            $plr = $_POST['plr'];
+            $stage = $_POST['stage'];
+
+            $model = $this->model('TimeLineModel');
+
+            if ($stage == 1) {
+                $column = 'stage1_request';
+            } else {
+                $column = 'stage2_request';
+            }
+
+            // ✅ reset to NONE
+            $model->updateStageRequest($nic, $plr, $column, 'none');
+
+            header("Location: " . URLROOT . "/FarmerTimeline");
+            exit();
         }
     }
 
