@@ -48,7 +48,6 @@ class M_Admin {
         // Bind parameters
 
         $this->db->bind(':email', $data['email']);
-        $this->db->bind(':company_name', $data['company_name']);
         $this->db->bind(':brn', $data['brn']);
         $this->db->bind(':seller_id', $seller_id);
 

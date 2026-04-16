@@ -101,8 +101,7 @@
 
         <div class="detail-item">
             <span class="detail-label">Company Name:</span>
-            <input type="text" name="company_name"
-                   value="<?= htmlspecialchars($data['seller']->company_name) ?>">
+            <span class="detail-value"><?= $data['seller']->company_name ?></span>
         </div>
 
         <div class="detail-item">
