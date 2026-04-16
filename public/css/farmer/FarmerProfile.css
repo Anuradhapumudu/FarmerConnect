@@ -1,3 +1,12 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 /* =======================
    General Styles
 ======================= */
@@ -604,4 +613,54 @@ form {
   }
 
   
+}
+
+.error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .profile-card {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    margin-left: 0;
+  }
+
+  .profile-info {
+    width: 100%;
+  }
+
+  .profile-pic {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .page-title h2 {
+    text-align: center;
+    margin-left: 0;
+ 
+}
+
+
+  .error {
+    font-size: 12px;
+    text-align: left;
+  }
 }

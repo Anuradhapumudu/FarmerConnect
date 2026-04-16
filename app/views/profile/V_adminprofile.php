@@ -3,9 +3,10 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/farmer/FarmerProfile.css?v=<?= time(); ?>">
 
 <?php 
-$old = $_SESSION['old_input'] ?? [];
-$errors = $_SESSION['profile_errors'] ?? [];
-unset($_SESSION['old_input'], $_SESSION['profile_errors']);
+
+$user = $data['user'] ?? [];
+$errors = $data['errors'] ?? [];
+
 ?>
 
 <main>
@@ -16,7 +17,11 @@ unset($_SESSION['old_input'], $_SESSION['profile_errors']);
     </a>
 </div>
 
-<form id="adminForm" method="POST" 
+<?php if(!empty($errors['general'])): ?>
+            <div class="error error-field"><?= $errors['general'] ?></div>
+<?php endif; ?>
+
+<form id="form" method="POST" 
       action="<?= URLROOT ?>/ProfileView/updateAdmin" 
       enctype="multipart/form-data">
 
@@ -34,26 +39,25 @@ unset($_SESSION['old_input'], $_SESSION['profile_errors']);
                     echo URLROOT . '/' . $img;
                 }
              ?>"
-             alt="Profile Photo">
 
-        <input type="hidden" name="existing_image"
-               value="<?= $data['admin']->image_url ?? '' ?>">
+alt="Profile Photo"  id="profileImage">
 
-        <div class="buttons">
-            <input type="file" id="uploadInput" name="profile_image"
-                   accept="image/*" hidden>
+                <input type="hidden" name="existing_image" value="<?= htmlspecialchars($user['image_url'] ?? '') ?>">
+                <?php if(!empty($errors['image'])): ?>
+                    <div class="error error-field"><?= $errors['image'] ?></div>
+                <?php endif; ?>
 
-            <button type="button" class="btn upload-btn"
-                    onclick="document.getElementById('uploadInput').click()">
-                Upload Photo
-            </button>
 
-            <button type="button" class="btn remove-btn"
-                    onclick="removeProfilePic()">
-                Remove Photo
-            </button>
-        </div>
-    </div>
+                <div class="buttons">
+                    <input type="file" id="uploadInput" name="profile_image" accept="image/*" style="display:none;">
+                    <button type="button" class="btn upload-btn" onclick="document.getElementById('uploadInput').click();">
+                        Upload Photo
+                    </button>
+                    <button type="submit" name="remove_image" value="1" class="btn remove-btn">
+                        Remove Photo
+                    </button>
+                </div>
+            </div>
 </div>
 
 <!-- ADMIN DETAILS -->
@@ -72,21 +76,35 @@ unset($_SESSION['old_input'], $_SESSION['profile_errors']);
 
     <div class="form-group">
         <label>First Name</label>
-        <input type="text" name="first_name"
-               value="<?= $data['admin']->first_name ?? '' ?>" required>
+            <input type="text" name="first_name" value="<?= htmlspecialchars($user['first_name'] ?? '') ?>" required>
+                  <?php if(!empty($errors['fname'])): ?>
+                        <div class="error error-field"><?= $errors['fname'] ?></div>
+                    <?php endif; ?>
     </div>
 
     <div class="form-group">
         <label>Last Name</label>
-        <input type="text" name="last_name"
-               value="<?= $data['admin']->last_name ?? '' ?>" required>
+                    <input type="text" name="last_name" value="<?= htmlspecialchars($user['last_name'] ?? '') ?>" required>
+                    <?php if(!empty($errors['lname'])): ?>
+                        <div class="error error-field"><?= $errors['lname'] ?></div>
+                    <?php endif; ?>
     </div>
 
     <div class="form-group">
         <label>Telephone Number</label>
-        <input type="text" name="phone_no"
-               value="<?= $data['admin']->phone_no ?? '' ?>" required>
+                    <input type="text" name="phone_no" value="<?= htmlspecialchars($user['phone_no'] ?? '') ?>" required>
+                     <?php if(!empty($errors['phone_no'])): ?>
+                        <div class="error error-field"><?= $errors['phone_no'] ?></div>
+                    <?php endif; ?> 
     </div>
+
+    <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required>
+            <?php if(!empty($errors['email'])): ?>
+                        <div class="error error-field"><?= $errors['email'] ?></div>
+            <?php endif; ?>
+            </div>
 
     <div class="form-actions">
         <button type="submit" class="btn save-btn">Save Changes</button>
@@ -97,36 +115,7 @@ unset($_SESSION['old_input'], $_SESSION['profile_errors']);
 
 </form>
 
-<script>
-document.getElementById('uploadInput').addEventListener('change', e => {
-    if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            document.getElementById('profileImage').src = e.target.result;
-        }
-        reader.readAsDataURL(e.target.files[0]);
-
-        const flag = document.getElementById('removed_flag');
-        if (flag) flag.remove();
-    }
-});
-
-function removeProfilePic() {
-    document.getElementById('profileImage').src =
-        'https://cdn-icons-png.flaticon.com/512/847/847969.png';
-    document.getElementById('uploadInput').value = '';
-
-    let flag = document.getElementById('removed_flag');
-    if (!flag) {
-        flag = document.createElement('input');
-        flag.type = 'hidden';
-        flag.name = 'removed_flag';
-        flag.id = 'removed_flag';
-        flag.value = '1';
-        document.getElementById('adminForm').appendChild(flag);
-    }
-}
-</script>
+<script src="<?php echo URLROOT; ?>/js/profileView/profile.js?v=<?= time(); ?>"></script>
 
 </main>
 
