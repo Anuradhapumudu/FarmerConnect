@@ -34,7 +34,7 @@
     </div>
 <?php endif; ?>
 
-<!-- ================= MAIN UPDATE FORM ================= -->
+
 <form method="POST"
       action="<?= URLROOT ?>/Admin/UserList/updateSeller/<?= $data['seller']->seller_id ?>">
 
@@ -137,7 +137,7 @@
 </div>
 </div>
 </form>
-<!-- ================= END FORM ================= -->
+
 
 
 <!-- APPROVE / REJECT (NO NESTED FORMS) -->
