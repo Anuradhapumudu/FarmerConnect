@@ -64,7 +64,11 @@ $farmerNIC = $_SESSION['nic'] ?? '';
 $isOfficer = $userType === 'officer';
 $isFarmer = $userType === 'farmer';
 $isReportOwner = $isFarmer && $farmerNIC === $report->farmerNIC;
-$canEditReport = $isReportOwner && strtolower($report->status) === 'pending' && !$isDeleted;
+$statusRaw = strtolower(trim($report->status ?? 'pending'));
+$statusValue = str_replace(' ', '_', $statusRaw);
+$canEditReport = $isReportOwner && $statusValue === 'pending' && !$isDeleted;
+$isPending = ($statusValue === 'pending');
+$isUnderReview = ($statusValue === 'under_review');
 ?>
 
 <div class="rd-wrapper">
@@ -123,7 +127,7 @@ $canEditReport = $isReportOwner && strtolower($report->status) === 'pending' && 
                                                 $statusOptions = ['pending' => 'Pending', 'under_review' => 'Under Review', 'resolved' => 'Resolved', 'rejected' => 'Rejected'];
                                                 foreach ($statusOptions as $value => $label): ?>
                                                         <option value="<?php echo $value; ?>"
-                                                            <?php echo ($report->status === $value) ? 'selected' : ''; ?>>
+                                                            <?php echo ($statusValue === $value) ? 'selected' : ''; ?>>
                                                             <?php echo $label; ?>
                                                         </option>
                                                 <?php endforeach; ?>
@@ -324,7 +328,7 @@ $canEditReport = $isReportOwner && strtolower($report->status) === 'pending' && 
 
     <!-- ═══ Officer: Submit Recommendation ═══ -->
     <?php if ($isOfficer): ?>
-            <?php if ($report->status === 'pending'): ?>
+            <?php if ($isPending): ?>
                     <!-- Prompt officer to accept the report before responding -->
                     <div class="rd-recommendation-form-section rd-pending-prompt">
                         <div class="rd-section-title"><i class="fas fa-clipboard-check"></i> Start Report Review</div>
@@ -341,7 +345,7 @@ $canEditReport = $isReportOwner && strtolower($report->status) === 'pending' && 
                         </div>
                     </div>
 
-            <?php elseif ($report->status === 'under_review'): ?>
+            <?php elseif ($isUnderReview): ?>
                     <!-- Recommendation form -->
                     <div class="rd-recommendation-form-section">
                         <div class="rd-section-title"><i class="fas fa-comment-medical"></i> Submit Recommendation</div>
