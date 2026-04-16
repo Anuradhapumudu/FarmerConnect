@@ -48,7 +48,7 @@ class plrReqList extends Controller {
         $this->view('officer/plrReqView', $data);
     }
 
-    // ✅ Approve request
+    //  Approve request
     public function approve($id)
     {
         $result = $this->model->approveRequest($id);
@@ -69,7 +69,7 @@ class plrReqList extends Controller {
         exit();
     }
 
-    // ✅ Reject request
+    //  Reject request
     public function reject($id)
     {
         $this->model->rejectRequest($id);

@@ -111,7 +111,7 @@ public function searchHistory($division, $search) {
         $this->db->bind(':plr', $request->PLR);
         $existing = $this->db->single();
 
-        // ❌ IF EXISTS → RETURN ERROR
+        //  IF EXISTS → RETURN ERROR
         if ($existing) {
             return [
                 'status' => 'exists',

@@ -18,35 +18,39 @@ class CalculatorOfficer extends Controller{
                 $potash = $_POST['potash'];
                 $phosphate = $_POST['phosphate'];
 
-              $errors = [];
+              $errors = [
+                    'urea' => '',
+                    'potash' => '',
+                    'phosphate' => ''
+              ];
 
-              if(!is_numeric($urea) || $urea < 0)
+              if(!is_numeric($urea) || $urea <= 0)
                 {
-                    $errors[] = "Urea amount must be a positive number";
+                    $errors['urea'] = "Urea amount must be a positive number";
                 }
 
-              if(!is_numeric($potash) || $potash < 0)
+              if(!is_numeric($potash) || $potash <= 0)
                 {
-                    $errors[] = "potash amount must be a positive number";
+                    $errors['potash'] = "potash amount must be a positive number";
                 }
 
-              if(!is_numeric($phosphate) || $phosphate < 0)
+              if(!is_numeric($phosphate) || $phosphate <= 0)
                 {
-                    $errors[] = "Phosphate amount must be a positive number";
+                    $errors['phosphate'] = "Phosphate amount must be a positive number";
                 }
 
-             if(empty($errors))
+             if(empty(array_filter($errors)))
                  {
                     $calculator = $this->model('officerCalculator');
                     $calculator->updateData($cropType,$cropStage,$urea,$potash,$phosphate);  
                     
                  }
 
-            $this->updateView();
+            $this->updateView($errors);
             }   
     }
 
-    public function updateView()
+    public function updateView($errors = [])
     {
         $calculator = $this->model('officerCalculator');
         $recommendation = $calculator->getAllRecommendationI();
@@ -65,7 +69,8 @@ class CalculatorOfficer extends Controller{
         }
 
         $data = [
-            'tableData'  => $recommendationArray
+            'tableData'  => $recommendationArray,
+            'errors' => $errors
         ];
 
         $this->view('officer/CalculatorOfficer',$data);

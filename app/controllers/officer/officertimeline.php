@@ -11,14 +11,14 @@ class OfficerTimeline extends Controller {
 
         $officerId = $_SESSION['officer_id']; // make sure this exists
 
-        // 1. Get officer division
+        //  Get officer division
         $division = $this->model->getOfficerDivision($officerId);
 
             //  GET SEARCH + FILTER
         $search = $_GET['search'] ?? null;
         $status = $_GET['status'] ?? 'all';
 
-        // 2. Get farmers in that division
+        // Get farmers in that division
         $farmers = $this->model->getFarmersByDivision($division, $search, $status);
 
             //  COUNTS
@@ -46,7 +46,7 @@ class OfficerTimeline extends Controller {
 
 public function show()
 {
-    // 1. Get PLR from POST
+    // Get PLR from POST
     $plr = $_POST['plr'] ?? $_SESSION['officer_plr'] ?? null;;
 
     $_SESSION['officer_plr'] = $plr;
@@ -55,41 +55,41 @@ public function show()
         die("Invalid request (PLR missing)");
     }
 
-    // 2. Get NIC using PLR
+    // Get NIC using PLR
     $nic = $this->model->getNICByPLR($plr);
 
     if (!$nic) {
         die("Farmer not found");
     }
 
-    // 3. Get seed variety
+    // Get seed variety
     $seed = $this->model->getSeedVariety($plr);
 
     if (!$seed) {
         die("Seed data not found");
     }
 
-    // 4. Get duration
+    // Get duration
     $duration = $this->getSeedDuration($seed->Paddy_Seed_Variety);
 
     if (!$duration) {
         die("Invalid seed duration");
     }
 
-    // 5. Get timeline steps
+    // Get timeline steps
     $timeline = $this->model->getTimelineByDuration($duration);
 
     //  get stage request status
     $stageStatus = $this->model->getStageRequestStatus($nic, $plr);
 
-    // 6. Get start date
+    // Get start date
     $startDate = $this->model->getStartDate($nic, $plr);
 
     if (!$startDate) {
         $startDate = date('Y-m-d'); // fallback
     }
 
-    // 7. Calculate estimated dates
+    // Calculate estimated dates
     $estimatedDates = [];
 
     foreach ($timeline as $step) {
@@ -97,7 +97,7 @@ public function show()
         $estimatedDates[$step->step_order] = $startDate;
     }
 
-    // 8. Get saved progress
+    // Get saved progress
     $saved = $this->model->getSavedProgress($nic, $plr);
 
     $progress = [];

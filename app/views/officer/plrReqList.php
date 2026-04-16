@@ -27,7 +27,7 @@
                 >
             </div>
 
-            <!-- ✅ Search Button -->
+            <!--  Search Button -->
             <button type="submit" class="search-btn">
                 Search
             </button>
@@ -87,7 +87,7 @@
 
         </table>
 
-<!-- ✅ MOBILE CARDS (Pending) -->
+<!--  MOBILE CARDS (Pending) -->
 <div class="farmer-cards">
 <?php if (!empty($data['pending'])): ?>
     <?php foreach ($data['pending'] as $req): ?>
@@ -172,7 +172,7 @@
 
 </table>
 
-        <!-- ✅ MOBILE CARDS (Pending) -->
+        <!--  MOBILE CARDS (Pending) -->
         <div class="farmer-cards">
         <?php if (!empty($data['history'])): ?>
             <?php foreach ($data['history'] as $req): ?>

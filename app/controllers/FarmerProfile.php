@@ -12,7 +12,7 @@ class FarmerProfile extends Controller
                 session_start();
             }
 
-            // ✅ Check if logged-in and correct user type
+            //  Check if logged-in and correct user type
             if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'farmer') {
                 header('Location: ' . URLROOT . '/users/login');
                 exit;
@@ -196,7 +196,7 @@ class FarmerProfile extends Controller
                 ];
 
                 
-                // ✅ Step 1: Validate PLR Number
+                //  Step 1: Validate PLR Number
                 
                 $plrPattern = '/^\d{2}\/\d{2}\/\d{5}\/\d{3}\/[A-Za-z]\/\d{4}$/';
 
@@ -228,7 +228,7 @@ class FarmerProfile extends Controller
                     return;
                 }
 
-                // 🔍 CHECK SAME FARMER + SAME PLR
+                //  CHECK SAME FARMER + SAME PLR
                 $this->db = new Database();
 
                 $this->db->query("
@@ -258,7 +258,7 @@ class FarmerProfile extends Controller
                         exit;
                     }
 
-                    // ✅ if rejected → allow
+                    //  if rejected → allow
                 }
                 //  Step 3: Save only if valid
                 

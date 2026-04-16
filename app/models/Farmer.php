@@ -7,7 +7,7 @@ class Farmer {
         $this->db = new Database();
     }
 
-    // ✅ Insert or update farmer using new table columns
+    //  Insert or update farmer using new table columns
     public function updateFarmer($data) {
         // Check if farmer exists
         $this->db->query("SELECT nic FROM farmers WHERE nic = :nic");
@@ -46,7 +46,7 @@ class Farmer {
         return $this->db->execute();
     }
 
-    // ✅ Get farmer by NIC
+    //  Get farmer by NIC
     public function getFarmerByNIC($nic) {
         $this->db->query("SELECT * FROM farmers WHERE nic = :nic");
         $this->db->bind(':nic', $nic);
