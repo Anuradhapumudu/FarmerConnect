@@ -74,11 +74,18 @@ class Announcements extends Controller {
 
             // Handle file upload
             if(isset($_FILES['attachFiles']) && $_FILES['attachFiles']['error'][0] != 4) { // 4 = no file
+                $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'docx'];    
                 $uploadDir = 'uploads/'; // folder to save files
                 $uploadedFiles = [];
 
                 foreach($_FILES['attachFiles']['tmp_name'] as $key => $tmpName) {
                     $filename = basename($_FILES['attachFiles']['name'][$key]);
+
+                    $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                    if (!in_array($fileExt, $allowedTypes)) {
+                        die('Invalid file type. Only JPG, PNG, PDF, DOCX allowed.');
+                    }
+
                     $targetFile = $uploadDir . time() . '_' . $filename; // unique filename
                     if(move_uploaded_file($tmpName, $targetFile)) {
                         $uploadedFiles[] = $targetFile;
@@ -131,11 +138,16 @@ class Announcements extends Controller {
 
             // Handle file upload
             if(isset($_FILES['attachFiles']) && $_FILES['attachFiles']['error'][0] != 4) { // 4 = no file
+                $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'docx']; 
                 $uploadDir = 'uploads/'; // folder to save files
                 $uploadedFiles = [];
 
                 foreach($_FILES['attachFiles']['tmp_name'] as $key => $tmpName) {
                     $filename = basename($_FILES['attachFiles']['name'][$key]);
+                    $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                    if (!in_array($fileExt, $allowedTypes)) {
+                        die('Invalid file type. Only JPG, PNG, PDF, DOCX allowed.');
+                    }
                     $targetFile = $uploadDir . time() . '_' . $filename; // unique filename
                     if(move_uploaded_file($tmpName, $targetFile)) {
                         $uploadedFiles[] = $targetFile;
