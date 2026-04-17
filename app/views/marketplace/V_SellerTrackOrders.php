@@ -194,40 +194,6 @@
     </div>
   </div>
 
-  <div class="modal1" id="status-modal1">
-    <div class="modal1-content">
-      <div class="modal1-header">
-        <h3 class="modal1-title">Update Order Status</h3>
-        <button class="close-modal1">&times;</button>
-      </div>
-      <div class="status-options">
-        <label class="status-option">
-          <input type="radio" name="order-status" value="order_placed">
-          <span>Order Placed</span>
-        </label>
-        <label class="status-option">
-          <input type="radio" name="order-status" value="order_confirmed">
-          <span>Order Confirmed</span>
-        </label>
-        <label class="status-option">
-          <input type="radio" name="order-status" value="order_cancelled">
-          <span>Order Cancelled</span>
-        </label>
-        <label class="status-option">
-          <input type="radio" name="order-status" value="ready_to_pickup">
-          <span>Ready For Pickup</span>
-        </label>
-        <label class="status-option">
-          <input type="radio" name="order-status" value="order_picked">
-          <span>Picked Up</span>
-        </label>
-      </div>
-      <div class="modal1-actions">
-        <button type="button" class="btn btn-secondary" id="cancel-update">Cancel</button>
-        <button type="button" class="btn btn-primary" id="save-status">Update Status</button>
-      </div>
-    </div>
-  </div>
 
 </main>
 

@@ -409,6 +409,22 @@ public function totalOrders() {
     return $this->db->single();
 }
 
+
+public function updateProductStatus($item_id, $status) {
+    $this->db->query("UPDATE products SET status = :status WHERE item_id = :id");
+    $this->db->bind(':status', $status);
+    $this->db->bind(':id', $item_id);
+    return $this->db->execute();
+}
+
+
+public function getStockByProductId($id)
+{
+    $this->db->query("SELECT available_quantity FROM products WHERE item_id = :id");
+    $this->db->bind(':id', $id);
+    return $this->db->single()->available_quantity;
+}
+
 }
 
 

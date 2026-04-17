@@ -174,11 +174,6 @@ $currentStatus = strtolower(trim($order->order_status));
                     <?php else: ?>
                         <!-- Show default next step if no history -->
                         <div class="timeline-step <?= $normalizedStatus !== 'order_placed' ? 'active' : '' ?>">
-                            <div class="timeline-content">
-                                <div class="timeline-date">Awaiting</div>
-                                <div class="timeline-text">Order Confirmation</div>
-                                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Waiting for seller to confirm your order</p>
-                            </div>
                         </div>
                     <?php endif; ?>
                     
