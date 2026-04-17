@@ -55,6 +55,7 @@
           <div class="results-message">No results found.</div>
         </div>
       <?php endif; ?>
+    </div>
 
     <div class="article-content">
       <?php if (!empty($data['articles'])): ?>
