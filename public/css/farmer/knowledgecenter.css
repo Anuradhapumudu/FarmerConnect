@@ -224,7 +224,24 @@ body {
   margin-top: 10px;
   color: #888;
 }
-/* Responsive */
+@media (max-width: 900px) {
+  .results-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .results-list {
+    grid-template-columns: 1fr;
+  }
+  .search-form {
+    flex-direction: column;
+  }
+  .search-button {
+    width: 100%;
+  }
+}
+
 @media (max-width: 900px) {
   .features_block {
     grid-template-columns: repeat(2, 1fr);
