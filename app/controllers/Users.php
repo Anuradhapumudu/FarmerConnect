@@ -519,7 +519,7 @@
                                 if (empty($data['seller_id_error']) && empty($data['password_error'])) {
                                     $loggedUser = $this->userModel->login($formType, $data['username'], $data['password']);
                                     if ($loggedUser) {
-                                        // Check if seller is approved (from registrations table)
+                                        // Check if seller is approved or not
                                         if (strtolower($loggedUser->approval_status) !== 'approved') {
                                             $data['seller_id_error'] = 'Your account is not approved yet.';
                                             $this->view('users/v_login', $data);

@@ -61,10 +61,10 @@
                     return true;
                     break;
                     case 'seller':
-                        // Insert into registrations table with pending status
+                        // Insert into registrations table
                         $this->db->query("INSERT INTO registrations
-                            (user_type, password, approval_status)
-                            VALUES (:user_type, :password, 'Pending')");
+                            (user_type, password)
+                            VALUES (:user_type, :password)");
                         $this->db->bind(':user_type', $data['form_type']);
                         $this->db->bind(':password', $data['password']);
                         $this->db->execute();
