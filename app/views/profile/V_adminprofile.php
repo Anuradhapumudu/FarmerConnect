@@ -12,7 +12,7 @@ $errors = $data['errors'] ?? [];
 <main>
 
 <div class="logout-container">
-    <a href="<?php echo URLROOT; ?>/users/logout" class="btn logout-btn">
+    <a href="<?php echo URLROOT; ?>/users/adminlogout" class="btn logout-btn">
         <i class="fas fa-sign-out-alt"></i> Logout
     </a>
 </div>
