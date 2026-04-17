@@ -206,9 +206,6 @@
                     <i class="fas fa-arrow-left"></i> Back to My Orders
                 </a>
                 
-                <button onclick="window.print()" class="btn-print">
-                    <i class="fas fa-print"></i> Print Details
-                </button>
                 
                 <?php if($normalizedStatus !== 'order_picked' && $normalizedStatus !== 'order_cancelled'): ?>
 
@@ -236,13 +233,7 @@
         window.location.reload();
     }, 30000);
     
-    // Print functionality
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 'p') {
-            e.preventDefault();
-            window.print();
-        }
-    });
+
 </script>
 
 <?php require_once APPROOT . '/views/inc/footer.php'; ?>

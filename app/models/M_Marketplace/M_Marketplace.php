@@ -158,20 +158,22 @@ public function updateProduct($item_id, $data) {
 
     //buy product
 // Place an order
-        public function createOrder($buyer_id, $item_id, $seller_id, $quantity, $total_price, $payment_method) {
-            $this->db->query("INSERT INTO orders (item_id, seller_id, buyer_id, quantity, total_price, payment_method) 
-                            VALUES (:item_id, :seller_id, :buyer_id, :quantity, :total_price, :payment_method)");
-            
-            $this->db->bind(':item_id', $item_id);
-            $this->db->bind(':seller_id', $seller_id);
-            $this->db->bind(':buyer_id', $buyer_id);
-            $this->db->bind(':quantity', $quantity);
-            $this->db->bind(':total_price', $total_price);
-            $this->db->bind(':payment_method', $payment_method);
-
-            return $this->db->execute();
-        }
-
+public function createOrder($buyer_id, $item_id, $seller_id, $quantity, $total_price, $payment_method) {
+    $this->db->query("INSERT INTO orders (item_id, seller_id, buyer_id, quantity, total_price, payment_method, order_status) 
+                    VALUES (:item_id, :seller_id, :buyer_id, :quantity, :total_price, :payment_method, 'order_placed')");
+    
+    $this->db->bind(':item_id', $item_id);
+    $this->db->bind(':seller_id', $seller_id);
+    $this->db->bind(':buyer_id', $buyer_id);
+    $this->db->bind(':quantity', $quantity);
+    $this->db->bind(':total_price', $total_price);
+    $this->db->bind(':payment_method', $payment_method);
+    
+    if ($this->db->execute()) {
+        return $this->db->lastInsertId(); // Return the order_id
+    }
+    return false;
+}
         // Update product stock
         public function updateStock($item_id, $newQty) {
             $this->db->query("UPDATE products SET available_quantity = :qty WHERE item_id = :item_id");
@@ -423,6 +425,12 @@ public function getStockByProductId($id)
     $this->db->query("SELECT available_quantity FROM products WHERE item_id = :id");
     $this->db->bind(':id', $id);
     return $this->db->single()->available_quantity;
+}
+
+public function getOrderByOrderId($order_id) {
+    $this->db->query("SELECT * FROM orders WHERE order_unique_id = :order_id LIMIT 1");
+    $this->db->bind(':order_id', $order_id);
+    return $this->db->single();
 }
 
 }
