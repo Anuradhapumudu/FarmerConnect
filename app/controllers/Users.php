@@ -606,6 +606,12 @@
             exit;
         }
 
+        public function adminlogout() {
+            $_SESSION = [];
+            session_destroy();
+            header('Location: ' . URLROOT . '/admin/adminlogin');
+            exit;
+        }
         public function isLoggedIn() {
             if(isset($_SESSION['user_type'])) {
                 return true;
