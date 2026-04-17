@@ -338,7 +338,7 @@
 }
 
 .status-step.active .circle {
-    background: orange;
+    background: green;
 }
 
 .status-step.completed .circle {
@@ -356,5 +356,5 @@
 
 .btn-confirm { background: green; }
 .btn-cancel { background: red; }
-.btn-ready { background: orange; }
-.btn-picked { background: blue; }
+.btn-ready { background:green; }
+.btn-picked { background: green; }

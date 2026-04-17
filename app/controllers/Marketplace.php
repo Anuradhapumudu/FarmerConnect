@@ -148,6 +148,20 @@ public function addProduct() {
         $data['price'] = trim($_POST['price'] ?? '');
         $data['available'] = trim($_POST['available'] ?? '');
 
+            $data['status'] = strtolower(trim($data['status']));
+
+    if ($data['status'] === 'Instock') {
+        $data['status'] = 'Instock';
+    } elseif ($data['status'] === 'Outstock') {
+        $data['status'] = 'Outstock';
+    }
+
+    if ((int)$data['available'] === 0) {
+        $data['status'] = 'Outstock';
+    } else {
+        $data['status'] = 'Instock';
+    }
+
         //  Validation 
         if(strlen($data['name']) === 0) {
             $data['errors']['name'] = "Product name is required.";
@@ -274,6 +288,22 @@ public function editProduct($id) {
         $data['product']['available_quantity'] = trim($_POST['available_quantity'] ?? '');
         $currentImage = $_POST['current_image'] ?? '';
 
+        // Normalize incoming status
+        $data['product']['status'] = strtolower(trim($data['product']['status']));
+
+        // Convert UI values
+        if ($data['product']['status'] === 'Instock') {
+            $data['product']['status'] = 'Instock';
+        } elseif ($data['product']['status'] === 'Outstock') {
+            $data['product']['status'] = 'Outstock';
+        }
+
+        // FORCE correct status
+        if ((int)$data['product']['available_quantity'] === 0) {
+            $data['product']['status'] = 'Outstock';
+        } else {
+            $data['product']['status'] = 'Instock';
+        }
         // VALIDATION 
         // Product Name
         if(strlen($data['product']['item_name']) === 0) {
@@ -402,6 +432,15 @@ public function buyProduct($id = null) {
 
     Auth::checkRole('farmer');
 
+    $product = $this->marketplaceModel->getProductByInternalId($id);
+
+    // Block purchase if out of stock
+    if (!$product || $product->available_quantity <= 0 || $product->status === 'Outstock') {
+        $_SESSION['error'] = "This product is out of stock.";
+        header("Location: " . URLROOT . "/Marketplace/farmer");
+        exit;
+    }
+
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         $product = $this->marketplaceModel->getProductByInternalId($id);
         $this->view('marketplace/V_buyProduct', ['product' => $product]);
@@ -428,10 +467,15 @@ public function buyProduct($id = null) {
             null
         );
 
-        $this->marketplaceModel->updateStock(
-            $product->item_id,
-            $product->available_quantity - $quantity
-        );
+        $newQty = $product->available_quantity - $quantity;
+
+        $this->marketplaceModel->updateStock($product->item_id, $newQty);
+
+        if ($newQty <= 0) {
+            $this->marketplaceModel->updateProductStatus($product->item_id, 'Outstock');
+        }else {
+            $this->marketplaceModel->updateProductStatus($product->item_id, 'Instock');
+            }
 
         header("Location: " . URLROOT . "/Marketplace/paymentSuccess");
         exit;
@@ -459,7 +503,7 @@ public function buyProduct($id = null) {
         "merchant_id" => PAYHERE_MERCHANT_ID,
         "return_url"  => URLROOT . "/Marketplace/paymentSuccessOnline",
         "cancel_url"  => URLROOT . "/Marketplace/paymentCancel",
-        "notify_url"  => "https://YOUR-NGROK-URL/FarmerConnect/Marketplace/paymentNotification",
+        "notify_url"  => "https://nontubercularly-uneulogized-evelin.ngrok-free.dev/FarmerConnect/Marketplace/paymentNotification",
 
         "order_id" => $order_id,
         "items"    => $product->item_name,
@@ -501,11 +545,13 @@ private function generatePayHereHash($order_id, $amount, $currency = "LKR") {
     );
 }
 
-public function paymentNotification() {
+public function paymentNotification()
+{
+    file_put_contents(__DIR__ . '/payhere.log', "HIT\n", FILE_APPEND);
+file_put_contents(__DIR__ . '/payhere.log', print_r($_POST, true), FILE_APPEND);
 
-    // LOG (debug)
     file_put_contents(
-        APPROOT . '/payhere.log',
+        __DIR__ . '/payhere.log',
         print_r($_POST, true),
         FILE_APPEND
     );
@@ -517,32 +563,41 @@ public function paymentNotification() {
     $status_code      = $_POST['status_code'] ?? '';
     $md5sig           = $_POST['md5sig'] ?? '';
 
-    $local_md5 = strtoupper(
-        md5(
-            $merchant_id .
-            $order_id .
-            $payhere_amount .
-            $payhere_currency .
-            $status_code .
-            strtoupper(md5(PAYHERE_MERCHANT_SECRET))
-        )
-    );
+    $local_md5 = strtoupper(md5(
+        $merchant_id .
+        $order_id .
+        $payhere_amount .
+        $payhere_currency .
+        $status_code .
+        strtoupper(md5(PAYHERE_MERCHANT_SECRET))
+    ));
 
-    // Verify payment
     if ($local_md5 === $md5sig && $status_code == 2) {
 
         $order = $this->marketplaceModel->getOrderByOrderId($order_id);
 
         if ($order && $order->status !== 'completed') {
 
-            // Mark order paid
+            // 1. Mark order completed
             $this->marketplaceModel->updateOrderStatus($order_id, 'completed');
 
-            // Update stock
-            $this->marketplaceModel->updateStock(
-                $order->item_id,
-                $order->available_quantity - $order->quantity
-            );
+            // 2. Get current product using INTERNAL ID (correct for your system)
+            $product = $this->marketplaceModel->getProductByInternalId($order->item_id);
+
+            if ($product) {
+
+                // 3. Calculate new stock
+                $newQty = (int)$product->available_quantity - (int)$order->quantity;
+
+                if ($newQty < 0) $newQty = 0;
+
+                // 4. Update stock using SAME internal ID
+                $this->marketplaceModel->updateStock($order->item_id, $newQty);
+
+                // 5. Update status
+                $status = ($newQty <= 0) ? 'Outstock' : 'Instock';
+                $this->marketplaceModel->updateProductStatus($order->item_id, $status);
+            }
         }
     }
 
