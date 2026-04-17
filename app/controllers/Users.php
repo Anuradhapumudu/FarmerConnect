@@ -234,9 +234,10 @@
                         if ($this->userModel->findUserByEmail($data['email'], 'sellers')) {
                             $data['email_error'] = 'Email is already taken';
                         }
-                    }
-                    if ($this->userModel->findSellerByBRN($data['brn'])) {
+                    } if (empty($data['brn'])) {
                         $data['brn_error'] = 'Please enter your Business Registration Number (BRN)';
+                    } else if ($this->userModel->findSellerByBRN($data['brn'])) {
+                        $data['brn_error'] = 'BRN is already registered';
                     }
                     if (empty($data['phone_no'])) {
                         $data['phone_no_error'] = 'Please enter your phone number';
