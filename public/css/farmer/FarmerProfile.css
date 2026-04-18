@@ -1,13 +1,4 @@
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  overflow-x: hidden;
-}
-
-/* =======================
+/* 
    General Styles
  */
 
@@ -372,20 +363,14 @@ form {
         margin: 10px 0 18px;
     }
 
-    .logout-btn {
-        background: #dc3545;
-        color: #fff;
-        padding: 8px 14px;
-        border-radius: 8px;
-        font-weight: 700;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: background .15s ease, transform .08s ease;
-        border: none;
-        cursor: pointer;
-    }
+.logout-btn {
+    background: #c82333;
+    width: auto !important;     /* 🔥 stop full width */
+    min-width: unset;
+    max-width: fit-content;
+    padding: 6px 12px;          /* smaller size */
+    font-size: 0.85rem;
+}
 
     .logout-btn i { font-size: 14px; }
 
@@ -396,10 +381,17 @@ form {
 
     
 
-    @media (max-width: 600px) {
-        .logout-container { justify-content: center; }
-        .logout-btn { padding: 8px 10px; font-size: 14px; }
+@media (max-width: 600px) {
+    .logout-container {
+        justify-content: flex-end;   
     }
+
+    .logout-btn {
+        width: auto !important;     
+    }
+
+
+}
 
 
 /* 
@@ -613,54 +605,4 @@ form {
   }
 
   
-}
-
-.error {
-    color: red;
-    font-size: 13px;
-    margin-top: 4px;
-    font-weight: 500;
-}
-
-@media (max-width: 768px) {
-  .profile-card {
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    margin-left: 0;
-  }
-
-  .profile-info {
-    width: 100%;
-  }
-
-  .profile-pic {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-
-@media (max-width: 768px) {
-  .buttons {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
-    max-width: 260px;
-  }
-
-  .page-title h2 {
-    text-align: center;
-    margin-left: 0;
- 
-}
-
-
-  .error {
-    font-size: 12px;
-    text-align: left;
-  }
 }
