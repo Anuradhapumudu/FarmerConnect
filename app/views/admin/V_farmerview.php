@@ -20,11 +20,11 @@
       <!-- Farmer Profile Section -->
       <div class="profile-card">
 <img 
-src="<?= !empty($data['farmer']->image_url) 
-        ? URLROOT . '/' . $data['farmer']->image_url 
-        : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' ?>" 
-alt="farmer Photo" 
-class="profile-img">
+                src="<?= !empty($data['farmer']->profile_image) 
+                    ? URLROOT . $data['farmer']->profile_image 
+                    : URLROOT . '/img/default-user.png' ?>"
+                class="profile-img"
+            >
         <h2 class="farmer-name"><?= $data['farmer']->full_name ?></h2>
         <p class="farmer-nic">NIC: <?= $data['farmer']->nic ?></p>
         <span class="status-badge status-active"><?= $data['farmer']->status ?></span>
