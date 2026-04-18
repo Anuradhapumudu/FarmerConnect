@@ -116,21 +116,35 @@ class M_complaint
         }
     }
 
-    public function getAllComplaints(?int $limit = null, ?int $offset = null, bool $includeDeleted = false): array
-    {
+    public function getAllComplaints(
+        ?int    $limit          = null,
+        ?int    $offset         = null,
+        bool    $includeDeleted = false,
+        ?string $division       = null
+    ): array {
         try {
+            $where = $includeDeleted ? ' WHERE 1=1' : ' WHERE cp.is_deleted = 0';
+
+            if (!empty($division)) {
+                $where .= ' AND p.Govi_Jana_Sewa_Division = :division';
+            }
+
             $sql = self::COMPLAINT_SELECT
-                 . ($includeDeleted ? ' WHERE 1=1' : ' WHERE cp.is_deleted = 0')
-                 . " GROUP BY cp.complaint_id ORDER BY cp.created_at DESC";
+                 . $where
+                 . ' GROUP BY cp.complaint_id ORDER BY cp.created_at DESC';
 
             if ($limit !== null) {
-                $sql .= " LIMIT :limit";
+                $sql .= ' LIMIT :limit';
                 if ($offset !== null) {
-                    $sql .= " OFFSET :offset";
+                    $sql .= ' OFFSET :offset';
                 }
             }
 
             $this->db->query($sql);
+
+            if (!empty($division)) {
+                $this->db->bind(':division', $division);
+            }
 
             if ($limit !== null) {
                 $this->db->bind(':limit', $limit, PDO::PARAM_INT);
@@ -147,14 +161,20 @@ class M_complaint
     }
 
     public function searchReports(
-        string $farmerNIC = '',
-        string $plrNumber = '',
-        string $reportCode = '',
-        bool $includeDeleted = false
+        string  $farmerNIC     = '',
+        string  $plrNumber     = '',
+        string  $reportCode    = '',
+        bool    $includeDeleted = false,
+        ?string $division       = null
     ): array {
         try {
             $conditions = $includeDeleted ? [] : ['cp.is_deleted = 0'];
             $params = [];
+
+            if (!empty($division)) {
+                $conditions[]        = 'p.Govi_Jana_Sewa_Division = :division';
+                $params[':division'] = $division;
+            }
 
             if (!empty($farmerNIC)) {
                 $conditions[] = 'cp.farmerNIC = :farmerNIC';
@@ -175,7 +195,7 @@ class M_complaint
 
             $sql = self::COMPLAINT_SELECT
                  . $where
-                 . " GROUP BY cp.complaint_id ORDER BY cp.created_at DESC";
+                 . ' GROUP BY cp.complaint_id ORDER BY cp.created_at DESC';
 
             $this->db->query($sql);
             foreach ($params as $key => $value) {

@@ -171,12 +171,23 @@ class M_disease
     /**
      * Returns all reports — used by admins and officers.
      * Supports optional pagination via $limit and $offset.
+     * Pass $division to restrict results to a single Govi Jana Sewa Division.
      */
-    public function getAllReports(?int $limit = null, ?int $offset = null, bool $includeDeleted = false): array
-    {
+    public function getAllReports(
+        ?int    $limit          = null,
+        ?int    $offset         = null,
+        bool    $includeDeleted = false,
+        ?string $division       = null
+    ): array {
         try {
+            $where = $includeDeleted ? ' WHERE 1=1' : ' WHERE dr.is_deleted = 0';
+
+            if (!empty($division)) {
+                $where .= " AND p.Govi_Jana_Sewa_Division = :division";
+            }
+
             $sql = self::REPORT_SELECT
-                 . ($includeDeleted ? ' WHERE 1=1' : ' WHERE dr.is_deleted = 0')
+                 . $where
                  . " GROUP BY dr.report_code ORDER BY dr.created_at DESC";
 
             if ($limit !== null) {
@@ -187,6 +198,10 @@ class M_disease
             }
 
             $this->db->query($sql);
+
+            if (!empty($division)) {
+                $this->db->bind(':division', $division);
+            }
 
             if ($limit !== null) {
                 $this->db->bind(':limit', $limit, PDO::PARAM_INT);
@@ -204,17 +219,24 @@ class M_disease
 
     /**
      * Searches reports by any combination of farmerNIC, plrNumber, or report code.
+     * Pass $division to restrict results to a single Govi Jana Sewa Division.
      * All parameters are optional — omitting all returns no extra filtering.
      */
     public function searchReports(
-        string $farmerNIC     = '',
-        string $plrNumber     = '',
-        string $reportCode    = '',
-        bool   $includeDeleted = false
+        string  $farmerNIC      = '',
+        string  $plrNumber      = '',
+        string  $reportCode     = '',
+        bool    $includeDeleted  = false,
+        ?string $division        = null
     ): array {
         try {
             $conditions = $includeDeleted ? [] : ['dr.is_deleted = 0'];
             $params     = [];
+
+            if (!empty($division)) {
+                $conditions[]        = 'p.Govi_Jana_Sewa_Division = :division';
+                $params[':division'] = $division;
+            }
 
             if (!empty($farmerNIC)) {
                 $conditions[]         = 'dr.farmerNIC = :farmerNIC';
