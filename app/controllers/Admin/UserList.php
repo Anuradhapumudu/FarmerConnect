@@ -27,6 +27,7 @@ class UserList extends Controller {
 
     // List all sellers
     public function sellerlist() {
+        Auth::checkAdmin();
         $data = [
             'sellers' => $this->adminModel->getAllSellers(),
             'counts'  => $this->adminModel->getCounts()
@@ -37,6 +38,7 @@ class UserList extends Controller {
 
     // Show seller details
     public function showseller($id = null) {
+        Auth::checkAdmin();
         if (!$id) {
             header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
             exit;
@@ -54,40 +56,60 @@ class UserList extends Controller {
 
 
     // Approve seller
-    public function approve($id) {
-        $seller = $this->adminModel->getSellerById($id);
-        if (!$seller) {
-            header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
-            exit;
-        }
+public function approve($id) {
+    Auth::checkAdmin();
 
-        // Validation before approval
-        $requiredFields = ['brn', 'nic', 'email', 'address', 'phone_no'];
-        foreach ($requiredFields as $field) {
-            if (empty($seller->$field)) {
-                $_SESSION['error'] = "Cannot approve seller: Missing required information ($field).";
-                header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
-                exit;
-            }
-        }
+    $seller = $this->adminModel->getSellerById($id);
 
-        if (!filter_var($seller->email, FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['error'] = "Cannot approve seller: Invalid email.";
-            header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
-            exit;
-        }
-
-        $this->adminModel->updateSellerStatus($id, 'Approved');
-
-        // Send approval email
-        sendApprovalEmail($seller->email, $seller->seller_id);
-
+    if (!$seller) {
         header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
         exit;
     }
 
+    $errors = [];
+
+    // Validation
+    $requiredFields = ['brn', 'nic', 'email', 'address', 'phone_no'];
+    foreach ($requiredFields as $field) {
+        if (empty($seller->$field)) {
+            $errors[$field] = "Missing $field";
+        }
+    }
+
+    if (!filter_var($seller->email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = "Invalid email format";
+    }
+
+    //  If errors → DO NOT REDIRECT
+    if (!empty($errors)) {
+
+        $data = [
+            'seller' => $seller,
+            'errors' => $errors,
+            'success' => ''
+        ];
+
+        // reload SAME page
+        $this->view('admin/V_sellerview', $data);
+        return;
+    }
+
+    // Approve
+    $this->adminModel->updateSellerStatus($id, 'Approved');
+    sendApprovalEmail($seller->email, $seller->seller_id);
+
+    $data = [
+        'seller' => $this->adminModel->getSellerById($id), // refresh data
+        'errors' => [],
+        'success' => "Seller approved successfully!"
+    ];
+
+    $this->view('admin/V_sellerview', $data);
+}
+
     // Reject seller
     public function reject($id) {
+        Auth::checkAdmin();
         $seller = $this->adminModel->getSellerById($id);
         if (!$seller) {
             header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
@@ -95,16 +117,69 @@ class UserList extends Controller {
         }
 
         $this->adminModel->updateSellerStatus($id, 'Rejected');
+        sendRejectEmail($seller->email,$seller->seller_id);
+
         header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
         exit;
     }
 
 
+    public function updateSeller($id) {
+    Auth::checkAdmin();
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        $data = [
+            'email' => trim($_POST['email']),
+            'company_name' => trim($_POST['company_name']),
+            'brn' => trim($_POST['brn'])
+        ];
+
+        $errors = [];
+
+        // validation
+        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = "Invalid email";
+        }
+
+        if (empty($data['company_name'])) {
+            $errors['company_name'] = "Company name required";
+        }
+
+        if (empty($data['brn'])) {
+            $errors['brn'] = "BRN required";
+        }
+
+        if (!empty($errors)) {
+            $seller = $this->adminModel->getSellerById($id);
+
+            $this->view('admin/V_sellerview', [
+                'seller' => $seller,
+                'errors' => $errors,
+                'success' => ''
+            ]);
+            return;
+        }
+
+        // update DB
+        $this->adminModel->updateSeller($id, $data);
+
+        // reload updated data
+        $seller = $this->adminModel->getSellerById($id);
+
+        $this->view('admin/V_sellerview', [
+            'seller' => $seller,
+            'errors' => [],
+            'success' => "Seller updated successfully!"
+        ]);
+    }
+}
     
 
 
 //farmer list
     public function farmerlist() {
+        Auth::checkAdmin();
         $data = [
             'farmers' => $this->adminModel->getAllFarmers(),
             'counts'  => $this->adminModel->getFarmerCounts()
@@ -114,6 +189,7 @@ class UserList extends Controller {
 
 
         public function showfarmer($id = null) {
+            Auth::checkAdmin();
             // If no ID is provided, redirect back to the farmer list
         if (!$id) {
             header('Location: ' . URLROOT . '/Admin/UserList/farmerlist');
@@ -138,6 +214,7 @@ class UserList extends Controller {
 
     
         public function inactivefarmer($id) {
+        Auth::checkAdmin();
         $farmer = $this->adminModel->getFarmerById($id);
         if (!$farmer) {
             header('Location: ' . URLROOT . '/Admin/UserList/farmerlist/');
@@ -150,6 +227,7 @@ class UserList extends Controller {
     }
 
         public function activefarmer($id) {
+        Auth::checkAdmin();
         $farmer = $this->adminModel->getFarmerById($id);
         if (!$farmer) {
             header('Location: ' . URLROOT . '/Admin/UserList/farmerlist');
@@ -168,6 +246,8 @@ class UserList extends Controller {
 
     //officer list
         public function officerlist() {
+
+        Auth::checkAdmin();
         $data = [
             'officers' => $this->adminModel->getAllOfficers(),
             'counts'  => $this->adminModel->getOfficerCounts()
@@ -176,6 +256,7 @@ class UserList extends Controller {
     }
 
             public function showofficer($id = null) {
+        Auth::checkAdmin();
             // If no ID is provided, redirect back to the farmer list
         if (!$id) {
             header('Location: ' . URLROOT . '/Admin/UserList/officerlist');
@@ -197,6 +278,7 @@ class UserList extends Controller {
 
 
             public function inactiveofficer($id) {
+                Auth::checkAdmin();
         $officer = $this->adminModel->getOfficerById($id);
         if (!$officer) {
             header('Location: ' . URLROOT . '/Admin/UserList/officerlist/');
@@ -209,6 +291,7 @@ class UserList extends Controller {
     }
 
         public function activeofficer($id) {
+            Auth::checkAdmin();
         $officer = $this->adminModel->getOfficerById($id);
         if (!$officer) {
             header('Location: ' . URLROOT . '/Admin/UserList/officerlist');

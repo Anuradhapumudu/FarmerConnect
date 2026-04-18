@@ -8,9 +8,9 @@
     <div class="admin-header">
       <div>
         <h1>Farmer Details</h1>
-        <p>Complete information about the farmer and their paddy cultivation</p>
       </div>
-      <button class="back-btn" onclick="window.location='<?= URLROOT ?>/Admin/UserList/farmerlist'">
+      <but
+      ton class="back-btn" onclick="window.location='<?= URLROOT ?>/Admin/UserList/farmerlist'">
         <i class="fas fa-arrow-left"></i> Back to Farmers
       </button>
     </div>
@@ -19,8 +19,12 @@
     <div class="content-wrapper">
       <!-- Farmer Profile Section -->
       <div class="profile-card">
-        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" 
-             alt="Farmer Photo" class="profile-img">
+<img 
+src="<?= !empty($data['farmer']->image_url) 
+        ? URLROOT . '/' . $data['farmer']->image_url 
+        : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' ?>" 
+alt="farmer Photo" 
+class="profile-img">
         <h2 class="farmer-name"><?= $data['farmer']->full_name ?></h2>
         <p class="farmer-nic">NIC: <?= $data['farmer']->nic ?></p>
         <span class="status-badge status-active"><?= $data['farmer']->status ?></span>

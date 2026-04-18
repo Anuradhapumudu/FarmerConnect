@@ -11,11 +11,10 @@
             switch($data['form_type']) {
                 case 'farmer':
                     // Insert to registrations table
-                    $this->db->query("INSERT INTO registrations (user_type, password)
-                        VALUES (:user_type, :password)
+                    $this->db->query("INSERT INTO registrations (user_type)
+                        VALUES (:user_type)
                     ");
                     $this->db->bind(':user_type', $data['form_type']);   
-                    $this->db->bind(':password', $data['password']);            
                     $this->db->execute();
                     $registration_id = $this->db->lastInsertId();
                     // Insert to farmers table
@@ -37,11 +36,10 @@
                     break;
                 case 'officer':
                     // Insert to registrations table
-                    $this->db->query("INSERT INTO registrations (user_type, password)
-                        VALUES (:user_type, :password)
+                    $this->db->query("INSERT INTO registrations (user_type)
+                        VALUES (:user_type)
                     ");
                     $this->db->bind(':user_type', $data['form_type']);   
-                    $this->db->bind(':password', $data['password']);            
                     $this->db->execute();
                     $registration_id = $this->db->lastInsertId();
                     // Update officers table
@@ -61,12 +59,11 @@
                     return true;
                     break;
                     case 'seller':
-                        // Insert into registrations table with pending status
+                        // Insert into registrations table
                         $this->db->query("INSERT INTO registrations
-                            (user_type, password, approval_status)
-                            VALUES (:user_type, :password, 'Pending')");
+                            (user_type)
+                            VALUES (:user_type)");
                         $this->db->bind(':user_type', $data['form_type']);
-                        $this->db->bind(':password', $data['password']);
                         $this->db->execute();
                         $registration_id = $this->db->lastInsertId();
 

@@ -3,21 +3,9 @@ class ProfileView extends Controller {
     private $profileViewModel;
 
     public function __construct() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
 
-        // Check if logged-in and correct user type
-        if (!isset($_SESSION['user_type'])) {
-            header('Location: ' . URLROOT . '/users/login');
-            exit;
-        }
-
-            // For admin, make sure they are redirected to admin login if session invalid
-        if ($_SESSION['user_type'] === 'admin' && !isset($_SESSION['user_id'])) {
-        header('Location: ' . URLROOT . '/admin/adminlogin');
-        exit;
-        }
+        require_once APPROOT . '/libraries/Auth.php';
+         Auth::check();
 
         $this->profileViewModel = $this->model('M_ProfileView', new Database());
     }
@@ -40,105 +28,154 @@ class ProfileView extends Controller {
     }
 
     public function sellerProfileView() {
+         Auth::checkRole('seller');
+
         $seller_id = $_SESSION['user_id'];
         $sellerProfile = $this->profileViewModel->getSellerProfile($seller_id);
 
         $data = [
-            'seller' => $sellerProfile
+            'seller' => $sellerProfile,
+            'user' => $_SESSION['old_input'] ?? (array)$sellerProfile,
+            'errors' => $_SESSION['profile_errors'] ?? []
         ];
 
+        unset($_SESSION['old_input'], $_SESSION['profile_errors']);
+
         if (!$sellerProfile) {
-    // redirect to admin login instead of dying
     header('Location: ' . URLROOT . '/users/login');
     exit;
 }
         $this->view('profile/V_sellerprofile', $data);
     }
 
-   public function updateSeller() {
+public function updateSeller()
+{
+    Auth::checkRole('seller');
+
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('Location: ' . URLROOT . '/profile');
+        header('Location: ' . URLROOT . '/ProfileView/sellerProfileView/');
         exit;
     }
 
-    $errors = [];
+    $seller_id = $_SESSION['user_id'];
+    $sellerProfile = $this->profileViewModel->getSellerProfile($seller_id);
 
-    $seller_id = $_POST['seller_id'];
-    $first_name = trim($_POST['first_name']);
-    $last_name = trim($_POST['last_name']);
-    $company_name = trim($_POST['company_name']);
-    $address = trim($_POST['address']);
-    $phone_no = trim($_POST['phone_no']);
+    // default image
+    $image_url = $sellerProfile->image_url ?? '';
 
-    // Basic required field validations
-    if (empty($first_name)) $errors[] = 'First name is required';
-    if (empty($last_name)) $errors[] = 'Last name is required';
-    if (empty($company_name)) $errors[] = 'Company name is required';
-    if (empty($address)) $errors[] = 'Address is required';
-    if (empty($phone_no)) $errors[] = 'Phone number is required';
+//collect input
+    $data = [
+        'user' => [
+            'seller_id' => $seller_id,
+            'first_name' => trim($_POST['first_name'] ?? ''),
+            'last_name' => trim($_POST['last_name'] ?? ''),
+            'company_name' => trim($_POST['company_name'] ?? ''),
+            'address' => trim($_POST['address'] ?? ''),
+            'phone_no' => trim($_POST['phone_no'] ?? ''),
+            'email' => trim($_POST['email'] ?? ''),
+        ],
+        'errors' => []
+    ];
 
-    // phone number and NIC format validation
-    if (!empty($phone_no) && !preg_match('/^[0-9]{10}$/', $phone_no)) {
-        $errors[] = 'Phone number must be 10 digits';
+
+    if ($data['user']['first_name'] === '') {
+        $data['errors']['fname'] = "First name is required.";
+    } elseif (!preg_match("/^[a-zA-Z]+$/", $data['user']['first_name'])) {
+        $data['errors']['fname'] = "Only letters allowed.";
     }
 
-    $sellerProfile = $this->profileViewModel->getSellerProfile($seller_id);
-    $image_url = $sellerProfile->image_url ?? 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+    if ($data['user']['last_name'] === '') {
+        $data['errors']['lname'] = "Last name is required.";
+    } elseif (!preg_match("/^[a-zA-Z]+$/", $data['user']['last_name'])) {
+        $data['errors']['lname'] = "Only letters allowed.";
+    }
 
-    // Remove profile picture
-    if (isset($_POST['removed_flag']) && $_POST['removed_flag'] == '1') {
+    if ($data['user']['company_name'] === '') {
+        $data['errors']['company_name'] = "Company name is required.";
+    }
+
+    if ($data['user']['address'] === '') {
+        $data['errors']['address'] = "Address is required.";
+    }
+
+    if ($data['user']['phone_no'] === '') {
+        $data['errors']['phone_no'] = "Phone number is required.";
+    } elseif (!preg_match("/^[0-9]{10}$/", $data['user']['phone_no'])) {
+        $data['errors']['phone_no'] = "Phone number must be 10 digits.";
+    }
+
+    if ($data['user']['email'] === '') {
+        $data['errors']['email'] = "Email is required.";
+    } elseif (!filter_var($data['user']['email'], FILTER_VALIDATE_EMAIL)) {
+        $data['errors']['email'] = "Invalid email format.";
+    } elseif ($this->profileViewModel->sellerEmailExists($data['user']['email'], $seller_id)) {
+        $data['errors']['email'] = "Email already in use.";
+    }
+
+
+    // IMAGE DELETE 
+
+    if (isset($_POST['remove_image']) && $_POST['remove_image'] == '1') {
+
+        $this->profileViewModel->deleteSellerImage($seller_id);
+
         $image_url = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
     }
-    // Upload new file
+
+
+    // IMAGE UPLOAD
+
     else if (!empty($_FILES['profile_image']['name'])) {
-        $uploadDir = 'uploads/sellers/'; 
-        if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+
+        $uploadDir = 'uploads/sellers/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
         $ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
         $image_name = $seller_id . '_' . time() . '.' . $ext;
         $targetFile = $uploadDir . $image_name;
 
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
         $fileType = mime_content_type($_FILES['profile_image']['tmp_name']);
         $fileSize = $_FILES['profile_image']['size'];
 
-        // Validate file type
         if (!in_array($fileType, $allowedTypes)) {
-            $errors[] = 'Invalid file type. Only JPG, PNG, GIF allowed.';
+            $data['errors']['image'] = "Invalid file type.";
         }
 
-        // Validate file size (max 2MB)
-        if ($fileSize > 2 * 1024 * 1024) {
-            $errors[] = 'File size must be less than 2MB';
+        if ($fileSize > 5 * 1024 * 1024) {
+            $data['errors']['image'] = "File must be less than 5MB.";
         }
 
-        if (empty($errors)) {
+        if (empty($data['errors'])) {
             if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFile)) {
-                $image_url = $targetFile; // save relative path in DB
+                $image_url = $targetFile;
             } else {
-                $errors[] = 'Error uploading file';
+                $data['errors']['general'] = "Upload failed.";
             }
         }
     }
 
-    if (!empty($errors)) {
-        // You can store errors in session or return to the form
-        $_SESSION['profile_errors'] = $errors;
+    // IF ERRORS → RETURN BACK
+
+    if (!empty($data['errors'])) {
+        $_SESSION['profile_errors'] = $data['errors'];
+        $_SESSION['old_input'] = $data['user'];
+
         header('Location: ' . URLROOT . '/ProfileView/sellerProfileView');
         exit;
     }
 
-    $data = [
-        'seller_id'    => $seller_id,
-        'first_name'   => $first_name,
-        'last_name'    => $last_name,
-        'company_name' => $company_name,
-        'address'      => $address,
-        'phone_no'     => $phone_no,
-        'image_url'    => $image_url
-    ];
 
-    if ($this->profileViewModel->updateSellerProfile($data)) {
+    // FINAL IMAGE ASSIGN
+
+    $data['user']['image_url'] = $image_url;
+
+
+    // UPDATE DB
+
+    if ($this->profileViewModel->updateSellerProfile($data['user'])) {
         header('Location: ' . URLROOT . '/ProfileView/sellerProfileView');
         exit;
     } else {
@@ -146,52 +183,106 @@ class ProfileView extends Controller {
     }
 }
 
+
+
+
+
+////////////////////////////////
+//officer
+////////////////////////////////
+
     public function officerProfileView() {
+        Auth::checkRole('officer');
         $officer_id = $_SESSION['user_id'];
         $officerProfile = $this->profileViewModel->getOfficerProfile($officer_id);
 
         $data = [
-            'officer' => $officerProfile
+            'officer' => $officerProfile,
+            'user' => $_SESSION['old_input'] ?? (array)$officerProfile,
+            'errors' => $_SESSION['profile_errors'] ?? []
         ];
+
+        unset($_SESSION['old_input'], $_SESSION['profile_errors']);
 
         if (!$officerProfile) {
     // redirect to admin login instead of dying
     header('Location: ' . URLROOT . '/users/login');
     exit;
-}
+    }
         $this->view('profile/V_officerprofile', $data);
     }
 
 public function updateOfficer() {
+
+    Auth::checkRole('officer');
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('Location: ' . URLROOT . '/profile');
+        header('Location: ' . URLROOT . '/ProfileView/officerProfileView/');
         exit;
     }
 
-    $errors = [];
+     $officer_id = $_SESSION['user_id'];
+     $officerProfile = $this->profileViewModel->getofficerProfile($officer_id);
+     $image_url = $officerProfile->image_url ?? '';
 
-    $officer_id = $_POST['officer_id'];
-    $first_name = trim($_POST['first_name']);
-    $last_name = trim($_POST['last_name']);
-    $phone_no = trim($_POST['phone_no']);
+    $data=[
+        'user' => [],
+        'errors' => []
 
-    // Basic required field validations
-    if (empty($first_name)) $errors[] = 'First name is required';
-    if (empty($last_name)) $errors[] = 'Last name is required';
-    if (empty($phone_no)) $errors[] = 'Phone number is required';
+    ];
 
-    // phone number and NIC format validation
-    if (!empty($phone_no) && !preg_match('/^[0-9]{10}$/', $phone_no)) {
-        $errors[] = 'Phone number must be 10 digits';
-    }
+    $data = [
+        'user' => [
+            'officer_id' => $officer_id,
+            'first_name' => trim($_POST['first_name'] ?? ''),
+            'last_name' => trim($_POST['last_name'] ?? ''),
+            'phone_no' => trim($_POST['phone_no'] ?? ''),
+            'email' => trim($_POST['email'] ?? ''),
+        ],
+        'errors' => []
+    ];
 
-    $officerProfile = $this->profileViewModel->getOfficerProfile($officer_id);
-    $image_url = $officerProfile->image_url ?? 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+
+
+        if(strlen($data['user']['first_name']) === 0) {
+            $data['errors']['fname'] = "First name is required.";
+        } elseif(!preg_match("/^[a-zA-Z]+$/", $data['user']['first_name'])) {
+            $data['errors']['fname'] = "Only letters allowed.";
+        }
+
+
+        if(strlen($data['user']['last_name']) === 0) {
+            $data['errors']['lname'] = "Last name is required.";
+        } elseif(!preg_match("/^[a-zA-Z]+$/", $data['user']['last_name'])) {
+            $data['errors']['lname'] = "Only letters allowed.";
+        }
+
+
+        if(strlen($data['user']['phone_no']) === 0) {
+            $data['errors']['phone_no'] = "Phone number is required.";
+        } elseif(!preg_match("/^[0-9]{10}$/", $data['user']['phone_no'])) {
+            $data['errors']['phone_no'] = "Phone number must be 10 digits.";
+        }
+
+        if (strlen($data['user']['email']) === 0) {
+       $data['errors']['email'] = "Email is required.";
+        } elseif (!filter_var($data['user']['email'], FILTER_VALIDATE_EMAIL)) {
+            $data['errors']['email'] = "Invalid email format.";
+        } elseif ($this->profileViewModel->officerEmailExists($data['user']['email'], $officer_id)) {
+            $data['errors']['email'] = "Email already in use.";
+        }
+
+
 
     // Remove profile picture
-    if (isset($_POST['removed_flag']) && $_POST['removed_flag'] == '1') {
+
+
+    if (isset($_POST['remove_image']) && $_POST['remove_image'] == '1') {
+
+        $this->profileViewModel->deleteOfficerImage($officer_id);
+
         $image_url = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
     }
+        
     // Upload new file
     else if (!empty($_FILES['profile_image']['name'])) {
         $uploadDir = 'uploads/officers/'; 
@@ -201,129 +292,219 @@ public function updateOfficer() {
         $image_name = $officer_id . '_' . time() . '.' . $ext;
         $targetFile = $uploadDir . $image_name;
 
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'  , 'image/webp'];
         $fileType = mime_content_type($_FILES['profile_image']['tmp_name']);
         $fileSize = $_FILES['profile_image']['size'];
 
         // Validate file type
         if (!in_array($fileType, $allowedTypes)) {
-            $errors[] = 'Invalid file type. Only JPG, PNG, GIF allowed.';
+            $data['errors']['image'] = 'Invalid file type. Only JPG, JPEG , PNG, GIF , WEBP allowed.';
         }
 
         // Validate file size (max 2MB)
-        if ($fileSize > 2 * 1024 * 1024) {
-            $errors[] = 'File size must be less than 2MB';
+        if ($fileSize > 5 * 1024 * 1024) {
+             $data['errors']['image'] = 'File size must be less than 10MB';
         }
 
-        if (empty($errors)) {
+
+
+
+
+        if (empty($data['errors'])) {
             if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFile)) {
                 $image_url = $targetFile; // save relative path in DB
             } else {
-                $errors[] = 'Error uploading file';
+                 $data['errors']['general'] = 'Error uploading file';
             }
         }
+
+    
     }
 
-    if (!empty($errors)) {
+    //if errors-> go back
+        if (!empty($data['errors'])) {
         // You can store errors in session or return to the form
-        $_SESSION['profile_errors'] = $errors;
+        $_SESSION['profile_errors'] = $data['errors'];
+        $_SESSION['old_input'] = $data['user'];
+
         header('Location: ' . URLROOT . '/ProfileView/officerProfileView');
         exit;
     }
 
-    $data = [
-        'officer_id'    => $officer_id,
-        'first_name'   => $first_name,
-        'last_name'    => $last_name,
-        'phone_no'     => $phone_no,
-        'image_url'    => $image_url
-    ];
+    //save image
+    $data['user']['image_url'] = $image_url;
 
-    if ($this->profileViewModel->updateOfficerProfile($data)) {
+    //update db
+        if ($this->profileViewModel->updateOfficerProfile($data['user'])) {
         header('Location: ' . URLROOT . '/ProfileView/officerProfileView');
         exit;
     } else {
         die('Something went wrong while updating profile');
     }
+
 }
+
+
+
+
+
+
+
+
+/////////////////////////////////////////
+//Admin
+/////////////////////////////////////////
 
 public function adminProfile() {
-    $admin_id = $_SESSION['user_id'];
+        Auth::checkAdmin();
+        $admin_id = $_SESSION['user_id'];
+        $adminProfile = $this->profileViewModel->getAdminProfile($admin_id);
 
-    $adminProfile = $this->profileViewModel->getAdminProfile($admin_id);
-if (!$adminProfile) {
+        $data = [
+            'admin' => $adminProfile,
+            'user' => $_SESSION['old_input'] ?? (array)$adminProfile,
+            'errors' => $_SESSION['profile_errors'] ?? []
+        ];
+
+        unset($_SESSION['old_input'], $_SESSION['profile_errors']);
+
+        if (!$adminProfile) {
     // redirect to admin login instead of dying
-    header('Location: ' . URLROOT . '/admin/adminlogin');
+    header('Location: ' . URLROOT . '/users/login');
     exit;
-}
-
-    $this->view('profile/V_adminprofile', [
-        'admin' => $adminProfile
-    ]);
+    }
+        $this->view('profile/V_adminprofile', $data);
 }
 
 public function updateAdmin() {
 
+    Auth::checkAdmin();
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('Location: ' . URLROOT . '/ProfileView/adminProfile');
+        header('Location: ' . URLROOT . '/ProfileView/adminProfileView/');
         exit;
     }
 
-    $admin_id   = $_POST['admin_id'];
-    $first_name = trim($_POST['first_name']);
-    $last_name  = trim($_POST['last_name']);
-    $phone_no   = trim($_POST['phone_no']);
+     $admin_id = $_SESSION['user_id'];
+     $adminProfile = $this->profileViewModel->getadminProfile($admin_id);
+     $image_url = $adminProfile->image_url ?? '';
 
-    $errors = [];
+    $data=[
+        'user' => [],
+        'errors' => []
 
-    if (!$first_name) $errors[] = 'First name required';
-    if (!$last_name)  $errors[] = 'Last name required';
-    if (!preg_match('/^[0-9]{10}$/', $phone_no)) {
-        $errors[] = 'Phone must be 10 digits';
-    }
+    ];
 
-    $admin = $this->profileViewModel->getAdminProfile($admin_id);
-    $image_url = $admin->image_url ??
-        'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+    $data = [
+        'user' => [
+            'admin_id' => $admin_id,
+            'first_name' => trim($_POST['first_name'] ?? ''),
+            'last_name' => trim($_POST['last_name'] ?? ''),
+            'phone_no' => trim($_POST['phone_no'] ?? ''),
+            'email' => trim($_POST['email'] ?? ''),
+        ],
+        'errors' => []
+    ];
 
-    if (isset($_POST['removed_flag'])) {
+
+
+        if(strlen($data['user']['first_name']) === 0) {
+            $data['errors']['fname'] = "First name is required.";
+        } elseif(!preg_match("/^[a-zA-Z]+$/", $data['user']['first_name'])) {
+            $data['errors']['fname'] = "Only letters allowed.";
+        }
+
+
+        if(strlen($data['user']['last_name']) === 0) {
+            $data['errors']['lname'] = "Last name is required.";
+        } elseif(!preg_match("/^[a-zA-Z]+$/", $data['user']['last_name'])) {
+            $data['errors']['lname'] = "Only letters allowed.";
+        }
+
+
+        if(strlen($data['user']['phone_no']) === 0) {
+            $data['errors']['phone_no'] = "Phone number is required.";
+        } elseif(!preg_match("/^[0-9]{10}$/", $data['user']['phone_no'])) {
+            $data['errors']['phone_no'] = "Phone number must be 10 digits.";
+        }
+
+        if (strlen($data['user']['email']) === 0) {
+       $data['errors']['email'] = "Email is required.";
+        } elseif (!filter_var($data['user']['email'], FILTER_VALIDATE_EMAIL)) {
+            $data['errors']['email'] = "Invalid email format.";
+        } elseif ($this->profileViewModel->adminEmailExists($data['user']['email'], $admin_id)) {
+            $data['errors']['email'] = "Email already in use.";
+        }
+
+
+
+    // Remove profile picture
+
+
+    if (isset($_POST['remove_image']) && $_POST['remove_image'] == '1') {
+
+        $this->profileViewModel->deleteAdminImage($admin_id);
+
         $image_url = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
     }
-
-    elseif (!empty($_FILES['profile_image']['name'])) {
-
-        $dir = 'uploads/admins/';
-        if (!file_exists($dir)) mkdir($dir, 0777, true);
+        
+    // Upload new file
+    else if (!empty($_FILES['profile_image']['name'])) {
+        $uploadDir = 'uploads/admins/'; 
+        if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
 
         $ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
-        $file = $dir . $admin_id . '_' . time() . '.' . $ext;
+        $image_name = $admin_id . '_' . time() . '.' . $ext;
+        $targetFile = $uploadDir . $image_name;
 
-        if ($_FILES['profile_image']['size'] > 2 * 1024 * 1024) {
-            $errors[] = 'Image too large';
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'  , 'image/webp'];
+        $fileType = mime_content_type($_FILES['profile_image']['tmp_name']);
+        $fileSize = $_FILES['profile_image']['size'];
+
+        // Validate file type
+        if (!in_array($fileType, $allowedTypes)) {
+            $data['errors']['image'] = 'Invalid file type. Only JPG, JPEG , PNG, GIF , WEBP allowed.';
         }
 
-        if (empty($errors) &&
-            move_uploaded_file($_FILES['profile_image']['tmp_name'], $file)) {
-            $image_url = $file;
+        // Validate file size (max 2MB)
+        if ($fileSize > 5 * 1024 * 1024) {
+             $data['errors']['image'] = 'File size must be less than 10MB';
         }
+
+
+
+
+
+        if (empty($data['errors'])) {
+            if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFile)) {
+                $image_url = $targetFile; // save relative path in DB
+            } else {
+                 $data['errors']['general'] = 'Error uploading file';
+            }
+        }
+
+    
     }
 
-    if (!empty($errors)) {
-        $_SESSION['profile_errors'] = $errors;
-        header('Location: ' . URLROOT . '/ProfileView/adminProfile');
+    //if errors-> go back
+        if (!empty($data['errors'])) {
+        // You can store errors in session or return to the form
+        $_SESSION['profile_errors'] = $data['errors'];
+        $_SESSION['old_input'] = $data['user'];
+
+        header('Location: ' . URLROOT . '/ProfileView/adminProfileView');
         exit;
     }
 
-    $this->profileViewModel->updateAdminProfile([
-        'admin_id'   => $admin_id,
-        'first_name' => $first_name,
-        'last_name'  => $last_name,
-        'phone_no'   => $phone_no,
-        'image_url'  => $image_url
-    ]);
+    //save image
+    $data['user']['image_url'] = $image_url;
 
-    header('Location: ' . URLROOT . '/ProfileView/adminProfile');
-    exit;
+    //update db
+        if ($this->profileViewModel->updateAdminProfile($data['user'])) {
+        header('Location: ' . URLROOT . '/ProfileView/adminProfileView');
+        exit;
+    } else {
+        die('Something went wrong while updating profile');
+    }
 }
   
 

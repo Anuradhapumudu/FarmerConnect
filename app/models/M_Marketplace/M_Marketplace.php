@@ -158,20 +158,22 @@ public function updateProduct($item_id, $data) {
 
     //buy product
 // Place an order
-        public function createOrder($buyer_id, $item_id, $seller_id, $quantity, $total_price, $payment_method) {
-            $this->db->query("INSERT INTO orders (item_id, seller_id, buyer_id, quantity, total_price, payment_method) 
-                            VALUES (:item_id, :seller_id, :buyer_id, :quantity, :total_price, :payment_method)");
-            
-            $this->db->bind(':item_id', $item_id);
-            $this->db->bind(':seller_id', $seller_id);
-            $this->db->bind(':buyer_id', $buyer_id);
-            $this->db->bind(':quantity', $quantity);
-            $this->db->bind(':total_price', $total_price);
-            $this->db->bind(':payment_method', $payment_method);
-
-            return $this->db->execute();
-        }
-
+public function createOrder($buyer_id, $item_id, $seller_id, $quantity, $total_price, $payment_method) {
+    $this->db->query("INSERT INTO orders (item_id, seller_id, buyer_id, quantity, total_price, payment_method, order_status) 
+                    VALUES (:item_id, :seller_id, :buyer_id, :quantity, :total_price, :payment_method, 'order_placed')");
+    
+    $this->db->bind(':item_id', $item_id);
+    $this->db->bind(':seller_id', $seller_id);
+    $this->db->bind(':buyer_id', $buyer_id);
+    $this->db->bind(':quantity', $quantity);
+    $this->db->bind(':total_price', $total_price);
+    $this->db->bind(':payment_method', $payment_method);
+    
+    if ($this->db->execute()) {
+        return $this->db->lastInsertId(); // Return the order_id
+    }
+    return false;
+}
         // Update product stock
         public function updateStock($item_id, $newQty) {
             $this->db->query("UPDATE products SET available_quantity = :qty WHERE item_id = :item_id");
@@ -286,22 +288,38 @@ public function getOrderById($order_id) {
     $this->db->query("
         SELECT 
             o.*,
-            p.item_name,
+            p.item_id,
+            p.item_name, 
             p.image_url,
+            p.category,
+
+            s.seller_id AS seller_id,
             s.first_name AS seller_first,
             s.last_name AS seller_last,
+            s.phone_no AS seller_telNo,
             s.address AS seller_address,
-            s.phone_no AS seller_telNo
+            s.company_name AS seller_company,
+
+            f.nic AS farmer_nic,
+            f.full_name AS farmer_full,
+            f.phone_no AS farmer_telNo,
+            f.address AS farmer_address,
+
+            h.changed_at AS latest_change
+
         FROM orders o
         JOIN products p ON o.item_id = p.item_id
         JOIN sellers s ON o.seller_id = s.seller_id
+        JOIN farmers f ON o.buyer_id = f.nic 
+        LEFT JOIN order_status_history h ON o.order_id = h.order_id
+
         WHERE o.order_id = :order_id
     ");
 
     $this->db->bind(':order_id', $order_id);
+
     return $this->db->single();
 }
-
 
 // Update order status
 public function updateOrderStatus($order_id, $new_status) {
@@ -390,6 +408,28 @@ public function totalOrders() {
         FROM orders
     ");
 
+    return $this->db->single();
+}
+
+
+public function updateProductStatus($item_id, $status) {
+    $this->db->query("UPDATE products SET status = :status WHERE item_id = :id");
+    $this->db->bind(':status', $status);
+    $this->db->bind(':id', $item_id);
+    return $this->db->execute();
+}
+
+
+public function getStockByProductId($id)
+{
+    $this->db->query("SELECT available_quantity FROM products WHERE item_id = :id");
+    $this->db->bind(':id', $id);
+    return $this->db->single()->available_quantity;
+}
+
+public function getOrderByOrderId($order_id) {
+    $this->db->query("SELECT * FROM orders WHERE order_unique_id = :order_id LIMIT 1");
+    $this->db->bind(':order_id', $order_id);
     return $this->db->single();
 }
 

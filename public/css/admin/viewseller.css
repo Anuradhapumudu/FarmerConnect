@@ -4,8 +4,8 @@
   padding: 20px;
 }
 
-/* Header */
-.admin-header {
+   /* Header */
+    .admin-header {
   display: flex;
   flex-direction: column; /* stack title and button vertically */
   align-items: center;    /* center horizontally */
@@ -17,16 +17,20 @@
   border-radius: 16px;
   box-shadow: none;        /* remove shadow for cleaner transparency */
   gap: 15px;               /* spacing between elements */
-}
-
-.admin-header h1 {
+    }
+    
+    .admin-header h1 {
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 700;
   color: #2e7d32;
-  margin-bottom: 5px;
-}
-
-.admin-header p {
-  color: #558b2f;
-}
+  margin: 10px 0 20px 0;
+  text-align: center;
+  margin-top: -50px;
+    }
+    
+    .admin-header p {
+      color: #558b2f;
+    }
 
 .back-btn {
   background: #2e7d32;
@@ -208,6 +212,34 @@
   background: #d32f2f; 
 }
 
+.alert {
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.alert.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.alert ul li {
+    margin-bottom: 5px;
+}
 
 /* Responsive */
 @media (max-width: 900px) {
@@ -226,4 +258,31 @@
   .action-buttons {
     flex-direction: column;
   }
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #2e7d32, #43a047);
+  color: white;
+  border-radius: 30px;
+  padding: 10px 24px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.25);
+  transition: all 0.25s ease;
+  font-size: 14px;
+}
+
+/* hover effect */
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(46, 125, 50, 0.35);
+}
+
+/* click effect */
+.save-btn:active {
+  transform: scale(0.96);
 }

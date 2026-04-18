@@ -14,7 +14,7 @@ class Help extends Controller {
         public function index() {
         switch($_SESSION['user_type']) {
             case 'farmer':
-                $this->helpOfficer();
+                $this->helpFarmer();
                 break;
             case 'seller':
                 $this->helpSeller();
@@ -73,6 +73,7 @@ class Help extends Controller {
 
     
     public function helpFarmer() {
+        
 
         Auth::checkRole('farmer');
 

@@ -20,8 +20,12 @@
     }
     
     .admin-header h1 {
-      color: #2e7d32;
-      margin-bottom: 5px;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: #2e7d32;
+  margin: 10px 0 20px 0;
+  text-align: center;
+  margin-top: -50px;
     }
     
     .admin-header p {

@@ -1,15 +1,4 @@
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #2c3e50;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
+
     
     .containers {
       max-width: 1200px;
@@ -23,6 +12,7 @@
   color: #2e7d32;
   margin: 10px 0 20px 0;
   text-align: center;
+  margin-top: -50px;
 }
 
 .header p {
@@ -79,48 +69,57 @@
     
 /* Filter Container */
 .filter-container {
-  max-width: 1200px;   /* unified with cards */
+  max-width: 1200px;
   width: 95%;
   margin: 20px auto;
   padding: 15px;
   background: #f1f8f4;
   border: 1px solid #c8e6c9;
   border-radius: 8px;
+  
   display: flex;
-  gap: 15px;
+  gap: 10px;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
 }
 
+/* Inputs */
 .filter-container input,
 .filter-container select,
 .filter-container button {
-  border: 1px solid #2e7d32;
+  border: 1px solid #c8e6c9;
   border-radius: 6px;
 }
 
+/* Search input */
+.search-input {
+  flex: 1 1 300px;   /* flexible width */
+  padding: 10px 15px;
+  font-size: 16px;
+  min-width: 200px;  /* prevent too small */
+}
+
+/* Dropdown */
+.filter-select {
+  flex: 1 1 180px;
+  padding: 10px 15px;
+  font-size: 16px;
+  min-width: 150px;
+}
+
+/* Button */
 .filter-container button {
+  padding: 10px 15px;
   background: #2e7d32;
   color: #fff;
   cursor: pointer;
   transition: 0.3s;
+  white-space: nowrap;
 }
 
 .filter-container button:hover {
-  background: #1b5e20;
-}
-
-.search-input {
-  min-width: 450px;
-  padding: 10px 15px;
-  font-size: 16px;
-}
-
-.filter-select {
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 6px;
-  min-width: 290px;
+  background: #298b30;
 }
     
 .stats-cards {
@@ -283,6 +282,9 @@
     .view-btn {
       background: #2e7d32;
       color: white;
+  
+  text-decoration: none;
+
     }
     
     .view-btn:hover {
@@ -600,3 +602,5 @@
         padding: 10px;
       }
     }
+
+    

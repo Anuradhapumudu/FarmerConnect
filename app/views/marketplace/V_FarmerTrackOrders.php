@@ -18,7 +18,7 @@
     <div class="farmer-filter-container">
       <div class="filter-group">
         
-        <input type="text" id="search" class="search-input" placeholder="Search by order ID, product, or customer...">
+        <input type="text" id="search" class="search-input" placeholder="Search by order ID or product Name">
       </div>
       
       <div class="filter-group">
@@ -33,9 +33,6 @@
         </select>
       </div>
       
-      <button class="btn-filter" id="applyFilters">
-         Apply Filters
-      </button>
     </div>
     
     <!-- Orders Grid -->
@@ -97,7 +94,8 @@
         
         <div class="farmer-order-card" data-order-id="<?= htmlspecialchars($order->order_id) ?>" 
              data-status="<?= $normalizedStatus ?>"
-             data-date="<?= date('Y-m-d', strtotime($order->order_create_date)) ?>">
+             data-date="<?= date('Y-m-d', strtotime($order->order_create_date)) ?>"
+             data-product-name="<?= htmlspecialchars(ucfirst(strtolower($order->item_name))) ?>">
           
           <div class="order-card-header">
             <div>
@@ -218,35 +216,9 @@
   </div>
 </main>
 
-<script>
-document.getElementById('applyFilters').addEventListener('click', function() {
-    const searchTerm = document.getElementById('search').value.toLowerCase();
-    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-    
-    const orders = document.querySelectorAll('.farmer-order-card');
-
-    orders.forEach(order => {
-        const orderId = order.dataset.orderId.toLowerCase();
-        const status = order.dataset.status.toLowerCase();
-
-        // Check search match (order ID, product name)
-        const productName = order.querySelector('.product-info h3').textContent.toLowerCase();
-        const matchesSearch = orderId.includes(searchTerm) || productName.includes(searchTerm);
-
-        // Check status match
-        const matchesStatus = statusFilter === 'all' || status === statusFilter;
-
-        // Show or hide order card
-        if (matchesSearch && matchesStatus) {
-            order.style.display = 'block';
-        } else {
-            order.style.display = 'none';
-        }
-    });
-});
-</script>
 
 
 
+<script src="<?php echo URLROOT; ?>/js/marketplace/farmertrackorder.js?v=<?= time(); ?>"></script>
 
   

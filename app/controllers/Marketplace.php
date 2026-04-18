@@ -91,7 +91,7 @@ class Marketplace extends Controller {
             'paddy-seeds' => 'Seeds',
             'agrochemicals' => 'Agrochemicals',
             'equipments' => 'Equipments',
-            'machinery' => 'Rent Machinery',
+            'machinery' => 'Rental',
             'others' => 'Others'
         ];
 
@@ -147,6 +147,20 @@ public function addProduct() {
         $data['unit_type'] = trim($_POST['unit_type'] ?? '');
         $data['price'] = trim($_POST['price'] ?? '');
         $data['available'] = trim($_POST['available'] ?? '');
+
+            $data['status'] = strtolower(trim($data['status']));
+
+    if ($data['status'] === 'Instock') {
+        $data['status'] = 'Instock';
+    } elseif ($data['status'] === 'Outstock') {
+        $data['status'] = 'Outstock';
+    }
+
+    if ((int)$data['available'] === 0) {
+        $data['status'] = 'Outstock';
+    } else {
+        $data['status'] = 'Instock';
+    }
 
         //  Validation 
         if(strlen($data['name']) === 0) {
@@ -274,6 +288,22 @@ public function editProduct($id) {
         $data['product']['available_quantity'] = trim($_POST['available_quantity'] ?? '');
         $currentImage = $_POST['current_image'] ?? '';
 
+        // Normalize incoming status
+        $data['product']['status'] = strtolower(trim($data['product']['status']));
+
+        // Convert UI values
+        if ($data['product']['status'] === 'Instock') {
+            $data['product']['status'] = 'Instock';
+        } elseif ($data['product']['status'] === 'Outstock') {
+            $data['product']['status'] = 'Outstock';
+        }
+
+        // FORCE correct status
+        if ((int)$data['product']['available_quantity'] === 0) {
+            $data['product']['status'] = 'Outstock';
+        } else {
+            $data['product']['status'] = 'Instock';
+        }
         // VALIDATION 
         // Product Name
         if(strlen($data['product']['item_name']) === 0) {
@@ -402,6 +432,15 @@ public function buyProduct($id = null) {
 
     Auth::checkRole('farmer');
 
+    $product = $this->marketplaceModel->getProductByInternalId($id);
+
+    // Block purchase if out of stock
+    if (!$product || $product->available_quantity <= 0 || $product->status === 'Outstock') {
+        $_SESSION['error'] = "This product is out of stock.";
+        header("Location: " . URLROOT . "/Marketplace/farmer");
+        exit;
+    }
+
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         $product = $this->marketplaceModel->getProductByInternalId($id);
         $this->view('marketplace/V_buyProduct', ['product' => $product]);
@@ -414,7 +453,7 @@ public function buyProduct($id = null) {
 
     $total = $product->price_per_unit * $quantity;
 
-    // Cash
+    // Cash payment 
     if ($method === 'cash') {
 
         $this->marketplaceModel->createOrder(
@@ -423,67 +462,60 @@ public function buyProduct($id = null) {
             $product->seller_id,
             $quantity,
             $total,
-            'cash',
-            'completed',
-            null
+            'cash'
         );
 
-        $this->marketplaceModel->updateStock(
-            $product->item_id,
-            $product->available_quantity - $quantity
-        );
+        $newQty = $product->available_quantity - $quantity;
+        $this->marketplaceModel->updateStock($product->item_id, $newQty);
+
+        if ($newQty <= 0) {
+            $this->marketplaceModel->updateProductStatus($product->item_id, 'Outstock');
+        } else {
+            $this->marketplaceModel->updateProductStatus($product->item_id, 'Instock');
+        }
 
         header("Location: " . URLROOT . "/Marketplace/paymentSuccess");
         exit;
     }
 
-    // online
+    // ONLINE PAYMENT 
     $order_id = uniqid("ORD_");
     $amount   = number_format($total, 2, '.', '');
     $hash     = $this->generatePayHereHash($order_id, $amount);
-
-    //save order as pending
-    $this->marketplaceModel->createOrder(
-        $_SESSION['nic'],
-        $product->item_id,
-        $product->seller_id,
-        $quantity,
-        $amount,
-        'online',
-        'pending',
-        $order_id
-    );
-
-    $payhere = [
-        "sandbox"     => true,
-        "merchant_id" => PAYHERE_MERCHANT_ID,
-        "return_url"  => URLROOT . "/Marketplace/paymentSuccessOnline",
-        "cancel_url"  => URLROOT . "/Marketplace/paymentCancel",
-        "notify_url"  => "https://YOUR-NGROK-URL/FarmerConnect/Marketplace/paymentNotification",
-
-        "order_id" => $order_id,
-        "items"    => $product->item_name,
-        "amount"   => $amount,
-        "currency" => "LKR",
-        "hash"     => $hash,
-
-        "first_name" => "Farmer",
-        "last_name"  => "User",
-        "email"      => "farmer@example.com",
-        "phone"      => "0771234567",
-        "address"    => "Sri Lanka",
-        "city"       => $product->region,
-        "country"    => "Sri Lanka"
+    
+    // Store purchase details in SESSION only 
+    $_SESSION['pending_online_payment'] = [
+        'product_id' => $product->item_id,
+        'seller_id' => $product->seller_id,
+        'quantity' => $quantity,
+        'total' => $amount,
+        'buyer_nic' => $_SESSION['nic']
     ];
 
-        $this->view('marketplace/V_buyProduct', [
-            'product' => $product,
-            'payhere' => [
-                "order_id" => $order_id,
-                "amount" => $amount,
-                "hash" => $hash
-            ]
-        ]);
+    $payhere = [
+        "sandbox" => true,
+        "merchant_id" => PAYHERE_MERCHANT_ID,
+        "return_url" => URLROOT . "/Marketplace/paymentSuccessOnline",
+        "cancel_url" => URLROOT . "/Marketplace/paymentCancel",
+        "notify_url" => URLROOT . "/Marketplace/paymentNotification",
+        "order_id" => $order_id,
+        "items" => $product->item_name,
+        "amount" => $amount,
+        "currency" => "LKR",
+        "hash" => $hash,
+        "first_name" => "Farmer",
+        "last_name" => "User",
+        "email" => "farmer@example.com",
+        "phone" => "0771234567",
+        "address" => "Sri Lanka",
+        "city" => $product->region,
+        "country" => "Sri Lanka"
+    ];
+
+    $this->view('marketplace/V_buyProduct', [
+        'product' => $product,
+        'payhere' => $payhere
+    ]);
 }
 
 
@@ -501,64 +533,73 @@ private function generatePayHereHash($order_id, $amount, $currency = "LKR") {
     );
 }
 
-public function paymentNotification() {
-
-    // LOG (debug)
-    file_put_contents(
-        APPROOT . '/payhere.log',
-        print_r($_POST, true),
+public function paymentNotification()
+{
+    // Just log for debugging, don't do anything critical
+    file_put_contents(__DIR__ . '/payhere.log',
+        "\nPAYHERE NOTIFICATION \n" . print_r($_POST, true),
         FILE_APPEND
     );
-
-    $merchant_id      = $_POST['merchant_id'] ?? '';
-    $order_id         = $_POST['order_id'] ?? '';
-    $payhere_amount   = $_POST['payhere_amount'] ?? '';
-    $payhere_currency = $_POST['payhere_currency'] ?? '';
-    $status_code      = $_POST['status_code'] ?? '';
-    $md5sig           = $_POST['md5sig'] ?? '';
-
-    $local_md5 = strtoupper(
-        md5(
-            $merchant_id .
-            $order_id .
-            $payhere_amount .
-            $payhere_currency .
-            $status_code .
-            strtoupper(md5(PAYHERE_MERCHANT_SECRET))
-        )
-    );
-
-    // Verify payment
-    if ($local_md5 === $md5sig && $status_code == 2) {
-
-        $order = $this->marketplaceModel->getOrderByOrderId($order_id);
-
-        if ($order && $order->status !== 'completed') {
-
-            // Mark order paid
-            $this->marketplaceModel->updateOrderStatus($order_id, 'completed');
-
-            // Update stock
-            $this->marketplaceModel->updateStock(
-                $order->item_id,
-                $order->available_quantity - $order->quantity
-            );
-        }
-    }
-
+    
+    // Return success to PayHere even if we don't process
     http_response_code(200);
+    echo "OK";
+    exit;
 }
 
+public function paymentCancel() {
+    // Just clear the session - NO order created, NO stock reduced
+    if (isset($_SESSION['pending_online_payment'])) {
+        unset($_SESSION['pending_online_payment']);
+    }
+    
+    $_SESSION['error'] = "Payment was cancelled. No order was placed.";
+    $this->view('marketplace/V_paymentCancel');
+}
 
+public function paymentSuccessOnline()
+{
+    // Create order and reduce stock ONLY on successful return
+    if (isset($_SESSION['pending_online_payment'])) {
+        $pending = $_SESSION['pending_online_payment'];
+        
+        // Create the order
+        $this->marketplaceModel->createOrder(
+            $pending['buyer_nic'],
+            $pending['product_id'],
+            $pending['seller_id'],
+            $pending['quantity'],
+            $pending['total'],
+            'online'
+        );
+        
+        // Reduce stock NOW (after successful payment)
+        $product = $this->marketplaceModel->getProductById($pending['product_id']);
+        if ($product) {
+            $newQty = $product->available_quantity - $pending['quantity'];
+            $this->marketplaceModel->updateStock($pending['product_id'], $newQty);
+            
+            if ($newQty <= 0) {
+                $this->marketplaceModel->updateProductStatus($pending['product_id'], 'Outstock');
+            } else {
+                $this->marketplaceModel->updateProductStatus($pending['product_id'], 'Instock');
+            }
+        }
+        
+        // Clear the session
+        unset($_SESSION['pending_online_payment']);
+        
+        $_SESSION['success'] = "Payment successful! Your order has been placed.";
+    }
+    
+    $this->view('marketplace/V_paymentSuccess');
+}
 
     public function paymentSuccess() {
         $this->view('marketplace/V_paymentSuccess');
     }
 
-    public function paymentCancel() {
-        $_SESSION['error'] = "Payment was cancelled";
-        $this->view('marketplace/V_paymentCancel');
-    }
+
 
 
 
@@ -712,6 +753,7 @@ Auth::checkRole('farmer');
 
     public function adminViewProducts() {
 
+            Auth::checkAdmin();
         //fetch all products
         $products =$this->marketplaceModel->getAllProducts();
         $this->view('marketplace/V_AdminViewProducts', ['products' => $products]);
@@ -719,11 +761,26 @@ Auth::checkRole('farmer');
 
        public function adminViewOrders() {
 
+          Auth::checkAdmin();
         $order =$this->marketplaceModel->getAllOrders();
         $this->view('marketplace/V_AdminViewOrders', ['orders' => $order]);
     }
     
+        public function adminVieworderDetails($order_id){
 
+           Auth::checkAdmin();
+            $order = $this->marketplaceModel->getOrderById($order_id);
+
+            if (!$order) {
+                die("Order not found");
+            }
+
+            $data = [
+                'order' => $order
+            ];
+
+            $this->view('marketplace/V_AdminVieworderDetails', $data);
+        }
 
 //////////////////////////////////////////////
 ////Raiting Submit

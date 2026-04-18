@@ -20,9 +20,9 @@
     <div class="search-box">
       <div style="position: relative; flex: 1;">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" class="search-input" placeholder="Search farmers by NIC or Name...">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search Officers by officerId or Name...">
       </div>
-      <select class="filter-select">
+      <select id="statusFilter" class="filter-select">
         <option value="all">All Status</option>
         <option value="active">Active</option>
         <option value="inactive">Inactive</option><option value="pending">Pending</option>
@@ -42,8 +42,15 @@
           </tr>
         </thead>
         <tbody id="farmerTable">
-        <?php foreach($data['officers'] as $officer): ?>
-          <tr>
+
+    <?php if(!empty($data['officers'])): ?>
+    <?php foreach($data['officers'] as $officer): ?>
+
+      <tr class="userList"
+      data-id="<?php echo strtolower(htmlspecialchars($officer->officer_id));?>"
+      data-fname="<?php echo strtolower(htmlspecialchars($officer->first_name));?>"
+      data-lname="<?php echo strtolower(htmlspecialchars($officer->last_name));?>"
+      data-status="<?php echo strtolower(htmlspecialchars($officer->status));?>">
             <td data-label="NIC"><?= $officer->officer_id ?></td>
             <td data-label="Name"><?= $officer->first_name . ' ' . $officer->last_name ?></td>
             <td data-label="Status">
@@ -59,7 +66,11 @@
           </td>
 
           </tr>
+   
         <?php endforeach; ?>
+        <?php else: ?>
+                  <p>No officer found.</p>
+      <?php endif; ?>
         </tbody>
       </table>
     </div>
@@ -68,5 +79,5 @@
 </main>
 
 
-
+<script src="<?php echo URLROOT; ?>/js/admin/officerlist.js?v=<?= time(); ?>"></script>
 <?php require APPROOT . '/views/inc/footer.php'; ?>

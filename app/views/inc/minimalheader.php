@@ -149,8 +149,17 @@ if ($initials === '') {
               </a>
             </div>
 
+            <?php
+              $logoutUrl = URLROOT . '/users/logout';
+
+              // If admin, change redirect target
+              if ($userType === 'admin') {
+                $logoutUrl = URLROOT . '/admin/adminlogin';
+              }
+              ?>
+
             <div class="dropdown-section">
-              <a href="<?php echo URLROOT; ?>/users/logout" class="dropdown-item danger" role="menuitem">
+              <a href="<?php echo $logoutUrl; ?>" class="dropdown-item danger" role="menuitem">
                 <span class="item-icon"><i class="fas fa-right-from-bracket"></i></span>
                 <span class="item-text">Sign Out</span>
               </a>

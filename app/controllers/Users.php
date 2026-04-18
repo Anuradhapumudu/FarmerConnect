@@ -234,9 +234,10 @@
                         if ($this->userModel->findUserByEmail($data['email'], 'sellers')) {
                             $data['email_error'] = 'Email is already taken';
                         }
-                    }
-                    if ($this->userModel->findSellerByBRN($data['brn'])) {
+                    } if (empty($data['brn'])) {
                         $data['brn_error'] = 'Please enter your Business Registration Number (BRN)';
+                    } else if ($this->userModel->findSellerByBRN($data['brn'])) {
+                        $data['brn_error'] = 'BRN is already registered';
                     }
                     if (empty($data['phone_no'])) {
                         $data['phone_no_error'] = 'Please enter your phone number';
@@ -519,7 +520,7 @@
                                 if (empty($data['seller_id_error']) && empty($data['password_error'])) {
                                     $loggedUser = $this->userModel->login($formType, $data['username'], $data['password']);
                                     if ($loggedUser) {
-                                        // Check if seller is approved (from registrations table)
+                                        // Check if seller is approved or not
                                         if (strtolower($loggedUser->approval_status) !== 'approved') {
                                             $data['seller_id_error'] = 'Your account is not approved yet.';
                                             $this->view('users/v_login', $data);
@@ -605,6 +606,28 @@
             exit;
         }
 
+            public function adminlogout() {
+
+                session_start();
+
+                $_SESSION = [];
+                session_destroy();
+
+                // Delete session cookie
+                if (ini_get("session.use_cookies")) {
+                    $params = session_get_cookie_params();
+                    setcookie(session_name(), '', time() - 42000,
+                        $params["path"],
+                        $params["domain"],
+                        $params["secure"],
+                        $params["httponly"]
+                    );
+                }
+
+                header('Location: ' . URLROOT . '/admin/adminlogin');
+                exit;
+            }
+            
         public function isLoggedIn() {
             if(isset($_SESSION['user_type'])) {
                 return true;

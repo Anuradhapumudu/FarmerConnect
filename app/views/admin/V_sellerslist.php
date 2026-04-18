@@ -20,13 +20,13 @@
     <div class="search-box">
       <div style="position: relative; flex: 1;">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" class="search-input" placeholder="Search farmers by NIC or Name...">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search Sellers by sellerId or Name...">
       </div>
-      <select class="filter-select">
+      <select id="statusFilter" class="filter-select">
         <option value="all">All Status</option>
-        <option value="active">Approved</option>
-        <option value="inactive">Rejected</option>
-        <option value="pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Pending">Pending</option>
       </select>
     </div>
 
@@ -45,8 +45,15 @@
           </tr>
         </thead>
         <tbody>
+
+        <?php if(!empty($data['sellers'])): ?>
         <?php foreach($data['sellers'] as $seller): ?>
-          <tr>
+
+      <tr class="userList"
+      data-id="<?php echo strtolower(htmlspecialchars($seller->seller_id));?>"
+      data-fname="<?php echo strtolower(htmlspecialchars($seller->first_name));?>"
+      data-lname="<?php echo strtolower(htmlspecialchars($seller->last_name));?>"
+      data-status="<?php echo strtolower(htmlspecialchars($seller->approval_status));?>">
             <td data-label="Seller ID"><?= $seller->seller_id ?></td>
             <td data-label="Name"><?= $seller->first_name . ' ' . $seller->last_name ?></td>
             <td data-label="Company"><?= $seller->company_name ?></td>
@@ -64,10 +71,15 @@
 
           </tr>
         <?php endforeach; ?>
+        <?php else: ?>
+                  <p>No sellers found.</p>
+      <?php endif; ?>
         </tbody>
       </table>
       </div>
  
 </main>
 
+
+<script src="<?php echo URLROOT; ?>/js/admin/sellerlist.js?v=<?= time(); ?>"></script>
 <?php require APPROOT . '/views/inc/footer.php'; ?>
