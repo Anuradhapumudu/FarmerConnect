@@ -3,6 +3,9 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/complain/myComplaints.css">
 
 <?php
+// Role helpers
+$isFarmer = ($_SESSION['user_type'] ?? '') === 'farmer';
+
 // Count statuses
 $totalComplaints = isset($data['reports']) ? count($data['reports']) : 0;
 $pendingCount = 0;
@@ -34,9 +37,11 @@ if (!empty($data['reports'])) {
                     <div class="mc-subtitle">Track and manage your submitted complaints</div>
                 </div>
             </div>
+            <?php if ($isFarmer): ?>
             <a href="<?php echo URLROOT; ?>/complaint" class="mc-new-btn">
                 <i class="fas fa-plus"></i> New Complaint
             </a>
+            <?php endif; ?>
         </div>
 
         <!-- Search -->
@@ -170,9 +175,11 @@ if (!empty($data['reports'])) {
             </div>
             <h3>No Complaints Found</h3>
             <p>You haven't submitted any complaints yet, or none match your search.</p>
+            <?php if ($isFarmer): ?>
             <a href="<?php echo URLROOT; ?>/complaint" class="mc-new-btn">
                 <i class="fas fa-plus"></i> Submit Your First Complaint
             </a>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
