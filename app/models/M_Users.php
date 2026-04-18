@@ -43,10 +43,12 @@
                     $this->db->execute();
                     $registration_id = $this->db->lastInsertId();
                     // Update officers table
-                    $this->db->query("UPDATE officers
-                        SET first_name = :first_name, last_name = :last_name, email = :email, nic = :nic, phone_no = :phone_no, registration_id = :registration_id, status = 'Active', password = :password
-                        WHERE officer_id = :officer_id
+                    $this->db->query("INSERT INTO officers
+                        (officer_id, first_name, last_name, email, nic, phone_no, registration_id, status, password, govi_jana_sewa_division)
+                        VALUES
+                        (:officer_id, :first_name, :last_name, :email, :nic, :phone_no, :registration_id, 'Active', :password, :govi_jana_sewa_division)
                     ");
+                    $this->db->bind(':officer_id', $data['officer_id']);
                     $this->db->bind(':first_name', $data['first_name']);
                     $this->db->bind(':last_name', $data['last_name']);
                     $this->db->bind(':email', $data['email']);
@@ -54,15 +56,13 @@
                     $this->db->bind(':phone_no', $data['phone_no']);
                     $this->db->bind(':registration_id', $registration_id);
                     $this->db->bind(':password', $data['password']);
-                    $this->db->bind(':officer_id', $data['officer_id']);
+                    $this->db->bind(':govi_jana_sewa_division', $data['govi_jana_sewa_division']);
                     $this->db->execute();
                     return true;
                     break;
                     case 'seller':
                         // Insert into registrations table
-                        $this->db->query("INSERT INTO registrations
-                            (user_type)
-                            VALUES (:user_type)");
+                        $this->db->query("INSERT INTO registrations (user_type) VALUES (:user_type)");
                         $this->db->bind(':user_type', $data['form_type']);
                         $this->db->execute();
                         $registration_id = $this->db->lastInsertId();
@@ -195,10 +195,10 @@
 
         // Check if officer_id exists in officers table
         public function isOfficerIdValid($officer_id) {
-            $this->db->query("SELECT * FROM officers WHERE officer_id = :officer_id");
+            $this->db->query("SELECT * FROM agri_officer_list WHERE officer_id = :officer_id");
             $this->db->bind(':officer_id', $officer_id);
             $this->db->single();
-            return ($this->db->rowCount() > 0);
+            return $this->db->single();
         }
 
         public function findSellerByBRN($brn) {

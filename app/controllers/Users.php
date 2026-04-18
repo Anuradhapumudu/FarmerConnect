@@ -162,10 +162,13 @@
                     if (empty($data['officer_id'])) {
                         $data['officer_id_error'] = 'Please enter your Officer ID';
                     } else {
-                        if (!$this->userModel->isOfficerIdValid($data['officer_id'])) {
+                        $officerrecord = $this->userModel->isOfficerIdValid($data['officer_id']);
+                        if (!$officerrecord) {
                             $data['officer_id_error'] = 'Officer ID not found. Only valid officers can register.';
                         } elseif ($this->userModel->isOfficerAlreadyRegistered($data['officer_id'])) {
                             $data['officer_id_error'] = 'Officer ID is already registered';
+                        } else {
+                            $data['govi_jana_sewa_division'] = $officerrecord->govi_jana_sewa_division;
                         }
                     }
                     if (empty($data['phone_no'])) {
