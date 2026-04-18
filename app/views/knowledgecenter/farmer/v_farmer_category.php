@@ -56,7 +56,6 @@
                 <h3><?php echo $article->article_name; ?></h3>
                 <div class="article-text"><?php echo nl2br($article->description); ?></div>
                 <a href="<?php echo URLROOT; ?>/Knowledgecenter/viewarticle/<?php echo $article->id; ?>" class="read-more-btn">View Full Article →</a>
-                <!--<button class="read-more-btn">Read More</button>-->
               </div>
             </div>
           </div>
