@@ -1,6 +1,6 @@
-/* =======================
+/* 
    General Styles
-======================= */
+ */
 
 
 main {
@@ -11,9 +11,9 @@ main {
   box-sizing: border-box;
 }
 
-/* =======================
+/* 
    Page Titles
-======================= */
+ */
 .page-title {
   margin: 40px 0 20px;
 }
@@ -28,9 +28,9 @@ main {
   margin-left: 40px;
 }
 
-/* =======================
+/* 
    Profile Card
-======================= */
+ */
 .profile-card {
   background: #fff;
   border-radius: 14px;
@@ -109,9 +109,9 @@ main {
   background: #d32f2f;
 }
 
-/* =======================
+/* 
    Forms
-======================= */
+ */
 
 form {
   display: grid;
@@ -204,9 +204,9 @@ form {
   background: #d32f2f; /* Darker red on hover */
 }
 
-/* =======================
+/* 
    Professional Alerts
-======================= */
+ */
 
 .alert-box {
     display: flex;
@@ -393,9 +393,9 @@ form {
     }
 
 
-/* ===============================
+/* 
    REQUEST MOBILE CARDS
-=============================== */
+ */
 
 .request-cards {
     display: none;
@@ -442,9 +442,9 @@ form {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-/* =======================
+/* 
    Responsive
-======================= */
+ */
 @media (max-width: 992px) {
   main {
     padding: 0 20px;
@@ -510,7 +510,7 @@ form {
   }
 
 .buttons {
-  flex-direction: column;   /* ✅ stack vertically */
+  flex-direction: column;   /*  stack vertically */
   gap: 10px;
   width: 100%;
   align-items: center;
@@ -535,7 +535,7 @@ form {
     margin-left: 0;
     width: 100%;
     flex-direction: column;
-    align-items: center;   /* ✅ CENTER EVERYTHING */
+    align-items: center;   /*  CENTER EVERYTHING */
     gap: 10px;
     text-align: center;
 }

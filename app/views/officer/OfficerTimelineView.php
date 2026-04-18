@@ -30,7 +30,7 @@
   ];
 ?>
 
-  <!-- ================= STAGE 01 ================= -->
+  <!--  STAGE 01  -->
   <div class="stage-section">
     <h3>Stage-01</h3>
     <div class="task-row">
@@ -94,7 +94,7 @@
 
   </div>
 
-  <!-- ================= STAGE 02 ================= -->
+  <!-- STAGE 02  -->
   <div class="stage-section">
     <h3>Stage-02</h3>
     <div class="task-row">
@@ -140,7 +140,7 @@
 
 <div class="stage-action">
 
-    <span class="stage-approved-text">✔ Stage 01 Approved</span>
+    <span class="stage-approved-text">✔ Stage 02 Approved</span>
 
     <form action="<?php echo URLROOT; ?>/officer/OfficerTimeline/cancelApproval" method="POST">
         <input type="hidden" name="plr" value="<?php echo $data['plr']; ?>">
@@ -158,7 +158,7 @@
 
   </div>
 
-  <!-- ================= STAGE 03 ================= -->
+  <!--  STAGE 03  -->
   <div class="stage-section">
     <h3>Stage-03</h3>
     <div class="task-row">

@@ -20,7 +20,7 @@
     <!-- Content -->
     <div class="content-wrapper">
 
-        <!-- ================= FARMER PROFILE ================= -->
+        <!--  FARMER PROFILE  -->
         <div class="profile-card">
             
             <img 
@@ -48,6 +48,11 @@
                 </div>
 
                 <div class="detail-item">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value"><?= $data['farmer']->email ?></span>
+                </div>
+
+                <div class="detail-item">
                     <span class="detail-label">Phone:</span>
                     <span class="detail-value"><?= $data['farmer']->phone_no ?></span>
                 </div>
@@ -61,7 +66,7 @@
             </div>
         </div>
 
-        <!-- ================= PADDY DETAILS ================= -->
+        <!--  PADDY DETAILS  -->
         <div class="paddy-details">
 
             <h2 class="section-title">Paddy Lands</h2>

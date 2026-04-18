@@ -37,7 +37,7 @@
     </div>
     </div>
 
-    <!-- ===================== PENDING TABLE ===================== -->
+    <!--  PENDING TABLE -->
     <div class="farmer-table-wrapper">
         <div class="farmer-table-header">Pending Requests</div>
 
@@ -118,7 +118,7 @@
 </div> 
 
 
-    <!-- ===================== HISTORY TABLE ===================== -->
+    <!--  HISTORY TABLE  -->
     <div class="farmer-table-wrapper" style="margin-top:30px;">
         <div class="farmer-table-header">Request History</div>
 

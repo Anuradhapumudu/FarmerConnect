@@ -3,7 +3,7 @@ class OfficerTimelineItems extends Controller {
 
 public function show()
 {
-    // ✅ Get PLR from query string
+    //  Get PLR from query string
     $plr = $_GET['plr'] ?? null;
 
     if (!$plr) {
@@ -18,7 +18,7 @@ public function show()
         die('Invalid PLR: ' . $plr);
     }
 
-    // ✅ Continue full logic
+    //  Continue full logic
     $seed = $model->getSeedVariety($plr);
     $duration = $this->getSeedDuration($seed->Paddy_seed_variety);
     $timeline = $model->getTimelineByDuration($duration);

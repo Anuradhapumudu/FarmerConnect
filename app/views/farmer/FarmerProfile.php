@@ -66,6 +66,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" value="<?php echo $data['farmer']->email ?? ''; ?>">
+                    <?php if (!empty($data['errors']['email'])): ?>
+                        <small class="error" style="color: #d93025;"><?php echo htmlspecialchars($data['errors']['email']); ?></small>
+                    <?php endif; ?>
+                </div>
+
+                <div class="form-group">
                     <label for="TelNo">Tel. No</label>
                     <input type="text" id="TelNo" name="TelNo" 
                         value="<?php echo htmlspecialchars($data['farmer']->phone_no ?? '', ENT_QUOTES); ?>"
@@ -242,7 +250,7 @@
         
             
 
-<!-- ================= REQUEST SECTION ================= -->
+<!--  REQUEST SECTION  -->
     <div class="page-title">
         <h2>Paddy Registration Requests</h2>
     </div>
@@ -381,7 +389,7 @@ document.getElementById('farmerForm').addEventListener('submit', function(e) {
             return;
         }
 
-        // ✅ Validate Paddy Size (Option 3)
+        //  Validate Paddy Size (Option 3)
         const size = document.getElementById('Paddy_Size').value.trim();
         if (!size || isNaN(size) || size <= 0) {
             e.preventDefault();
@@ -409,7 +417,7 @@ function loadPaddy(plr) {
       // First, update districts (this is sync)
       updateDistricts(data.District);
 
-      // 🔹 Now fetch centers for that district and set the selected one
+      //  Now fetch centers for that district and set the selected one
       const divisionSelect = document.getElementById('Govi_Jana_Sewa_Division');
       divisionSelect.innerHTML = '<option value="" disabled selected>Loading...</option>';
 
@@ -423,7 +431,7 @@ function loadPaddy(plr) {
             option.value = center.center_name;
             option.textContent = center.center_name;
 
-            // ✅ Set selected value correctly
+            //  Set selected value correctly
             if (center.center_name === data.Govi_Jana_Sewa_Division) {
               option.selected = true;
             }
@@ -468,7 +476,7 @@ function updateDistricts(selectedDistrict = '') {
       option.value = district;
       option.textContent = district;
 
-      // ✅ Preselect the district if matches saved value
+      //  Preselect the district if matches saved value
       if (district === selectedDistrict) option.selected = true;
 
       districtSelect.appendChild(option);
@@ -476,7 +484,7 @@ function updateDistricts(selectedDistrict = '') {
   }
 }
 
-// 🔹 Fetch Agrarian (Govi Jana Sewa) centers when district changes
+//  Fetch Agrarian (Govi Jana Sewa) centers when district changes
 document.getElementById('District').addEventListener('change', function() {
     const district = this.value;
     const divisionSelect = document.getElementById('Govi_Jana_Sewa_Division');
@@ -532,7 +540,7 @@ function deletePaddy() {
         });
 }
 
-// ---------- Profile Picture Upload ----------
+//Profile Picture Upload 
 document.getElementById('uploadInput').addEventListener('change', function() {
     const file = this.files[0];
     if (!file) return;
@@ -556,7 +564,7 @@ document.getElementById('uploadInput').addEventListener('change', function() {
     .catch(() => alert('Error uploading image.'));
 });
 
-// ---------- Profile Picture Remove ----------
+// Profile Picture Remove 
 function removeProfilePic() {
     if (!confirm('Are you sure you want to remove your profile picture?')) return;
 

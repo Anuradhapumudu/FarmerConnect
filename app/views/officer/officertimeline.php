@@ -120,7 +120,7 @@
           <?php endif; ?>
           </tbody>
       </table>
-            <!-- ✅ Mobile View -->
+            <!--  Mobile View -->
       <div class="farmer-cards">
 
       <?php if (!empty($data['farmers'])): ?>

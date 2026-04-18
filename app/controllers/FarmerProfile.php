@@ -37,6 +37,7 @@ class FarmerProfile extends Controller
             'NIC' => $farmerNIC,
             'Name' => 'Unknown Farmer', // You can replace this if you store names separately
             'Address' => '',
+            'email' => '',
             'TelNo' => '',
             'Birthday' => '',
             'Gender' => ''
@@ -46,6 +47,7 @@ class FarmerProfile extends Controller
             'nic' => $farmerNIC,
             'full_name' => 'Unknown Farmer',
             'address' => '',
+            'email' => '',
             'phone_no' => '',
             'birthdate' => '',
             'gender' => ''
@@ -79,6 +81,7 @@ class FarmerProfile extends Controller
             $data = [
                 'NIC' => trim($_POST['NIC'] ?? ''),
                 'Address' => trim($_POST['Address'] ?? ''),
+                'email' => trim($_POST['email'] ?? ''),
                 'TelNo' => trim($_POST['TelNo'] ?? ''),
                 'Birthday' => trim($_POST['Birthday'] ?? ''),
                 'Gender' => trim($_POST['Gender'] ?? ''),
@@ -91,12 +94,12 @@ class FarmerProfile extends Controller
             $data['Name'] = $existingFarmer->full_name ?? '';
 
             
-            // TelNo validation (server-side)
+            // TelNo validation 
             
             if (empty($data['TelNo'])) {
                 $data['errors']['TelNo'] = 'Telephone number is required.';
             } else {
-                // Sri Lanka example: start with +94 or 0 then mobile(7xxxxxxxx) or landline(1xxxxxxxx etc)
+                // start with +94 or 0 then mobile(7xxxxxxxx) or landline(1xxxxxxxx )
                 $pattern = '/^(?:\+94|0)(7\d{8}|1\d{8})$/';
                 if (!preg_match($pattern, $data['TelNo'])) {
                     $data['errors']['TelNo'] = 'Invalid telephone number format. Use 0711234567 or +94711234567.';
@@ -126,6 +129,22 @@ class FarmerProfile extends Controller
                     $data['errors']['Address'] = 'Address is required.';
                 }
 
+                // Email validation
+                if (empty($data['email'])) {
+                    $data['errors']['email'] = 'Email is required.';
+                } else {
+                    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                        $data['errors']['email'] = 'Invalid email format.';
+                    } else {
+                        // Check uniqueness
+                        $existingEmail = $this->farmerModel->findFarmerByEmail($data['email']);
+
+                        if ($existingEmail && $existingEmail->nic != $data['NIC']) {
+                            $data['errors']['email'] = 'Email already in use.';
+                        }
+                    }
+                }
+
                 
                 // Gender validation
                 
@@ -140,6 +159,7 @@ class FarmerProfile extends Controller
                     'NIC' => $data['NIC'],
                     'Name' => $data['Name'],
                     'Address' => $data['Address'],
+                    'email' => $data['email'],
                     'TelNo' => $data['TelNo'],
                     'Birthday' => $data['Birthday'],
                     'Gender' => $data['Gender']
@@ -160,6 +180,7 @@ class FarmerProfile extends Controller
                 'NIC' => $data['NIC'],
                 'Name' => $data['Name'],
                 'Address' => $data['Address'],
+                'email' => $data['email'],
                 'TelNo' => $data['TelNo'],
                 'Birthday' => $data['Birthday'],
                 'Gender' => $data['Gender']
@@ -196,7 +217,7 @@ class FarmerProfile extends Controller
                 ];
 
                 
-                //  Step 1: Validate PLR Number
+                //  Validate PLR Number
                 
                 $plrPattern = '/^\d{2}\/\d{2}\/\d{5}\/\d{3}\/[A-Za-z]\/\d{4}$/';
 
@@ -216,7 +237,7 @@ class FarmerProfile extends Controller
 
                 
                 
-                //  Step 2: Check for error
+                //   Check for error
                 if (!empty($data['errors'])) {
                     // Load farmer details again for re-render
                     $farmer = $this->farmerModel->getFarmerByNIC($data['NIC']);
@@ -258,9 +279,9 @@ class FarmerProfile extends Controller
                         exit;
                     }
 
-                    //  if rejected → allow
+                    
                 }
-                //  Step 3: Save only if valid
+                //   Save only if valid
                 
                 $this->paddyModel->savePaddyRequest($data);
 

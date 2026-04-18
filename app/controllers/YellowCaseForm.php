@@ -45,7 +45,7 @@ class YellowCaseForm extends Controller {
             return;
         }
 
-        // ✅ Get farmer data from POST or SESSION
+        //  Get farmer data from POST or SESSION
         $farmerNIC = $_POST['farmerNIC'] ?? $_SESSION['nic'] ?? null;
         $plrNumber = $_POST['plrNumber'] ?? $_SESSION['selected_plr'] ?? null;
 
@@ -53,13 +53,13 @@ class YellowCaseForm extends Controller {
             die('Session expired or missing PLR number. Please try again.');
         }
 
-        // ✅ Generate Case ID
+        //  Generate Case ID
         $caseId = $this->generateCaseID();
         $observationDate = !empty($_POST['observationDate']) ? $_POST['observationDate'] : date('Y-m-d');
         $caseTitle = trim($_POST['caseTitle'] ?? '');
         $caseDescription = trim($_POST['caseDescription'] ?? '');
 
-        // ✅ Collect form data
+        //  Collect form data
         $data = [
             'case_id'          => $caseId,
             'farmer_nic'       => $farmerNIC,
@@ -109,7 +109,7 @@ class YellowCaseForm extends Controller {
             }
         }
 
-        // ✅ Save to DB
+        //  Save to DB
         if ($this->yellowCaseModel->create($data)) {
              header('Location:'.URLROOT.'/YellowCaseList'); // Redirect to the same page
         exit();

@@ -93,7 +93,7 @@ public function searchHistory($division, $search) {
     // Approve request
     public function approveRequest($id) {
 
-        // 1. Get request
+        //  Get request
         $this->db->query("SELECT * FROM paddy_requests WHERE id = :id");
         $this->db->bind(':id', $id);
         $request = $this->db->single();
@@ -120,7 +120,7 @@ public function searchHistory($division, $search) {
             ];
         }
 
-        // 3. Insert to paddy
+        //  Insert to paddy
         $this->db->query("
             INSERT INTO paddy 
             (PLR, NIC_FK, OfficerID, Paddy_Seed_Variety, Paddy_Size, Province, District, Govi_Jana_Sewa_Division, Grama_Niladhari_Division, Yaya)
@@ -141,7 +141,7 @@ public function searchHistory($division, $search) {
 
         $this->db->execute();
 
-        // 4. Update status
+        //  Update status
         $this->db->query("
             UPDATE paddy_requests
             SET status = 'approved'
@@ -156,14 +156,14 @@ public function searchHistory($division, $search) {
     // Reject request
     public function rejectRequest($id) {
 
-        // 1. Get request
+        //  Get request
         $this->db->query("SELECT * FROM paddy_requests WHERE id = :id");
         $this->db->bind(':id', $id);
         $request = $this->db->single();
 
         if (!$request) return false;
 
-        // 2. ❌ DELETE from paddy if exists
+        //  DELETE from paddy if exists
         $this->db->query("DELETE FROM paddy WHERE PLR = :plr");
         $this->db->bind(':plr', $request->PLR);
         $this->db->execute();

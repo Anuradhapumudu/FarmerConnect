@@ -1,6 +1,6 @@
-/* ===============================
+/* 
    HEADER
-=============================== */
+ */
 .yellow-header {
     text-align: center;
     margin-bottom: 30px;
@@ -40,9 +40,9 @@
 }
 
 
-/* ===============================
+/*
    CONTAINER
-=============================== */
+ */
 .yellow-options {
     display: flex;
     gap: 30px;
@@ -55,9 +55,9 @@
 }
 
 
-/* ===============================
+/* 
    CARD
-=============================== */
+ */
 .yellow-card {
     flex: 1;
     min-width: 340px;
@@ -77,9 +77,9 @@
 }
 
 
-/* ===============================
+/* 
    TEXT
-=============================== */
+ */
 .yellow-card h3 {
     font-size: 20px;
     margin-bottom: 10px;
@@ -100,9 +100,9 @@
 }
 
 
-/* ===============================
+/* 
    BUTTON
-=============================== */
+ */
 .yellow-btn {
     display: block;
     text-align: center;
@@ -115,9 +115,9 @@
 }
 
 
-/* ===============================
+/* 
    COMPLAINT CARD (YELLOW)
-=============================== */
+ */
 .complaint {
     border-left: 6px solid #fbc02d;
 }
@@ -132,9 +132,9 @@
 }
 
 
-/* ===============================
+/* 
    DISEASE CARD (GREEN)
-=============================== */
+ */
 .disease {
     border-left: 6px solid #66bb6a;
 }
@@ -149,9 +149,9 @@
 }
 
 
-/* ===============================
+/* 
    DESKTOP OPTIMIZATION
-=============================== */
+ */
 @media (min-width: 1024px) {
     .yellow-options {
         justify-content: space-between;
@@ -163,9 +163,9 @@
 }
 
 
-/* ===============================
+/* 
    MOBILE VIEW
-=============================== */
+ */
 @media (max-width: 768px) {
 
     .yellow-header h2 {

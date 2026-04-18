@@ -1,4 +1,4 @@
-/* 🌾 Yellow Case Form Styles */
+/*  Yellow Case Form Styles */
 .yellowcase-card {
     background: #ffffff;
     border-radius: 15px;
@@ -57,7 +57,7 @@
     border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
-/* ===== FORM ===== */
+/*  FORM  */
 .yellowcase-form {
     width: 100%;
 }
@@ -211,7 +211,7 @@ textarea {
     white-space: pre-wrap;
 }
 
-/* ===== Responsive Fixes ===== */
+/*  Responsive Fixes  */
 @media (max-width: 992px) {
     .yellowcase-card {
         padding: 25px;

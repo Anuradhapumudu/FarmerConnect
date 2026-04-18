@@ -108,7 +108,7 @@ public function show()
         $updatedDates[$row->step_order] = $row->updated_date;
     }
 
-    // 9. Send to view (READ-ONLY MODE)
+    //  Send to view (READ-ONLY MODE)
     $data = [
         'plr' => $plr,
         'estimatedDates' => $estimatedDates,

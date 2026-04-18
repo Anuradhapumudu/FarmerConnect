@@ -137,7 +137,7 @@ class FarmerTimeline extends Controller
             // Save progress
             $model->saveStepStatus($nic, $plr, $step, $status);
 
-            // ✅ Save start date ONLY when step 1 is done
+            //  Save start date ONLY when step 1 is done
             if ($step == 1 && $status == 'done') {
                 $model->saveStartDate($nic, $plr);
             }
@@ -164,7 +164,7 @@ class FarmerTimeline extends Controller
 
             $model->updateStageRequest($nic, $plr, $column, 'pending');
 
-            // ✅ redirect back
+            //  redirect back
             header("Location: " . URLROOT . "/FarmerTimeline");
             exit();
         }
@@ -186,7 +186,7 @@ class FarmerTimeline extends Controller
                 $column = 'stage2_request';
             }
 
-            // ✅ reset to NONE
+            //  reset to NONE
             $model->updateStageRequest($nic, $plr, $column, 'none');
 
             header("Location: " . URLROOT . "/FarmerTimeline");

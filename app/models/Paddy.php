@@ -142,7 +142,7 @@ class Paddy {
         $this->db->bind(':Yaya', $row->Yaya);
         $this->db->bind(':CreatedDate', $row->CreatedDate);
 
-        // 👇 who deleted
+        //  who deleted
         if (isset($_SESSION['officer_id'])) {
             $this->db->bind(':deleted_by', 'officer');
             $this->db->bind(':deleted_by_id', $_SESSION['officer_id']);

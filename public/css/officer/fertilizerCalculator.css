@@ -1,15 +1,15 @@
-/* ==============================
+/* 
    RESET
-============================== */
+ */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ==============================
+/* 
    MAIN LAYOUT
-============================== */
+ */
 main {
   font-family: Arial, sans-serif;
   display: flex;
@@ -18,9 +18,9 @@ main {
   gap: 10px;
 }
 
-/* ==============================
+/* 
    HEADER
-============================== */
+ */
 main h1 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -38,9 +38,9 @@ main h1 {
   text-align: center;
 }
 
-/* ==============================
+/* 
    CONTAINER
-============================== */
+ */
 .calc-container {
   display: flex;
   gap: 30px;
@@ -50,9 +50,9 @@ main h1 {
   padding: 20px;
 }
 
-/* ==============================
+/* 
    FORM CARD
-============================== */
+ */
 #calc {
   flex: 1;
   min-width: 320px;
@@ -99,9 +99,9 @@ main h1 {
   background: linear-gradient(135deg, #43a047, #2e7d32);
 }
 
-/* ==============================
+/* 
    TABLE BOX
-============================== */
+ */
 .table-box {
   flex: 1;
   min-width: 420px;
@@ -122,9 +122,9 @@ main h1 {
   overflow-x: auto;
 }
 
-/* ==============================
+/* 
    TABLE
-============================== */
+ */
 .fertilizer-table {
   width: 100%;
   border-collapse: collapse;
@@ -161,9 +161,9 @@ main h1 {
   background: #f9fdf9;
 }
 
-/* ==============================
+/* 
    FERTILIZER BOXES
-============================== */
+ */
 .fert-box {
   display: flex;
   justify-content: space-between;
@@ -197,9 +197,9 @@ main h1 {
   display: none;
 }
 
-/* ==============================
+/* 
    MOBILE GRID CARD
-============================== */
+ */
 
 .mobile-grid-card {
   background: #ffffff;
@@ -253,9 +253,9 @@ main h1 {
 }
 
 
-/* ==============================
+/* 
    RESPONSIVE
-============================== */
+ */
 @media (max-width: 768px) {
   .calc-container {
     flex-direction: column;

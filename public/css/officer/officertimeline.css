@@ -4,7 +4,7 @@
   padding: 20px;
 }
 
-/* ==== Header ==== */
+/*  Header  */
 .officer-header {
   text-align: center;
   margin-bottom: 30px;
@@ -32,7 +32,7 @@
   font-size: 1rem;
 }
 
-/* ==== Stats Section ==== */
+/*  Stats Section  */
 .stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -62,7 +62,7 @@
   color: #555; 
 }
 
-/* ==== Search + Filter ==== */
+/*  Search + Filter  */
 .search-box {
   background: white;
   border-radius: 16px;
@@ -126,7 +126,7 @@
   border-color: #2e7d32;
 }
 
-/* ==== Farmer Table ==== */
+/*  Farmer Table  */
 .farmer-table-wrapper {
   background: white;
   border-radius: 16px;
@@ -167,7 +167,7 @@ tr:hover {
   background: #f5f9f5; 
 }
 
-/* ==== Status Badges ==== */
+/*  Status Badges  */
 .status-badge {
   display: inline-block;
   padding: 6px 12px;
@@ -180,18 +180,18 @@ tr:hover {
 .status-pending { background: #cce5ff; color: #004085; }
 
 
-/* ==============================
+/* 
    Action Buttons Container
-============================== */
+ */
 td form,
 .farmer-card-actions form {
     display: inline-block;
     margin: 2px;
 }
 
-/* ==============================
+/* 
    Base Button
-============================== */
+ */
 .action-btn {
     border: none;
     padding: 10px 16px;
@@ -207,9 +207,9 @@ td form,
     position: relative;
 }
 
-/* ==============================
-   View Timeline (Light Blue)
-============================== */
+/* 
+   View Timeline 
+ */
 .view-btn {
     background: #e3f2fd;
     color: #1565c0;
@@ -221,9 +221,9 @@ td form,
     color: #0d47a1;
 }
 
-/* ==============================
-   Profile (Light Yellow)
-============================== */
+/* 
+   Profile 
+ */
 .edit-btn {
     background: #fff8e1;
     color: #f57f17;
@@ -235,9 +235,9 @@ td form,
     color: #e65100;
 }
 
-/* ==============================
+/* 
    Notification Dot (Blue)
-============================== */
+ */
 .notify-dot {
     position: absolute;
     top: 5px;
@@ -270,9 +270,9 @@ td form,
     box-shadow: 0 0 6px rgba(33, 150, 243, 0.3);
 }
 
-/* ==============================
+/* 
    Mobile Fix
-============================== */
+ */
 .farmer-card-actions {
     display: flex;
     gap: 8px;
@@ -293,7 +293,7 @@ td form,
   font-size: 14px;
   opacity: 0.9;
 }
-/* ==== Pagination ==== */
+/*  Pagination  */
 .pagination {
   display: flex;
   justify-content: center;
@@ -315,12 +315,12 @@ td form,
   border-color: #2e7d32;
 }
 
-/* ==== Mobile Card View ==== */
+/*  Mobile Card View  */
 .farmer-cards {
   display: none;
 }
 
-/* ✅ Show cards on small screens */
+/*  Show cards on small screens */
 @media (max-width: 1135px) {
   table {
     display: none; /* Hide table */
@@ -374,7 +374,7 @@ td form,
   }
 }
 
-/* ✅ Smaller Mobile Adjustments */
+/*  Smaller Mobile Adjustments */
 @media (max-width: 768px) {
 
   .search-box {

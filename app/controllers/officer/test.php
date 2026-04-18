@@ -2,10 +2,33 @@
 class test extends Controller {
 
 
+        public function __construct() {
+        $this->model = $this->model('testModel');
+    }
     
     public function index() {
+
+        $filter = $_GET['filter'] ?? null;
+
+        var_dump($filter);
+
+       if(empty($filter))
+        {
+        $list = $this->model->getAllNote();
+        }
+        else
+        {
+         $list = $this->model->getfilterNote($filter);   
+        }
+
+        $data=
+        [
+            'list'=>$list,
+            'filter' => $filter
+        ];
        
-        $this->view('officer/test');
+
+        $this->view('officer/test',$data);
     }
 
     public function calculate()
@@ -34,8 +57,8 @@ class test extends Controller {
                 }
             else
                 {
-                    $calculator = $this->model('testModel');
-                    $result = $calculator->calculate($num1,$num2,$operation);
+                   //$calculator = $this->model('testModel');
+                    $result = $this->model->calculate($num1,$num2,$operation);
 
                     $data['finResult'] = $result;
                 }
@@ -62,14 +85,18 @@ class test extends Controller {
             {
                 $farmerID = $_POST['farmer_ID'];
                 $note = $_POST['note'];
+                $priority = $_POST['note_piority'];
             }
 
             //var_dump($farmerID);
            // var_dump($note);
             //exit();
 
-            $create = $this->model('testModel');
-            $create -> addToDB($farmerID,$note);
+           // $create = $this->model('testModel');
+            $this->model -> addToDB($farmerID,$note,$priority);
+
+                header("Location: " . URLROOT . "/officer/test/index");
+                exit();
         }
 
         public function search()
@@ -79,8 +106,8 @@ class test extends Controller {
                 $farmerID = $_POST['farmer_ID'];
             }
 
-            $list = $this->model('testModel');
-            $resultlist = $list -> listnotes($farmerID);
+            //$list = $this->model('testModel');
+            $resultlist = $this->model -> listnotes($farmerID);
 
             //var_dump($farmerID);
             //var_dump($resultlist);
@@ -92,4 +119,59 @@ class test extends Controller {
 
             $this->view('officer/test',$data);
         }
+
+        public function edit($id)
+        {
+
+            //var_dump($id);
+           // var_dump($note);
+            //exit();
+        $request = $this->model->getRequestById($id);
+           //var_dump($request);
+            //exit();
+                    // Get request by ID
+
+        if (!$request) {
+            die("ID found");
+        }
+
+        $data = [
+            'request' => $request
+        ];
+
+        $this->view('officer/test', $data);
+
+        }
+
+        public function delete($id)
+        {
+
+        $this->model->deleteById($id);
+
+
+             header("Location: " . URLROOT . "/officer/test/index");
+             exit();;
+
+        }
+
+        public function save()
+        {
+            if($_SERVER['REQUEST_METHOD'] == 'POST')
+            {
+                $farmerID = $_POST['farmer_ID'];
+                $note = $_POST['note'];
+                $id = $_POST['id'];
+                $priority = $_POST['note_piority'];
+            }
+
+           // var_dump($farmerID);
+            //var_dump($note);
+            //var_dump($id);
+            //exit();
+            $this->model -> updateDB($farmerID,$note,$id,$priority);
+
+                header("Location: " . URLROOT . "/officer/test/index");
+                exit();
+        }
+
 }?>

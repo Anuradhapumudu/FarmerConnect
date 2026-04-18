@@ -20,6 +20,7 @@ class Farmer {
                 UPDATE farmers 
                 SET full_name = :full_name,
                     address = :address,
+                    email = :email,
                     phone_no = :phone_no,
                     birthdate = :birthdate,
                     gender = :gender
@@ -28,8 +29,8 @@ class Farmer {
         } else {
             // Insert new farmer
             $this->db->query("
-                INSERT INTO farmers (nic, full_name, registration_id, phone_no, gender, birthdate, address, password)
-                VALUES (:nic, :full_name, :registration_id, :phone_no, :gender, :birthdate, :address, :password)
+                INSERT INTO farmers (nic, full_name, registration_id, phone_no, gender, birthdate, address, password ,email)
+                VALUES (:nic, :full_name, :registration_id, :phone_no, :gender, :birthdate, :address, :password, :email)
             ");
             // use dummy password and registration_id
             $this->db->bind(':registration_id', 0);
@@ -39,9 +40,11 @@ class Farmer {
         $this->db->bind(':nic', $data['NIC']);
         $this->db->bind(':full_name', $data['Name']);
         $this->db->bind(':address', $data['Address']);
+        $this->db->bind(':email', $data['email']);
         $this->db->bind(':phone_no', $data['TelNo']);
         $this->db->bind(':birthdate', $data['Birthday']);
         $this->db->bind(':gender', $data['Gender']);
+
 
         return $this->db->execute();
     }
@@ -53,9 +56,15 @@ class Farmer {
         return $this->db->single();
     }
 
-    // --------------------------------------------------------
+    public function findFarmerByEmail($email)
+{
+    $this->db->query("SELECT * FROM farmers WHERE email = :email");
+    $this->db->bind(':email', $email);
+    return $this->db->single();
+}
+
+    
     // Update profile image path
-    // --------------------------------------------------------
     public function updateProfilePic($nic, $path)
     {
         $this->db->query("UPDATE farmers SET profile_image = :path WHERE nic = :nic");
