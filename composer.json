@@ -2,6 +2,8 @@
     "require": {
         "phpmailer/phpmailer": "^7.0",
         "paypal/paypal-server-sdk": "^2.0"
-        
+    },
+    "config": {
+        "platform-check": false
     }
 }
