@@ -128,27 +128,8 @@ if ($initials === '') {
                 <span class="item-text">My Profile<span class="item-sub">View and edit your details</span></span>
                 <span class="item-trail"><i class="fas fa-chevron-right"></i></span>
               </a>
-              <a href="<?php echo $dashboardUrl; ?>" class="dropdown-item" role="menuitem">
-                <span class="item-icon"><i class="fas fa-chart-line"></i></span>
-                <span class="item-text">Dashboard<span class="item-sub">Quick access to your workspace</span></span>
-                <span class="item-trail"><i class="fas fa-chevron-right"></i></span>
-              </a>
-              <a href="<?php echo URLROOT; ?>/Announcements" class="dropdown-item" role="menuitem">
-                <span class="item-icon"><i class="fas fa-bell"></i></span>
-                <span class="item-text">Announcements<span class="item-sub">Latest platform updates</span></span>
-                <span class="item-trail"><i class="fas fa-chevron-right"></i></span>
-              </a>
             </div>
-
-            <div class="dropdown-section">
-              <div class="dropdown-label">Support</div>
-              <a href="<?php echo URLROOT; ?>/Help/help" class="dropdown-item" role="menuitem">
-                <span class="item-icon"><i class="fas fa-circle-question"></i></span>
-                <span class="item-text">Help Center<span class="item-sub">Guides and support tickets</span></span>
-                <span class="item-trail"><i class="fas fa-chevron-right"></i></span>
-              </a>
-            </div>
-
+            
             <?php
               $logoutUrl = URLROOT . '/users/logout';
 

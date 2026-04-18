@@ -648,17 +648,22 @@ class Disease extends Controller
         $reportCode     = trim($_GET['reportCode'] ?? '');
         $hasFilters     = isset($_GET['reportCode']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC']);
 
+        // Officers are scoped to their own Govi Jana Sewa Division; admins pass null (no filter)
+        $division = $this->isOfficer() ? ($_SESSION['govi_jana_sewa_division'] ?? '') : null;
+
         if ($hasFilters && (!empty($farmerNIC) || !empty($plrNumber) || !empty($reportCode))) {
-            $reports            = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode, $includeDeleted);
+            $reports            = $this->model('M_disease')->searchReports($farmerNIC, $plrNumber, $reportCode, $includeDeleted, $division);
             $data['farmerNIC']  = $farmerNIC;
             $data['plrNumber']  = $plrNumber;
             $data['reportCode'] = $reportCode;
             $data['searched']   = true;
-            $data['message']    = count($reports) . ' report(s) found';
+            $data['message']    = count($reports) . ' report(s) found'
+                                . ($division ? ' in your division' : '');
         } else {
-            $reports           = $this->model('M_disease')->getAllReports(null, null, $includeDeleted);
+            $reports           = $this->model('M_disease')->getAllReports(null, null, $includeDeleted, $division);
             $data['farmerNIC'] = '';
-            $data['message']   = 'Showing all reports (' . count($reports) . ' total)';
+            $data['message']   = ($division ? 'Showing reports in your division' : 'Showing all reports')
+                                . ' (' . count($reports) . ' total)';
         }
 
         $data['reports'] = $reports;

@@ -615,22 +615,27 @@ class Complaint extends Controller
     private function loadAdminOfficerComplaints(array &$data): void
     {
         $includeDeleted = $this->isAdmin();
-        $farmerNIC = trim($_GET['farmerNIC'] ?? '');
-        $plrNumber = trim($_GET['plrNumber'] ?? '');
+        $farmerNIC   = trim($_GET['farmerNIC']    ?? '');
+        $plrNumber   = trim($_GET['plrNumber']    ?? '');
         $complaintId = trim($_GET['complaint_id'] ?? '');
-        $hasFilters = isset($_GET['complaint_id']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC']);
+        $hasFilters  = isset($_GET['complaint_id']) || isset($_GET['plrNumber']) || isset($_GET['farmerNIC']);
+
+        // Officers are scoped to their own Govi Jana Sewa Division; admins pass null (no filter)
+        $division = $this->isOfficer() ? ($_SESSION['govi_jana_sewa_division'] ?? '') : null;
 
         if ($hasFilters && (!empty($farmerNIC) || !empty($plrNumber) || !empty($complaintId))) {
-            $reports = $this->model('M_complaint')->searchReports($farmerNIC, $plrNumber, $complaintId, $includeDeleted);
-            $data['farmerNIC'] = $farmerNIC;
-            $data['plrNumber'] = $plrNumber;
+            $reports = $this->model('M_complaint')->searchReports($farmerNIC, $plrNumber, $complaintId, $includeDeleted, $division);
+            $data['farmerNIC']    = $farmerNIC;
+            $data['plrNumber']    = $plrNumber;
             $data['complaint_id'] = $complaintId;
-            $data['searched'] = true;
-            $data['message'] = count($reports) . ' complaint(s) found';
+            $data['searched']     = true;
+            $data['message']      = count($reports) . ' complaint(s) found'
+                                  . ($division ? ' in your division' : '');
         } else {
-            $reports = $this->model('M_complaint')->getAllComplaints(null, null, $includeDeleted);
+            $reports           = $this->model('M_complaint')->getAllComplaints(null, null, $includeDeleted, $division);
             $data['farmerNIC'] = '';
-            $data['message'] = 'Showing all complaints (' . count($reports) . ' total)';
+            $data['message']   = ($division ? 'Showing complaints in your division' : 'Showing all complaints')
+                               . ' (' . count($reports) . ' total)';
         }
 
         $data['reports'] = $reports;
