@@ -289,9 +289,13 @@ class Disease extends Controller
             return;
         }
 
+        // Pre-generate the report code so it can be used as the media filename prefix
+        $reportCode = $this->model('M_disease')->generateReportCodePublic();
+        $data['report_code'] = $reportCode;
+
         $uploadResult = $this->processFileUpload(
             uploadDir: $this->getUploadDir(),
-            prefix:    'NEW'
+            prefix:    $reportCode
         );
 
         if (isset($uploadResult['error'])) {

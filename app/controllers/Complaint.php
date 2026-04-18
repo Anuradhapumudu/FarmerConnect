@@ -280,9 +280,13 @@ class Complaint extends Controller
             return;
         }
 
+        // Pre-generate the complaint ID so it can be used as the media filename prefix
+        $complaintId = $this->model('M_complaint')->generateComplaintCodePublic();
+        $data['complaint_id'] = $complaintId;
+
         $uploadResult = $this->processFileUpload(
             uploadDir: $this->getUploadDir(),
-            prefix: 'CPNEW'
+            prefix: $complaintId
         );
 
         if (isset($uploadResult['error'])) {
