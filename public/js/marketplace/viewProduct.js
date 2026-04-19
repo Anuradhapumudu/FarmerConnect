@@ -6,7 +6,7 @@ const regionFilter = document.getElementById("regionFilter");
 
 const products = document.querySelectorAll(".order-card.product-card");
 
-// Event listeners
+
 searchInput.addEventListener("keyup", filterProducts);
 provinceFilter.addEventListener("change", filterProducts);
 regionFilter.addEventListener("change", filterProducts);
@@ -34,7 +34,7 @@ function filterProducts() {
     let matchPrice = price >= minPrice && price <= maxPrice;
 
     if (matchSearch && matchProvince && matchRegion && matchPrice) {
-        product.style.display = "block"; // or "flex" if your CSS uses flex
+        product.style.display = "block"; 
     } else {
         product.style.display = "none";
     }
@@ -50,10 +50,21 @@ function updateRegions() {
   const options = regionSelect.querySelectorAll("option");
 
   options.forEach(opt => {
-    if (!opt.value) return; // Keep "All Regions"
+    if (!opt.value) return; //keep all regions
     opt.style.display = (!province || opt.dataset.province === province) ? "block" : "none";
   });
 
   regionSelect.value = "";
+}
+
+function checkStock(btn) {
+    let qty = btn.getAttribute("data-qty");
+    let status = btn.getAttribute("data-status");
+
+    if (qty <= 0 || status === "Outstock") {
+        alert("This product is out of stock");
+        return false;
+    }
+    return true;
 }
 

@@ -40,13 +40,28 @@
 
 <div class="content-wrapper">
 
-    <!-- PROFILE CARD -->
-    <div class="profile-card">
+ 
 
-        <img src="<?= !empty($data['seller']->image_url)
-            ? URLROOT . '/' . $data['seller']->image_url
-            : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' ?>"
-            class="profile-img">
+       <div class="profile-card">
+        <img src="<?php 
+            // Get the officer's image URL from the database
+            $img = $data['seller']->image_url ?? '';
+
+            // use default profile image
+            if (empty($img)) {
+                echo 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+            } 
+            // The image URL is an external link (starts with http or https) ,,use as-is
+            elseif (strpos($img, 'http') === 0) {
+                echo $img; 
+            } 
+            // The image URL is a local file path,, prepend URLROOT to generate full URL
+            else {
+                echo URLROOT . '/' . $img; 
+            }
+        ?>" 
+alt="Officer Photo" 
+class="profile-img">
 
         <h2 class="seller-name">
             <?= $data['seller']->first_name . ' ' . $data['seller']->last_name ?>
@@ -127,8 +142,6 @@
     </div>
 
 
-
-<!-- SAVE BUTTON (ONLY ONE FORM BUTTON) -->
 <div class="action-buttons">
     <button type="submit" class="action-btn save-btn">
         Save Changes
@@ -140,7 +153,7 @@
 
 
 
-<!-- APPROVE / REJECT (NO NESTED FORMS) -->
+
 <div class="action-buttons">
 
 <?php $status = strtolower(trim($data['seller']->approval_status)); ?>
@@ -161,11 +174,9 @@
 
 <?php elseif($status == 'approved'): ?>
 
-    <button type="button"
-        onclick="location.href='<?= URLROOT ?>/Admin/UserList/reject/<?= $data['seller']->seller_id ?>'"
-        class="action-btn delete-btn">
-        Reject
-    </button>
+    <span class="status-text" style="color: green; font-weight: bold;">
+        Seller already approved
+    </span>
 
 <?php else: ?>
 

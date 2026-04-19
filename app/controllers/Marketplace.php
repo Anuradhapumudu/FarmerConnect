@@ -313,11 +313,10 @@ public function editProduct($id) {
         } elseif(!preg_match("/^[a-zA-Z0-9\s\-_]+$/", $data['product']['item_name'])) {
             $data['errors']['name'] = "Product name can only contain letters, numbers, spaces, hyphens, and underscores.";
         }
-
         // Category
-        if(strlen($data['product']['category']) === 0) {
+        if(($data['product']['category']) === 0) {
             $data['errors']['category'] = "Please select a category.";
-        }
+
 
         // Status
         if(strlen($data['product']['status']) === 0) {
@@ -344,7 +343,8 @@ public function editProduct($id) {
             $data['errors']['price'] = "Price is required.";
         } elseif(!is_numeric($data['product']['price_per_unit']) || floatval($data['product']['price_per_unit']) <= 0) {
             $data['errors']['price'] = "Price must be a number greater than 0.";
-        }
+        } 
+
 
         // Available Quantity
         if(strlen($data['product']['available_quantity']) === 0) {
@@ -390,7 +390,7 @@ public function editProduct($id) {
     $this->view('marketplace/V_editProduct', $data);
 }
 
-
+}
 
     //  Delete Product
     public function deleteProduct($id) {
@@ -434,7 +434,7 @@ public function buyProduct($id = null) {
 
     $product = $this->marketplaceModel->getProductByInternalId($id);
 
-    // Block purchase if out of stock
+    
     if (!$product || $product->available_quantity <= 0 || $product->status === 'Outstock') {
         $_SESSION['error'] = "This product is out of stock.";
         header("Location: " . URLROOT . "/Marketplace/farmer");
@@ -535,7 +535,7 @@ private function generatePayHereHash($order_id, $amount, $currency = "LKR") {
 
 public function paymentNotification()
 {
-    // Just log for debugging, don't do anything critical
+    //debug purpose
     file_put_contents(__DIR__ . '/payhere.log',
         "\nPAYHERE NOTIFICATION \n" . print_r($_POST, true),
         FILE_APPEND
@@ -616,7 +616,7 @@ public function trackOrdersFarmer() {
 
 Auth::checkRole('farmer');
     // Get buyer NIC from session
-    $buyer_nic = $_SESSION['user_id'] ?? null; // or $_SESSION['nic']
+    $buyer_nic = $_SESSION['user_id'] ?? null; 
 
     if (!$buyer_nic) {
         $_SESSION['error'] = "You must be logged in as a farmer to view your orders.";
@@ -644,6 +644,22 @@ Auth::checkRole('farmer');
     'ratedOrders' => $ratedOrders
     ]);
 
+}
+
+public function deleteOrder($order_id){
+    
+
+    Auth::checkRole('farmer');
+ $delete = $this->marketplaceModel->deleteOrders($order_id);
+
+ if($delete){
+    $_SESSION['sucess'] ="Order deleted sucesffully";
+ }else{
+    "Order is not deleted. Something happens";
+ }
+     header("Location: " . URLROOT . "/Marketplace/trackOrdersFarmer");
+    exit;
+   
 }
 
 

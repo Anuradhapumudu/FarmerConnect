@@ -116,6 +116,14 @@ public function approve($id) {
             exit;
         }
 
+        if($seller->approval_status == 'Approved'){
+                    $_SESSION['seller_message'] = "Approved sellers cannot be rejected.";
+
+        header('Location: ' . URLROOT . '/Admin/UserList/sellerlist');
+        exit;
+    }
+    
+
         $this->adminModel->updateSellerStatus($id, 'Rejected');
         sendRejectEmail($seller->email,$seller->seller_id);
 

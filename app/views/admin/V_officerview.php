@@ -18,10 +18,23 @@
     <div class="content-wrapper">
       <!-- Officer Profile Section -->
        <div class="profile-card">
-<img 
-src="<?= !empty($data['officer']->image_url) 
-        ? URLROOT . '/' . $data['officer']->image_url 
-        : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' ?>" 
+        <img src="<?php 
+            // Get the officer's image URL from the database
+            $img = $data['officer']->image_url ?? '';
+
+            // use default profile image
+            if (empty($img)) {
+                echo 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+            } 
+            // The image URL is an external link (starts with http or https) ,,use as-is
+            elseif (strpos($img, 'http') === 0) {
+                echo $img; 
+            } 
+            // The image URL is a local file path,, prepend URLROOT to generate full URL
+            else {
+                echo URLROOT . '/' . $img; 
+            }
+        ?>" 
 alt="Officer Photo" 
 class="profile-img">
 

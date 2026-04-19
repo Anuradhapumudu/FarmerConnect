@@ -89,7 +89,8 @@ public function getProductsBySeller($seller_id) {
     $this->db->bind(':seller_id', $seller_id);
     return $this->db->resultSet();
 }
-       public function getProductsByCategory($category) {
+ 
+public function getProductsByCategory($category) {
     $this->db->query("
         SELECT 
             p.*, 
@@ -368,7 +369,6 @@ public function addRating($order_id, $rating){
     return $this->db->execute();
 
 }
-
 
 
 public function getRaitingForEachOrder($order_id){

@@ -14,7 +14,26 @@
         <i class="fas fa-arrow-left"></i> Back to Farmers
       </button>
     </div>
-    
+
+    <div class="stats">
+      <div class="card"><h2><?= $data['counts']->confirm ?></h2><p>confirm</p></div>
+      <div class="card"><h2><?= $data['counts']->cancel ?></h2><p>cancel</p></div>
+      
+    </div>
+
+        <div class="search-box">
+      <div style="position: relative; flex: 1;">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search farmers by order id and PLR.">
+      </div>
+      <select id="statusFilter" class="filter-select">
+        <option value="all">All Status</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      
+      </select>
+    </div>
+
     <!-- Main Content -->
     <div class="content-wrapper">
       <!-- Farmer Profile Section -->
@@ -49,26 +68,42 @@
             <span class="detail-value"><?= $data['farmer']->phone_no ?></span>
           </div>
           <div class="detail-item">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value"><?= $data['farmer']->email ?></span>
+            <span class="detail-label">Address:</span>
+            <span class="detail-value"><?= $data['farmer']->address ?></span>
           </div>
         <div class="detail-item">
         <span class="detail-label">Account Created:</span>
         <span class="detail-value"><?= date('d M Y, h:i A', strtotime($data['farmer']->created_at)) ?></span>
         </div>
+        <!-- <div class="detail-item">
+        <span class="detail-label">Last Updated:</span>
+        <span class="detail-value"><?= date('d M Y, h:i A', strtotime($data['farmer']->updated_at)) ?></span>
+       </div>  -->
         </div>
       
+<?php if(!empty($data['orderDetails'])):?>
+     
+    <?php foreach ($data['orderDetails'] as $order): ?>
+<div class="order-card" data-order="<?php echo strtolower(htmlspecialchars($order->order_id));?>" >
+        <p>Order id:</p>
+            <span class="detail-value"><?= htmlspecialchars($order->order_id) ?></span>
+</div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>No order details available.</p>
+<?php endif; ?>
     
       <!-- Paddy Details Section -->
       <div class="paddy-details">
         <h2 class="section-title">Paddy Cultivation Details</h2>
 
-       
+        <!-- we use this because farmer can have lot of paddy fields -->
 <div class="paddy-cards">
 
 <?php if (!empty($data['paddyDetails'])): ?>
     <?php foreach ($data['paddyDetails'] as $paddy): ?>
-        <div class="paddy-card">
+        <div class="paddy-card"
+            data-plr="<?php echo strtolower(htmlspecialchars($paddy->PLR));?>">
             <h3>PLR : <?= htmlspecialchars($paddy->PLR) ?></h3>
 
             <div class="paddy-detail-item">
@@ -150,4 +185,64 @@
 </main>
 
 
+
+    public function getOrdersByFarmer($id){
+        $this->db->query("SELECT * FROM orders WHERE buyer_id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->resultSet();
+    }
+
+    public function getOrderCount($id){
+              $this->db->query("\n            SELECT 
+                COUNT(*) AS total,
+                SUM(CASE WHEN order_status='order_confirmed' THEN 1 ELSE 0 END) AS confirm,
+                SUM(CASE WHEN order_status='order_cancelled' THEN 1 ELSE 0 END) AS cancel
+            FROM orders  where buyer_id = :id
+        ");
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+            public function showfarmer($id = null) {
+            Auth::checkAdmin();
+            // If no ID is provided, redirect back to the farmer list
+        if (!$id) {
+            header('Location: ' . URLROOT . '/Admin/UserList/farmerlist');
+            exit;
+        }
+
+
+        $farmer = $this->adminModel->getFarmerById($id);
+        // If the ID is invalid or the farmer was deleted, redirect back
+        if (!$farmer) {
+            header('Location: ' . URLROOT . '/Admin/UserList/farmerlist');
+            exit;
+        }
+
+        $paddyDetails = $this->adminModel->getPaddyDetailsById($id);
+
+        $orderDetails = $this->adminModel->getOrdersByFarmer($id);
+        $counts = $this->adminModel->getOrderCount($id);
+         $this->view('admin/V_sample', [
+        'farmer' => $farmer,
+        'paddyDetails' => $paddyDetails,
+        'orderDetails'=>$orderDetails,
+        'counts' =>$counts
+    ]);
+    }
+
+
+                <div class="order-actions">
+              
+                <a href="<?= URLROOT ?>/Marketplace/deleteOrder/<?= $order->order_id ?>" class="btn btn-primary"  onclick="return confirm('Product Deleted');">
+                    <i class="fas fa-map-marked-alt"></i> delete order
+                </a>
+              
+            </div>
+
+
+              elseif(($data['category']) !== "Fertilizer") {
+            $data['errors']['category'] = "Please select a only fertilizer.";
+        }
+<script src="<?php echo URLROOT; ?>/js/admin/sample.js?v=<?= time(); ?>"></script>
 <?php require APPROOT . '/views/inc/footer.php'; ?>

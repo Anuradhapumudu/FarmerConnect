@@ -54,6 +54,8 @@ class M_Admin {
         return $this->db->execute();
     }
 
+    
+
     public function updateSellerStatus($seller_id, $status) {
         $this->db->query("UPDATE sellers SET approval_status = :status WHERE seller_id = :seller_id");
         $this->db->bind(':status', $status);

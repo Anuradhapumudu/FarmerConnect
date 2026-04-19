@@ -204,12 +204,8 @@
         <?php endforeach; ?>
       <?php else: ?>
         <div class="empty-state">
-          <i class="fas fa-box-open"></i>
           <h3>No Orders Found</h3>
           <p>You haven't received any orders yet. When customers purchase your products, they will appear here.</p>
-          <button class="btn-refresh" onclick="window.location.reload()">
-            <i class="fas fa-redo"></i> Refresh
-          </button>
         </div>
       <?php endif; ?>
     </div>
