@@ -18,21 +18,21 @@ class M_complaint
                  f.full_name   AS farmer_name,
                  f.phone_no    AS farmer_phone,
                  f.address     AS farmer_address,
-                 p.Paddy_Size  AS paddySize,
-                 p.Paddy_Seed_Variety AS paddySeedVariety,
-                 p.Province    AS paddyProvince,
-                 p.District    AS paddyDistrict,
-                 p.Govi_Jana_Sewa_Division AS paddyAgrarian,
-                 p.Grama_Niladhari_Division AS paddyGN,
-                 p.Yaya        AS paddyYaya,
+                 COALESCE(p.Paddy_Size,  dp.Paddy_Size)  AS paddySize,
+                 COALESCE(p.Paddy_Seed_Variety, dp.Paddy_Seed_Variety) AS paddySeedVariety,
+                 COALESCE(p.Province,    dp.Province)    AS paddyProvince,
+                 COALESCE(p.District,    dp.District)    AS paddyDistrict,
+                 COALESCE(p.Govi_Jana_Sewa_Division,  dp.Govi_Jana_Sewa_Division)  AS paddyAgrarian,
+                 COALESCE(p.Grama_Niladhari_Division, dp.Grama_Niladhari_Division) AS paddyGN,
+                 COALESCE(p.Yaya,        dp.Yaya)        AS paddyYaya,
                  o.first_name  AS officer_first_name,
                  o.last_name   AS officer_last_name,
                  o.officer_id  AS updater_id
         FROM     complaints cp
-        LEFT JOIN farmers  f ON cp.farmerNIC          = f.nic
-        LEFT JOIN paddy    p ON cp.plrNumber          = p.PLR
-                             AND cp.farmerNIC         = p.NIC_FK
-        LEFT JOIN officers o ON cp.status_updated_by  = o.officer_id
+        LEFT JOIN farmers     f  ON cp.farmerNIC         = f.nic
+        LEFT JOIN paddy       p  ON cp.plrNumber         = p.PLR
+        LEFT JOIN deleted_plr dp ON cp.plrNumber         = dp.PLR
+        LEFT JOIN officers    o  ON cp.status_updated_by = o.officer_id
     ";
 
     public function __construct()
@@ -374,6 +374,15 @@ class M_complaint
         } catch (Exception $e) {
             return $this->logError('submitOfficerResponse', $e, false);
         }
+    }
+
+    /**
+     * Public wrapper so the controller can pre-generate a complaint ID
+     * before the file upload (used for media filename prefixing).
+     */
+    public function generateComplaintCodePublic(): string
+    {
+        return $this->generateComplaintCode();
     }
 
     private function generateComplaintCode(): string

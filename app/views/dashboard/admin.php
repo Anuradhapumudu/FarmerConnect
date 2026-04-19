@@ -80,7 +80,7 @@
 
     <a href="<?php echo URLROOT; ?>/Complaint/myComplaints" class="feature">
       <i class="fa-solid fa-comments fa-2x"></i>
-      <h3>Complain</h3>
+      <h3>Complaints</h3>
       <p>Report issues directly to the relevant agricultural authorities.</p>
     </a>
 

@@ -36,7 +36,7 @@ switch ($sidebarUserType) {
             ['url' => URLROOT . '/Disease/viewReports',            'icon' => 'fas fa-disease',                 'text' => 'Disease Reports'],
             ['url' => URLROOT . '/Complaint/myComplaints',         'icon' => 'fas fa-comment-dots',            'text' => 'Complaints'],
             ['url' => URLROOT . '/officer/officertimeline',        'icon' => 'fas fa-calendar-days',           'text' => 'Farmer Timeline'],
-            ['url' => URLROOT . '/officer/officerYellowCase',      'icon' => 'fas fa-file-circle-exclamation', 'text' => 'Yellow Cases'],
+            ['url' => URLROOT . '/YellowCaseList',                 'icon' => 'fas fa-file-circle-exclamation', 'text' => 'Yellow Cases'],
             ['url' => URLROOT . '/officer/CalculatorOfficer',      'icon' => 'fas fa-calculator',              'text' => 'Fertilizer Calc'],
             ['url' => URLROOT . '/Knowledgecenter',                'icon' => 'fas fa-book-open',               'text' => 'Knowledge Center'],
         ];

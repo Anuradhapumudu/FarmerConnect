@@ -24,7 +24,7 @@
             <li>Any delay in cultivation</li>
         </ul>
 
-        <a href="<?php echo URLROOT; ?>/ComplaintReport?plr=<?php echo $data['plr']; ?>" 
+        <a href="<?php echo URLROOT; ?>/Complaint"
            class="yellow-btn complaint-btn">
             Go to Complaint Form
         </a>
@@ -43,7 +43,7 @@
             <li>Unknown damage to crops</li>
         </ul>
 
-        <a href="<?php echo URLROOT; ?>/DiseaseReport?plr=<?php echo $data['plr']; ?>" 
+        <a href="<?php echo URLROOT; ?>/disease"
            class="yellow-btn disease-btn">
             Go to Disease Report
         </a>
