@@ -231,7 +231,12 @@
     ]);
     }
 
-
+ALTER TABLE farmers
+ADD email VARCHAR(100);             
+  ALTER TABLE farmers
+ADD status VARCHAR(20) DEFAULT 'active';
+ALTER TABLE orders
+ADD status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending';
                 <div class="order-actions">
               
                 <a href="<?= URLROOT ?>/Marketplace/deleteOrder/<?= $order->order_id ?>" class="btn btn-primary"  onclick="return confirm('Product Deleted');">
@@ -244,5 +249,10 @@
               elseif(($data['category']) !== "Fertilizer") {
             $data['errors']['category'] = "Please select a only fertilizer.";
         }
+
+                                 <!--    <div style="margin-top: 15px;">
+                                <textarea name="review" placeholder="Optional: Write a review..." 
+                                          style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; resize: vertical; min-height: 80px;"></textarea>
+                            </div> -->
 <script src="<?php echo URLROOT; ?>/js/admin/sample.js?v=<?= time(); ?>"></script>
 <?php require APPROOT . '/views/inc/footer.php'; ?>

@@ -74,7 +74,7 @@ public function isAlreadyHelpMember($id) {
         return $this->db->execute();
     }
 
-    /* ===== Emergency Contact ===== */
+    //Emergency Contact 
 
     public function getEmergencyContact() {
         $this->db->query("SELECT phone FROM emergency_contacts LIMIT 1");

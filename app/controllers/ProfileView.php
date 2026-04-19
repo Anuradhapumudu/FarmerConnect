@@ -39,6 +39,7 @@ class ProfileView extends Controller {
             'errors' => $_SESSION['profile_errors'] ?? []
         ];
 
+        //clear session data
         unset($_SESSION['old_input'], $_SESSION['profile_errors']);
 
         if (!$sellerProfile) {
