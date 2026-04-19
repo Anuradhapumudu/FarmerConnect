@@ -14,7 +14,6 @@
         // Registration logic here
         public function register() {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                // Form is submitting
                 // Sanitize POST data
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 

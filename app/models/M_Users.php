@@ -166,7 +166,7 @@
             return ($this->db->rowCount() > 0);
         }
 
-        // Check if officer ID already exists in registrations
+        // Check if officer ID already registered
         public function isOfficerAlreadyRegistered($officer_id) {
             $this->db->query("SELECT * FROM officers WHERE officer_id = :officer_id AND registration_id IS NOT NULL");
             $this->db->bind(':officer_id', $officer_id);
@@ -175,7 +175,7 @@
             return ($this->db->rowCount() > 0);
         }
 
-        // Check if seller ID already exists in registrations
+        // Check if seller ID already registered
         public function findUserBySellerId($seller_id, $table) {
             $this->db->query("SELECT * FROM $table WHERE seller_id = :seller_id");
             $this->db->bind(':seller_id', $seller_id);

@@ -77,9 +77,7 @@
                     <input type="hidden" name="username" value="<?php echo $_SESSION['username']; ?>">
                     <input type="hidden" name="user_type" value="<?php echo $_SESSION['user_type']; ?>">
 
-                    <button type="submit" class="resend-btn">
-                        Resend OTP
-                    </button>
+                    <button type="submit" class="resend-btn"> Resend OTP </button>
                 </form>
             <?php endif; ?>
 

@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 body {
-    background: linear-gradient(135deg, rgb(235, 234, 234), rgb(242, 243, 242));
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     justify-content: center;
     align-items: center;
@@ -29,23 +28,12 @@ main {
     background: #fdfaf5;
     padding: 0px 0px;
     border-radius: 16px;
-    box-shadow: 0 0 15px rgba(7, 7, 7, 0.1);
     box-shadow: 0 8px 32px rgba(30, 58, 47, 0.12);;
 }
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+
 .image-section {
     flex: 0.5;
 }
-
 .desktop-img {
     width: 100%;
     height: 100%;
@@ -58,6 +46,16 @@ main {
     flex: 0.5;
     padding: 52px 44px;
     margin-top: 30px;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 .form-box {
     display: none;

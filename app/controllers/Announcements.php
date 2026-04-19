@@ -75,7 +75,7 @@ class Announcements extends Controller {
             // Handle file upload
             if(isset($_FILES['attachFiles']) && $_FILES['attachFiles']['error'][0] != 4) { // 4 = no file
                 $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'docx'];    
-                $uploadDir = 'uploads/'; // folder to save files
+                $uploadDir = 'uploads/'; 
                 $uploadedFiles = [];
 
                 foreach($_FILES['attachFiles']['tmp_name'] as $key => $tmpName) {
@@ -139,7 +139,7 @@ class Announcements extends Controller {
             // Handle file upload
             if(isset($_FILES['attachFiles']) && $_FILES['attachFiles']['error'][0] != 4) { // 4 = no file
                 $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'docx']; 
-                $uploadDir = 'uploads/'; // folder to save files
+                $uploadDir = 'uploads/'; 
                 $uploadedFiles = [];
 
                 foreach($_FILES['attachFiles']['tmp_name'] as $key => $tmpName) {
@@ -161,7 +161,6 @@ class Announcements extends Controller {
             // Validate and create announcement
             if(!empty($data['title']) && !empty($data['category']) && !empty($data['content'])) {
                 if($this->announcementModel->editAnnouncement($data)) {
-                    // Redirect or show success message
                     echo "
                             
                             <script>
