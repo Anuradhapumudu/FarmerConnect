@@ -195,7 +195,7 @@ public function addProduct() {
             $data['errors']['price'] = "Price is required.";
         } elseif(!is_numeric($data['price']) || floatval($data['price']) <= 0) {
             $data['errors']['price'] = "Price must be a number greater than 0.";
-        }
+        } 
 
         if(strlen($data['available']) === 0) {
             $data['errors']['available'] = "Quantity is required.";
@@ -316,7 +316,7 @@ public function editProduct($id) {
         // Category
         if(($data['product']['category']) === 0) {
             $data['errors']['category'] = "Please select a category.";
-
+        }
 
         // Status
         if(strlen($data['product']['status']) === 0) {
@@ -390,7 +390,7 @@ public function editProduct($id) {
     $this->view('marketplace/V_editProduct', $data);
 }
 
-}
+
 
     //  Delete Product
     public function deleteProduct($id) {
