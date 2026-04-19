@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Complaint Controller
- *
- * Handles complaint submission, viewing, editing, deletion,
- * status updates, officer recommendations, and media streaming.
- */
 class Complaint extends Controller
 {
     private const ALLOWED_MIME_TYPES = [
@@ -660,9 +654,6 @@ class Complaint extends Controller
         $this->view('complaint/complaint', $data);
     }
 
-    /**
-     * @return array{isValid: bool, errors: array<string, string>}
-     */
     private function validateComplaintData(array $data): array
     {
         $errors = [];
@@ -743,13 +734,6 @@ class Complaint extends Controller
         return ['isValid' => empty($errors), 'errors' => $errors];
     }
 
-    /**
-     * @param  string   $uploadDir
-     * @param  string   $prefix
-     * @param  string   $existingMedia
-     * @param  string[] $removeMedia
-     * @return array{media_string: string}|array{error: string}
-     */
     private function processFileUpload(
         string $uploadDir,
         string $prefix = 'NEW',
@@ -789,6 +773,7 @@ class Complaint extends Controller
                     return ['error' => "Failed to upload file: {$originalName}"];
                 }
 
+                //give permissions to read the file, but not execute
                 chmod($targetPath, 0644);
                 $finalFiles[] = $newFilename;
             }
@@ -797,10 +782,6 @@ class Complaint extends Controller
         return ['media_string' => implode(',', $finalFiles)];
     }
 
-    /**
-     * @param  string[] $removeMedia
-     * @return string[]
-     */
     private function filterExistingMedia(string $existingMedia, array $removeMedia, string $uploadDir): array
     {
         if (empty($existingMedia)) {
@@ -841,10 +822,6 @@ class Complaint extends Controller
         return trim(rawurldecode($filename));
     }
 
-    /**
-     * Resolves a file request against stored media values and returns the real path.
-     * Supports both filename-only entries and legacy entries that contain paths.
-     */
     private function resolveMediaPathFromList(string $requestedFilename, string $fileList, string $defaultDir): ?string
     {
         $requested = $this->normalizeFilename($requestedFilename);
