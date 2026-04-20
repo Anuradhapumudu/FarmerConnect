@@ -19,12 +19,12 @@
         <?php endif; ?>
 
         <?php if(isset($_SESSION['success'])): ?>
-            <div class="alert success">
+           <!-- <div class="alert success">
                 <?php 
-                    echo $_SESSION['success']; 
-                    unset($_SESSION['success']);
+                 //   echo $_SESSION['success']; 
+                  //  unset($_SESSION['success']);
                 ?>
-            </div>
+            </div> -->
         <?php endif; ?>
 
     <div class="form-grid">
